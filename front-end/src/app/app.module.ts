@@ -9,6 +9,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ElectoToolsComponent } from './categories/electo-tools/electo-tools.component';
 import { GardeningComponent } from './categories/gardening/gardening.component';
 import { OthersComponent } from './categories/others/others.component';
+import { SortComponent } from './shared/sort/sort.component';
+import { SearchComponent } from './shared/search/search.component';
+import { SharedMaterialModule } from './shared/shared-material.module';
 
 
 @NgModule({
@@ -19,12 +22,15 @@ import { OthersComponent } from './categories/others/others.component';
     ElectoToolsComponent,
     GardeningComponent,
     OthersComponent,
+    SortComponent,
+    SearchComponent,
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    SharedMaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]
