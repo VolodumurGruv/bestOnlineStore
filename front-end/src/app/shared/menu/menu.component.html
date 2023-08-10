@@ -1,5 +1,12 @@
 <header class="header">
   <a class="nav__logo" routerLink="/">LOGO</a>
+  <div class="search">
+    <app-search></app-search>
+    <app-sort></app-sort>
+  </div>
+  <a class="cart__link" routerLink="/cart">
+    <mat-icon>shopping_cart</mat-icon>
+  </a>
   <nav class="nav">
     <!-- <div class="nav__menu"> -->
       <a class="nav__link" routerLink="" routerLinkActive="active__link" ariaCurrentWhenActive="page"  >Electro tools</a>

@@ -3,7 +3,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  height: 5rem;
+  height: 10rem;
   width: 100vw;
   background: rgba(185, 213, 240, .7);
 }
@@ -38,4 +38,19 @@
     font-size: 18px;
     color: #000;
   }
+}
+
+.search {
+  display: flex;
+  justify-content: center;
+}
+
+mat-form-field {
+  margin: 1rem 2rem;
+}
+
+.cart__link {
+  position: absolute;
+  right: 5rem;
+  top: 1rem;
 }
