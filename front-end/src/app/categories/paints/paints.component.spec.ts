@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ElectoToolsComponent } from './electo-tools.component';
+import { PaintsComponent } from './paints.component';
 
-describe('ElectoToolsComponent', () => {
-  let component: ElectoToolsComponent;
-  let fixture: ComponentFixture<ElectoToolsComponent>;
+describe('PaintsComponent', () => {
+  let component: PaintsComponent;
+  let fixture: ComponentFixture<PaintsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ElectoToolsComponent ]
+      declarations: [ PaintsComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ElectoToolsComponent);
+    fixture = TestBed.createComponent(PaintsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
