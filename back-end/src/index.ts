@@ -1,13 +1,21 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+import { join } from 'path';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 4200;
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello, World!');
+const staticPath = join(__dirname, '../../../front-end/dist/front-end/');
+app.use(express.static(staticPath));
+
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(join(staticPath, 'favicon.ico'));
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(join(staticPath, 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server for Angular work on ${PORT}`);
 });
 
