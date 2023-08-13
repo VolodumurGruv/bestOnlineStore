@@ -7,24 +7,19 @@ import bcrypt from 'bcryptjs';
 const userRouter = express.Router();
 
 userRouter.get('/api/seed', (req, res, next) => {
-  console.log('before insert');
+
   User.insertMany(data.users)
     .then(createdUsers => {
-      console.log('inside then');
       console.log(createdUsers);
       res.send(`<p>${createdUsers}</p>`);
     })
     .catch(error => {
-      console.log(error);
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify(error));
     });
 });
-/*  .catch(error => {
-    console.log(error);
-    res.send(`<p>${error}</p>`);
-  })
-);*/
 
-userRouter.get('/', expressAsyncHandler(async (req, res) => {
+userRouter.get('/api/users', expressAsyncHandler(async (req, res) => {
   console.log('before get');
   const users = await User.find({});
   console.log(`get: ${users}`);
