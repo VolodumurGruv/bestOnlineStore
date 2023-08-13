@@ -24,12 +24,12 @@ app.get('/favicon.ico', (req, res) => {
   res.sendFile(join(staticPath, 'favicon.ico'));
 });
 
-/*app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:4200');
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:30000');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
-});*/
+});
 
 mongoose.connect(uri, {})
   .then(() => {
@@ -49,12 +49,12 @@ dbConnection
     console.log("Connected to DB!");
   });
 
-app.use('/', userRouter);
+app.use('/api/users', userRouter);
 app.use('/api/seed', userRouter);
 
-//app.get('*', (req, res) => {
-//  res.sendFile(path.join(staticPath, 'index.html'));
-//});
+app.get('*', (req, res) => {
+  res.sendFile(path.join(staticPath, 'index.html'));
+});
 
 app.listen(port, () => {
   console.log(`Server at http://localhost:${port}`);
