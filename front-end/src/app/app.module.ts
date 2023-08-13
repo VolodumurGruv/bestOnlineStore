@@ -7,6 +7,7 @@ import { LayoutComponent } from './shared/layout/layout.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { HomeComponent } from './home-page/home/home.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -15,11 +16,13 @@ import { HomeComponent } from './home-page/home/home.component';
     LayoutComponent,
     HeaderComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

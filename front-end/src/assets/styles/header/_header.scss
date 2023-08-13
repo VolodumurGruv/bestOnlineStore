@@ -34,11 +34,33 @@
   &__input {
     display: flex;
     margin-top: 48px;
-    padding: 8px 16px;
     width: 423px;
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
+    border-radius: 8px;
+    border: 1px solid #949494;
   }
 }
 
+.input__search {
+  margin: 8px auto 8px 16px;
+  border: none;
+  outline: none;
+  width: 198px;
+  flex-shrink: 0;
+  font-family: "Roboto";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+  color: #000;
+
+  &:placeholder-shown {
+    color: #C7C6C6;
+  }
+}
+
+.btn__input__search {
+  cursor: pointer;
+}
