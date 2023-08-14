@@ -10,7 +10,7 @@ userRouter.get('/all', (req, res) => {
   User.find({})
     .then(users => {
       console.log(users);
-      res.send(`<p>${users}</p>`);
+      res.send(`${users}`);
     })
     .catch(error => {
       res.setHeader('Content-Type', 'application/json');
@@ -23,7 +23,7 @@ userRouter.get('/seed', (req, res) => {
   User.insertMany(data.users)
     .then(createdUsers => {
       console.log(createdUsers);
-      res.send(`<p>${createdUsers}</p>`);
+      res.send(`${createdUsers}`);
     })
     .catch(error => {
       res.setHeader('Content-Type', 'application/json');
