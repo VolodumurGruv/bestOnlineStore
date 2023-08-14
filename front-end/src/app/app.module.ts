@@ -8,6 +8,8 @@ import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { HomeComponent } from './home-page/home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SearchComponent } from './shared/header/components/search/search.component';
+import { IconsComponent } from './shared/header/components/icons/icons.component';
 
 
 @NgModule({
@@ -17,6 +19,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HeaderComponent,
     FooterComponent,
     HomeComponent,
+    SearchComponent,
+    IconsComponent,
 
   ],
   imports: [
