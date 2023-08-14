@@ -1,12 +1,9 @@
-@use './assets/styles/header/header';
-@use './assets/styles/header/nav';
-
+@use "./assets/styles/header/header";
+@use "./assets/styles/header/nav";
+@use "./assets/styles//footer/footer";
 
 body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
