@@ -4,9 +4,6 @@ import path from 'path';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRouter from './routers/user.js';
-//import User from './models/user.js';
-//import data from './data.js';
-import isAdmin from './utils/auth.js';
 
 dotenv.config({ path: '../.env' });
 
@@ -30,7 +27,7 @@ app.use('*', (req, res, next) => {
 
 app.use('/api/users', userRouter);
 
-const staticPath = path.join(__dirname, '../../front-end/dist/front-end/');
+const staticPath = path.join(__dirname, '../../front-end/dist/front-end/');//'./'
 app.use(express.static(staticPath));
 
 app.get('/favicon.ico', (req, res) => {
