@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchComponent } from './shared/header/components/search/search.component';
 import { IconsComponent } from './shared/header/components/icons/icons.component';
 import { CarouselComponent } from './home-page/components/carousel/carousel.component';
-import { TopComponent } from './home-page/components/top/top.component';
+import { CardComponent } from './home-page/components/card/card.component';
 
 
 @NgModule({
@@ -24,7 +24,7 @@ import { TopComponent } from './home-page/components/top/top.component';
     SearchComponent,
     IconsComponent,
     CarouselComponent,
-    TopComponent,
+    CardComponent,
 
   ],
   imports: [
