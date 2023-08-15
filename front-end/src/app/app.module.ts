@@ -10,6 +10,8 @@ import { HomeComponent } from './home-page/home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchComponent } from './shared/header/components/search/search.component';
 import { IconsComponent } from './shared/header/components/icons/icons.component';
+import { CarouselComponent } from './home-page/components/carousel/carousel.component';
+import { TopComponent } from './home-page/components/top/top.component';
 
 
 @NgModule({
@@ -21,6 +23,8 @@ import { IconsComponent } from './shared/header/components/icons/icons.component
     HomeComponent,
     SearchComponent,
     IconsComponent,
+    CarouselComponent,
+    TopComponent,
 
   ],
   imports: [
