@@ -2,7 +2,8 @@
 @use "./assets/styles/header/nav";
 @use "./assets/styles//footer/footer";
 @use "./assets/styles/main/main";
-@use "./assets/styles/carousel/carousel";
+@use "./assets/styles/home-page/carousel";
+@use "./assets/styles/home-page/top";
 
 body {
   margin: 0;
