@@ -6,6 +6,8 @@
   top: 0;
   left: 0;
   max-width: 1920px;
+  background: #fff;
+  z-index: 100;
 
   &__box {
     display: flex;
