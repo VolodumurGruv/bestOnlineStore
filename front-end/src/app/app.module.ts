@@ -12,6 +12,7 @@ import { SearchComponent } from './shared/header/components/search/search.compon
 import { IconsComponent } from './shared/header/components/icons/icons.component';
 import { CarouselComponent } from './home-page/components/carousel/carousel.component';
 import { CardComponent } from './home-page/components/card/card.component';
+import { AdvicesComponent } from './home-page/components/advices/advices.component';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { CardComponent } from './home-page/components/card/card.component';
     IconsComponent,
     CarouselComponent,
     CardComponent,
+    AdvicesComponent,
 
   ],
   imports: [
