@@ -101,3 +101,19 @@
   background: transparent;
   cursor: pointer;
 }
+
+.new {
+  @extend .top;
+
+  &__box {
+    @extend .top__box;
+  }
+}
+
+.actions {
+  @extend .top;
+
+  &__box {
+    @extend .top__box;
+  }
+}
