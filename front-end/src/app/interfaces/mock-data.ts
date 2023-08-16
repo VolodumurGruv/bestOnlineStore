@@ -1,12 +1,11 @@
 export interface MockData {
   title: string;
-  data: Data[]
-
+  data: Data[];
 }
 
 export interface Data {
-    title: string;
-    img: string;
-    price: number;
-    discount: number;
-  }
+  title: string;
+  img: string;
+  price: number;
+  discount: number;
+}
