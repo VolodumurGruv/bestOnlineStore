@@ -1,11 +1,11 @@
 {
   "name": "nodejsserver",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "description": "Server for online store.",
-  "main": "dist/index.js",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "start": "node dist/src/index.js",
+    "start": "node src/server.js",
     "build": "tsc"
   },
   "dependencies": {
@@ -13,7 +13,7 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.1",
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.3"
   },
