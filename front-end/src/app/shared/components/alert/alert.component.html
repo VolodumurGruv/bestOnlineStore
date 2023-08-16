@@ -1,10 +1,7 @@
-<div *ngIf="text">
-  <div
-    [class]="{'alert__success': this.type === 'success',
-  'alert__danger': this.type === 'danger',}"
-  >
-    <p>{{ text }}</p>
+<ng-container *ngIf="text">
+  <div [ngClass]="alertClass">
+    <p class="alert__text">{{ text }}</p>
     <p *ngIf="errorText">{{ errorText }}</p>
     <button (click)="text = ''">Close</button>
   </div>
-</div>
+</ng-container>

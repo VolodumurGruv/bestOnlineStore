@@ -1,0 +1,145 @@
+@use "colors" as *;
+@use "signin";
+
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 131px;
+  margin-bottom: 168px;
+
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 570px;
+    height: 515px;
+  }
+
+  &__title {
+    padding-bottom: 60px;
+
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 130%;
+    color: #000;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__section-adittion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 570px;
+  }
+
+  &__link {
+    padding-top: 8px;
+    padding-bottom: 28px;
+    text-decoration: none;
+
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%; /* 19.5px */
+    text-decoration-line: underline;
+    color: $gray-text;
+    cursor: pointer;
+  }
+}
+
+.form {
+  &__container {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  &__input {
+    @include signin.input;
+
+    &::placeholder {
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 130%;
+      color: $border-input;
+    }
+  }
+
+  &__checkbox {
+    margin-right: auto;
+    padding-top: 18px;
+    padding-bottom: 43px;
+  }
+
+  &__checkbox__label {
+    width: 127px;
+    padding-left: 15px;
+
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    color: $gray-text;
+  }
+}
+
+.input {
+  &__wrap {
+    @include signin.input-wrap;
+    max-width: 570px;
+  }
+}
+
+.icon {
+  padding: 0 16px 0 16px;
+  cursor: pointer;
+}
+
+.or {
+  padding-bottom: 28px;
+
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+  color: #000;
+}
+
+.google__login {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid #010101;
+  width: 274px;
+
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+  color: #010101;
+  cursor: pointer;
+
+  &-icon {
+    width: 24px;
+    height: 24px;
+    background-image: url("../../../../../../assets/pics/png/flat-color-icons_google.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  &-text {
+    padding: 8px;
+  }
+}

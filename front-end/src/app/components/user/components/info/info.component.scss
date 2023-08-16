@@ -1,0 +1,175 @@
+@use "fonts";
+@use "colors";
+@use "a-link";
+@use "signin";
+
+.user {
+  &__info {
+    display: flex;
+    align-items: flex-start;
+    padding-left: 100px;
+    gap: 72px;
+  }
+
+  &__info-title {
+    @include fonts.font-roboto;
+    color: #000;
+    text-align: center;
+    padding-bottom: 72px;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%; /* 36.4px */
+  }
+  &__info-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 32px;
+    width: 837px;
+  }
+
+  &__wrap-input {
+    @include signin.input-wrap;
+    width: 402px;
+  }
+
+  &__input {
+    @include signin.input;
+  }
+}
+
+.delivery {
+  display: inline-flex;
+  padding-right: 0px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 51px;
+  padding-top: 120px;
+  width: 829px;
+
+  &__title {
+    @include fonts.font-roboto;
+
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    color: #000;
+  }
+
+  &__options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 56px;
+  }
+
+  &__options-select {
+    margin-bottom: 32px;
+    margin-top: 32px;
+    margin-left: 72px;
+    display: flex;
+    width: 332px;
+    padding: 12px 16px;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    border: 1px solid #949494;
+
+    .select {
+      @include fonts.font-roboto;
+
+      display: flex;
+      width: 300px;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 130%; /* 23.4px */
+      outline: none;
+      border: none;
+      background: transparent;
+      color: #6a6a6a;
+    }
+  }
+
+  &__opitions-btn {
+    display: flex;
+    width: 757px;
+    padding: 16px;
+    margin-left: 72px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    background: #efeeee;
+    cursor: pointer;
+
+    span {
+      @include fonts.font-roboto;
+      color: #000;
+
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 130%;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 80px;
+    padding-top: 80px;
+  }
+
+  &__btn {
+    @include fonts.font-roboto;
+
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 130%; /* 23.4px */
+    text-transform: none;
+    color: #000;
+  }
+}
+
+.checkbox {
+  width: 24px;
+  height: 24px;
+}
+
+.logo-company {
+  padding-left: 48px;
+  padding-right: 24px;
+  padding-bottom: 32px;
+}
+
+.text-company {
+  @include fonts.font-roboto;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+  color: #000;
+}
+
+.btn__text {
+  @include fonts.font-roboto;
+
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%; /* 26px */
+  text-decoration-line: underline;
+  border: none;
+  background: transparent;
+  color: #000;
+}

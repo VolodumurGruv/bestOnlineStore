@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Message, Type } from '@interfaces/message.interface';
 
 @Injectable({
@@ -14,6 +14,10 @@ export class AlertService {
 
   danger(text: string, errorText: string = '') {
     this.alert$.next({ text, errorText, type: 'danger' });
+  }
+
+  warning(text: string) {
+    return this.alert$.next({ text, type: 'warning' });
   }
   /*
   public msg: Message[] = [];

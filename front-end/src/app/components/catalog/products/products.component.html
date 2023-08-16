@@ -17,7 +17,7 @@
     <div *ngFor="let product of subcategory.products">
       <app-product-card
         [product]="product"
-        [routerLink]="['/catalog/' + subcategory.routerLink, product.id]"
+        [routerLink]="['/catalog', product.id]"
       ></app-product-card>
     </div>
   </div>
