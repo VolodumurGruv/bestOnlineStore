@@ -1,0 +1,15 @@
+.carousel {
+  margin: 0 auto;
+  width: 1240px;
+  height: 540px;
+  background: rgba(128, 128, 128, 0.5);
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  &__image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 160px;
+  }
+}
