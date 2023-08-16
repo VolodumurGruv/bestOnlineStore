@@ -1,5 +1,5 @@
 import express from 'express';
-import User from '../models/user.js';
+import User from '../models/userSchema.js';
 import bcrypt from 'bcryptjs';
 import data from '../data.js';
 import isAuth from '../utils/auth.js';

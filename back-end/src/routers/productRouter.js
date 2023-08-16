@@ -1,66 +1,62 @@
-import express from "express";
-import Product from "../models/product.js";
-import data from "../data.js";
-import isAuth from "../utils/auth.js";
-import isAdmin from "../utils/admin.js";
+import express from 'express';
+import Product from '../models/productSchema.js';
+import data from '../data.js';
+import isAuth from '../utils/auth.js';
+import isAdmin from '../utils/admin.js';
 
 const productRouter = express.Router();
 
-productRouter.get("/", (req, res) => {
+productRouter.get('/', (req, res) => {
   Product.find({})
-    .then((products) => {
+    .then(products => {
       res
         .send({
           message: 'success',
           text: 'All products in payload.',
-          payload: {
-            products
-          }
+          payload: { products }
         });
     })
-    .catch((error) => {
+    .catch(error => {
       res
         .status(500)
         .send({
           message: 'falt',
-          text: 'Internal Server Error.'
+          text: 'Internal Server Error.',
+          payload: { error }
         });
     });
 });
 
-productRouter.get("/seed", (req, res) => {
+productRouter.get('/seed', (req, res) => {
   Product.insertMany(data.products)
-    .then((createdProducts) => {
+    .then(createdProducts => {
       res
         .send({
           message: 'success',
           text: 'Products created.',
-          payload: {
-            createdProducts
-          }
+          payload: { createdProducts }
         });
     })
-    .catch((error) => {
+    .catch(error => {
       res
         .status(500)
         .send({
           message: 'falt',
-          text: 'Internal Server Error.'
+          text: 'Internal Server Error.',
+          payload: { error }
         });
     });
 });
 
-productRouter.get("/:id", (req, res) => {
+productRouter.get('/:id', (req, res) => {
   Product.findById(req.params.id)
-    .then((product) => {
+    .then(product => {
       if (product) {
         res
           .send({
             message: 'success',
             text: 'Products created.',
-            payload: {
-              product
-            }
+            payload: { product }
           });
       } else {
         res
@@ -71,17 +67,18 @@ productRouter.get("/:id", (req, res) => {
           });
       }
     })
-    .catch((error) => {
+    .catch(error => {
       res
         .status(500)
         .send({
           message: 'falt',
-          text: 'Internal Server Error.'
+          text: 'Internal Server Error.',
+          payload: { error }
         });
     });
 });
 
-productRouter.post("/", isAuth, isAdmin, (req, res) => {
+productRouter.post('/', isAuth, isAdmin, (req, res) => {
   const product = new Product({
     name: 'product ' + Date.now(),
     descr: 'sample description',
@@ -98,7 +95,7 @@ productRouter.post("/", isAuth, isAdmin, (req, res) => {
 
   product
     .save()
-    .then((createdProduct) => {
+    .then(createdProduct => {
       res
         .send({
           message: 'success',
@@ -108,21 +105,22 @@ productRouter.post("/", isAuth, isAdmin, (req, res) => {
           }
         });
     })
-    .catch((error) => {
+    .catch(error => {
       res
         .status(500)
         .send({
           message: 'falt',
-          text: 'Internal Server Error.'
+          text: 'Internal Server Error.',
+          payload: { error }
         });
     });
 });
 
-productRouter.put("/:id", isAuth, isAdmin, (req, res) => {
+productRouter.put('/:id', isAuth, isAdmin, (req, res) => {
   const productId = req.params.id;
 
   Product.findById(productId)
-    .then((product) => {
+    .then(product => {
       if (product) {
         product.name = req.body.name;
         product.descr = req.body.descr;
@@ -136,7 +134,7 @@ productRouter.put("/:id", isAuth, isAdmin, (req, res) => {
 
         product
           .save()
-          .then((updatedProduct) => {
+          .then(updatedProduct => {
             res
               .send({
                 message: 'success',
@@ -146,12 +144,13 @@ productRouter.put("/:id", isAuth, isAdmin, (req, res) => {
                 }
               });
           })
-          .catch((error) => {
+          .catch(error => {
             res
               .status(500)
               .send({
                 message: 'falt',
-                text: 'Internal Server Error.'
+                text: 'Internal Server Error.',
+                payload: { error }
               });
           });
       } else {
@@ -163,21 +162,22 @@ productRouter.put("/:id", isAuth, isAdmin, (req, res) => {
           });
       }
     })
-    .catch((error) => {
+    .catch(error => {
       res
         .status(500)
         .send({
           message: 'falt',
-          text: 'Internal Server Error.'
+          text: 'Internal Server Error.',
+          payload: { error }
         });
     });
 });
 
-productRouter.delete("/:id", isAuth, isAdmin, (req, res) => {
+productRouter.delete('/:id', isAuth, isAdmin, (req, res) => {
   const productId = req.params.id;
 
   Product.findById(productId)
-    .then((product) => {
+    .then(product => {
       if (product) {
         product
           .remove()
@@ -186,17 +186,16 @@ productRouter.delete("/:id", isAuth, isAdmin, (req, res) => {
               .send({
                 message: 'success',
                 text: 'Product deleted.',
-                payload: {
-                  product: product
-                }
+                payload: { product }
               });
           })
-          .catch((error) => {
+          .catch(error => {
             res
               .status(500)
               .send({
                 message: 'falt',
-                text: 'Internal Server Error.'
+                text: 'Internal Server Error.',
+                payload: { error }
               });
           });
       } else {
@@ -208,12 +207,13 @@ productRouter.delete("/:id", isAuth, isAdmin, (req, res) => {
           });
       }
     })
-    .catch((error) => {
+    .catch(error => {
       res
         .status(500)
         .send({
           message: 'falt',
-          text: 'Internal Server Error.'
+          text: 'Internal Server Error.',
+          payload: { error }
         });
     });
 });

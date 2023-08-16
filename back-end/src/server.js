@@ -3,7 +3,9 @@ import { fileURLToPath } from 'url'
 import path from 'path';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import userRouter from './routers/user.js';
+import userRouter from './routers/userRouter.js';
+import productRouter from './routers/productRouter.js';
+import orderRouter from './routers/orderRouter.js';
 
 dotenv.config({ path: '../.env' });
 
@@ -29,6 +31,8 @@ app.use('*', (req, res, next) => {
 });
 
 app.use('/api/users', userRouter);
+app.use('/api/product', productRouter);
+app.use('/api/order', orderRouter);
 
 const staticPath = path.join(__dirname, '../../front-end/dist/front-end/');//'./'
 app.use(express.static(staticPath));
