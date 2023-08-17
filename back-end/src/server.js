@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
+import uploadRouter from './routers/uploadRouter.js';
 
 dotenv.config({ path: '../.env' });
 
@@ -33,6 +34,7 @@ app.use('*', (req, res, next) => {
 app.use('/api/users', userRouter);
 app.use('/api/product', productRouter);
 app.use('/api/order', orderRouter);
+app.use('/api/upload', uploadRouter);
 
 const staticPath = path.join(__dirname, '../../front-end/dist/front-end/');//'./'
 app.use(express.static(staticPath));
