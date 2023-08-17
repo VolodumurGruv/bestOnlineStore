@@ -13,8 +13,34 @@ export const APP_ROUTING: Routes = [
             (m) => m.HomePageComponent
           ),
       },
+      {
+        path: '',
+        loadChildren: () =>
+          import('./catalog/catalog.routing').then((m) => m.CATOLOG_ROUTING),
+      },
+      {
+        path: 'blog',
+        loadComponent: () =>
+          import('./blog/blog.component').then((m) => m.BlogComponent),
+      },
+      {
+        path: 'cart',
+        loadComponent: () =>
+          import('./cart/cart.component').then((m) => m.CartComponent),
+      },
+      {
+        path: 'sales',
+        loadComponent: () =>
+          import('./sales/sales.component').then((m) => m.SalesComponent),
+      },
+      {
+        path: 'about',
+        loadComponent: () =>
+          import('./about/about.component').then((m) => m.AboutComponent),
+      },
     ],
   },
+
   {
     path: 'login',
     loadComponent: () =>
