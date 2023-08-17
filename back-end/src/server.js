@@ -11,36 +11,9 @@ import dotenv from 'dotenv';
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
-<<<<<<< HEAD
-import uploadRouter from './routers/uploadRouter.js';
-=======
-// import uploadRouter from './routers/uploadRouter.js';
->>>>>>> front-end-login
 
-const __fileName = fileURLToPath(import.meta.url);
-const __dirName = path.dirname(__fileName);
+dotenv.config({ path: '../.env' });
 
-dotenv.config({
-  path: path.resolve(__dirName, '../.env')
-});
-
-const args = process.argv.slice(2);
-console.log('args: ' + args);
-let mode = 'develop';
-let pathToIndex = '../../tests/';
-
-for (let i = 0; i < args.length; i++) {
-  if (args[i] === '--mode' && i + 1 < args.length) {
-    mode = args[i + 1];
-    break;
-  }
-}
-console.log('mode: ' + mode);
-if (mode === 'product') pathToIndex = '../../front-end/dist/front-end/';
-console.log('path: ' + pathToIndex);
-
-<<<<<<< HEAD
-console.log(process.env.MONGODB_PASSWORD);
 const port = 30000;
 const app = express();
 const uri = `mongodb+srv://team:${process.env.MONGODB_PASSWORD}@cluster0.qfcqvtb.mongodb.net/?retryWrites=true&w=majority`;
@@ -78,11 +51,6 @@ app.use('*', (req, res, next) => {
 app.use('/api/users', userRouter);
 app.use('/api/product', productRouter);
 app.use('/api/order', orderRouter);
-<<<<<<< HEAD
-app.use('/api/upload', uploadRouter);
-=======
-// app.use('/api/upload', uploadRouter);
->>>>>>> front-end-login
 
 const staticPath = path.join(__dirName, pathToIndex);
 
