@@ -3,14 +3,29 @@
     <img src="../../../assets/pics/logo.png" alt="" style="width: 109px" />
   </a>
 </div>
+
 <app-search></app-search>
 <nav class="nav">
   <div class="nav__links">
-    <a class="nav__link" routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Головна</a>
-    <a class="nav__link" routerLink="/catalog" routerLinkActive="active-link">Каталог</a>
-    <a class="nav__link" routerLink="/sales" routerLinkActive="active-link">Акції</a>
-    <a class="nav__link" routerLink="/blog" routerLinkActive="active-link">Блог</a>
-    <a class="nav__link" routerLink="/about" routerLinkActive="active-link">Про нас</a>
+    <a
+      class="nav__link"
+      routerLink="/"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Головна</a
+    >
+    <a class="nav__link" routerLink="/catalog" routerLinkActive="active-link"
+      >Каталог</a
+    >
+    <a class="nav__link" routerLink="/sales" routerLinkActive="active-link"
+      >Акції</a
+    >
+    <a class="nav__link" routerLink="/blog" routerLinkActive="active-link"
+      >Блог</a
+    >
+    <a class="nav__link" routerLink="/about" routerLinkActive="active-link"
+      >Про нас</a
+    >
   </div>
 
   <div class="nav__icon">
