@@ -3,8 +3,7 @@
 .name {
   display: flex;
   justify-content: center;
-  margin-top: 71px;
-  margin-bottom: 32px;
+  padding: 70px 0 32px;
 
   &__shop {
     @include fonts.satisfy;

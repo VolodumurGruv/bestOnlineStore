@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@use "./assets/styles/shared/shared";
 @use "./assets/styles/btn";
 @use "./assets/styles/footer/footer";
 @use "./assets/styles//header/header";
@@ -8,3 +9,5 @@
 @use "./assets/styles/home-page/top";
 @use "./assets/styles/main/main";
 @use "./assets/styles/login/login";
+
+

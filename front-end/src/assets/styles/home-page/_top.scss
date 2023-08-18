@@ -1,7 +1,8 @@
 .top {
-  margin: 160px auto;
-  width: 1240px;
-  height: 744px;
+  //padding-bottom: 160px;
+  //margin: 160px auto;
+  //height: 744px;
+  padding: 80px 0;
 
   &__box {
     display: flex;
@@ -111,6 +112,14 @@
 }
 
 .actions {
+  @extend .top;
+
+  &__box {
+    @extend .top__box;
+  }
+}
+
+.advices {
   @extend .top;
 
   &__box {
