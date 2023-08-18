@@ -11,12 +11,6 @@
   background: #fff;
   z-index: 100;
 
-  &__box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
   &__logo {
     @include logo-mixin.logo;
 
@@ -41,29 +35,6 @@
 .logo__image {
   // @include logo-mixin.image();
   background-image: url("../../../assets/pics/logo.png");
-}
-
-.input__search {
-  margin: 8px auto 8px 16px;
-  border: none;
-  outline: none;
-  width: 350px;
-  flex-shrink: 0;
-  font-family: "Roboto";
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 130%;
-  color: #000;
-
-  &::placeholder {
-    color: #c7c6c6;
-  }
-}
-
-.btn__input__search {
-  margin-right: 16px;
-  cursor: pointer;
 }
 
 .nav {
