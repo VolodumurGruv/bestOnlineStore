@@ -38,16 +38,16 @@ export const APP_ROUTING: Routes = [
         loadComponent: () =>
           import('./about/about.component').then((m) => m.AboutComponent),
       },
+      {
+        path: 'login',
+        loadComponent: () =>
+          import('./signin-flow/login/login.component').then(
+            (m) => m.LoginComponent
+          ),
+      },
     ],
   },
 
-  {
-    path: 'login',
-    loadComponent: () =>
-      import('./signin-flow/login/login.component').then(
-        (m) => m.LoginComponent
-      ),
-  },
   {
     path: '',
     loadChildren: () =>

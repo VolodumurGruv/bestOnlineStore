@@ -1,38 +1,49 @@
 <section class="login">
-  <form class="login__form" [formGroup]="signinForm" (ngSubmit)="onSubmit()">
-    <div class="form__container">
-      <label for="email">Електронна пошта</label>
-      <input
-        class="form__input"
-        type="email"
-        id="email"
-        formControlName="email"
-      />
-    </div>
-    <div class="form__container">
-      <label for="password">Пароль</label>
-      <div class="input__wrap">
+  <div class="login__wrap">
+    <div class="login__title">Увійти</div>
+    <form class="login__form" [formGroup]="signinForm" (ngSubmit)="onSubmit()">
+      <div class="form__container">
         <input
-          #input
           class="form__input"
-          type="password"
-          id="password"
-          formControlName="password"
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="E-mail*"
         />
-        <span class="icon" (click)="isVisisble(input)">
-          <app-visibility-icon></app-visibility-icon>
-        </span>
       </div>
+      <div class="form__container">
+        <div class="input__wrap">
+          <input
+            #input
+            class="form__input"
+            type="password"
+            id="password"
+            formControlName="password"
+            placeholder="Пароль*"
+          />
+          <span class="icon" (click)="isVisisble(input)">
+            <app-visibility-icon></app-visibility-icon>
+          </span>
+        </div>
+      </div>
+      <div class="form__checkbox">
+        <input type="checkbox" id="pass-save" formControlName="savePass" />
+        <label class="form__checkbox__label" for="pass-save"
+          >Зберегти пароль</label
+        >
+      </div>
+      <div class="form__btn">
+        <button class="btn__grey" type="submit">Увійти</button>
+      </div>
+    </form>
+    <div class="login__section-adition">
+      <a class="login__link">Забули пароль?</a>
+      <a class="login__link">Зареєструватися</a>
     </div>
-    <div class="form__container">
-      <button class="btn" type="submit">Увійти</button>
+    <p class="or">або</p>
+    <div class="login__google" (click)="googleLogin()">
+      <span class="login__google-icon"></span>
+      <span class="login__google-text">Google</span>
     </div>
-  </form>
-
-  <div>
-    <button class="btn" (click)="googleLogin()">Увійти через Google</button>
-  </div>
-  <div style="margin-top: 50px">
-    <a routerLink="/" class="btn">На головну сторінку</a>
   </div>
 </section>
