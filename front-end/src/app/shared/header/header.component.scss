@@ -1,15 +1,7 @@
 @use "../../../assets/styles/logo-mixin";
 
 .header {
-  display: block;
-  position: sticky;
-  max-width: 1920px;
-  margin: 0 auto;
-  padding: 20px 80px;
-  top: 0;
-  left: 0;
-  background: #fff;
-  z-index: 100;
+
 
   &__logo {
     @include logo-mixin.logo;
