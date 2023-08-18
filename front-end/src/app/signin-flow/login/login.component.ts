@@ -35,7 +35,7 @@ export class LoginComponent {
 
   googleLogin() {}
 
-  isVisisble() {
-    console.log(this.signinForm.get("password"))
+  isVisisble(input: { type: string }) {
+    input.type = input.type === 'password' ? 'text' : 'password';
   }
 }

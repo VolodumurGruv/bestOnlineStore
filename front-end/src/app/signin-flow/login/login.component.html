@@ -13,23 +13,24 @@
       <label for="password">Пароль</label>
       <div class="input__wrap">
         <input
+          #input
           class="form__input"
           type="password"
           id="password"
           formControlName="password"
         />
-        <span class="icon" (click)="isVisisble()">
+        <span class="icon" (click)="isVisisble(input)">
           <app-visibility-icon></app-visibility-icon>
         </span>
       </div>
     </div>
     <div class="form__container">
-      <button class="btn" type="submit">Login</button>
+      <button class="btn" type="submit">Увійти</button>
     </div>
   </form>
 
   <div>
-    <button class="btn" (click)="googleLogin()">Login with Google</button>
+    <button class="btn" (click)="googleLogin()">Увійти через Google</button>
   </div>
   <div style="margin-top: 50px">
     <a routerLink="/" class="btn">На головну сторінку</a>

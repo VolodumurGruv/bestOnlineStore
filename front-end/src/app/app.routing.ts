@@ -48,6 +48,11 @@ export const APP_ROUTING: Routes = [
         (m) => m.LoginComponent
       ),
   },
+  {
+    path: '',
+    loadChildren: () =>
+      import('./admin/admin.routing').then((m) => m.ADMIN_ROUTING),
+  },
 
   { path: '', redirectTo: '/', pathMatch: 'full' },
   { path: '**', redirectTo: '/', pathMatch: 'full' },
