@@ -1,0 +1,17 @@
+@use "../typography/fonts";
+
+.name {
+  display: flex;
+  justify-content: center;
+  padding: 70px 0 32px;
+
+  &__shop {
+    @include fonts.satisfy;
+    margin: 0;
+    font-size: 52px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    color: #000;
+  }
+}
