@@ -3,7 +3,10 @@ import { fileURLToPath } from 'url'
 import path from 'path';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import userRouter from './routers/user.js';
+import userRouter from './routers/userRouter.js';
+import productRouter from './routers/productRouter.js';
+import orderRouter from './routers/orderRouter.js';
+import uploadRouter from './routers/uploadRouter.js';
 
 dotenv.config({ path: '../.env' });
 
@@ -17,18 +20,27 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const staticPath = path.join(__dirname, '../../front-end/dist/front-end/');
+app.use('*', (req, res, next) => {
+  console.log(req.originalUrl);
+  res.header('Access-Control-Allow-Origin',
+             '*');
+  res.header('Access-Control-Allow-Methods',
+             'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers',
+             'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  next();
+});
+
+app.use('/api/users', userRouter);
+app.use('/api/product', productRouter);
+app.use('/api/order', orderRouter);
+app.use('/api/upload', uploadRouter);
+
+const staticPath = path.join(__dirname, '../../front-end/dist/front-end/');//'./'
 app.use(express.static(staticPath));
 
 app.get('/favicon.ico', (req, res) => {
-  res.sendFile(join(staticPath, 'favicon.ico'));
-});
-
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:30000');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
+  res.sendFile(path.join(staticPath, 'favicon.ico'));
 });
 
 mongoose.connect(uri, {})
@@ -49,10 +61,9 @@ dbConnection
     console.log("Connected to DB!");
   });
 
-app.use('/api/users', userRouter);
-app.use('/api/seed', userRouter);
 
 app.get('*', (req, res) => {
+  console.log(JSON.stringify(req.headers));
   res.sendFile(path.join(staticPath, 'index.html'));
 });
 

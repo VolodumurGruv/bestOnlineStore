@@ -9,6 +9,21 @@ const data = {
       email: '#@$',
       isAdmin: true
     }
+  ],
+  products: [
+    {
+      name: 'Qwerty',
+      descr: 'best product',
+      shortDescr: 'product',
+      price: 100,
+      image: 'url.png',
+      brand: 'Gucci',
+      category: 'stuff',
+      instock: true,
+      countInStock: 5,
+      raiting: 3,
+      numReviews: 7
+    }
   ]
 };
 
