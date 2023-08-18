@@ -3,9 +3,11 @@
 .header {
   display: block;
   position: sticky;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 20px 80px;
   top: 0;
   left: 0;
-  max-width: 1920px;
   background: #fff;
   z-index: 100;
 
@@ -17,16 +19,15 @@
 
   &__logo {
     @include logo-mixin.logo;
-    margin: 40px 0 0 80px;
 
-    &__text {
-      @include logo-mixin.text;
-    }
+    // &__text {
+    //   @include logo-mixin.text;
+
+    // }
   }
 
   &__input {
     display: flex;
-    margin-top: 48px;
     height: 40px;
     // width: 423px;
     justify-content: space-between;
@@ -35,6 +36,11 @@
     border-radius: 8px;
     border: 1px solid #949494;
   }
+}
+
+.logo__image {
+  // @include logo-mixin.image();
+  background-image: url("../../pics/logo.png");
 }
 
 .input__search {

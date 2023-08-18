@@ -1,18 +1,38 @@
 <section class="login">
+  <form class="login__form" [formGroup]="signinForm" (ngSubmit)="onSubmit()">
+    <div class="form__container">
+      <label for="email">Електронна пошта</label>
+      <input
+        class="form__input"
+        type="email"
+        id="email"
+        formControlName="email"
+      />
+    </div>
+    <div class="form__container">
+      <label for="password">Пароль</label>
+      <div class="input__wrap">
+        <input
+          #input
+          class="form__input"
+          type="password"
+          id="password"
+          formControlName="password"
+        />
+        <span class="icon" (click)="isVisisble(input)">
+          <app-visibility-icon></app-visibility-icon>
+        </span>
+      </div>
+    </div>
+    <div class="form__container">
+      <button class="btn" type="submit">Увійти</button>
+    </div>
+  </form>
+
   <div>
-    <form>
-      <div>
-        <label for="email">Електронна пошта</label>
-        <input type="email" id="email" />
-      </div>
-      <div>
-        <label for="password">Пароль</label>
-        <input type="password" id="password" />
-      </div>
-      <button class="btn__link" type="submit">Login</button>
-    </form>
+    <button class="btn" (click)="googleLogin()">Увійти через Google</button>
   </div>
-  <div>
-    <a routerLink="/" class="btn__link">На головну сторінку</a>
+  <div style="margin-top: 50px">
+    <a routerLink="/" class="btn">На головну сторінку</a>
   </div>
 </section>

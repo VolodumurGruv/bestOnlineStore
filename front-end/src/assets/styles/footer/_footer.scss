@@ -8,7 +8,7 @@
 
   &__logo {
     @include logo-mixin.logo;
-    margin: 160px 880px 100px 880px;
+    margin: 160px auto 100px auto;
 
     &__text {
       @include logo-mixin.text;
