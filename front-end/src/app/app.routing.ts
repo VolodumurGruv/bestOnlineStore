@@ -16,7 +16,7 @@ export const APP_ROUTING: Routes = [
       {
         path: '',
         loadChildren: () =>
-          import('./catalog/catalog.routing').then((m) => m.CATOLOG_ROUTING),
+          import('./catalog/catalog.routing').then((m) => m.CATALOG_ROUTING),
       },
       {
         path: 'blog',

@@ -10,4 +10,5 @@ export interface Product {
   countInStock: number;
   raiting: number;
   numReviews: number;
+  sale?: boolean;
 }

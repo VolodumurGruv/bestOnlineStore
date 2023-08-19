@@ -8,7 +8,6 @@
       >
         <a
           class="categories__menu-title"
-          [routerLink]="[category.routerLink, { category: category.routerLink }]"
         >{{ category.name }}</a>
         <ul class="categories__menu-links"
             *ngIf="category.showSubcategories"
@@ -16,7 +15,8 @@
           <li *ngFor="let subcategory of category.subcategories">
             <a
               class="categories__menu-subtitle"
-              [routerLink]="[category.routerLink, { category: subcategory.routerLink }]"
+
+              [routerLink]="[subcategory.routerLink]"
             >{{ subcategory.name }}</a>
           </li>
         </ul>
