@@ -8,14 +8,31 @@ import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import uploadRouter from './routers/uploadRouter.js';
 
-dotenv.config({ path: '../.env' });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({
+  path: path.resolve(__dirname, '../.env')
+});
+
+const args = process.argv.slice(2);
+console.log('args: ' + args);
+let mode = 'develop';
+let pathToIndex = '../../tests/';
+
+for (let i = 0; i < args.length; i++) {
+  if (args[i] === '--mode' && i + 1 < args.length) {
+    mode = args[i + 1];
+    break;
+  }
+}
+console.log('mode: ' + mode);
+if (mode === 'product') pathToIndex = '../../front-end/dist/front-end/';
+console.log('path: ' + pathToIndex);
 
 const port = 30000;
 const app = express();
 const uri = `mongodb+srv://team:${process.env.MONGODB_PASSWORD}@cluster0.qfcqvtb.mongodb.net/?retryWrites=true&w=majority`;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,8 +43,10 @@ app.use('*', (req, res, next) => {
              '*');
   res.header('Access-Control-Allow-Methods',
              'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Credentials',
+             'true');
   res.header('Access-Control-Allow-Headers',
-             'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+             'Origin, X-Requested-With, Content-Type, Accept, Key, Authorization');
   next();
 });
 
@@ -36,7 +55,7 @@ app.use('/api/product', productRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/upload', uploadRouter);
 
-const staticPath = path.join(__dirname, '../../front-end/dist/front-end/');//'./'
+const staticPath = path.join(__dirname, pathToIndex);
 app.use(express.static(staticPath));
 
 app.get('/favicon.ico', (req, res) => {
@@ -69,4 +88,14 @@ app.get('*', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server at http://localhost:${port}`);
+});
+
+app.on('error', error => {
+  if (error.code === 'EACCES') {
+    console.log(`No access to port: ${port}.`);
+  }
+});
+
+app.on('clientServer', (error, socket) => {
+  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
 });
