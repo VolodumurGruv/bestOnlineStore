@@ -1,0 +1,119 @@
+.top {
+  margin: 160px auto;
+  width: 1240px;
+  height: 744px;
+
+  &__box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__title {
+    text-align: center;
+    margin-bottom: 100px;
+    font-family: "Roboto";
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    color: #000;
+  }
+}
+
+.card {
+  &__image {
+    width: 360px;
+    height: 360px;
+    background: rgba(128, 128, 128, 0.5);
+  }
+
+  &__disc {
+    display: inline-flex;
+    padding: 8px 12px;
+    justify-content: center;
+    align-items: center;
+    margin-left: 284px;
+    font-family: "Roboto";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    background: #4b4b4b;
+    color: #fff;
+  }
+
+  &__wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__title {
+    margin-top: 32px;
+    text-align: center;
+    font-family: "Roboto";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    color: #000;
+  }
+
+  &__price {
+    text-align: center;
+    font-family: "Roboto";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    color: #000;
+  }
+
+  &__price__discount {
+    text-align: center;
+    font-family: "Roboto";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%; /* 20.8px */
+    text-decoration-line: line-through;
+    color: #da3838;
+  }
+}
+
+.btn__card {
+  margin-top: 64px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 274px;
+  padding: 16px 32px;
+  gap: 10px;
+  border-radius: 8px;
+  border: 1px solid #000;
+  color: #000;
+  font-family: "Roboto";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 130%; /* 26px */
+  text-transform: uppercase;
+  background: transparent;
+  cursor: pointer;
+}
+
+.new {
+  @extend .top;
+
+  &__box {
+    @extend .top__box;
+  }
+}
+
+.actions {
+  @extend .top;
+
+  &__box {
+    @extend .top__box;
+  }
+}
