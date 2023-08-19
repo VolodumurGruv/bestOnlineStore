@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {  RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-categories',
@@ -8,6 +8,4 @@ import {  RouterOutlet } from '@angular/router';
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss'],
 })
-export class CategoriesComponent {
-
-}
+export class CategoriesComponent {}

@@ -1,9 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-
-import { Category, SubCategory } from '@interfaces/catalog.interface';
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
+import {Product} from "@interfaces/product.interfaces";
 
 @Component({
   selector: 'app-card',
@@ -13,7 +12,7 @@ import { ProductCardComponent } from '@shared/components/product-card/product-ca
   styleUrls: ['./card.component.scss'],
 })
 export class CardComponent {
-  @Input() mockData!: Category | SubCategory;
+  @Input() mockData!: Product[];
 
   constructor() {}
 }

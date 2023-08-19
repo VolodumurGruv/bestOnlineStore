@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, Input, } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 
 import { Product } from '@interfaces/product.interfaces';
@@ -11,6 +11,6 @@ import { TransformPricePipe } from '../../pipes/transform-price.pipe';
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.scss'],
 })
-export class ProductCardComponent {
+export class ProductCardComponent   {
   @Input() product!: Product;
 }

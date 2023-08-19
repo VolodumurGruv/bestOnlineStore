@@ -1,8 +1,8 @@
-<div class="top__title">{{ mockData.name }}</div>
+<div class="top__title">Категорія</div>
 <div class="card__wrap">
   <app-product-card
-    *ngFor="let product of mockData.products"
+    *ngFor="let product of mockData"
     [product]="product"
-    [routerLink]="'/catalog/' + mockData.routerLink + '/' + product.id"
   />
+<!--  [routerLink]="'/catalog/' + mockData.routerLink + '/' + product"-->
 </div>

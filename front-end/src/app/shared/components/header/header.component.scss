@@ -8,17 +8,11 @@
 
   &__logo {
     @include logo-mixin.logo;
-
-    // &__text {
-    //   @include logo-mixin.text;
-
-    // }
   }
 
   &__input {
     display: flex;
     height: 40px;
-    // width: 423px;
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
