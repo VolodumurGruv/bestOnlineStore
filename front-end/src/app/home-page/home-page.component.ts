@@ -4,6 +4,7 @@ import { CarouselComponent } from './components/carousel/carousel.component';
 import { AdvicesComponent } from './components/advices/advices.component';
 import { CardComponent } from './components/card/card.component';
 import { MockData } from '../interfaces/mock-data';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
@@ -39,4 +40,10 @@ export class HomePageComponent {
       { title: 'Касовий столик', price: 5000, img: '', discount: 6500 },
     ],
   };
+
+  constructor(private router: Router) {}
+
+  redirect(path: string, param?: { filter: string }): void {
+    param ? this.router.navigate([path, param]) : this.router.navigate([path]);
+  }
 }
