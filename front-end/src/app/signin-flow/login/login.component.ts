@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { VisibilityIconComponent } from 'src/app/shared/icons/visibility-icon/visibility-icon.component';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -28,10 +29,15 @@ export class LoginComponent {
     password: ['', Validators.required],
     savePass: [],
   });
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   onSubmit() {
+    const { email, password } = this.signinForm.value;
+
     console.log(this.signinForm.value);
+    if (email && password) {
+      this.authService.signIn().subscribe();
+    }
   }
 
   googleLogin() {}
