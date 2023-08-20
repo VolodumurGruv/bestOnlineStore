@@ -63,6 +63,7 @@ app.use('/api/order', orderRouter);
 app.use('/api/upload', uploadRouter);
 
 const staticPath = path.join(__dirname, pathToIndex);
+
 app.use(express.static(staticPath));
 
 app.get('/favicon.ico', (req, res) => {
