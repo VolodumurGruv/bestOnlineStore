@@ -1,5 +1,6 @@
 import express from 'express';
-import { fileURLToPath } from 'url'
+import RateLimit from 'express-rate-limit';
+import { fileURLToPath } from 'url';
 import path from 'path';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
@@ -34,19 +35,25 @@ const port = 30000;
 const app = express();
 const uri = `mongodb+srv://team:${process.env.MONGODB_PASSWORD}@cluster0.qfcqvtb.mongodb.net/?retryWrites=true&w=majority`;
 
+const limiter = RateLimit({
+  windowMs: 1*60*1000,
+  max: 10
+});
+
+app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('*', (req, res, next) => {
   console.log(req.originalUrl);
   res.header('Access-Control-Allow-Origin',
-             '*');
+    '*');
   res.header('Access-Control-Allow-Methods',
-             'GET, POST, PUT, DELETE');
+    'GET, POST, PUT, DELETE');
   res.header('Access-Control-Allow-Credentials',
-             'true');
+    'true');
   res.header('Access-Control-Allow-Headers',
-             'Origin, X-Requested-With, Content-Type, Accept, Key, Authorization');
+    'Origin, X-Requested-With, Content-Type, Accept, Key, Authorization');
   next();
 });
 
@@ -73,12 +80,12 @@ mongoose.connect(uri, {})
 
 const dbConnection = mongoose.connection;
 dbConnection
-  .on("error", (err) => {
+  .on('error', (err) => {
     console.log(`Connection error ${err}`);
   });
 dbConnection
-  .once("open", () => {
-    console.log("Connected to DB!");
+  .once('open', () => {
+    console.log('Connected to DB!');
   });
 
 
