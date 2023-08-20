@@ -6,7 +6,7 @@ const generateToken = (user) => {
     email: user.email,
     name: user.name,
     isAdmin: user.isAdmin,
-  }, process.env.JWT_SECRET || 'secret', {
+  }, process.env.JWT_SECRET, {
     expiresIn: '1d'
   });
 };

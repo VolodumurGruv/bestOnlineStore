@@ -78,7 +78,9 @@ const signInUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({
+      email: {$eq: email}
+    });
 
     if (user && bcrypt.compareSync(password, user.password)) {
       const token = generateToken(user);
@@ -110,130 +112,150 @@ const signInUser = async (req, res) => {
 };
 
 const getUserById = async (req, res) => {
-    try {
-      const user = await User.findById(req.params.id);
-      if (user) {
-        res.json({
-          message: 'success',
-          text: 'User was found.',
-          payload: user
-        });
-      } else {
-        res.status(404).json({
-          message: 'falt',
-          text: 'User not found.'
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
+  try {
+    const user = await User.findById({
+      _id: {$eq: req.params.id}
+    });
+    if (user) {
+      res.json({
+        message: 'success',
+        text: 'User was found.',
+        payload: user
+      });
+    } else {
+      res.status(404).json({
         message: 'falt',
-        text: 'Internal Server Error.'
+        text: 'User not found.'
       });
     }
-  };
-  
-const updateProfile = async (req, res) => {
-    try {
-      const user = await User.findById(req.user._id);
-  
-      if (user) {
-        user.name = req.body.name || user.name;
-        user.email = req.body.email || user.email;
-        user.phone = req.body.phone || user.phone;
-        
-        if (req.body.password) {
-          user.password = bcrypt.hashSync(req.body.password, 8);
-        }
-  
-        const updatedUser = await user.save();
-        const token = generateToken(updatedUser);
-  
-        res.json({
-          message: 'success',
-          text: 'User was updated.',
-          payload: {
-            _id: updatedUser._id,
-            name: updatedUser.name,
-            email: updatedUser.email,
-            phone: updatedUser.phone,
-            isAdmin: updatedUser.isAdmin,
-            token
-          }
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
-        message: 'falt',
-        text: 'Error on server.'
-      });
-    }
-  };
-  
-const deleteUser = async (req, res) => {
-    try {
-      const user = await User.findById(req.params.id);
-  
-      if (user) {
-        if (user.email === 'markovalekdandr108@gmail.com') {
-          res.status(400).json({
-            message: 'falt',
-            text: 'Cannot delete admin.'
-          });
-        } else {
-          const deletedUser = await user.remove();
-          res.json({
-            message: 'success',
-            text: 'User deleted.',
-            payload: {
-              user: deletedUser
-            }
-          });
-        }
-      } else {
-        res.status(404).json({
-          message: 'message',
-          text: 'User not found.'
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
-        message: 'falt',
-        text: 'Error on server.'
-      });
-    }
-  };
-  
-const updateUser = async (req, res) => {
-    try {
-      const user = await User.findById(req.params.id);
-  
-      if (user) {
-        user.name = req.body.name || user.name;
-        user.email = req.body.email || user.email;
-        user.phone = req.body.phone || user.phone;
-        user.isAdmin = req.body.isAdmin || user.isAdmin;
-  
-        const updatedUser = await user.save();
-        
-        res.json({
-          message: 'success',
-          text: 'User updated.',
-          payload: {
-            user: updatedUser
-          }
-        });
-      } else {
-        res.status(404).json({
-          message: 'falt',
-          text: 'User not found.'
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
-        message: 'falt',
-        text: 'Error on server.'
-      });
-    }
-  };
+  } catch (error) {
+    res.status(500).json({
+      message: 'falt',
+      text: 'Internal Server Error.'
+    });
+  }
+};
 
-export { getAllUsers, seedUsers, registerUser, signInUser, getUserById, updateProfile, deleteUser, updateUser };
+const updateProfile = async (req, res) => {
+  try {
+    const user = await User.findById({
+      _id: {$eq: req.user._id}
+    });
+
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      user.phone = req.body.phone || user.phone;
+
+      if (req.body.password) {
+        user.password = bcrypt
+          .hashSync({$eq: req.body.password}, 8);
+      }
+
+      const updatedUser = await user.save();
+      const token = generateToken(updatedUser);
+
+      res.json({
+        message: 'success',
+        text: 'User was updated.',
+        payload: {
+          _id: updatedUser._id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          phone: updatedUser.phone,
+          isAdmin: updatedUser.isAdmin,
+          token
+        }
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: 'falt',
+      text: 'Error on server.'
+    });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const user = await User
+      .findById({
+        _id: {$eq: req.params.id}
+      });
+
+    if (user) {
+      if (user.email === 'markovalekdandr108@gmail.com') {
+        res.status(400).json({
+          message: 'falt',
+          text: 'Cannot delete admin.'
+        });
+      } else {
+        const deletedUser = await user.remove();
+        res.json({
+          message: 'success',
+          text: 'User deleted.',
+          payload: {
+            user: deletedUser
+          }
+        });
+      }
+    } else {
+      res.status(404).json({
+        message: 'message',
+        text: 'User not found.'
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: 'falt',
+      text: 'Error on server.'
+    });
+  }
+};
+
+const updateUser = async (req, res) => {
+  try {
+    const user = await User
+      .findById({
+        _id: {$eq: req.params.id}
+      });
+
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      user.phone = req.body.phone || user.phone;
+      user.isAdmin = req.body.isAdmin || user.isAdmin;
+
+      const updatedUser = await user.save();
+
+      res.json({
+        message: 'success',
+        text: 'User updated.',
+        payload: {
+          user: updatedUser
+        }
+      });
+    } else {
+      res.status(404).json({
+        message: 'falt',
+        text: 'User not found.'
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: 'falt',
+      text: 'Error on server.'
+    });
+  }
+};
+
+export {
+  getAllUsers,
+  seedUsers,
+  registerUser,
+  signInUser,
+  getUserById,
+  updateProfile,
+  deleteUser,
+  updateUser
+};

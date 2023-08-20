@@ -29,4 +29,4 @@ const uploadFile = async (req, res) => {
   }
 };
 
-export { uploadFile };
+export { upload, uploadFile };
