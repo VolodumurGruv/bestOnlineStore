@@ -4,21 +4,27 @@ import { ActivatedRoute } from "@angular/router";
 
 import { mainCategories } from "../../interfaces/catalog.data";
 import { SubCategory } from "../../interfaces/catalog.interface";
-import {CardComponent} from "../../home-page/components/card/card.component";
-import {ProductCardComponent} from "../../shared/product-card/product-card.component";
+import { CardComponent } from "../../home-page/components/card/card.component";
+import { ProductCardComponent } from "../../shared/product-card/product-card.component";
+import {FiltersComponent} from "../filters/filters.component";
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, CardComponent, ProductCardComponent],
+  imports: [CommonModule, CardComponent, ProductCardComponent, FiltersComponent],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent implements OnInit {
   public categoryName!: string;
   public subcategory!: SubCategory;
-  constructor(private route: ActivatedRoute) {}
+  public isClickSort: boolean = false;
+  public isClickFilter: boolean = false;
 
+  constructor(private route: ActivatedRoute) {}
+  onIsClickFilterChange(newValue: boolean) {
+    this.isClickFilter = newValue;
+  }
   ngOnInit(): void {
     this.route.url.subscribe(urlSegments => {
       const categoryPath = urlSegments[urlSegments.length - 1].path;
@@ -35,7 +41,6 @@ export class ProductsComponent implements OnInit {
         if (matchingCategory) {
           this.categoryName = matchingCategory.name;
           this.subcategory = matchingSubcategory;
-          console.log(this.subcategory);
         }
       }
     });
