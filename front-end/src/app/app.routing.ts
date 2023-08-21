@@ -9,47 +9,50 @@ export const APP_ROUTING: Routes = [
       {
         path: '',
         loadComponent: () =>
-          import('./home-page/home-page.component').then(
+          import('./components/home-page/home-page.component').then(
             (m) => m.HomePageComponent
           ),
       },
       {
         path: '',
         loadChildren: () =>
-          import('./catalog/catalog.routing').then((m) => m.CATALOG_ROUTING),
+          import('./components/catalog/catalog.routing').then(
+            (m) => m.CATALOG_ROUTING
+          ),
       },
       {
         path: 'blog',
         loadComponent: () =>
-          import('./blog/blog.component').then((m) => m.BlogComponent),
+          import('./components/blog/blog.component').then(
+            (m) => m.BlogComponent
+          ),
       },
       {
         path: 'cart',
         loadComponent: () =>
-          import('./cart/cart.component').then((m) => m.CartComponent),
+          import('./components/cart/cart.component').then(
+            (m) => m.CartComponent
+          ),
       },
       {
         path: 'sales',
         loadComponent: () =>
-          import('./sales/sales.component').then((m) => m.SalesComponent),
+          import('./components/sales/sales.component').then(
+            (m) => m.SalesComponent
+          ),
       },
       {
         path: 'about',
         loadComponent: () =>
-          import('./about/about.component').then((m) => m.AboutComponent),
+          import('./components/about/about.component').then(
+            (m) => m.AboutComponent
+          ),
       },
       {
         path: 'login',
         loadComponent: () =>
-          import('./signin-flow/login/login.component').then(
+          import('./components/signin-flow/login/login.component').then(
             (m) => m.LoginComponent
-          ),
-      },
-      {
-        path: 'signup',
-        loadComponent: () =>
-          import('./signin-flow/signup/signup.component').then(
-            (m) => m.SignupComponent
           ),
       },
     ],
