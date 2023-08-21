@@ -1,5 +1,6 @@
-import {Component, Input} from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
+
 import { Product } from "../../interfaces/product.interfaces";
 
 @Component({
@@ -9,10 +10,11 @@ import { Product } from "../../interfaces/product.interfaces";
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.scss']
 })
+
 export class ProductCardComponent {
   @Input() product!: Product;
 
-  formatPrice(price: number): string {
+  transformPrice(price: number): string {
     const formattedPrice = new Intl.NumberFormat('uk-UA', {
       style: 'decimal',
       minimumFractionDigits: 2,

@@ -11,12 +11,12 @@
       class="product-card__sale"
       *ngIf="product.sale"
     >
-      {{ formatPrice(product.price * 0.8) }}
+      {{ transformPrice(product.price * 0.8) }}
     </p>
     <p
       class="product-card__price"
       [ngClass]="{'product-card__crossed-price': product.sale}"
-    >{{ formatPrice(product.price) }}</p>
+    >{{ transformPrice(product.price) }}</p>
   </figcaption>
 </figure>
 
