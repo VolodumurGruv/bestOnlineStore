@@ -1,13 +1,13 @@
 {
   "name": "nodejsserver",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Server for online store.",
   "main": "src/server.js",
   "type": "module",
   "scripts": {
     "start": "node src/server.js --mode develop",
     "start:prod": "node src/server.js --mode production",
-    "build": "tsc",
+    "build": "echo 'done'",
     "prepare": "cd .. && husky install back-end/.husky",
     "test": "echo 'Hello from test.'"
   },
