@@ -3,14 +3,14 @@
   "name": "best-online-store",
   "builds": [
     {
-      "src": "/back-end/src/server.js",
+      "src": "/back-end/dist/api/index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/back-end/src/server.js"
+      "dest": "/back-end/dist/api/index.js"
     }
   ]
 }
