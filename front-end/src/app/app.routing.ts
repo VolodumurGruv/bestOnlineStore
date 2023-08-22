@@ -55,6 +55,13 @@ export const APP_ROUTING: Routes = [
             (m) => m.LoginComponent
           ),
       },
+      {
+        path: 'signup',
+        loadComponent: () =>
+          import('./components/signin-flow/signup/signup.component').then(
+            (m) => m.SignupComponent
+          ),
+      },
     ],
   },
 
