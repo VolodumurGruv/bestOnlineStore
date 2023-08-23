@@ -5,11 +5,12 @@ import {ActivatedRoute} from "@angular/router";
 import {Product} from "../../../../../../../../src/app/interfaces/product.interfaces";
 import {mainCategories} from "../../../../../../../../src/app/interfaces/catalog.data";
 import {ProductCardComponent} from "../../../../../../../../src/app/shared/product-card/product-card.component";
+import {AboutProductComponent} from "./components/about-product/about-product.component";
 
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage, ProductCardComponent],
+  imports: [CommonModule, NgOptimizedImage, ProductCardComponent, AboutProductComponent],
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss']
 })
