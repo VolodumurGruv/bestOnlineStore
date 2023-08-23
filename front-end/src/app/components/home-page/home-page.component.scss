@@ -1,0 +1,47 @@
+@use "../../assets/styles/typography/fonts";
+
+.name {
+  display: flex;
+  justify-content: center;
+  padding: 70px 0 32px;
+
+  &__shop {
+    @include fonts.satisfy;
+    margin: 0;
+    font-size: 52px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    color: #000;
+  }
+}
+
+.top,
+.actions,
+.advices {
+  padding: 160px 0;
+}
+
+.top__btn {
+  display: flex;
+}
+
+.btn__card {
+  margin-top: 64px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 274px;
+  padding: 16px 32px;
+  gap: 10px;
+  border-radius: 8px;
+  border: 1px solid #000;
+  color: #000;
+  font-family: "Roboto";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 130%; /* 26px */
+  text-transform: uppercase;
+  background: transparent;
+  cursor: pointer;
+}
