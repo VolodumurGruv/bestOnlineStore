@@ -1,5 +1,3 @@
-import bcrypt from 'bcrypt';
-
 const data = {
   users: [
     {
@@ -17,10 +15,12 @@ const data = {
       shortDescr: 'product',
       price: 100,
       image: 'url.png',
-      category: 'stuff',
       brand: 'Gucci',
+      category: 'stuff',
+      instock: true,
       countInStock: 5,
-      instock: true
+      raiting: 3,
+      numReviews: 7
     }
   ]
 };
