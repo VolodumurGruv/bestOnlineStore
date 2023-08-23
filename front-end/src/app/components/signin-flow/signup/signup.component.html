@@ -1,7 +1,7 @@
 <section class="signup">
   <div class="signup__form-wrap">
     <div class="signup__title">Зареєструватися</div>
-    <form class="signup__form">
+    <form [formGroup]="signupForm" (ngSubmit)="registerUser()" class="signup__form">
       <div class="signup__input-wrap">
         <input type="text" class="signup__input" placeholder="І'мя Призвіще*" />
       </div>
