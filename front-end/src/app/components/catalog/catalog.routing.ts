@@ -1,6 +1,8 @@
-import { Route } from '@angular/router';
-import { ProductComponent } from './product/product.component';
-import { ProductsComponent } from './products/products.component';
+import {Route} from '@angular/router';
+
+import {ProductsComponent} from "./products/products.component";
+import {ProductComponent} from "./product/product.component";
+
 
 export const CATALOG_ROUTING: Route[] = [
   {
@@ -10,6 +12,6 @@ export const CATALOG_ROUTING: Route[] = [
         (m) => m.CategoriesComponent
       ),
   },
-  { path: 'catalog/:id', component: ProductsComponent },
-  { path: 'product/:id', component: ProductComponent },
+  {path: 'catalog/:id', component: ProductsComponent},
+  {path: 'catalog/:subcategory/:id', component: ProductComponent},
 ];

@@ -1,9 +1,9 @@
 .product-card {
   position: relative;
-  max-width: 360px;
+  width: 360px;
   text-align: center;
-  font-family: Roboto;
-  line-height: 130%; /* 23.4px */
+  line-height: 130%;
+  cursor: pointer;
 
   &__action {
     position: absolute;
