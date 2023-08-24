@@ -41,7 +41,7 @@ const limiter = RateLimit({
   max: 10
 });
 
-app.set('trust proxy', 1);
+app.set('trust proxy', 2);
 app.get('/ip', (req, res) => {
   res.send(req.ip);
 });
@@ -98,8 +98,19 @@ dbConnection
 app.get('*', (req, res) => {
   console.log(JSON.stringify(req.headers));
   if (mode == 'develop') {
-    console.log(req);
-    console.log(res);
+    console.log('statusCode:', res.statusCode);
+    console.log('statusMessage:', res.statusMessage);
+    console.log('headers:', res.headers);
+
+    let data = '';
+
+    res.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    res.on('end', () => {
+      console.log('data / body:', data);
+    });
   }
   res.sendFile(path.join(staticPath, 'index.html'));
 });
