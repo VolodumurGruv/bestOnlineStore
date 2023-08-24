@@ -1,3 +1,5 @@
+@import "../../../assets/styles/shared/colors";
+
 .product-card {
   position: relative;
   width: 360px;
@@ -11,7 +13,7 @@
     top: 0;
     color: white;
     padding: 8px 12px;
-    background-color: #4B4B4B;
+    background-color: $dark-gray;
   }
 
   &__image,
@@ -19,7 +21,7 @@
     width: 360px;
     height: 360px;
     object-fit: contain;
-    background-color: #D9D9D9;
+    background-color: $main-color;
     margin-bottom: 32px;
   }
 
@@ -38,9 +40,8 @@
   }
 
   &__crossed-price {
-    color: #DA3838;
+    color: $sale-color;
     font-size: 16px;
     text-decoration: line-through;
   }
-
 }

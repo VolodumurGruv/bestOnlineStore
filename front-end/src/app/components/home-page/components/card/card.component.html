@@ -1,6 +1,7 @@
 <div class="top__title">{{ mockData.title }}</div>
 <!-- in card without discount is lover position it should be fixed -->
 <div class="card__wrap">
+
   <div class="card" *ngFor="let prod of mockData.data">
     <div class="card__image">
       <ng-container *ngIf="prod.discount">

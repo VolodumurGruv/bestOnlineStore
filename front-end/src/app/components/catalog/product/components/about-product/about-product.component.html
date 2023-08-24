@@ -53,8 +53,8 @@
       </div>
       <p class="product__descr"><span class="product__bold">Опис товару: </span>{{ product.descr }}</p>
       <div class="product__prices">
-        <span *ngIf="product.sale" class="product__sale-price">{{product.price * 0.8}} ₴</span>
-        <span class="product__price" [ngClass]="{'product__crossed-price': product.sale}">{{product.price}} ₴</span>
+        <span *ngIf="product.sale" class="product__sale-price">{{product.price * 0.8 | transformPrice}}</span>
+        <span class="product__price" [ngClass]="{'product__crossed-price': product.sale}">{{product.price | transformPrice}}</span>
       </div>
       <div class="product__buttons">
         <button class="product__buy">

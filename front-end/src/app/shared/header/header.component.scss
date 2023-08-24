@@ -1,4 +1,6 @@
 @use "../../../assets/styles/logo-mixin";
+@import "../../../assets/styles/shared/colors";
+
 
 .header {
 
@@ -20,7 +22,7 @@
     align-items: center;
     flex-shrink: 0;
     border-radius: 8px;
-    border: 1px solid #949494;
+    border: 1px solid $border-input;
   }
 }
 
@@ -46,7 +48,7 @@
     position: relative;
     padding: 5px;
     text-decoration: none;
-    font-family: "Roboto";
+
     font-size: 20px;
     font-style: normal;
     font-weight: 400;

@@ -1,4 +1,4 @@
-@use "../../../assets//styles/logo-mixin";
+@use "../../../assets/styles/logo-mixin";
 
 .footer {
   display: block;
@@ -23,7 +23,7 @@
 
     &__link {
       text-decoration: none;
-      font-family: "Roboto";
+
       font-size: 20px;
       font-style: normal;
       font-weight: 400;
@@ -48,7 +48,7 @@
 
   p {
     margin: 0;
-    font-family: "Roboto";
+
     font-size: 12px;
     font-style: normal;
     font-weight: 400;

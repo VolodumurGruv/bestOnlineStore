@@ -1,4 +1,4 @@
-@use "../../assets/styles/typography/fonts";
+@use "../../../assets/styles/typography/fonts";
 
 .name {
   display: flex;
@@ -36,12 +36,10 @@
   border-radius: 8px;
   border: 1px solid #000;
   color: #000;
-  font-family: "Roboto";
   font-size: 20px;
   font-style: normal;
   font-weight: 300;
   line-height: 130%; /* 26px */
   text-transform: uppercase;
   background: transparent;
-  cursor: pointer;
 }
