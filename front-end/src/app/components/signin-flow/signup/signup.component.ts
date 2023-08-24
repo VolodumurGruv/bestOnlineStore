@@ -19,11 +19,13 @@ export class SignupComponent {
     password: ['', [Validators.required, Validators.minLength(8)]],
     confirmPassword: ['', [Validators.required, Validators.minLength(8)]],
     isAdmin: [false],
+    phone: ['']
   })
   constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   registerUser() {
-    this.authService.signup(this.signupForm.value)
+    const {name, email, password, isAdmin, phone} = this.signupForm.value;
+    this.authService.signup({name, email, password, phone, isAdmin})
   }
 
   googleLogin() {}

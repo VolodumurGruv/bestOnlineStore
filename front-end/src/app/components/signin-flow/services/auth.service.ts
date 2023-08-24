@@ -11,7 +11,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   signIn(user: User): Observable<User> {
-    return this.http.get<User>(`${configs.URL}/all`).pipe(
+    return this.http.get<User>(`${configs.URL}/users/all`).pipe(
       tap((data) => {
         console.log(data);
       })
@@ -19,6 +19,6 @@ export class AuthService {
   }
 
   signup(user: User) {
-    this.http.post<User>(configs.URL, JSON.stringify(user), httpConfig).pipe(tap(res => console.log(res))).subscribe();
+    this.http.post<User>(`${configs.URL}/users/register`, JSON.stringify(user), httpConfig).pipe(tap(res => console.log(res))).subscribe();
   }
 }
