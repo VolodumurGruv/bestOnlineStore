@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 
 import { Product } from "../../interfaces/product.interfaces";

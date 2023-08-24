@@ -67,27 +67,45 @@ export class ProductsService {
   getPathProduct(productId: number, subcategory: string | null): string | null {
     let path = "Каталог";
 
-    const {subcategories, name: categoryName} = mainCategories.find(cat =>
+    const matchingCategory = mainCategories.find(cat =>
       cat.subcategories?.some(subcat => subcat.routerLink === subcategory)
-    ) || {subcategories: []};
-    const {name: subcategoryName, products} = subcategories?.find(subcat => subcat.routerLink === subcategory)
-    || {products: []};
-    const product = products?.find(prod => prod.id === productId);
+    );
 
-    if (categoryName) { path +=  ` / ${categoryName}` }
-    if (subcategoryName) { path +=  ` / ${subcategoryName}` }
-    if (product) {  path +=  ` / ${product.name}`}
+    if (matchingCategory) {
+      const matchingSubcategory = matchingCategory.subcategories?.find(subcat =>
+        subcat.routerLink === subcategory
+      );
+
+      const product = matchingSubcategory?.products?.find(prod => prod.id === productId);
+      const subcategoryName = matchingSubcategory?.name;
+
+      if (subcategoryName) { path += ` / ${subcategoryName}` }
+      if (product) { path += ` / ${product.name}` }
+    } else {
+      const product = mainCategories.flatMap(cat => cat.products || []).find(prod => prod.id === productId);
+      if (product) { path += ` / ${product.name}` }
+    }
 
     return path || null;
   }
 
-  getProductById(id: number): Product | null {
-    const matchingProduct = mainCategories
-      .flatMap((category: Category) => category.subcategories || [])
-      .flatMap((subcategory: SubCategory) => subcategory.products || [])
-      .find((product: Product) => product.id === id);
 
-    return matchingProduct || null;
+  getProductById(productId: number): Product | null {
+    for (const category of mainCategories) {
+      const productInCategory = category.products?.find(product => product.id === productId);
+      if (productInCategory) {
+        return productInCategory;
+      }
+
+      for (const subcategory of category.subcategories || []) {
+        const productInSubcategory = subcategory.products?.find(product => product.id === productId);
+        if (productInSubcategory) {
+          return productInSubcategory;
+        }
+      }
+    }
+
+    return null;
   }
 
   // getProducts(): Observable<Product[]> {
