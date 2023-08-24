@@ -1,14 +1,31 @@
 <div class="header__logo">
-  <p class="header__logo__text">LOGO</p>
+  <a routerLink="/" class="header__logo__text">
+    <img src="../../../assets/pics/logo.png" alt="" style="width: 109px" />
+  </a>
 </div>
+
 <app-search></app-search>
 <nav class="nav">
   <div class="nav__links">
-    <a class="nav__link" routerLink="/">Головна</a>
-    <a class="nav__link" routerLink="/catalog">Каталог</a>
-    <a class="nav__link" routerLink="/discount">Акції</a>
-    <a class="nav__link" routerLink="/blog">Блог</a>
-    <a class="nav__link" routerLink="/about">Про нас</a>
+    <a
+      class="nav__link"
+      routerLink="/"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Головна</a
+    >
+    <a class="nav__link" routerLink="/catalog" routerLinkActive="active-link"
+      >Каталог</a
+    >
+    <a class="nav__link" routerLink="/sales" routerLinkActive="active-link"
+      >Акції</a
+    >
+    <a class="nav__link" routerLink="/blog" routerLinkActive="active-link"
+      >Блог</a
+    >
+    <a class="nav__link" routerLink="/about" routerLinkActive="active-link"
+      >Про нас</a
+    >
   </div>
 
   <div class="nav__icon">
