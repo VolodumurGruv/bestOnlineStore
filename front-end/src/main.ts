@@ -1,7 +1,8 @@
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { AppComponent } from './app/app.component';
+import { AuthService } from './app/components/signin-flow/services/auth.service';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -13,5 +14,6 @@ bootstrapApplication(AppComponent, {
       },
     ]),
     provideHttpClient(),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthService, multi: true },
   ],
 });

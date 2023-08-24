@@ -8,9 +8,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { VisibilityIconComponent } from 'src/app/shared/icons/visibility-icon/visibility-icon.component';
+import { VisibilityIconComponent } from 'src/app/shared/components/icons/visibility-icon/visibility-icon.component';
 import { AuthService } from '../services/auth.service';
 import { Subscription } from 'rxjs';
+import { AlertService } from 'src/app/shared/services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -33,10 +34,16 @@ export class LoginComponent implements OnDestroy {
     password: ['', Validators.required],
     savePass: [],
   });
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(
+    private fb: FormBuilder,
+    private alertService: AlertService,
+    private authService: AuthService
+  ) {}
 
   onSubmit() {
-    this.authService.signIn(this.signinForm.value).subscribe();
+    this.authService.signIn(this.signinForm.value).subscribe(() => {
+      this.alertService.success("You've logged in successfully");
+    });
   }
 
   googleLogin() {}
@@ -46,6 +53,6 @@ export class LoginComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.unSub;
+    if (this.unSub) this.unSub.unsubscribe();
   }
 }

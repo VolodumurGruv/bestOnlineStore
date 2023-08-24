@@ -1,4 +1,4 @@
-@use "../../../assets/styles/logo-mixin";
+@use "../../../../assets/styles/logo-mixin";
 
 .header {
   &__logo {
@@ -24,7 +24,7 @@
 
 .logo__image {
   // @include logo-mixin.image();
-  background-image: url("../../../assets/pics/logo.png");
+  background-image: url("../../../../assets/pics/logo.png");
 }
 
 .nav {
