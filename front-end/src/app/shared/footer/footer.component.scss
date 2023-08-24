@@ -1,6 +1,9 @@
 @use "../../../assets/styles/logo-mixin";
 
 .footer {
+  max-width: 811px;
+  padding-top: 80px;
+  margin: 0 auto;
   display: block;
   position: relative;
   bottom: 0;
@@ -8,7 +11,7 @@
 
   &__logo {
     @include logo-mixin.logo;
-    margin: 160px auto 100px auto;
+    margin: 0 auto 100px;
 
     &__text {
       @include logo-mixin.text;
@@ -17,9 +20,11 @@
 
   &__nav {
     display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
     justify-content: space-around;
     align-items: center;
-    margin-bottom: 100px;
+    margin-bottom: 60px;
 
     &__link {
       text-decoration: none;
@@ -29,14 +34,6 @@
       font-weight: 400;
       line-height: 130%;
       color: #000;
-
-      &:nth-child(-n + 1) {
-        margin-left: 555px;
-      }
-
-      &:nth-last-child(-n + 1) {
-        margin-right: 554px;
-      }
     }
   }
 }
@@ -44,11 +41,10 @@
 .rights {
   display: flex;
   justify-content: center;
-  margin: 40px;
+  padding: 40px;
 
   p {
     margin: 0;
-
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
