@@ -41,6 +41,10 @@ const limiter = RateLimit({
   max: 10
 });
 
+app.set('trust proxy', 1);
+app.get('/ip', (req, res) => {
+  res.send(req.ip);
+});
 app.use(helmet());
 app.use(limiter);
 app.use(express.json());
