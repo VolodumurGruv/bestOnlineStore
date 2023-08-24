@@ -44,7 +44,6 @@ export class SimilarProductsComponent implements OnInit {
   }
 
   onProductClick(productId: number) {
-    console.log(productId)
     this.router.navigate(['/catalog', this.subcategory, productId]);
   }
 

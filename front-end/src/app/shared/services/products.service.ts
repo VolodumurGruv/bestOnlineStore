@@ -57,7 +57,6 @@ export class ProductsService {
           category.subcategories?.includes(matchingSubcategory)
         );
         if (matchingParentCategory) {
-          console.log(matchingParentCategory.name);
           path +=  ` / ${matchingParentCategory.name} / ${matchingSubcategory.name}`;
         }
       }
