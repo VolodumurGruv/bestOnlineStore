@@ -28,15 +28,16 @@ export class ProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
+      const subcategory = params.get('subcategory');
       const idParam = params.get('id');
       const productId = idParam ? +idParam : null;
       if (productId) {
         this.product = this.productService.getProductById(productId);
-        this.pathProduct = this.productService.getPathProduct(productId)
+        this.pathProduct = this.productService.getPathProduct(productId, subcategory);
       }
     });
-
   }
+
 }
 
 
