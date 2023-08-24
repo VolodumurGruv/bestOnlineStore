@@ -47,7 +47,6 @@ export class ProductsService {
 
     if (matchingCategory) {
       path +=  ` / ${matchingCategory.name}`;
-      console.log(matchingCategory.name);
     } else {
       const matchingSubcategory = mainCategories
         .flatMap((category: Category) => category.subcategories || [])
