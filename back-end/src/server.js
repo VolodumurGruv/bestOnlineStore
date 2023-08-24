@@ -1,4 +1,5 @@
 import express from 'express';
+import helmet from 'helmet';
 import RateLimit from 'express-rate-limit';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -41,6 +42,7 @@ const limiter = RateLimit({
   max: 10
 });
 
+app.use(helmet());
 app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
