@@ -41,7 +41,7 @@ const limiter = RateLimit({
   max: 10
 });
 
-app.set('trust proxy', 2);
+app.set('trust proxy', 1);
 app.get('/ip', (req, res) => {
   res.send(req.ip);
 });
@@ -59,6 +59,22 @@ app.use('*', (req, res, next) => {
     'true');
   res.header('Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Key, Authorization');
+
+  if (mode == 'develop') {
+    console.log('statusCode:', res.statusCode);
+    console.log('statusMessage:', res.statusMessage);
+    console.log('headers:', res.headers);
+
+    let data = '';
+
+    res.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    res.on('end', () => {
+      console.log('data / body:', data);
+    });
+  }
   next();
 });
 
@@ -97,21 +113,6 @@ dbConnection
 
 app.get('*', (req, res) => {
   console.log(JSON.stringify(req.headers));
-  if (mode == 'develop') {
-    console.log('statusCode:', res.statusCode);
-    console.log('statusMessage:', res.statusMessage);
-    console.log('headers:', res.headers);
-
-    let data = '';
-
-    res.on('data', (chunk) => {
-      data += chunk;
-    });
-
-    res.on('end', () => {
-      console.log('data / body:', data);
-    });
-  }
   res.sendFile(path.join(staticPath, 'index.html'));
 });
 

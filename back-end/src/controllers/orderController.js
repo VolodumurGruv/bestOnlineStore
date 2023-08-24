@@ -10,7 +10,7 @@ const getOrders = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
+      message: 'fault',
       text: 'Internal Server Error.',
       payload: error
     });
@@ -27,7 +27,7 @@ const getUserCart = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
+      message: 'fault',
       text: 'Internal Server Error.',
       payload: error
     });
@@ -38,7 +38,7 @@ const createNewOrder = async (req, res) => {
   try {
     if (req.body.orderItems.length === 0) {
       res.status(400).json({
-        message: 'falt',
+        message: 'fault',
         text: 'Cart is empty.'
       });
     } else {
@@ -63,14 +63,12 @@ const createNewOrder = async (req, res) => {
       res.status(201).json({
         message: 'success',
         text: 'New order created.',
-        payload: {
-          order: createdOrder
-        }
+        payload: createdOrder
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
+      message: 'fault',
       text: 'Internal Server Error.',
       payload: error
     });
@@ -88,13 +86,13 @@ const getOrderById = async (req, res) => {
       });
     } else {
       res.status(404).json({
-        message: 'falt',
+        message: 'fault',
         text: 'Order was not found.'
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
+      message: 'fault',
       text: 'Internal Server Error.',
       payload: error
     });
@@ -117,19 +115,17 @@ const updateOrderToPaid = async (req, res) => {
       res.json({
         message: 'success',
         text: 'Order has been paid.',
-        payload: {
-          order: updatedOrder
-        }
+        payload: updatedOrder
       });
     } else {
       res.status(404).json({
-        message: 'falt',
+        message: 'fault',
         text: 'Order was not found.'
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
+      message: 'fault',
       text: 'Internal Server Error.',
       payload: error
     });
@@ -144,19 +140,17 @@ const deleteOrder = async (req, res) => {
       res.json({
         message: 'success',
         text: 'Order was deleted.',
-        payload: {
-          order: deletedOrder
-        }
+        payload: deletedOrder
       });
     } else {
       res.status(404).json({
-        message: 'falt',
+        message: 'fault',
         text: 'Order was not found.'
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
+      message: 'fault',
       text: 'Internal Server Error.',
       payload: error
     });
