@@ -1,8 +1,6 @@
 @use "../../../assets/styles/logo-mixin";
 
 .header {
-
-
   &__logo {
     @include logo-mixin.logo;
 

@@ -2,13 +2,25 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { VisibilityIconComponent } from 'src/app/shared/icons/visibility-icon/visibility-icon.component';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, RouterLink, VisibilityIconComponent, FormsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    RouterLink,
+    VisibilityIconComponent,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
@@ -19,13 +31,14 @@ export class SignupComponent {
     password: ['', [Validators.required, Validators.minLength(8)]],
     confirmPassword: ['', [Validators.required, Validators.minLength(8)]],
     isAdmin: [false],
-    phone: ['']
-  })
+    phone: [''],
+  });
   constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   registerUser() {
-    const {name, email, password, isAdmin, phone} = this.signupForm.value;
-    this.authService.signup({name, email, password, phone, isAdmin})
+    const { name, email, password, isAdmin, phone } = this.signupForm.value;
+    console.log(this.signupForm.value);
+    this.authService.signup({ name, password, email, phone, isAdmin });
   }
 
   googleLogin() {}

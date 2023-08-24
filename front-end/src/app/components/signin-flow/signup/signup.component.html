@@ -3,10 +3,20 @@
     <div class="signup__title">Зареєструватися</div>
     <form [formGroup]="signupForm" (ngSubmit)="registerUser()" class="signup__form">
       <div class="signup__input-wrap">
-        <input type="text" class="signup__input" placeholder="І'мя Призвіще*" />
+        <input
+          type="text"
+          class="signup__input"
+          placeholder="І'мя Призвіще*"
+          formControlName="name"
+        />
       </div>
       <div class="signup__input-wrap">
-        <input type="email" class="signup__input" placeholder="E-mail*" />
+        <input
+          type="email"
+          class="signup__input"
+          placeholder="E-mail*"
+          formControlName="email"
+        />
       </div>
       <div class="signup__input-wrap">
         <input
@@ -14,6 +24,7 @@
           type="password"
           class="signup__input-icon"
           placeholder="Пароль*"
+          formControlName="password"
         />
         <span class="icon" (click)="isVisisble(input)">
           <app-visibility-icon></app-visibility-icon>
@@ -25,6 +36,7 @@
           type="password"
           class="signup__input-icon"
           placeholder="Повторити пароль*"
+          formControlName="confirmPassword"
         />
         <span class="icon" (click)="isVisisble(confirm)">
           <app-visibility-icon></app-visibility-icon>

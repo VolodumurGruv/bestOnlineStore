@@ -19,6 +19,9 @@ export class AuthService {
   }
 
   signup(user: User) {
-    this.http.post<User>(`${configs.URL}/users/register`, JSON.stringify(user), httpConfig).pipe(tap(res => console.log(res))).subscribe();
+    this.http
+      .post<User>(`${configs.URL}/users/register`, user, httpConfig)
+      .pipe(tap((res) => console.log(res)))
+      .subscribe();
   }
 }

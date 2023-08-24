@@ -36,7 +36,7 @@ export class LoginComponent implements OnDestroy {
   constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   onSubmit() {
-    this.authService.signIn(this.signinForm.value).subscribe()
+    this.authService.signIn(this.signinForm.value).subscribe();
   }
 
   googleLogin() {}
