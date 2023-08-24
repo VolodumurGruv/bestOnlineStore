@@ -1,16 +1,16 @@
 {
   "version": 2,
-  "name": "bestOnlineStore",
+  "name": "best-online-store",
   "builds": [
     {
-      "src": "server.js",
+      "src": "/back-end/dist/api/index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "server.js"
+      "dest": "/back-end/dist/api/index.js"
     }
   ]
 }

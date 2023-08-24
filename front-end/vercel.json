@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "name": "LykkeStore",
+  "builds": [
+    {
+      "src": "front-end/dist/front-end",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/front-end/dist/front-end/$1"
+    }
+  ]
+}
+

@@ -1,4 +1,5 @@
 import express from 'express';
+import helmet from 'helmet';
 import RateLimit from 'express-rate-limit';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -9,11 +10,11 @@ import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import uploadRouter from './routers/uploadRouter.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __fileName = fileURLToPath(import.meta.url);
+const __dirName = path.dirname(__fileName);
 
 dotenv.config({
-  path: path.resolve(__dirname, '../.env')
+  path: path.resolve(__dirName, '../.env')
 });
 
 const args = process.argv.slice(2);
@@ -40,10 +41,10 @@ const limiter = RateLimit({
   max: 10
 });
 
+app.use(helmet());
 app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use('*', (req, res, next) => {
   console.log(req.originalUrl);
   res.header('Access-Control-Allow-Origin',
@@ -62,7 +63,7 @@ app.use('/api/product', productRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/upload', uploadRouter);
 
-const staticPath = path.join(__dirname, pathToIndex);
+const staticPath = path.join(__dirName, pathToIndex);
 
 app.use(express.static(staticPath));
 

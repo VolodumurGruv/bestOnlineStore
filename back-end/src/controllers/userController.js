@@ -149,7 +149,7 @@ const updateProfile = async (req, res) => {
 
       if (req.body.password) {
         user.password = bcrypt
-          .hashSync({$eq: req.body.password}, 8);
+          .hashSync(req.body.password, 8);
       }
 
       const updatedUser = await user.save();
