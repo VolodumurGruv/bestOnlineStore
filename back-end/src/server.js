@@ -32,8 +32,7 @@ console.log('mode: ' + mode);
 if (mode === 'product') pathToIndex = '../../front-end/dist/front-end/';
 console.log('path: ' + pathToIndex);
 
-console.log(process.env.MONGODB_PASSWORD);
-const port = 30000;
+const port = process.env.PORT || 30000;
 const app = express();
 const uri = `mongodb+srv://team:${process.env.MONGODB_PASSWORD}@cluster0.qfcqvtb.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -68,18 +67,18 @@ const staticPath = path.join(__dirName, pathToIndex);
 
 app.use(express.static(staticPath));
 
-app.get("/favicon.ico", (req, res) => {
-	res.sendFile(path.join(staticPath, "favicon.ico"));
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(path.join(staticPath, 'favicon.ico'));
 });
 
 mongoose
-	.connect(uri, {})
-	.then(() => {
-		console.log("Connected to MongoDB Atlas");
-	})
-	.catch((error) => {
-		console.error("Connection error:", error);
-	});
+  .connect(uri, {})
+  .then(() => {
+    console.log('Connected to MongoDB Atlas');
+  })
+  .catch((error) => {
+    console.error('Connection error:', error);
+  });
 
 const dbConnection = mongoose.connection;
 dbConnection
@@ -98,7 +97,7 @@ app.get('*', (req, res) => {
 });
 
 app.listen(port, () => {
-	console.log(`Server at http://localhost:${port}`);
+  console.log(`Server at http://localhost:${port}`);
 });
 
 app.on('error', error => {
