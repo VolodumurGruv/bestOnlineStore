@@ -1,12 +1,12 @@
 {
   "name": "nodejsserver",
-  "version": "0.12.4",
+  "version": "0.13.4",
   "description": "Server for online store.",
   "main": "dist/api/index.js",
   "type": "module",
   "scripts": {
-    "start:dev": "node dist/api/index.js --mode develop",
-    "start": "node dist/api/index.js --mode production",
+    "start:dev": "node src/server.js --mode develop",
+    "start": "node src/server.js --mode production",
     "build": "node build.js",
     "prepare": "cd .. && husky install back-end/.husky",
     "test": "echo 'Hello from test.'"
