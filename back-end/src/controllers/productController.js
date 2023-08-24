@@ -93,76 +93,76 @@ const createProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
-    const productId = req.params.id;
+  const productId = req.params.id;
+
+  try {
+    const product = await Product.findById(productId);
+    if (product) {
+      product.name = req.body.name;
+      product.descr = req.body.descr;
+      product.shortDescr = req.body.shortDescr;
+      product.price = req.body.price;
+      product.image = req.body.image;
+      product.category = req.body.category;
+      product.brand = req.body.brand;
+      product.instock = req.body.instock;
+      product.countInStock = req.body.countInStock;
   
-    try {
-      const product = await Product.findById(productId);
-      if (product) {
-        product.name = req.body.name;
-        product.descr = req.body.descr;
-        product.shortDescr = req.body.shortDescr;
-        product.price = req.body.price;
-        product.image = req.body.image;
-        product.category = req.body.category;
-        product.brand = req.body.brand;
-        product.instock = req.body.instock;
-        product.countInStock = req.body.countInStock;
-  
-        const updatedProduct = await product.save();
-        res.json({
-          message: 'success',
-          text: 'Product updated.',
-          payload: {
-            product: updatedProduct
-          }
-        });
-      } else {
-        res.status(404).json({
-          message: 'falt',
-          text: 'Product was not found.'
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
+      const updatedProduct = await product.save();
+      res.json({
+        message: 'success',
+        text: 'Product updated.',
+        payload: {
+          product: updatedProduct
+        }
+      });
+    } else {
+      res.status(404).json({
         message: 'falt',
-        text: 'Internal Server Error.',
-        payload: { error }
+        text: 'Product was not found.'
       });
     }
-  };
+  } catch (error) {
+    res.status(500).json({
+      message: 'falt',
+      text: 'Internal Server Error.',
+      payload: { error }
+    });
+  }
+};
   
-  const deleteProduct = async (req, res) => {
-    const productId = req.params.id;
+const deleteProduct = async (req, res) => {
+  const productId = req.params.id;
   
-    try {
-      const product = await Product.findById(productId);
-      if (product) {
-        await product.remove();
-        res.json({
-          message: 'success',
-          text: 'Product deleted.',
-          payload: { product }
-        });
-      } else {
-        res.status(404).json({
-          message: 'falt',
-          text: 'Product was not found.'
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
+  try {
+    const product = await Product.findById(productId);
+    if (product) {
+      await product.remove();
+      res.json({
+        message: 'success',
+        text: 'Product deleted.',
+        payload: { product }
+      });
+    } else {
+      res.status(404).json({
         message: 'falt',
-        text: 'Internal Server Error.',
-        payload: { error }
+        text: 'Product was not found.'
       });
     }
-  };
-  
-  export {
-    getAllProducts,
-    seedProducts,
-    getProductById,
-    createProduct,
-    updateProduct,
-    deleteProduct
-  };
+  } catch (error) {
+    res.status(500).json({
+      message: 'falt',
+      text: 'Internal Server Error.',
+      payload: { error }
+    });
+  }
+};
+
+export {
+  getAllProducts,
+  seedProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct
+};

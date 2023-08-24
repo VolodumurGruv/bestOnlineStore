@@ -97,6 +97,10 @@ dbConnection
 
 app.get('*', (req, res) => {
   console.log(JSON.stringify(req.headers));
+  if (mode == 'develop') {
+    console.log(req);
+    console.log(res);
+  }
   res.sendFile(path.join(staticPath, 'index.html'));
 });
 

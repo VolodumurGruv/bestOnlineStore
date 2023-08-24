@@ -39,10 +39,10 @@ const seedUsers = async (req, res) => {
 
 const registerUser = async (req, res) => {
   const { name, password, email, phone } = req.body;
-  
+
   try {
     const hashedPassword = bcrypt.hashSync(password, 8);
-    
+
     const user = new User({
       name,
       password: hashedPassword,
@@ -106,7 +106,8 @@ const signInUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: 'falt',
-      text: 'Internal Server Error.'
+      text: 'Internal Server Error.',
+      payload: error
     });
   }
 };
@@ -131,7 +132,8 @@ const getUserById = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: 'falt',
-      text: 'Internal Server Error.'
+      text: 'Internal Server Error.',
+      payload: error
     });
   }
 };
@@ -171,7 +173,8 @@ const updateProfile = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: 'falt',
-      text: 'Error on server.'
+      text: 'Error on server.',
+      payload: error
     });
   }
 };
@@ -208,7 +211,8 @@ const deleteUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: 'falt',
-      text: 'Error on server.'
+      text: 'Error on server.',
+      payload: error
     });
   }
 };
@@ -244,7 +248,8 @@ const updateUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: 'falt',
-      text: 'Error on server.'
+      text: 'Error on server.',
+      payload: error
     });
   }
 };
