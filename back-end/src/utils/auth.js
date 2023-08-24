@@ -1,13 +1,33 @@
 import jwt from 'jsonwebtoken';
 
-const isAdmin = (req, res, next) => {
-  if (req.user && req.user.isAdmin) {console.log('yes');
-    next();
-  } else {console.log('no');
+const isAuth = (req, res, next) => {
+  const authorization = req.headers.authorization;
+  if (authorization) {
+    const token = authorization
+      .slice(7, authorization.length);
+    console.log(`Token: ${token}`);
+
+    jwt.verify(token, process.env.JWT_SECRET || 'secret', (error, decode) => {
+      if (error) {
+        res
+          .status(401)
+          .send({
+            message: 'falt',
+            text: 'Wrong token!'
+          });
+      } else {
+        req.user = decode;
+        next();
+      }
+    });
+  } else {
     res
       .status(401)
-      .send({ message: 'Wrong admin token' });
+      .send({
+        message: 'falt',
+        text: 'No token.'
+      });
   }
 };
 
-export default isAdmin;
+export default isAuth;
