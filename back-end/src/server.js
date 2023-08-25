@@ -110,6 +110,14 @@ dbConnection
     console.log('Connected to DB!');
   });
 
+app.use((error, req, res) => {
+  console.error(error.stack);
+  res.status(500).json({
+    message: 'fault',
+    text: 'Something went wrong!',
+    payload: error
+  });
+});
 
 app.get('*', (req, res) => {
   console.log(JSON.stringify(req.headers));

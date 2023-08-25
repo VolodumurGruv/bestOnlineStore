@@ -1,14 +1,13 @@
 import jwt from 'jsonwebtoken';
 
 const generateToken = (user) => {
-  return jwt.sign({
+  const token = jwt.sign({
     _id: user._id,
-    email: user.email,
-    name: user.name,
-    isAdmin: user.isAdmin,
-  }, process.env.JWT_SECRET, {
+  }, `${process.env.JWT_SECRET}`, {
     expiresIn: '1d'
   });
+
+  return token;
 };
 
 export default generateToken;

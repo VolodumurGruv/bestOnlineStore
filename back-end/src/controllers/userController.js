@@ -51,25 +51,27 @@ const registerUser = async (req, res) => {
     });
 
     const createdUser = await user.save();
+
     const token = generateToken(createdUser);
+
+    const newUser = {                                                   _id: createdUser._id,
+      name: createdUser.name,
+      email: createdUser.email,
+      phone: createdUser.phone,
+      isAdmin: createdUser.isAdmin,
+      token
+    };
 
     res.status(201).json({
       message: 'success',
       text: 'New user created.',
-      payload: {
-        _id: createdUser._id,
-        name: createdUser.name,
-        email: createdUser.email,
-        phone: createdUser.phone,
-        isAdmin: createdUser.isAdmin,
-        token
-      }
+      payload: newUser
     });
   } catch (error) {
     res.status(500).json({
       message: 'fault',
       text: 'User registration failed.',
-      payload: error
+      payload: error.message
     });
   }
 };
