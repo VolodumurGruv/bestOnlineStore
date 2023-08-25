@@ -22,9 +22,9 @@ const uploadFile = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
+      message: 'fault',
       text: 'Internal Server Error.',
-      payload: { error }
+      payload: error
     });
   }
 };

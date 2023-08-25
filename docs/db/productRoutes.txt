@@ -1,0 +1,26 @@
+Отримати всі продукти:
+Метод: GET
+URL: /api/products
+
+Заповнити базу даних тестовими продуктами (додавання даних для тестування):
+Метод: GET
+URL: /api/products/seed
+
+Отримати інформацію про певний продукт за його ID:
+Метод: GET
+URL: /api/products/:id
+
+Створити новий продукт (тільки для адміністратора):
+Метод: POST
+URL: /api/products
+Middleware: isAuth, isAdmin
+
+Оновити інформацію про певний продукт за його ID (тільки для адміністратора):
+Метод: PUT
+URL: /api/products/:id
+Middleware: isAuth, isAdmin
+
+Видалити продукт за його ID (тільки для адміністратора):
+Метод: DELETE
+URL: /api/products/:id
+Middleware: isAuth, isAdmin

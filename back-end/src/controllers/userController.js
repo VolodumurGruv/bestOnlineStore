@@ -13,7 +13,7 @@ const getAllUsers = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
+      message: 'fault',
       text: 'Some error occurred on DB.',
       payload: error
     });
@@ -30,7 +30,7 @@ const seedUsers = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
+      message: 'fault',
       text: 'An error occurred.',
       payload: error
     });
@@ -39,10 +39,10 @@ const seedUsers = async (req, res) => {
 
 const registerUser = async (req, res) => {
   const { name, password, email, phone } = req.body;
-  
+
   try {
     const hashedPassword = bcrypt.hashSync(password, 8);
-    
+
     const user = new User({
       name,
       password: hashedPassword,
@@ -67,7 +67,7 @@ const registerUser = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
+      message: 'fault',
       text: 'User registration failed.',
       payload: error
     });
@@ -78,9 +78,7 @@ const signInUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({
-      email: {$eq: email}
-    });
+    const user = await User.findOne({ email });
 
     if (user && bcrypt.compareSync(password, user.password)) {
       const token = generateToken(user);
@@ -99,23 +97,22 @@ const signInUser = async (req, res) => {
       });
     } else {
       res.status(401).json({
-        message: 'falt',
+        message: 'fault',
         text: 'Wrong email or password.'
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
-      text: 'Internal Server Error.'
+      message: 'fault',
+      text: 'Internal Server Error.',
+      payload: error
     });
   }
 };
 
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findById({
-      _id: {$eq: req.params.id}
-    });
+    const user = await User.findById(req.params.id);
     if (user) {
       res.json({
         message: 'success',
@@ -124,23 +121,22 @@ const getUserById = async (req, res) => {
       });
     } else {
       res.status(404).json({
-        message: 'falt',
+        message: 'fault',
         text: 'User not found.'
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
-      text: 'Internal Server Error.'
+      message: 'fault',
+      text: 'Internal Server Error.',
+      payload: error
     });
   }
 };
 
 const updateProfile = async (req, res) => {
   try {
-    const user = await User.findById({
-      _id: {$eq: req.user._id}
-    });
+    const user = await User.findById(req.user._id);
 
     if (user) {
       user.name = req.body.name || user.name;
@@ -170,8 +166,9 @@ const updateProfile = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
-      text: 'Error on server.'
+      message: 'fault',
+      text: 'Error on server.',
+      payload: error
     });
   }
 };
@@ -179,14 +176,12 @@ const updateProfile = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const user = await User
-      .findById({
-        _id: {$eq: req.params.id}
-      });
+      .findById(req.params.id);
 
     if (user) {
       if (user.email === 'markovalekdandr108@gmail.com') {
         res.status(400).json({
-          message: 'falt',
+          message: 'fault',
           text: 'Cannot delete admin.'
         });
       } else {
@@ -201,24 +196,22 @@ const deleteUser = async (req, res) => {
       }
     } else {
       res.status(404).json({
-        message: 'message',
+        message: 'fault',
         text: 'User not found.'
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
-      text: 'Error on server.'
+      message: 'fault',
+      text: 'Error on server.',
+      payload: error
     });
   }
 };
 
 const updateUser = async (req, res) => {
   try {
-    const user = await User
-      .findById({
-        _id: {$eq: req.params.id}
-      });
+    const user = await User.findById(req.params.id);
 
     if (user) {
       user.name = req.body.name || user.name;
@@ -231,20 +224,19 @@ const updateUser = async (req, res) => {
       res.json({
         message: 'success',
         text: 'User updated.',
-        payload: {
-          user: updatedUser
-        }
+        payload: updatedUser
       });
     } else {
       res.status(404).json({
-        message: 'falt',
+        message: 'fault',
         text: 'User not found.'
       });
     }
   } catch (error) {
     res.status(500).json({
-      message: 'falt',
-      text: 'Error on server.'
+      message: 'fault',
+      text: 'Error on server.',
+      payload: error
     });
   }
 };

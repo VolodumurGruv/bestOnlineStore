@@ -1,0 +1,34 @@
+Отримати всі замовлення (тільки для адміністратора):
+
+Метод: GET
+URL: /api/orders
+Middleware: isAuth, isAdmin
+Отримати замовлення користувача (тільки для зареєстрованого користувача):
+
+Метод: GET
+URL: /api/orders/my
+Middleware: isAuth
+Створити нове замовлення (для зареєстрованого користувача):
+
+Метод: POST
+URL: /api/orders
+Middleware: isAuth
+Отримати інформацію про певне замовлення за його ID (тільки для зареєстрованого користувача):
+
+Метод: GET
+URL: /api/orders/:id
+Middleware: isAuth
+Створити сесію оплати через Stripe:
+
+Метод: POST
+URL: /api/orders/create-checkout-session
+Оплатити замовлення (тільки для зареєстрованого користувача):
+
+Метод: PUT
+URL: /api/orders/:id/pay
+Middleware: isAuth
+Видалити замовлення (тільки для адміністратора):
+
+Метод: DELETE
+URL: /api/orders/:id
+Middleware: isAuth, isAdmin
