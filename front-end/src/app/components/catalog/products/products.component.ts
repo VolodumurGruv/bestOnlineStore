@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {ActivatedRoute, RouterLink} from "@angular/router";
 
 import {Category, SubCategory} from "../../../interfaces/catalog.interface";
-import {ProductCardComponent} from "../../../shared/product-card/product-card.component";
+import {ProductCardComponent} from "../../../shared/components/product-card/product-card.component";
 import {CardComponent} from "../../home-page/components/card/card.component";
 import {FiltersComponent} from "../filters/filters.component";
 import {ProductsService} from "../../../shared/services/products.service";

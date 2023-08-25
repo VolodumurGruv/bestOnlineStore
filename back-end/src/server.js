@@ -1,4 +1,8 @@
 import express from 'express';
+<<<<<<< HEAD
+=======
+import helmet from 'helmet';
+>>>>>>> front-end-login
 import RateLimit from 'express-rate-limit';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -7,7 +11,11 @@ import dotenv from 'dotenv';
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
+<<<<<<< HEAD
 import uploadRouter from './routers/uploadRouter.js';
+=======
+// import uploadRouter from './routers/uploadRouter.js';
+>>>>>>> front-end-login
 
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
@@ -31,16 +39,26 @@ console.log('mode: ' + mode);
 if (mode === 'product') pathToIndex = '../../front-end/dist/front-end/';
 console.log('path: ' + pathToIndex);
 
+<<<<<<< HEAD
 console.log(process.env.MONGODB_PASSWORD);
 const port = 30000;
 const app = express();
 const uri = `mongodb+srv://team:${process.env.MONGODB_PASSWORD}@cluster0.qfcqvtb.mongodb.net/?retryWrites=true&w=majority`;
+=======
+const port = 30000;
+const app = express();
+const uri = process.env.MONGODB_URL;
+>>>>>>> front-end-login
 
 const limiter = RateLimit({
   windowMs: 1*60*1000,
   max: 10
 });
 
+<<<<<<< HEAD
+=======
+app.use(helmet());
+>>>>>>> front-end-login
 app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -60,12 +78,17 @@ app.use('*', (req, res, next) => {
 app.use('/api/users', userRouter);
 app.use('/api/product', productRouter);
 app.use('/api/order', orderRouter);
+<<<<<<< HEAD
 app.use('/api/upload', uploadRouter);
+=======
+// app.use('/api/upload', uploadRouter);
+>>>>>>> front-end-login
 
 const staticPath = path.join(__dirName, pathToIndex);
 
 app.use(express.static(staticPath));
 
+<<<<<<< HEAD
 app.get("/favicon.ico", (req, res) => {
 	res.sendFile(path.join(staticPath, "favicon.ico"));
 });
@@ -78,6 +101,19 @@ mongoose
 	.catch((error) => {
 		console.error("Connection error:", error);
 	});
+=======
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(path.join(staticPath, 'favicon.ico'));
+});
+
+mongoose.connect(uri, {})
+  .then(() => {
+    console.log('Connected to MongoDB Atlas');
+  })
+  .catch(error => {
+    console.error('Connection error:', error);
+  });
+>>>>>>> front-end-login
 
 const dbConnection = mongoose.connection;
 dbConnection
@@ -96,7 +132,11 @@ app.get('*', (req, res) => {
 });
 
 app.listen(port, () => {
+<<<<<<< HEAD
 	console.log(`Server at http://localhost:${port}`);
+=======
+  console.log(`Server at http://localhost:${port}`);
+>>>>>>> front-end-login
 });
 
 app.on('error', error => {
@@ -107,4 +147,8 @@ app.on('error', error => {
 
 app.on('clientServer', (error, socket) => {
   socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> front-end-login

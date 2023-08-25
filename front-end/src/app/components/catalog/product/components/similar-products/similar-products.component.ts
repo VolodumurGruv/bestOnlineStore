@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 
 import {Product} from "../../../../../interfaces/product.interfaces";
 import {NgForOf, NgIf} from "@angular/common";
-import {ProductCardComponent} from "../../../../../shared/product-card/product-card.component";
+import {ProductCardComponent} from "../../../../../shared/components/product-card/product-card.component";
 import {ActivatedRoute, NavigationEnd, Router, RouterLink} from "@angular/router";
 import {ProductsService} from "../../../../../shared/services/products.service";
 import {Category, SubCategory} from "../../../../../interfaces/catalog.interface";

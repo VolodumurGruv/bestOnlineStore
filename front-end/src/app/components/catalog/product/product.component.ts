@@ -7,7 +7,7 @@ import {FeaturesComponent} from "./components/features/features.component";
 import {SimilarProductsComponent} from "./components/similar-products/similar-products.component";
 import {FeedbacksComponent} from "./components/feedbacks/feedbacks.component";
 import {Product} from "../../../interfaces/product.interfaces";
-import {ProductCardComponent} from "../../../shared/product-card/product-card.component";
+import {ProductCardComponent} from "../../../shared/components/product-card/product-card.component";
 import {ProductsService} from "../../../shared/services/products.service";
 
 @Component({

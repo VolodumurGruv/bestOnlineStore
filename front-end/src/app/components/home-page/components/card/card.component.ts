@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {Category, SubCategory} from "../../../../interfaces/catalog.interface";
-import {ProductCardComponent} from "../../../../shared/product-card/product-card.component";
+import {ProductCardComponent} from "../../../../shared/components/product-card/product-card.component";
 import {RouterLink} from "@angular/router";
 
 @Component({
