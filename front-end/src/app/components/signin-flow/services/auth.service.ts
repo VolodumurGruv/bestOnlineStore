@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of, retry, Subject, tap } from 'rxjs';
+import { catchError, Observable, of, retry, tap } from 'rxjs';
 import { configs, httpConfig } from 'src/app/configs/configs';
 import { User } from 'src/app/interfaces/user.interface';
 import { AlertService } from 'src/app/shared/services/alert.service';
