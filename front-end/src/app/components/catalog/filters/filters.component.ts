@@ -12,6 +12,28 @@ export class FiltersComponent {
   @Input() isClickFilter!: boolean;
   @Output() isClickFilterChange = new EventEmitter<boolean>();
 
+  public filters = [
+    {
+      nameFilter: "Матеріал",
+      subFilters: ["Дерево", "Метал", "ДСП", "Пластик"],
+      isChecked: false
+    }, {
+      nameFilter: "Матеріал оббивки",
+      subFilters: ["Ткань", "Кожа", "Синтетика"],
+      isChecked: false
+    },
+    {
+      nameFilter: "Вид деревини",
+      subFilters: ["Дуб", "Сосна", "Бук"],
+      isChecked: false
+    },
+    {
+      nameFilter: "Конструктивні особливості",
+      subFilters: ["Складне виконання", "Легке виконання", "Модульна"],
+      isChecked: false
+    }
+  ]
+
   updateIsClickFilter() {
     this.isClickFilter = !this.isClickFilter;
     this.isClickFilterChange.emit(this.isClickFilter);

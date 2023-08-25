@@ -1,3 +1,5 @@
+@import "../../../../../assets/styles/shared/colors";
+
 .advices {
 
   &__container {
@@ -9,7 +11,7 @@
 
   &__title {
     margin-bottom: 100px;
-    font-family: "Roboto";
+
     font-size: 40px;
     font-style: normal;
     font-weight: 400;
@@ -29,12 +31,12 @@
   margin-bottom: 20px;
   width: 360px;
   height: 471px;
-  background: #d9d9d9;
+  background: $main-color;
 
   &__wide {
     margin-bottom: 20px;
     width: 800px;
     height: 471px;
-    background: #d9d9d9;
+    background: $main-color;
   }
 }

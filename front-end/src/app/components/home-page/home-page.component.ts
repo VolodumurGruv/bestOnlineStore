@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { AdvicesComponent } from './components/advices/advices.component';
 import { CardComponent } from './components/card/card.component';
 import { MockData } from '../../interfaces/mock-data';
 import { Router } from '@angular/router';
+import {ProductsService} from "../../shared/services/products.service";
+import {Category, SubCategory} from "../../interfaces/catalog.interface";
 
 @Component({
   selector: 'app-home-page',
@@ -13,37 +15,24 @@ import { Router } from '@angular/router';
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
 })
-export class HomePageComponent {
-  public readonly mockDataTop: MockData = {
-    title: 'Популярне',
-    data: [
-      { title: 'Касовий столик', price: 6500, img: '', discount: 0 },
-      { title: 'Касовий столик', price: 5500, img: '', discount: 6500 },
-      { title: 'Касовий столик', price: 5000, img: '', discount: 6500 },
-    ],
-  };
+export class HomePageComponent implements OnInit {
+  public categoryNew!: SubCategory | Category | null;
+  public categoryShares!: SubCategory | Category | null;
+  public categoryPopular!: SubCategory | Category | null;
 
-  public readonly mockDataNew: MockData = {
-    title: 'Новинки',
-    data: [
-      { title: 'Касовий столик', price: 6500, img: '', discount: 0 },
-      { title: 'Касовий столик', price: 5500, img: '', discount: 0 },
-      { title: 'Касовий столик', price: 5000, img: '', discount: 0 },
-    ],
-  };
+  constructor(
+    private router: Router,
+    private productService: ProductsService
+  ) {}
 
-  public readonly mockDataActions: MockData = {
-    title: 'Акції',
-    data: [
-      { title: 'Касовий столик', price: 6500, img: '', discount: 7000 },
-      { title: 'Касовий столик', price: 5500, img: '', discount: 6500 },
-      { title: 'Касовий столик', price: 5000, img: '', discount: 6500 },
-    ],
-  };
+  ngOnInit(): void {
+   this.categoryNew = this.productService.getProducts('new');
+   this.categoryShares = this.productService.getProducts('shares');
+   this.categoryPopular = this.productService.getProducts('popular');
+  }
 
-  constructor(private router: Router) {}
-
-  redirect(path: string, param?: { filter: string }): void {
-    param ? this.router.navigate([path, param]) : this.router.navigate([path]);
+  redirect(path: string, dynamicPart?: string): void {
+    const fullPath = dynamicPart ? [path, dynamicPart] : [path];
+    this.router.navigate(fullPath);
   }
 }

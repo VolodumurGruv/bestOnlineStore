@@ -13,4 +13,5 @@ export interface Category {
   routerLink: string;
   showSubcategories: boolean,
   subcategories?: SubCategory[];
+  products?: Product[];
 }

@@ -1,9 +1,15 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 @angular/animations
 MIT
 
 =======
 >>>>>>> 0200dda3c20e4a03301fca31beab4dcf196c2c76
+=======
+@angular/animations
+MIT
+
+>>>>>>> a37028cf5f4a2ce849cc75a77d12a50010b24464
 @angular/common
 MIT
 
@@ -11,11 +17,14 @@ MIT
 MIT
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 @angular/forms
 MIT
 
 >>>>>>> 0200dda3c20e4a03301fca31beab4dcf196c2c76
+=======
+>>>>>>> a37028cf5f4a2ce849cc75a77d12a50010b24464
 @angular/platform-browser
 MIT
 
@@ -229,6 +238,7 @@ Apache-2.0
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 tslib
 0BSD
@@ -246,6 +256,8 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 
 >>>>>>> 0200dda3c20e4a03301fca31beab4dcf196c2c76
+=======
+>>>>>>> a37028cf5f4a2ce849cc75a77d12a50010b24464
 zone.js
 MIT
 The MIT License

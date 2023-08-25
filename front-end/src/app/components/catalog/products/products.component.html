@@ -1,5 +1,5 @@
-<section class="products">
-  <p class="products__path">{{ "Каталог / " + categoryName + " / " + subcategory.name }}</p>
+<section class="products" *ngIf="subcategory">
+  <p *ngIf="pathCategory" class="products__path path">{{ pathCategory }}</p>
   <h2 class="products__title">{{ subcategory.name }}</h2>
   <span class="products__cards-filter" (click)="isClickFilter = !isClickFilter">Фільтри</span>
   <div class="products__cards-sort">
@@ -13,7 +13,10 @@
   </div>
   <div class="products__cards">
     <div *ngFor="let product of subcategory.products">
-      <app-product-card [product]="product"></app-product-card>
+      <app-product-card
+        [product]="product"
+        [routerLink]="'/catalog/' + subcategory.routerLink + '/' + product.id"
+      ></app-product-card>
     </div>
   </div>
 </section>

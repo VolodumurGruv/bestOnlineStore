@@ -1,3 +1,5 @@
+@import "../../../../../assets/styles/shared/colors";
+
 .header__input {
   display: flex;
   height: 40px;
@@ -6,7 +8,7 @@
   align-items: center;
   flex-shrink: 0;
   border-radius: 8px;
-  border: 1px solid #949494;
+  border: 1px solid $border-input;
 }
 
 .input__search {
@@ -15,7 +17,7 @@
   outline: none;
   width: 350px;
   flex-shrink: 0;
-  font-family: "Roboto";
+
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -23,7 +25,7 @@
   color: #000;
 
   &::placeholder {
-    color: #c7c6c6;
+    color: $input-text;
   }
 }
 

@@ -4,26 +4,26 @@
 <section class="carousel wrapper">
   <app-carousel></app-carousel>
 </section>
-<section class="top wrapper">
-  <app-card [mockData]="mockDataTop" class="top__box"> </app-card>
+<section class="top wrapper" *ngIf="categoryPopular">
+  <app-card  class="top__box" [mockData]="categoryPopular"> </app-card>
   <div class="top__btn">
-    <button class="btn__card" (click)="redirect('/catalog')">
+    <button class="btn__card" (click)="redirect('/catalog', categoryPopular.routerLink)">
       ПЕРЕЙТИ В КАТАЛОГ
     </button>
   </div>
 </section>
-<section class="new wrapper">
-  <app-card class="new__box" [mockData]="mockDataNew"></app-card>
+<section class="new wrapper" *ngIf="categoryNew">
+  <app-card class="new__box" [mockData]="categoryNew"></app-card>
   <div class="top__btn">
-    <button class="btn__card" (click)="redirect('/catalog', { filter: 'new' })">
+    <button class="btn__card" (click)="redirect('/catalog', categoryNew.routerLink)">
       переглянути всі
     </button>
   </div>
 </section>
-<section class="actions wrapper">
-  <app-card class="actions__box" [mockData]="mockDataActions"></app-card>
+<section class="actions wrapper" *ngIf="categoryShares">
+  <app-card class="actions__box" [mockData]="categoryShares"></app-card>
   <div class="top__btn">
-    <button class="btn__card" (click)="redirect('/sales')">
+    <button class="btn__card" (click)="redirect('/catalog', categoryShares.routerLink)">
       переглянути всі
     </button>
   </div>
