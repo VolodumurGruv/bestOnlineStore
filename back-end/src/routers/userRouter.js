@@ -5,6 +5,7 @@ import {
   getAllUsers,
   seedUsers,
   registerUser,
+  signInUser,
   getUserById,
   updateProfile,
   deleteUser,
@@ -17,6 +18,7 @@ const userRouter = express.Router();
 userRouter.get('/all', getAllUsers);
 userRouter.get('/seed', seedUsers);
 userRouter.post('/register', registerUser);
+userRouter.post('/signin', signInUser);
 userRouter.get('/:id', getUserById);
 userRouter.put('/profile', isAuth, updateProfile);
 userRouter.delete('/:id', isAuth, isAdmin, deleteUser);
