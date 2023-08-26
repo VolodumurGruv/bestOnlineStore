@@ -12,6 +12,7 @@ import { VisibilityIconComponent } from 'src/app/shared/components/icons/visibil
 import { AuthService } from '../services/auth.service';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/shared/services/alert.service';
+import { GoogleLoginComponent } from '../google-login/google-login.component';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ import { AlertService } from 'src/app/shared/services/alert.service';
     FormsModule,
     ReactiveFormsModule,
     VisibilityIconComponent,
+    GoogleLoginComponent
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
