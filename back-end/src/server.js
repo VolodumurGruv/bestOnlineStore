@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import helmet from 'helmet';
 import RateLimit from 'express-rate-limit';
 import { fileURLToPath } from 'url';
@@ -41,6 +42,14 @@ const limiter = RateLimit({
   max: 10
 });
 
+const corsOptions = {
+  origin: true,
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: ['Origin, X-Requested-With, Content-Type, Accept, Key, Authorization'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 app.set('trust proxy', 1);
 app.get('/ip', (req, res) => {
   res.send(req.ip);
@@ -51,30 +60,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('*', (req, res, next) => {
   console.log(req.originalUrl);
-  res.header('Access-Control-Allow-Origin',
-    '*');
-  res.header('Access-Control-Allow-Methods',
-    'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Credentials',
-    'true');
-  res.header('Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Key, Authorization');
-
-  if (mode == 'develop') {
-    console.log('statusCode:', res.statusCode);
-    console.log('statusMessage:', res.statusMessage);
-    console.log('headers:', res.headers);
-
-    let data = '';
-
-    res.on('data', (chunk) => {
-      data += chunk;
-    });
-
-    res.on('end', () => {
-      console.log('data / body:', data);
-    });
-  }
   next();
 });
 
@@ -110,18 +95,18 @@ dbConnection
     console.log('Connected to DB!');
   });
 
-app.use((error, req, res) => {
-  console.error(error.stack);
+app.get('*', (req, res) => {
+  console.log(JSON.stringify(req.headers));
+  res.sendFile(path.join(staticPath, 'index.html'));
+});
+
+app.use((error, req, res, next) => {
+  console.error('err: ' + error.message);
   res.status(500).json({
     message: 'fault',
     text: 'Something went wrong!',
     payload: error
   });
-});
-
-app.get('*', (req, res) => {
-  console.log(JSON.stringify(req.headers));
-  res.sendFile(path.join(staticPath, 'index.html'));
 });
 
 app.listen(port, () => {

@@ -1,6 +1,6 @@
 {
   "name": "nodejsserver",
-  "version": "0.14.7",
+  "version": "0.15.7",
   "description": "Server for online store.",
   "main": "dist/api/index.js",
   "type": "module",
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-rate-limit": "^6.9.0",
