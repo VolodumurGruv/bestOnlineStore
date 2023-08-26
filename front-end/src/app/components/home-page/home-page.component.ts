@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { AdvicesComponent } from './components/advices/advices.component';
 import { CardComponent } from './components/card/card.component';
-import { MockData } from '../../interfaces/mock-data';
-import { Router } from '@angular/router';
-import {ProductsService} from "../../shared/services/products.service";
-import {Category, SubCategory} from "../../interfaces/catalog.interface";
+
+import {ProductsService} from "@shared/services/products.service";
+import {Category, SubCategory} from "@interfaces/catalog.interface";
 
 @Component({
   selector: 'app-home-page',

@@ -1,8 +1,8 @@
-import {Component, Input,} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 
-import { Product } from "../../../interfaces/product.interfaces";
-import {TransformPricePipe} from "../../services/transform-price.pipe";
+import { Product } from '@interfaces/product.interfaces';
+import { TransformPricePipe } from '../../services/transform-price.pipe';
 
 @Component({
   selector: 'app-product-card',

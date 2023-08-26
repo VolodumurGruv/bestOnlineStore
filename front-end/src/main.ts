@@ -4,13 +4,12 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { provideAuth } from '@angular/fire/auth';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { getAuth } from '@firebase/auth';
+import { getAuth } from '@angular/fire/auth';
 
 import { AppComponent } from './app/app.component';
 
 import { AuthService } from './app/components/signin-flow/services/auth.service';
-
-import { environment } from './environments/environment';
+import { environment } from './environments/environment.development';
 
 if (environment.production) {
   enableProdMode();
@@ -29,9 +28,9 @@ bootstrapApplication(AppComponent, {
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })
     ),
     importProvidersFrom(
-      provideFirebaseApp(() => initializeApp(environment.firebaseConfig))
+      provideFirebaseApp(() => initializeApp(environment.firebase)),
+      provideAuth(() => getAuth())
     ),
-    importProvidersFrom(provideAuth(() => getAuth())),
     provideHttpClient(),
     { provide: HTTP_INTERCEPTORS, useClass: AuthService, multi: true },
   ],

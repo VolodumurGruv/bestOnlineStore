@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { VisibilityIconComponent } from 'src/app/shared/components/icons/visibility-icon/visibility-icon.component';
 import {
   FormBuilder,
   FormGroup,
@@ -9,6 +8,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+
+import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
 import { AuthService } from '../services/auth.service';
 
 @Component({
