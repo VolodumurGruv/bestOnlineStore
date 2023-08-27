@@ -28,7 +28,7 @@
             "styles": ["src/styles.scss"],
             "scripts": [],
             "stylePreprocessorOptions": {
-              "includePaths": ["src/assets/styles/typography/"]
+              "includePaths": ["src/assets/styles/"]
             }
           },
           "configurations": {
