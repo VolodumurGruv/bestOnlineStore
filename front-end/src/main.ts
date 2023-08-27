@@ -1,7 +1,7 @@
 import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { provideAuth } from '@angular/fire/auth';
+import { connectAuthEmulator, provideAuth } from '@angular/fire/auth';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { getAuth } from '@angular/fire/auth';
