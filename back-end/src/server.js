@@ -4,19 +4,14 @@ import helmet from 'helmet';
 import RateLimit from 'express-rate-limit';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import uploadRouter from './routers/uploadRouter.js';
+import dbConnection from './db.js';
 
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
-
-dotenv.config({
-  path: path.resolve(__dirName, '../.env')
-});
 
 const args = process.argv.slice(2);
 console.log('args: ' + args);
@@ -35,10 +30,9 @@ console.log('path: ' + pathToIndex);
 
 const port = process.env.PORT || 30000;
 const app = express();
-const uri = `mongodb+srv://team:${process.env.MONGODB_PASSWORD}@cluster0.qfcqvtb.mongodb.net/?retryWrites=true&w=majority`;
 
 const limiter = RateLimit({
-  windowMs: 1*60*1000,
+  windowMs: 1 * 60 * 1000,
   max: 10
 });
 
@@ -76,25 +70,6 @@ app.get('/favicon.ico', (req, res) => {
   res.sendFile(path.join(staticPath, 'favicon.ico'));
 });
 
-mongoose
-  .connect(uri, {})
-  .then(() => {
-    console.log('Connected to MongoDB Atlas');
-  })
-  .catch((error) => {
-    console.error('Connection error:', error);
-  });
-
-const dbConnection = mongoose.connection;
-dbConnection
-  .on('error', (err) => {
-    console.log(`Connection error ${err}`);
-  });
-dbConnection
-  .once('open', () => {
-    console.log('Connected to DB!');
-  });
-
 app.get('*', (req, res) => {
   console.log(JSON.stringify(req.headers));
   res.sendFile(path.join(staticPath, 'index.html'));
@@ -109,8 +84,16 @@ app.use((error, req, res, next) => {
   });
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server at http://localhost:${port}`);
+});
+
+server.on('close', () => {
+  console.log('Server is shutting down. Disconnecting from DB...');
+  dbConnection.close(() => {
+    console.log('Disconnected from DB.');
+    process.exit(0);
+  });
 });
 
 app.on('error', error => {
