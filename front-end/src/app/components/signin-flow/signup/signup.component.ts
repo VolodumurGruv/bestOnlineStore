@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-<<<<<<< HEAD
-import { VisibilityIconComponent } from 'src/app/shared/components/icons/visibility-icon/visibility-icon.component';
-=======
->>>>>>> google-login
 import {
   FormBuilder,
   FormGroup,
@@ -12,11 +8,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-<<<<<<< HEAD
-=======
 
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
->>>>>>> google-login
 import { AuthService } from '../services/auth.service';
 
 @Component({

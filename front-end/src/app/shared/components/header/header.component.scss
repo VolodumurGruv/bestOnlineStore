@@ -1,5 +1,5 @@
-@use "../../../assets/styles/logo-mixin";
-@import "../../../assets/styles/shared/colors";
+@use "logo-mixin";
+@import "colors";
 
 .header {
   &__logo {

@@ -8,18 +8,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-<<<<<<< HEAD
-import { VisibilityIconComponent } from 'src/app/shared/components/icons/visibility-icon/visibility-icon.component';
-import { AuthService } from '../services/auth.service';
-import { Subscription } from 'rxjs';
-import { AlertService } from 'src/app/shared/services/alert.service';
-=======
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { AlertService } from '@shared/services/alert.service';
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
 import { GoogleLoginComponent } from '../google-login/google-login.component';
->>>>>>> google-login
 
 @Component({
   selector: 'app-login',
