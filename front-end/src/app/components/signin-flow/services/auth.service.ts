@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of, retry, tap } from 'rxjs';
-import { configs, httpConfig } from 'src/app/configs/configs';
-import { User } from 'src/app/interfaces/user.interface';
-import { AlertService } from 'src/app/shared/services/alert.service';
+import { configs, httpConfig } from '@configs/configs';
+import { User } from '@interfaces/user.interface';
+import { AlertService } from '@shared/services/alert.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private http: HttpClient, private alertService: AlertService) {}
 
   signIn(user: User): Observable<User> {
-    return this.http.get<User>(`${configs.URL}/users/all`).pipe(
+    return this.http.post<User>(`${configs.URL}/signin`, user, httpConfig).pipe(
       tap((data) => {
         console.log(data);
       }),
@@ -24,7 +24,7 @@ export class AuthService {
 
   signup(user: User) {
     this.http
-      .post<User>(`${configs.URL}/users/register`, user, httpConfig)
+      .post<User>(`${configs.URL}/register`, user, httpConfig)
       .pipe(
         tap((res) => console.log(res)),
         catchError(this.handleError<User>(`signup `))

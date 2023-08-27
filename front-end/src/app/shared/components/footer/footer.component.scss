@@ -1,8 +1,4 @@
-<<<<<<< HEAD:front-end/src/app/shared/footer/footer.component.scss
-@use "../../../assets/styles/logo-mixin";
-=======
-@use "../../../../assets//styles/logo-mixin";
->>>>>>> front-end-login:front-end/src/app/shared/components/footer/footer.component.scss
+@use "@logo-mixin";
 
 .footer {
   max-width: 811px;

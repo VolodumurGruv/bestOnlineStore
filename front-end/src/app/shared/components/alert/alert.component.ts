@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AlertService } from '../../services/alert.service';
 import { Subscription } from 'rxjs';
-import { Type } from 'src/app/interfaces/message.interface';
+import { AlertService } from '../../services/alert.service';
+import { Type } from '@interfaces/message.interface';
 
 @Component({
   selector: 'app-alert',

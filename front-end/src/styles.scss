@@ -1,4 +1,3 @@
-@use "./assets/styles/shared/shared";
-@use "./assets/styles/btn";
-@import "./assets/styles/shared/colors";
-
+@use "shared";
+@use "btn";
+@import "colors";

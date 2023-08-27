@@ -1,4 +1,4 @@
-@import "../../../../../assets/styles/shared/colors";
+@import "colors";
 
 .top {
   padding: 80px 0;
@@ -22,7 +22,6 @@
 }
 
 .card {
-
   &__wrap {
     display: flex;
     justify-content: space-between;
