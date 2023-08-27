@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 @angular/animations
 MIT
 
@@ -10,12 +11,15 @@ MIT
 MIT
 
 >>>>>>> a37028cf5f4a2ce849cc75a77d12a50010b24464
+=======
+>>>>>>> front-end-login
 @angular/common
 MIT
 
 @angular/core
 MIT
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -25,6 +29,11 @@ MIT
 >>>>>>> 0200dda3c20e4a03301fca31beab4dcf196c2c76
 =======
 >>>>>>> a37028cf5f4a2ce849cc75a77d12a50010b24464
+=======
+@angular/forms
+MIT
+
+>>>>>>> front-end-login
 @angular/platform-browser
 MIT
 
@@ -239,7 +248,10 @@ Apache-2.0
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> front-end-login
 tslib
 0BSD
 Copyright (c) Microsoft Corporation.
@@ -255,9 +267,12 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 
+<<<<<<< HEAD
 >>>>>>> 0200dda3c20e4a03301fca31beab4dcf196c2c76
 =======
 >>>>>>> a37028cf5f4a2ce849cc75a77d12a50010b24464
+=======
+>>>>>>> front-end-login
 zone.js
 MIT
 The MIT License
