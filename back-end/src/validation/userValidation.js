@@ -6,7 +6,7 @@ const validateUserData = [
     .withMessage('User name is required')
     .isString()
     .withMessage('User name should be string')
-    .matches(/^[A-Za-zА-Яа-яІіЇїЄєҐґ]{3,30}$/)
+    .matches(/^[A-Za-zА-Яа-яІіЇїЄєҐґ]{3,30}(?: [A-Za-zА-Яа-яІіЇїЄєҐґ]{3,30}){0,1}$/)
     .withMessage('Name must be between 3 and 30 characters.'),
   body('password')
     .exists()
