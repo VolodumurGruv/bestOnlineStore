@@ -1,3 +1,4 @@
+import { validationResult } from 'express-validator';
 import User from '../models/userSchema.js';
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/token.js';
@@ -41,6 +42,16 @@ const registerUser = async (req, res) => {
   const { name, password, email, phone } = req.body;
 
   try {
+    const errors = validationResult(req);
+    console.log(errors);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        message: 'fault',
+        text: 'Not valid.',
+        payload: errors.array(),
+      });
+    }
+
     const hashedPassword = bcrypt.hashSync(password, 8);
 
     const user = new User({
