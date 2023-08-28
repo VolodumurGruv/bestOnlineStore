@@ -13,18 +13,24 @@ export class AuthService {
   constructor(private http: HttpClient, private alertService: AlertService) {}
 
   signIn(user: User): Observable<User> {
-    return this.http.post<User>(`${configs.URL}/signin`, user, httpConfig).pipe(
-      tap((data) => {
-        console.log(data);
-      }),
-      retry(3),
-      catchError(this.handleError<User>(`sign in for ${user.name} `))
-    );
+    return this.http
+      .post<User>(`${configs.URL}/user/signin`, user, httpConfig)
+      .pipe(
+        tap((data) => {
+          console.log(data);
+        }),
+        retry(3),
+        catchError(this.handleError<User>(`sign in for ${user.name} `))
+      );
   }
 
   signup(user: User) {
     this.http
-      .post<User>(`${configs.URL}/register`, user, httpConfig)
+      .post<User>(
+        `${configs.URL}/user/register`,
+        JSON.stringify(user),
+        httpConfig
+      )
       .pipe(
         tap((res) => console.log(res)),
         catchError(this.handleError<User>(`signup `))

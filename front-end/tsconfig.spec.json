@@ -8,6 +8,5 @@
   "include": [
     "src/**/*.spec.ts",
     "src/**/*.d.ts",
-    "src/environments/environments.prod.ts"
   ]
 }

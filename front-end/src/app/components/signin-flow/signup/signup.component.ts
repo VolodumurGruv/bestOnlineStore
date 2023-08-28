@@ -11,6 +11,7 @@ import {
 
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
 import { AuthService } from '../services/auth.service';
+import { GoogleLoginComponent } from '../google-login/google-login.component';
 
 @Component({
   selector: 'app-signup',
@@ -21,6 +22,7 @@ import { AuthService } from '../services/auth.service';
     VisibilityIconComponent,
     FormsModule,
     ReactiveFormsModule,
+    GoogleLoginComponent,
   ],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
@@ -38,11 +40,9 @@ export class SignupComponent {
 
   registerUser() {
     const { name, email, password, isAdmin, phone } = this.signupForm.value;
-    console.log(this.signupForm.value);
-    this.authService.signup({ name, password, email, phone, isAdmin });
+    console.log({ name, email, password });
+    this.authService.signup({ name, password, email, isAdmin });
   }
-
-  googleLogin() {}
 
   isVisisble(input: { type: string }) {
     input.type = input.type === 'password' ? 'text' : 'password';
