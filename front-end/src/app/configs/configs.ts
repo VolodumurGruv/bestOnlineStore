@@ -6,6 +6,6 @@ export const configs = {
 
 export const httpConfig = {
   headers: new HttpHeaders({
-    'Content-Type': 'application/json, application/html',
+    'Content-Type': 'application/json',
   }),
 };
