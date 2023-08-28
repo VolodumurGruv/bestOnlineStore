@@ -1,5 +1,4 @@
 import Product from '../models/productSchema.js';
-import data from '../data.js';
 
 const getAllProducts = async (req, res) => {
   try {
@@ -8,23 +7,6 @@ const getAllProducts = async (req, res) => {
       message: 'success',
       text: 'All products in payload.',
       payload: products
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'Internal Server Error.',
-      payload: error
-    });
-  }
-};
-
-const seedProducts = async (req, res) => {
-  try {
-    const createdProducts = await Product.insertMany(data.products);
-    res.json({
-      message: 'success',
-      text: 'Products created.',
-      payload: createdProducts
     });
   } catch (error) {
     res.status(500).json({
@@ -156,7 +138,6 @@ const deleteProduct = async (req, res) => {
 
 export {
   getAllProducts,
-  seedProducts,
   getProductById,
   createProduct,
   updateProduct,

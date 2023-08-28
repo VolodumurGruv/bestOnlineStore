@@ -3,7 +3,6 @@ import isAuth from '../utils/auth.js';
 import isAdmin from '../utils/admin.js';
 import {
   getAllProducts,
-  seedProducts,
   getProductById,
   createProduct,
   updateProduct,
@@ -13,7 +12,6 @@ import {
 const productRouter = express.Router();
 
 productRouter.get('/', getAllProducts);
-productRouter.get('/seed', seedProducts);
 productRouter.get('/:id', getProductById);
 productRouter.post('/', isAuth, isAdmin, createProduct);
 productRouter.put('/:id', isAuth, isAdmin, updateProduct);
