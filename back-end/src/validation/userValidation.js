@@ -17,8 +17,9 @@ const validateUserData = [
     .isEmail()
     .withMessage('Invalid email format.'),
   body('phone')
+    .optional({ nullable: true, checkFalsy: true })
     .matches(/^\+\d{1,3}\s?\(\d{1,3}\)\s?\d{3,}-\d{2,}-\d{2,}$/)
-    .withMessage('Invalid phone number format.')
+    .withMessage('Invalid phone number format. For example: +38(050)123-45-67')
 ];
 
 export default validateUserData;

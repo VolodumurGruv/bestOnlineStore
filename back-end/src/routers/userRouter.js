@@ -4,7 +4,6 @@ import isAdmin from '../utils/admin.js';
 import validateUserData from '../validation/userValidation.js';
 import {
   getAllUsers,
-  seedUsers,
   registerUser,
   signInUser,
   getUserById,
@@ -17,7 +16,6 @@ const userRouter = express.Router();
 
 
 userRouter.get('/all', getAllUsers);
-userRouter.get('/seed', seedUsers);
 userRouter.post('/register', validateUserData, registerUser);
 userRouter.post('/signin', signInUser);
 userRouter.get('/:id', getUserById);

@@ -25,7 +25,7 @@ for (let i = 0; i < args.length; i++) {
   }
 }
 console.log('mode: ' + mode);
-if (mode === 'product') pathToIndex = '../../front-end/dist/front-end/';
+if (mode === 'production') pathToIndex = '../../front-end/dist/front-end/';
 console.log('path: ' + pathToIndex);
 
 const port = process.env.PORT || 30000;
@@ -57,7 +57,7 @@ app.use('*', (req, res, next) => {
   next();
 });
 
-app.use('/api/users', userRouter);
+app.use('/api/user', userRouter);
 app.use('/api/product', productRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/upload', uploadRouter);

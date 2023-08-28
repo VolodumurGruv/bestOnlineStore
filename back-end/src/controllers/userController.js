@@ -2,7 +2,6 @@ import { validationResult } from 'express-validator';
 import User from '../models/userSchema.js';
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/token.js';
-import data from '../data.js';
 
 const getAllUsers = async (req, res) => {
   try {
@@ -16,23 +15,6 @@ const getAllUsers = async (req, res) => {
     res.status(500).json({
       message: 'fault',
       text: 'Some error occurred on DB.',
-      payload: error
-    });
-  }
-};
-
-const seedUsers = async (req, res) => {
-  try {
-    const createdUsers = await User.insertMany(data.users);
-    res.json({
-      message: 'success',
-      text: 'New user(s) added to DB.',
-      payload: createdUsers
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'An error occurred.',
       payload: error
     });
   }
@@ -256,7 +238,6 @@ const updateUser = async (req, res) => {
 
 export {
   getAllUsers,
-  seedUsers,
   registerUser,
   signInUser,
   getUserById,
