@@ -25,13 +25,13 @@ export class AuthService {
   }
 
   signup(user: User) {
-    this.http
-      .post<User>(`${configs.URL}/user/register`, user)
-      .pipe(
-        tap((res) => console.log(res)),
-        catchError(this.handleError<User>(`signup `))
-      )
-      .subscribe();
+    this.http.post<User>(`${configs.URL}/user/register`, user).pipe(
+      tap((res) => console.log(res)),
+      catchError(this.handleError<User>(`signup `))
+    );
+    // .subscribe(() => {
+    //   this.alertService.success("you've signed up successfuly");
+    // });
   }
 
   private handleError<T>(operation: string, result?: T) {

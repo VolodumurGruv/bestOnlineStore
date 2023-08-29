@@ -14,6 +14,12 @@ import { AuthService } from '../services/auth.service';
 import { GoogleLoginComponent } from '../google-login/google-login.component';
 import { AuthInterceptor } from '../services/auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  confirmValidator,
+  emailValidator,
+  nameValidator,
+  passwordValidator,
+} from '../services/validators.directive';
 
 @Component({
   selector: 'app-signup',
@@ -31,10 +37,34 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 })
 export class SignupComponent {
   public signupForm: FormGroup = this.fb.group({
-    name: ['Volodumur'],
-    email: ['some@mail.com'],
-    password: ['user123U-ser'],
-    confirmPassword: [''],
+    name: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30),
+        nameValidator(),
+      ],
+    ],
+    email: ['', [Validators.required, Validators.email, emailValidator()]],
+    password: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(16),
+        passwordValidator(),
+      ],
+    ],
+    confirmPassword: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(16),
+        confirmValidator(),
+      ],
+    ],
   });
   constructor(private fb: FormBuilder, private authService: AuthService) {}
 
