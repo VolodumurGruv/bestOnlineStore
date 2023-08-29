@@ -4,17 +4,32 @@ import helmet from 'helmet';
 import RateLimit from 'express-rate-limit';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import winston from 'winston';
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import uploadRouter from './routers/uploadRouter.js';
 import dbConnection from './db.js';
 
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.printf(({ timestamp, level, message }) => {
+      return `${timestamp} [${level.toUpperCase()}]: ${message}`;
+    })
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' })
+  ]
+});
+
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
 
 const args = process.argv.slice(2);
-console.log('args: ' + args);
+logger.info('args: ' + args);
 let mode = 'develop';
 let pathToIndex = '../../tests/';
 
@@ -24,9 +39,9 @@ for (let i = 0; i < args.length; i++) {
     break;
   }
 }
-console.log('mode: ' + mode);
+logger.info('mode: ' + mode);
 if (mode === 'production') pathToIndex = '../../front-end/dist/front-end/';
-console.log('path: ' + pathToIndex);
+logger.info('path: ' + pathToIndex);
 
 const port = process.env.PORT || 30000;
 const app = express();
@@ -53,7 +68,7 @@ app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('*', (req, res, next) => {
-  console.log(req.originalUrl);
+  logger.info(req.originalUrl);
   next();
 });
 
@@ -71,12 +86,12 @@ app.get('/favicon.ico', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-  console.log(JSON.stringify(req.headers));
+  logger.info(JSON.stringify(req.headers));
   res.sendFile(path.join(staticPath, 'index.html'));
 });
 
 app.use((error, req, res, next) => {
-  console.error('err: ' + error.message);
+  logger.error('err: ' + error.message);
   res.status(500).json({
     message: 'fault',
     text: 'Something went wrong!',
@@ -85,20 +100,20 @@ app.use((error, req, res, next) => {
 });
 
 const server = app.listen(port, () => {
-  console.log(`Server at http://localhost:${port}`);
+  logger.info(`Server at http://localhost:${port}`);
 });
 
 server.on('close', () => {
-  console.log('Server is shutting down. Disconnecting from DB...');
+  logger.info('Server is shutting down. Disconnecting from DB...');
   dbConnection.close(() => {
-    console.log('Disconnected from DB.');
+    logger.info('Disconnected from DB.');
     process.exit(0);
   });
 });
 
 app.on('error', error => {
   if (error.code === 'EACCES') {
-    console.log(`No access to port: ${port}.`);
+    logger.error(`No access to port: ${port}.`);
   }
 });
 
