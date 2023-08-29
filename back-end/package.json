@@ -1,6 +1,6 @@
 {
   "name": "nodejsserver",
-  "version": "0.20.8",
+  "version": "0.20.9",
   "description": "Server for online store.",
   "main": "dist/api/index.js",
   "type": "module",
