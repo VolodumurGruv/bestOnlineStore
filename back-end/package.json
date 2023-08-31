@@ -1,6 +1,6 @@
 {
   "name": "nodejsserver",
-  "version": "0.23.9",
+  "version": "0.24.9",
   "description": "Server for online store.",
   "main": "dist/api/index.js",
   "type": "module",
@@ -27,6 +27,7 @@
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.3",
     "multer": "^1.4.5-lts.1",
+    "node-fetch": "^3.3.2",
     "winston": "^3.10.0"
   },
   "devDependencies": {

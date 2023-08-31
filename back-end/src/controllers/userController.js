@@ -1,4 +1,5 @@
 import { validationResult } from 'express-validator';
+import fetch from 'node-fetch';
 import User from '../models/userSchema.js';
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/token.js';
@@ -64,6 +65,75 @@ const registerUser = async (req, res) => {
     res.status(500).json({
       message: 'fault',
       text: 'User registration failed.',
+      payload: error.message
+    });
+  }
+};
+
+const registerUserByGoogle = async (req, res) => {
+  const {googleAccessToken} = req.body;
+
+  try {
+    const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: {
+        'Authorization': `${googleAccessToken}`
+      }
+    });
+
+    if (!userInfoResponse.ok) {
+      throw new Error('Failed to fetch user information from Google.');
+    }
+
+    const userJSON = await userInfoResponse.json();
+
+    const existingUser = await User.findOne({ googleId: userJSON.sub });
+
+    const token = generateToken(existingUser);
+
+    if (existingUser) {
+      res.json({
+        message: 'success',
+        text: 'Successfully verify Google access token.',
+        payload: {
+          _id: existingUser._id,
+          name: existingUser.name,
+          email: existingUser.email,
+          phone: existingUser.phone,
+          isAdmin: existingUser.isAdmin,
+          token
+        }
+      });
+    } else {
+      const user = new User({
+        googleId: userJSON.sub,
+        name: userJSON.name,
+        email: userJSON.email,
+        token
+      });
+
+      const createdUser = await user.save();
+
+      const token = generateToken(createdUser);
+
+      const newUser = {
+        _id: createdUser._id,
+        name: createdUser.name,
+        email: createdUser.email,
+        phone: createdUser.phone,
+        isAdmin: createdUser.isAdmin,
+        token
+      };
+
+      res.status(201).json({
+        message: 'success',
+        text: 'New user created.',
+        payload: newUser
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: 'fault',
+      text: 'Failed to verify Google access token.',
       payload: error.message
     });
   }
@@ -239,6 +309,7 @@ const updateUser = async (req, res) => {
 export {
   getAllUsers,
   registerUser,
+  registerUserByGoogle,
   signInUser,
   getUserById,
   updateProfile,
