@@ -9,6 +9,7 @@ import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import uploadRouter from './routers/uploadRouter.js';
+import reviewRouter from './routers/reviewRouter.js';
 import dbConnection from './db.js';
 
 const logger = winston.createLogger({
@@ -76,10 +77,12 @@ app.use('/api/user', userRouter);
 app.use('/api/product', productRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/upload', uploadRouter);
+app.use('/api/review', reviewRouter);
 
 const staticPath = path.join(__dirName, pathToIndex);
 
 app.use(express.static(staticPath));
+app.use('/images', express.static(path.join(__dirName, '../uploads/images/')));
 
 app.get('/favicon.ico', (req, res) => {
   res.sendFile(path.join(staticPath, 'favicon.ico'));
