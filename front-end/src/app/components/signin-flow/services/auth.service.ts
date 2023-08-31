@@ -5,9 +5,7 @@ import { configs, httpConfig } from '@configs/configs';
 import { User } from '@interfaces/user.interface';
 import { AlertService } from '@shared/services/alert.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class AuthService {
   token = true;
   constructor(private http: HttpClient, private alertService: AlertService) {}
@@ -24,14 +22,11 @@ export class AuthService {
       );
   }
 
-  signup(user: User) {
-    this.http.post<User>(`${configs.URL}/user/register`, user).pipe(
+  signup(user: User): Observable<User> {
+    return this.http.post<User>(`${configs.URL}/user/register`, user).pipe(
       tap((res) => console.log(res)),
       catchError(this.handleError<User>(`signup `))
     );
-    // .subscribe(() => {
-    //   this.alertService.success("you've signed up successfuly");
-    // });
   }
 
   private handleError<T>(operation: string, result?: T) {
@@ -44,5 +39,13 @@ export class AuthService {
 
       return of(result as T);
     };
+  }
+
+  isAuth(): boolean {
+    return localStorage.getItem('JWT_TOKEN') ? true : false;
+  }
+
+  getAuthToken(): string | null {
+    return localStorage.getItem('token');
   }
 }

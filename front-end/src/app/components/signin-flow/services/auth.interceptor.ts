@@ -1,23 +1,17 @@
-import { Injectable } from '@angular/core';
 import {
   HttpRequest,
-  HttpHandler,
   HttpEvent,
-  HttpInterceptor,
+  HttpInterceptorFn,
+  HttpHandlerFn,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { AuthService } from './auth.service';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
-
-  intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    console.log(request);
-    if (this.authService.token) console.log(request);
-    return next.handle(request);
-  }
-}
+export const AuthInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<any>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<any>> => {
+  console.log(req);
+  console.log('hi');
+  return next(req).pipe(tap(() => console.log(req)));
+};

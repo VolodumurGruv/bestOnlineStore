@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
@@ -20,6 +20,7 @@ import {
   nameValidator,
   passwordValidator,
 } from '../services/validators.directive';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-signup',
@@ -28,14 +29,16 @@ import {
     CommonModule,
     RouterLink,
     VisibilityIconComponent,
-    FormsModule,
     ReactiveFormsModule,
     GoogleLoginComponent,
   ],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
+  providers: [AuthService]
 })
-export class SignupComponent {
+export class SignupComponent implements OnDestroy {
+  private unSub!: Subscription;
+
   public signupForm: FormGroup = this.fb.group({
     name: [
       '',
@@ -71,10 +74,14 @@ export class SignupComponent {
   registerUser() {
     const { name, email, password } = this.signupForm.value;
     console.log({ name, email, password });
-    this.authService.signup({ name, password, email });
+    this.unSub = this.authService.signup({ name, password, email }).subscribe();
   }
 
   isVisisble(input: { type: string }) {
     input.type = input.type === 'password' ? 'text' : 'password';
+  }
+
+  ngOnDestroy(): void {
+    if (this.unSub) this.unSub.unsubscribe();
   }
 }

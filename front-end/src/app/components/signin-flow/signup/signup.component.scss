@@ -99,3 +99,12 @@
 .icon {
   cursor: pointer;
 }
+
+.ng-valid,
+.ng-valid.required {
+  border-bottom: 5px solid #42a948; /* green */
+}
+
+.ng-invalid:not(form) {
+  border-bottom: 5px solid #a94442; /* red */
+}

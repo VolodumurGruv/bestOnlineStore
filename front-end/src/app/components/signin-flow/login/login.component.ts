@@ -27,6 +27,7 @@ import { GoogleLoginComponent } from '../google-login/google-login.component';
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  providers: [AuthService],
 })
 export class LoginComponent implements OnDestroy {
   private unSub!: Subscription;

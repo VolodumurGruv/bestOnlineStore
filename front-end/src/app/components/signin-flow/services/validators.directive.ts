@@ -2,16 +2,12 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export function nameValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const nameRegExp = /[A-Za-zА-Яа-я-]/g;
     let isTrue: boolean = false;
-    if (control.value) {
-      const res = control.value.trim().match(nameRegExp);
-      if (res) {
-        isTrue = res.join('') === control.value;
-      }
-    }
 
-    return isTrue ? { name: { value: control.value } } : null;
+    const latAlphabet = [];
+    const cyrilicAlphabet = [];
+
+    return isTrue ? { nameValid: { isValid: control.value } } : null;
   };
 }
 
@@ -25,8 +21,8 @@ export function emailValidator(): ValidatorFn {
         isTrue = res.join('') === control.value;
       }
     }
-
-    return isTrue ? { name: { value: control.value } } : null;
+    control.parent?.get('email')?.errors;
+    return isTrue ? { emailValid: { value: control.value } } : null;
   };
 }
 
@@ -41,7 +37,7 @@ export function passwordValidator(): ValidatorFn {
       }
     }
 
-    return isTrue ? { name: { value: control.value } } : null;
+    return isTrue ? { passwordValid: { value: false } } : null;
   };
 }
 
