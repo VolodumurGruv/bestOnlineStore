@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 import User from '../models/userSchema.js';
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/token.js';
+import sendWelcomeEmail from '../utils/email.js';
 
 const getAllUsers = async (req, res) => {
   try {
@@ -56,6 +57,7 @@ const registerUser = async (req, res) => {
       token
     };
 
+    sendWelcomeEmail(email);
     res.status(201).json({
       message: 'success',
       text: 'New user created.',
