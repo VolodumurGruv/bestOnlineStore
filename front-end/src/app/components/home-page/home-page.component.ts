@@ -1,34 +1,30 @@
 import {Component, OnInit} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { CarouselComponent } from './components/carousel/carousel.component';
-import { AdvicesComponent } from './components/advices/advices.component';
-import { CardComponent } from './components/card/card.component';
+import {CommonModule} from '@angular/common';
+import {Router} from '@angular/router';
+import {CarouselComponent} from './components/carousel/carousel.component';
+import {AdvicesComponent} from './components/advices/advices.component';
+import {CardComponent} from './components/card/card.component';
 
 import {ProductsService} from "@shared/services/products.service";
-import {Category, SubCategory} from "@interfaces/catalog.interface";
+import {Product} from "@interfaces/product.interfaces";
+import {ProductCardComponent} from "@shared/components/product-card/product-card.component";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, CarouselComponent, AdvicesComponent, CardComponent],
+  imports: [CommonModule, CarouselComponent, AdvicesComponent, CardComponent, ProductCardComponent],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
 })
 export class HomePageComponent implements OnInit {
-  public categoryNew!: SubCategory | Category | null;
-  public categoryShares!: SubCategory | Category | null;
-  public categoryPopular!: SubCategory | Category | null;
+  constructor(private router: Router, private productService: ProductsService) {}
 
-  constructor(
-    private router: Router,
-    private productService: ProductsService
-  ) {}
+  product$!: Observable<Product>;
+  products$!: Product[];
 
   ngOnInit(): void {
-   this.categoryNew = this.productService.getProducts('new');
-   this.categoryShares = this.productService.getProducts('shares');
-   this.categoryPopular = this.productService.getProducts('popular');
+    this.product$ = this.productService.getProductByIdApi('64ed1077cfa17b039820db9d');
   }
 
   redirect(path: string, dynamicPart?: string): void {

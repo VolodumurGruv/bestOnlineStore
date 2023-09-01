@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { NgClass, NgIf, NgOptimizedImage } from '@angular/common';
-import { Product } from '@interfaces/product.interfaces';
-import { TransformPricePipe } from '@shared/services/transform-price.pipe';
+import {Component, Input} from '@angular/core';
+import {NgClass, NgIf, NgOptimizedImage} from '@angular/common';
+
+import {TransformPricePipe} from '@shared/services/transform-price.pipe';
+import {Product} from "@interfaces/product.interfaces";
 
 @Component({
   selector: 'app-about-product',
