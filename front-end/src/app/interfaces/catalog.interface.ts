@@ -1,17 +1,7 @@
 import {Product} from "@interfaces/product.interfaces";
 
-export interface SubCategory {
-  id: number;
-  name: string;
-  routerLink: string;
-  products?: Product[];
-}
-
 export interface Category {
-  id: number;
-  name: string;
-  routerLink: string;
+  category: string,
   showSubcategories: boolean,
-  subcategories?: SubCategory[];
-  products?: Product[];
+  subcategories?: string[];
 }

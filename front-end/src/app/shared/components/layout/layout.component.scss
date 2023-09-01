@@ -1,6 +1,8 @@
 .header {
   background-color: #fff;
   display: block;
+  position: relative;
+  z-index: 100;
 
   &__box {
     display: flex;
@@ -12,6 +14,5 @@
     padding: 20px 80px;
     top: 0;
     left: 0;
-    z-index: 100;
   }
 }
