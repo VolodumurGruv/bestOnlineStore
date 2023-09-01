@@ -1,40 +1,122 @@
 import {Category} from "@interfaces/catalog.interface";
 
-export const categoriesArray: Category[]  = [
+export const mainCategories: Category[] = [
   {
-    category: 'Меблі',
+    name: 'Меблі',
+    routerLink: 'furniture',
     showSubcategories: false,
-    subcategories: ['Столи', 'Пуфи', 'Стільці', 'Крісла', 'Ліжка', 'Дивани', 'Стелажі', 'Тумби', 'Комоди']
+    subcategories: [
+      {
+        name: 'Столи',
+        routerLink: 'tables',
+      },
+      {
+        name: 'Пуфи',
+        routerLink: 'ottomans',
+      },
+      {
+        name: 'Стільці',
+        routerLink: 'chairs',
+      },
+      {
+        name: 'Крісла',
+        routerLink: 'armchairs',
+      },
+      {
+        name: 'Ліжка',
+        routerLink: 'beds',
+      },
+      {
+        name: 'Дивани',
+        routerLink: 'sofas',
+      },
+      {
+        name: 'Стелажі',
+        routerLink: 'shelves',
+      },
+      {
+        name: 'Тумби',
+        routerLink: 'nightstands',
+      },
+      {
+        name: 'Комоди',
+        routerLink: 'dressers',
+      },
+    ],
   },
   {
-    category: 'Освітлення',
+    name: 'Освітлення',
+    routerLink: 'lighting',
     showSubcategories: false,
-    subcategories: ['Люстри', 'Лампи']
+    subcategories: [
+      {
+        name: 'Люстри',
+        routerLink: 'chandeliers',
+      },
+      {
+        name: 'Лампи',
+        routerLink: 'lamps',
+      },
+    ],
   },
   {
-    category: 'Сантехніка',
+    name: 'Сантехніка',
+    routerLink: 'plumbing',
     showSubcategories: false,
-    subcategories: ['Ванни', 'Душі']
+    subcategories: [
+      {
+        name: 'Ванни',
+        routerLink: 'bathtubs',
+      },
+      {
+        name: 'Душі',
+        routerLink: 'showers',
+      },
+    ],
   },
   {
-    category: 'Аксесуари',
+    name: 'Аксесуари',
+    routerLink: 'accessories',
     showSubcategories: false,
-    subcategories: ['Подушки', 'Килими']
+    subcategories: [
+      {
+        name: 'Подушки',
+        routerLink: 'cushions',
+      },
+      {
+        name: 'Килими',
+        routerLink: 'rugs',
+      },
+    ],
   },
   {
-    category: 'Інше',
+    name: 'Інше',
+    routerLink: 'other',
+    showSubcategories: false,
+    subcategories: [
+      {
+        name: 'Декор',
+        routerLink: 'decor',
+      },
+      {
+        name: 'Посуд',
+        routerLink: 'tableware',
+      },
+    ],
+  },
+  {
+    name: 'Новинки',
+    routerLink: 'new',
     showSubcategories: false,
   },
   {
-    category: 'Новинки',
+    name: 'Популярне',
+    routerLink: 'popular',
     showSubcategories: false,
   },
   {
-    category: 'Популярне',
+    name: 'Акції',
+    routerLink: 'shares',
     showSubcategories: false,
   },
-  {
-    category: 'Акції',
-    showSubcategories: false,
-  }
 ];
