@@ -73,16 +73,17 @@ const registerUser = async (req, res) => {
 };
 
 const registerUserByGoogle = async (req, res) => {
-  const {googleAccessToken} = req.body;
-
+  const { gtoken } = req.body;
+  console.log(gtoken);
   try {
     const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: {
-        'Authorization': `${googleAccessToken}`
+        'Authorization': `${gtoken}`
       }
     });
 
     if (!userInfoResponse.ok) {
+      console.dir(userInfoResponse);
       throw new Error('Failed to fetch user information from Google.');
     }
 
@@ -90,9 +91,12 @@ const registerUserByGoogle = async (req, res) => {
 
     const existingUser = await User.findOne({ googleId: userJSON.sub });
 
-    const token = generateToken(existingUser);
-
     if (existingUser) {
+      console.log('User exist.');
+
+      const token = generateToken(existingUser);
+      console.log(token);
+
       res.json({
         message: 'success',
         text: 'Successfully verify Google access token.',
@@ -109,8 +113,7 @@ const registerUserByGoogle = async (req, res) => {
       const user = new User({
         googleId: userJSON.sub,
         name: userJSON.name,
-        email: userJSON.email,
-        token
+        email: userJSON.email
       });
 
       const createdUser = await user.save();
@@ -126,6 +129,9 @@ const registerUserByGoogle = async (req, res) => {
         token
       };
 
+      console.dir(newUser);
+      console.log('New user created.');
+
       res.status(201).json({
         message: 'success',
         text: 'New user created.',
@@ -133,6 +139,7 @@ const registerUserByGoogle = async (req, res) => {
       });
     }
   } catch (error) {
+    console.dir(error);
     res.status(500).json({
       message: 'fault',
       text: 'Failed to verify Google access token.',
