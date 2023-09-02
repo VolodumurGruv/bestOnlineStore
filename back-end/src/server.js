@@ -1,3 +1,4 @@
+import dbConnection from './db.js';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -10,7 +11,6 @@ import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import uploadRouter from './routers/uploadRouter.js';
 import reviewRouter from './routers/reviewRouter.js';
-import dbConnection from './db.js';
 
 const logger = winston.createLogger({
   level: 'info',
