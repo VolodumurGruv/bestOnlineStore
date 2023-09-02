@@ -73,6 +73,9 @@ const registerUser = async (req, res) => {
 };
 
 const registerUserByGoogle = async (req, res) => {
+  console.dir(req.body);
+  console.dir(req.method);
+  console.dir(req.url);
   const { gtoken } = req.body;
   console.log(gtoken);
   try {
