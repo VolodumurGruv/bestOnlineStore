@@ -24,7 +24,9 @@ const getAllUsers = async (req, res) => {
 
 const registerUser = async (req, res) => {
   const { name, password, email, phone } = req.body;
-
+  console.log(req.body);
+  console.log(req.url);
+  console.log(req.method);
   try {
     const errors = validationResult(req);
     console.log(errors);
