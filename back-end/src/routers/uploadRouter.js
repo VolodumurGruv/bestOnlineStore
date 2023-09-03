@@ -7,6 +7,6 @@ import {
 
 const uploadRouter = express.Router();
 
-uploadRouter.post('/', isAuth, upload.single('image'), uploadFile);
+uploadRouter.post('/', isAuth, upload.single('file'), uploadFile);
 
 export default uploadRouter;
