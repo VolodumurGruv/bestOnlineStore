@@ -83,7 +83,7 @@ const registerUserByGoogle = async (req, res) => {
   try {
     const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: {
-        'Authorization': `${gtoken}`
+        'Authorization': `Bearer ${gtoken}`
       }
     });
 
