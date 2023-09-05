@@ -1,25 +1,10 @@
 import Product from '../models/productSchema.js';
 import logger from '../utils/logger.js';
-
-const HTTP_STATUS_CODES = {
-  OK: 200,
-  CREATED: 201,
-  NOT_FOUND: 404,
-  INTERNAL_SERVER_ERROR: 500,
-};
-
-const ERROR_MESSAGES = {
-  PRODUCT_NOT_FOUND: 'Product was not found.',
-  INTERNAL_SERVER_ERROR: 'Internal Server Error.',
-};
-
-const handleResponse = (res, status, message, text, payload = null) => {
-  res.status(status).json({
-    message,
-    text,
-    payload,
-  });
-};
+import {
+  HTTP_STATUS_CODES,
+  ERROR_MESSAGES
+} from '../utils/constants.js';
+import handleResponse from '../utils/handleResponse.js';
 
 const getAllProducts = async (req, res) => {
   try {

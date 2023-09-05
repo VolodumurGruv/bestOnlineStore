@@ -1,29 +1,14 @@
 import Order from '../models/orderSchema.js';
 import logger from '../utils/logger.js';
-
-const HTTP_STATUS_CODES = {
-  OK: 200,
-  CREATED: 201,
-  NOT_FOUND: 404,
-  INTERNAL_SERVER_ERROR: 500,
-};
-
-const ERROR_MESSAGES = {
-  ORDER_NOT_FOUND: 'Order was not found.',
-  INTERNAL_SERVER_ERROR: 'Internal Server Error.',
-};
-
-const handleResponse = (res, status, message, text, payload = null) => {
-  res.status(status).json({
-    message,
-    text,
-    payload,
-  });
-};
+import {
+  HTTP_STATUS_CODES,
+  ERROR_MESSAGES
+} from '../utils/constants.js';
+import handleResponse from '../utils/handleResponse.js';
 
 const getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find({});
+    const orders = await Order.find({}).populate('user', 'name');
     logger.info('All orders fetched successfully');
     handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All orders in payload.', orders);
   } catch (error) {
@@ -34,9 +19,14 @@ const getAllOrders = async (req, res) => {
 
 const getUserCart = async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.user._id });
-    logger.info('User cart fetched for user:', req.user._id);
-    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Your cart in payload.', orders);
+    if (req.body.orderItems.length === 0) {
+      logger.info('Cart is empty.');
+      handleResponse(res, HTTP_STATUS_CODES.OK, 'fault', 'Cart is empty.');
+    } else {
+      const orders = await Order.find({ user: req.user._id });
+      logger.info('User cart fetched for user:', req.user._id);
+      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Your cart in payload.', orders);
+    }
   } catch (error) {
     logger.error('Error while fetching user cart for user:', req.user._id, error);
     handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
@@ -60,6 +50,9 @@ const getOrderById = async (req, res) => {
 };
 
 const createOrder = async (req, res) => {
+  if (!req.user || !req.user._id) {
+    return handleResponse(res, HTTP_STATUS_CODES.UNAUTHORIZED, 'Unauthorized');
+  }
   try {
     const {
       orderItems,
