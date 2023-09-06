@@ -10,6 +10,15 @@ const HTTP_STATUS_CODES = {
 const ERROR_MESSAGES = {
   MISSING_REQUIRED_FIELDS: 'Missing required fields.',
   ORDER_NOT_FOUND: 'Order was not found.',
+  PRODUCT_NOT_FOUND: 'Product not found.',
+  DATABASE_ERROR: 'Some error occurred on DB.',
+  INVALID_CREDENTIALS: 'Wrong email or password.',
+  NEW_USER_CREATED: 'New user created.',
+  GOOGLE_FETCH_FAILURE: 'Failed to fetch user information from Google.',
+  GOOGLE_ACCESS_VERIFIED: 'Successfully verify Google access token.',
+  USER_NOT_FOUND: 'User not found.',
+  USER_WAS_UPDATED: 'User was updated.',
+  CANNOT_DELETE_ADMIN: 'Cannot detete admin.',
   INTERNAL_SERVER_ERROR: 'Internal Server Error.',
 };
 
