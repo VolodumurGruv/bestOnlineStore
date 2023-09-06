@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import RateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import logger from './utils/logger.js';
@@ -54,6 +55,11 @@ app.use(helmet());
 app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  mongoSanitize({
+    replaceWith: '_',
+  }),
+);
 app.use('*', (req, res, next) => {
   logger.info(req.originalUrl);
   next();
