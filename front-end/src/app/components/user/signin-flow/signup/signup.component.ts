@@ -4,23 +4,20 @@ import { RouterLink } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { GoogleLoginComponent } from '../google-login/google-login.component';
-import { AuthInterceptor } from '../services/auth.interceptor';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import {
   confirmValidator,
   emailValidator,
   nameValidator,
   passwordValidator,
-} from '../services/validators.directive';
-import { Subscription } from 'rxjs';
+} from '../../services/validators.directive';
 
 @Component({
   selector: 'app-signup',
@@ -34,14 +31,13 @@ import { Subscription } from 'rxjs';
   ],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
-  providers: [AuthService]
 })
 export class SignupComponent implements OnDestroy {
   private unSub!: Subscription;
 
   public signupForm: FormGroup = this.fb.group({
     name: [
-      '',
+      'Vasya Pupkin',
       [
         Validators.required,
         Validators.minLength(3),
@@ -49,9 +45,12 @@ export class SignupComponent implements OnDestroy {
         nameValidator(),
       ],
     ],
-    email: ['', [Validators.required, Validators.email, emailValidator()]],
+    email: [
+      'pupkin@mail.com',
+      [Validators.required, Validators.email, emailValidator()],
+    ],
     password: [
-      '',
+      'pupKin123,J',
       [
         Validators.required,
         Validators.minLength(8),
@@ -73,8 +72,11 @@ export class SignupComponent implements OnDestroy {
 
   registerUser() {
     const { name, email, password } = this.signupForm.value;
-    console.log({ name, email, password });
-    this.unSub = this.authService.signup({ name, password, email }).subscribe();
+    if (name && email && password) {
+      this.unSub = this.authService
+        .signup({ name, password, email })
+        .subscribe();
+    }
   }
 
   isVisisble(input: { type: string }) {

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './components/user/services/auth.guard';
 
 export const APP_ROUTING: Routes = [
   {
@@ -53,16 +54,24 @@ export const APP_ROUTING: Routes = [
       {
         path: 'login',
         loadComponent: () =>
-          import('./components/signin-flow/login/login.component').then(
+          import('./components/user/signin-flow/login/login.component').then(
             (m) => m.LoginComponent
           ),
       },
       {
         path: 'signup',
         loadComponent: () =>
-          import('./components/signin-flow/signup/signup.component').then(
+          import('./components/user/signin-flow/signup/signup.component').then(
             (m) => m.SignupComponent
           ),
+      },
+      {
+        path: 'user',
+        loadComponent: () =>
+          import('./components/user/user/user.component').then(
+            (m) => m.UserComponent
+          ),
+        canActivate: [authGuard],
       },
     ],
   },

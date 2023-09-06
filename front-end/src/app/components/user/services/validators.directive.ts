@@ -3,9 +3,16 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 export function nameValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     let isTrue: boolean = false;
+    // it should pass only letters and white spaces
+    const regExp = /[A-Za-z]+[^0-1]\b/g;
+    let res: string[] = [];
 
-    const latAlphabet = [];
-    const cyrilicAlphabet = [];
+    if (control.value) {
+      res = control.value.match(regExp);
+      if (res.length) {
+        isTrue = res.join('') === control.value;
+      }
+    }
 
     return isTrue ? { nameValid: { isValid: control.value } } : null;
   };

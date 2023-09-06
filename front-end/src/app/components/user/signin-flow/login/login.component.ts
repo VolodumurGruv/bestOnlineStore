@@ -9,7 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { AlertService } from '@shared/services/alert.service';
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
 import { GoogleLoginComponent } from '../google-login/google-login.component';
@@ -27,7 +27,6 @@ import { GoogleLoginComponent } from '../google-login/google-login.component';
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  providers: [AuthService],
 })
 export class LoginComponent implements OnDestroy {
   private unSub!: Subscription;
@@ -44,9 +43,15 @@ export class LoginComponent implements OnDestroy {
   ) {}
 
   onSubmit() {
-    this.authService.signIn(this.signinForm.value).subscribe(() => {
-      this.alertService.success("You've logged in successfully");
-    });
+    this.unSub = this.authService
+      .signIn(this.signinForm.value)
+      .subscribe((res: any) => {
+        localStorage.setItem('email', res.payload.email);
+        localStorage.setItem('token', res.payload.token);
+        localStorage.setItem('id', res.payload.token);
+        console.log(res.password);
+        this.alertService.success("You've logged in successfully");
+      });
   }
 
   googleLogin() {}
