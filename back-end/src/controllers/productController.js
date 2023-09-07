@@ -1,164 +1,88 @@
 import Product from '../models/productSchema.js';
-import data from '../data.js';
+import logger from '../utils/logger.js';
+import {
+  HTTP_STATUS_CODES,
+  ERROR_MESSAGES
+} from '../utils/constants.js';
+import handleResponse from '../utils/handleResponse.js';
 
 const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find({});
-    res.json({
-      message: 'success',
-      text: 'All products in payload.',
-      payload: products
-    });
+    logger.info('All products fetched successfully');
+    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All products in payload.', products);
   } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'Internal Server Error.',
-      payload: error
-    });
-  }
-};
-
-const seedProducts = async (req, res) => {
-  try {
-    const createdProducts = await Product.insertMany(data.products);
-    res.json({
-      message: 'success',
-      text: 'Products created.',
-      payload: createdProducts
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'Internal Server Error.',
-      payload: error
-    });
+    logger.error('Error while fetching all products', error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
 const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate('reviews');
     if (product) {
-      res.json({
-        message: 'success',
-        text: 'Product found.',
-        payload: product
-      });
+      logger.info('Product found by ID:', req.params.id);
+      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Product found.', product);
     } else {
-      res.status(404).json({
-        message: 'fault',
-        text: 'Product was not found.'
-      });
+      logger.error('Product not found by ID:', req.params.id);
+      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', ERROR_MESSAGES.PRODUCT_NOT_FOUND);
     }
   } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'Internal Server Error.',
-      payload: error
-    });
+    logger.error('Error while fetching product by ID:', req.params.id, error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
 const createProduct = async (req, res) => {
-  const newProduct = new Product({
-    name: 'product ' + Date.now(),
-    descr: 'sample description',
-    shortDescr: 'short description',
-    image: 'no-path',
-    price: 0,
-    category: 'sample category',
-    brand: 'sample brand',
-    instock: true,
-    countInStock: 0,
-    raiting: 3,
-    numReviews: 0
-  });
-
   try {
-    const createdProduct = await newProduct.save();
-    res.json({
-      message: 'success',
-      text: 'Product created.',
-      payload: createdProduct
-    });
+    const newProductData = req.body;
+    const createdProduct = await Product.create(newProductData);
+    logger.info('Product created:', createdProduct._id);
+    handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', 'Product created.', createdProduct);
   } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'Internal Server Error.',
-      payload: error
-    });
+    logger.error('Error while creating product', error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
 const updateProduct = async (req, res) => {
-  const productId = req.params.id;
-
   try {
-    const product = await Product.findById(productId);
-    if (product) {
-      product.name = req.body.name;
-      product.descr = req.body.descr;
-      product.shortDescr = req.body.shortDescr;
-      product.price = req.body.price;
-      product.image = req.body.image;
-      product.category = req.body.category;
-      product.brand = req.body.brand;
-      product.instock = req.body.instock;
-      product.countInStock = req.body.countInStock;
-
-      const updatedProduct = await product.save();
-      res.json({
-        message: 'success',
-        text: 'Product updated.',
-        payload: updatedProduct
-      });
+    const productId = req.params.id;
+    const updatedProduct = await Product.findByIdAndUpdate(productId, req.body, { new: true });
+    if (updatedProduct) {
+      logger.info('Product updated:', productId);
+      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Product updated.', updatedProduct);
     } else {
-      res.status(404).json({
-        message: 'fault',
-        text: 'Product was not found.'
-      });
+      logger.error('Product not found for update:', productId);
+      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', ERROR_MESSAGES.PRODUCT_NOT_FOUND);
     }
   } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'Internal Server Error.',
-      payload: error
-    });
+    logger.error('Error while updating product:', req.params.id, error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
 const deleteProduct = async (req, res) => {
-  const productId = req.params.id;
-
   try {
-    const product = await Product.findById(productId);
-    if (product) {
-      await product.remove();
-      res.json({
-        message: 'success',
-        text: 'Product deleted.',
-        payload: product
-      });
+    const productId = req.params.id;
+    const deletedProduct = await Product.findByIdAndRemove(productId);
+    if (deletedProduct) {
+      logger.info('Product deleted:', productId);
+      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Product deleted.', deletedProduct);
     } else {
-      res.status(404).json({
-        message: 'fault',
-        text: 'Product was not found.'
-      });
+      logger.error('Product not found for delete:', productId);
+      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', ERROR_MESSAGES.PRODUCT_NOT_FOUND);
     }
   } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'Internal Server Error.',
-      payload: error
-    });
+    logger.error('Error while deleting product:', req.params.id, error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
 export {
   getAllProducts,
-  seedProducts,
   getProductById,
   createProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
 };

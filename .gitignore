@@ -90,9 +90,8 @@ out
 # Nuxt.js build / generate output
 .nuxt
 
-
-
-
+#API-key for GCP
+credentials.json
 
 # Gatsby files
 .cache/

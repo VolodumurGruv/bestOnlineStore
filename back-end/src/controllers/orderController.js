@@ -1,77 +1,35 @@
 import Order from '../models/orderSchema.js';
+import logger from '../utils/logger.js';
+import {
+  HTTP_STATUS_CODES,
+  ERROR_MESSAGES
+} from '../utils/constants.js';
+import handleResponse from '../utils/handleResponse.js';
 
-const getOrders = async (req, res) => {
+const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find({}).populate('user', 'name');
-    res.json({
-      message: 'success',
-      text: 'All orders in payload.',
-      payload: orders
-    });
+    logger.info('All orders fetched successfully');
+    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All orders in payload.', orders);
   } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'Internal Server Error.',
-      payload: error
-    });
+    logger.error('Error while fetching all orders', error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
 const getUserCart = async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.user._id });
-    res.json({
-      message: 'success',
-      text: 'Your cart in payload.',
-      payload: orders
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'Internal Server Error.',
-      payload: error
-    });
-  }
-};
-
-const createNewOrder = async (req, res) => {
-  try {
     if (req.body.orderItems.length === 0) {
-      res.status(400).json({
-        message: 'fault',
-        text: 'Cart is empty.'
-      });
+      logger.info('Cart is empty.');
+      handleResponse(res, HTTP_STATUS_CODES.OK, 'fault', 'Cart is empty.');
     } else {
-      const order = new Order({
-        orderItems: req.body.orderItems,
-        shippingAddress: req.body.shippingAddress,
-        paymentMethod: req.body.paymentMethod,
-        itemsPrice: req.body.itemsPrice,
-        totalPrice: req.body.totalPrice,
-        user: req.user._id,
-        isPaid: true,
-        paidAt: Date.now(),
-        paymentResult: {
-          id: 'real_payment_id',
-          status: 'success',
-          update_time: Date.now(),
-          email_address: req.user.email,
-        },
-      });
-
-      const createdOrder = await order.save();
-      res.status(201).json({
-        message: 'success',
-        text: 'New order created.',
-        payload: createdOrder
-      });
+      const orders = await Order.find({ user: req.user._id });
+      logger.info('User cart fetched for user:', req.user._id);
+      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Your cart in payload.', orders);
     }
   } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'Internal Server Error.',
-      payload: error
-    });
+    logger.error('Error while fetching user cart for user:', req.user._id, error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -79,89 +37,108 @@ const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (order) {
-      res.json({
-        message: 'success',
-        text: 'Your order in payload.',
-        payload: order
-      });
+      logger.info('Order found by ID:', req.params.id);
+      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order found.', order);
     } else {
-      res.status(404).json({
-        message: 'fault',
-        text: 'Order was not found.'
-      });
+      logger.error('Order not found by ID:', req.params.id);
+      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', ERROR_MESSAGES.ORDER_NOT_FOUND);
     }
   } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'Internal Server Error.',
-      payload: error
-    });
+    logger.error('Error while fetching order by ID:', req.params.id, error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
-const updateOrderToPaid = async (req, res) => {
+const createOrder = async (req, res) => {
+  if (!req.user || !req.user._id) {
+    return handleResponse(res, HTTP_STATUS_CODES.UNAUTHORIZED, 'Unauthorized');
+  }
+  try {
+    const {
+      orderItems,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice,
+      totalPrice,
+      isPaid
+    } = req.body;
+
+    const newOrderData = {
+      orderItems,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice,
+      totalPrice,
+      user: req.user._id,
+      isPaid,
+      paidAt: Date.now(),
+      paymentResult: {
+        id: 'real_payment_id',
+        status: 'success',
+        update_time: Date.now(),
+        email_address: req.user.email,
+      },
+    };
+
+    const createdOrder = await Order.create(newOrderData);
+    logger.info('Order created:', createdOrder._id);
+    handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', 'Order created.', createdOrder);
+  } catch (error) {
+    logger.error('Error while creating order', error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
+  }
+};
+
+const updateOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (order) {
+      const { id } = req.body;
+
       order.isPaid = true;
       order.paidAt = Date.now();
       order.paymentResult = {
-        id: req.body.id,
+        id,
         status: 'success',
         update_time: Date.now(),
         email_address: req.user.email,
       };
+
       const updatedOrder = await order.save();
-      res.json({
-        message: 'success',
-        text: 'Order has been paid.',
-        payload: updatedOrder
-      });
+      logger.info('Order paid:', req.params.id);
+      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order has been paid.', updatedOrder);
     } else {
-      res.status(404).json({
-        message: 'fault',
-        text: 'Order was not found.'
-      });
+      logger.error('Order not found for payment:', req.params.id);
+      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', ERROR_MESSAGES.ORDER_NOT_FOUND);
     }
   } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'Internal Server Error.',
-      payload: error
-    });
+    logger.error('Error while updating order to paid:', req.params.id, error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
 const deleteOrder = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
-    if (order) {
-      const deletedOrder = await order.remove();
-      res.json({
-        message: 'success',
-        text: 'Order was deleted.',
-        payload: deletedOrder
-      });
+    const orderId = req.params.id;
+    const deletedOrder = await Order.findByIdAndRemove(orderId);
+    if (deletedOrder) {
+      logger.info('Order deleted:', orderId);
+      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order deleted.', deletedOrder);
     } else {
-      res.status(404).json({
-        message: 'fault',
-        text: 'Order was not found.'
-      });
+      logger.error('Order not found for delete:', orderId);
+      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', ERROR_MESSAGES.ORDER_NOT_FOUND);
     }
   } catch (error) {
-    res.status(500).json({
-      message: 'fault',
-      text: 'Internal Server Error.',
-      payload: error
-    });
+    logger.error('Error while deleting order:', req.params.id, error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
 export {
-  getOrders,
+  getAllOrders,
   getUserCart,
-  createNewOrder,
   getOrderById,
-  updateOrderToPaid,
-  deleteOrder
+  createOrder,
+  updateOrder,
+  deleteOrder,
 };
