@@ -6,7 +6,7 @@
       (ngSubmit)="registerUser()"
       class="signup__form"
     >
-      <div class="signup__input-wrap">
+      <div class="signup__input-wrap" [ngClass]="isValid('name')">
         <input
           type="text"
           class="signup__input"
@@ -14,7 +14,11 @@
           formControlName="name"
         />
       </div>
-      <div class="signup__input-wrap">
+      <app-error-validation
+        [control]="signupForm.get('name')"
+      ></app-error-validation>
+
+      <div class="signup__input-wrap" [ngClass]="isValid('email')">
         <input
           type="email"
           class="signup__input"
@@ -22,7 +26,10 @@
           formControlName="email"
         />
       </div>
-      <div class="signup__input-wrap">
+      <app-error-validation
+        [control]="signupForm.get('email')"
+      ></app-error-validation>
+      <div class="signup__input-wrap" [ngClass]="isValid('password')">
         <input
           #input
           type="password"
@@ -34,7 +41,10 @@
           <app-visibility-icon></app-visibility-icon>
         </span>
       </div>
-      <div class="signup__input-wrap">
+      <app-error-validation
+        [control]="signupForm.get('password')"
+      ></app-error-validation>
+      <div class="signup__input-wrap" [ngClass]="isValid('confirmPassword')">
         <input
           #confirm
           type="password"
@@ -46,8 +56,17 @@
           <app-visibility-icon></app-visibility-icon>
         </span>
       </div>
+      <app-error-validation
+        [control]="signupForm.get('confirmPassword')"
+      ></app-error-validation>
       <div class="signup__btn-wrap">
-        <button class="btn__grey btn" type="submit">Зареєструватися</button>
+        <button
+          class="btn__grey btn"
+          type="submit"
+          [disabled]="!signupForm.valid"
+        >
+          Зареєструватися
+        </button>
       </div>
     </form>
     <div class="signup__section-adittion">

@@ -100,11 +100,10 @@
   cursor: pointer;
 }
 
-.ng-valid,
-.ng-valid.required {
-  border-bottom: 5px solid #42a948; /* green */
+.box-danger {
+  box-shadow: 2px 2px 10px rgba(255, 0, 0, 0.5);
 }
 
-.ng-invalid:not(form) {
-  border-bottom: 5px solid #a94442; /* red */
+.box-success {
+  box-shadow: 2px 2px 10px rgba(0, 128, 0, 0.5);
 }

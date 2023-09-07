@@ -32,8 +32,8 @@ export class LoginComponent implements OnDestroy {
   private unSub!: Subscription;
 
   public signinForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required],
+    email: [null, [Validators.required, Validators.email]],
+    password: [null, Validators.required],
     savePass: [],
   });
   constructor(

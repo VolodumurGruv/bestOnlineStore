@@ -17,7 +17,13 @@ import {
   emailValidator,
   nameValidator,
   passwordValidator,
-} from '../../services/validators.directive';
+} from '../../utils/validators';
+import { ErrorValidationComponent } from '../../error-validation/error-validation.component';
+
+type IsValid = {
+  'box-danger': boolean | undefined;
+  'box-success': boolean | undefined;
+};
 
 @Component({
   selector: 'app-signup',
@@ -28,6 +34,7 @@ import {
     VisibilityIconComponent,
     ReactiveFormsModule,
     GoogleLoginComponent,
+    ErrorValidationComponent,
   ],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
@@ -37,7 +44,7 @@ export class SignupComponent implements OnDestroy {
 
   public signupForm: FormGroup = this.fb.group({
     name: [
-      'Vasya Pupkin',
+      null,
       [
         Validators.required,
         Validators.minLength(3),
@@ -45,12 +52,9 @@ export class SignupComponent implements OnDestroy {
         nameValidator(),
       ],
     ],
-    email: [
-      'pupkin@mail.com',
-      [Validators.required, Validators.email, emailValidator()],
-    ],
+    email: [null, [Validators.required, Validators.email, emailValidator()]],
     password: [
-      'pupKin123,J',
+      null,
       [
         Validators.required,
         Validators.minLength(8),
@@ -59,11 +63,12 @@ export class SignupComponent implements OnDestroy {
       ],
     ],
     confirmPassword: [
-      '',
+      null,
       [
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(16),
+        passwordValidator(),
         confirmValidator(),
       ],
     ],
@@ -73,10 +78,19 @@ export class SignupComponent implements OnDestroy {
   registerUser() {
     const { name, email, password } = this.signupForm.value;
     if (name && email && password) {
-      this.unSub = this.authService
-        .signup({ name, password, email })
-        .subscribe();
+      // this.unSub = this.authService
+      // .signup({ name, password, email })
+      // .subscribe();
     }
+  }
+
+  isValid(name: string): IsValid {
+    return {
+      'box-danger':
+        !this.signupForm.get(name)?.valid && this.signupForm.get(name)?.touched,
+      'box-success':
+        this.signupForm.get(name)?.valid && this.signupForm.get(name)?.touched,
+    };
   }
 
   isVisisble(input: { type: string }) {

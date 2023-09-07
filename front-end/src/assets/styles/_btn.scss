@@ -33,12 +33,9 @@
     color: #fff;
     background: colors.$main-color;
   }
-}
 
-.btn__disabled {
-  background-color: colors.$dark-gray;
-
-  &:active {
-    background-color: colors.$dark-gray;
+  &:disabled {
+    opacity: 0.4;
+    border: 1px solid colors.$light-gray;
   }
 }

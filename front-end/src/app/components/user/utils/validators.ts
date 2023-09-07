@@ -5,16 +5,19 @@ export function nameValidator(): ValidatorFn {
     let isTrue: boolean = false;
     // it should pass only letters and white spaces
     const regExp = /[A-Za-z]+[^0-1]\b/g;
-    let res: string[] = [];
+    let res!: string[] | null;
 
     if (control.value) {
       res = control.value.match(regExp);
-      if (res.length) {
+
+      if (res) {
         isTrue = res.join('') === control.value;
       }
     }
 
-    return isTrue ? { nameValid: { isValid: control.value } } : null;
+    return !isTrue
+      ? { name: { message: "ім'я може містити лише букви" } }
+      : null;
   };
 }
 
@@ -29,13 +32,13 @@ export function emailValidator(): ValidatorFn {
       }
     }
     control.parent?.get('email')?.errors;
-    return isTrue ? { emailValid: { value: control.value } } : null;
+    return !isTrue ? { email: { message: 'введіть коректний e-mail' } } : null;
   };
 }
 
 export function passwordValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const nameRegExp = /^[\w-\.]+@([\w-]+\.)+[a-zA-Z-]{2,4}$/g;
+    const nameRegExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/g;
     let isTrue: boolean = false;
     if (control.value) {
       const res = control.value.trim().match(nameRegExp);
@@ -44,15 +47,23 @@ export function passwordValidator(): ValidatorFn {
       }
     }
 
-    return isTrue ? { passwordValid: { value: false } } : null;
+    return !isTrue
+      ? {
+          password: {
+            message:
+              'Пароль має містити хочаб один символ, одну заголовну літеру та цифру',
+          },
+        }
+      : null;
   };
 }
 
 export function confirmValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const password = control.parent?.getRawValue().password;
-    return control.value === password
-      ? { name: { value: control.value } }
+    console.log(password === control.value);
+    return control.value !== password
+      ? { confirmPassword: { message: 'паролі мають збігатися' } }
       : null;
   };
 }

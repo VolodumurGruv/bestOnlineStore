@@ -11,8 +11,11 @@ export const CATALOG_ROUTING: Route[] = [
         (m) => m.CategoriesComponent
       ),
     children: [
-      { path: 'catalog/:id', component: ProductsComponent },
-      { path: 'catalog/:subcategory/:id', component: ProductComponent },
+      {
+        path: ':subcategory',
+        component: ProductComponent,
+        children: [{ path: ':id', component: ProductsComponent }],
+      },
     ],
   },
 ];
