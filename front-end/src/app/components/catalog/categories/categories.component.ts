@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { mainCategories } from '@interfaces/catalog.data';
-import { Category } from '@interfaces/catalog.interface';
+import {  RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterOutlet],
+  imports: [RouterOutlet],
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss'],
 })

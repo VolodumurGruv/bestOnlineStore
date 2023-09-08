@@ -34,7 +34,6 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.url.subscribe((urlSegments) => {
-      console.log(urlSegments);
       const categoryPath = urlSegments[urlSegments.length - 1].path;
       this.subcategory = this.productService.getProducts(categoryPath);
       this.pathCategory = this.productService.getPathCategory(categoryPath);
