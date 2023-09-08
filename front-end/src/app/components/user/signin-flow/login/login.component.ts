@@ -32,8 +32,8 @@ export class LoginComponent implements OnDestroy {
   private unSub!: Subscription;
 
   public signinForm: FormGroup = this.fb.group({
-    email: [null, [Validators.required, Validators.email]],
-    password: [null, Validators.required],
+    email: ['vova@mymail.com', [Validators.required, Validators.email]],
+    password: ['voVA123vova', Validators.required],
     savePass: [],
   });
   constructor(
@@ -43,15 +43,7 @@ export class LoginComponent implements OnDestroy {
   ) {}
 
   onSubmit() {
-    this.unSub = this.authService
-      .signIn(this.signinForm.value)
-      .subscribe((res: any) => {
-        localStorage.setItem('email', res.payload.email);
-        localStorage.setItem('token', res.payload.token);
-        localStorage.setItem('id', res.payload.token);
-        console.log(res.password);
-        this.alertService.success("You've logged in successfully");
-      });
+    this.authService.signIn(this.signinForm.value);
   }
 
   googleLogin() {}

@@ -36,7 +36,6 @@ export class GoogleLoginComponent implements OnInit {
   }
 
   googleLogin() {
-    console.log(this.authService.isAuth());
     if (this.authService.isAuth()) {
       this.alert.warning("You've already logged in");
     } else {
@@ -59,10 +58,9 @@ export class GoogleLoginComponent implements OnInit {
           const credential = GoogleAuthProvider.credentialFromResult(result);
           const token = credential?.accessToken;
           const user = result.user;
-          console.log(user);
-          console.log(credential);
+
           if (user.email && token) {
-            this.authService.googleLogin({ email: user.email, gtoken: token });
+            this.authService.googleLogin({ gtoken: token });
           }
         }
       })
@@ -82,8 +80,7 @@ export class GoogleLoginComponent implements OnInit {
   signOut(): void {
     signOut(this.auth)
       .then(() => {
-        localStorage.removeItem('email');
-        localStorage.removeItem('token');
+        localStorage.clear();
         this.alert.success("You've signed out successfully!");
       })
       .catch((error) => {

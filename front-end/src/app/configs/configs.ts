@@ -12,3 +12,9 @@ export const httpConfig = {
     'Content-Type': 'application/json',
   }),
 };
+
+export const googleLoginHeaders = {
+  headers: new HttpHeaders({
+    'A-Type': 'application/json',
+  }),
+};

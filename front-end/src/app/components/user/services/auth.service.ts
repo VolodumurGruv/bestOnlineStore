@@ -1,58 +1,71 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of, retry, tap } from 'rxjs';
+import { catchError, Observable, of, retry, take, tap } from 'rxjs';
+import { Auth, signOut } from '@angular/fire/auth';
+
 import { configs, httpConfig } from '@configs/configs';
 import { User } from '@interfaces/user.interface';
 import { AlertService } from '@shared/services/alert.service';
-import { Auth, signOut } from '@angular/fire/auth';
+import { PAYLOAD } from '@interfaces/request.interface';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   constructor(
     private http: HttpClient,
     private alertService: AlertService,
-    private auth: Auth,
-    private alert: AlertService
+    private auth: Auth
   ) {}
 
-  signIn(user: User): Observable<User> {
+  signIn(user: User): void {
     if (this.isAuth()) {
-      this.alertService.warning('User is already logged in');
+      this.alertService.warning('Вхід вже здійснено!');
       // check it later
-      return of();
     }
-    return this.http
+    this.http
       .post<User>(`${configs.URL}/user/signin`, user, httpConfig)
       .pipe(
         retry(3),
-        catchError(this.handleError<User>(`sign in for ${user.name} `))
-      );
+
+        catchError(this.handleError<User>(`Помилка входу. Повторіть спробу!] `))
+      )
+      .subscribe((res: any) => {
+        if (res.payload) {
+          this.setLocalStorage(res.payload);
+        }
+        this.alertService.success("You've logged in successfully");
+      });
   }
 
   signup(user: User): Observable<User> {
     return this.http.post<User>(configs.URL + configs.REGISTER_ROOT, user).pipe(
       tap((res: any) => {
         const payload = res.payload;
-
-        localStorage.setItem('token', payload.token);
-        localStorage.setItem('id', payload._id);
-        localStorage.setItem('email', payload.email);
+        if (payload) {
+          this.setLocalStorage(payload);
+        }
       }),
-      catchError(this.handleError<User>(`signup `))
+      catchError(
+        this.handleError<User>(
+          `Виникла помилка під час реєстрації. Повторіть спробу!`
+        )
+      )
     );
   }
 
-  googleLogin(body: any): void {
+  googleLogin(body: { gtoken: string }): void {
+    console.log(body);
     this.http
-      .post(configs.URL + configs.GOOGLE_ROOT, JSON.stringify({ body }))
+      .post(configs.URL + configs.GOOGLE_ROOT, body)
       .pipe(
-        tap((res: any) => {
-          console.log(res);
-        }),
-        catchError(this.handleError<void>('Google login'))
+        take(1),
+        catchError(
+          this.handleError<void>('Виникла помилка при здійсненні Google login!')
+        )
       )
-      .subscribe((res) => {
-        console.log(res);
+      .subscribe((res: any) => {
+        if (res?.payload) {
+          this.setLocalStorage(res?.payload);
+        }
       });
   }
 
@@ -61,7 +74,7 @@ export class AuthService {
       this.alertService.danger(
         operation,
         // error.message.split(' ').splice(0, 3).join(' ')
-        error.statusText
+        error?.error.text
       );
 
       return of(result as T);
@@ -73,25 +86,39 @@ export class AuthService {
   }
 
   getAuthToken(): string | null {
-    return localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    if (token) {
+      return token;
+    }
+    return null;
   }
 
   signOut(): void {
     // remove true
-    if (this.isAuth() || true) {
+    if (this.isAuth()) {
       signOut(this.auth)
         .then(() => {
-          localStorage.removeItem('email');
-          localStorage.removeItem('token');
-          localStorage.removeItem('id');
-          this.alert.success("You've signed out successfully!");
+          localStorage.clear();
+          this.alertService.success('Вихід здійснено успішно!');
         })
         .catch((error) => {
           console.log(error.message);
-          this.alert.danger('Google sign out', error.message);
+          this.alertService.danger(
+            'Виникла помилка при виході!',
+            error.message
+          );
         });
     } else {
-      this.alert.warning('You should be logged in');
+      this.alertService.warning('Ви маєте бути зареєстровані!');
     }
+  }
+
+  setLocalStorage(payload: PAYLOAD) {
+    const expDate = new Date(new Date().getTime() + 360000);
+
+    localStorage.setItem('token', payload.token);
+    localStorage.setItem('id', payload._id);
+    localStorage.setItem('email', payload.email);
+    localStorage.setItem('expDate', expDate.toString());
   }
 }

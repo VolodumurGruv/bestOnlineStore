@@ -15,9 +15,10 @@ export const AuthInterceptor: HttpInterceptorFn = (
 ): Observable<HttpEvent<any>> => {
   const auth = inject(AuthService);
   const token = auth.getAuthToken();
-  const url = req.url.split('/').includes(configs.DOMAIN);
+  const url = req.url.split('/').includes('google');
 
-  if (token && url) {
+  if (token && !url) {
+    console.log(url);
     const authToken = req.clone({
       headers: req.headers.set('Authorization', token),
     });
