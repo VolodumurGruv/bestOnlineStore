@@ -7,7 +7,7 @@ const HTTP_STATUS_CODES = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
-const ERROR_MESSAGES = {
+const MESSAGES = {
   MISSING_REQUIRED_FIELDS: 'Missing required fields.',
   ORDER_NOT_FOUND: 'Order was not found.',
   PRODUCT_NOT_FOUND: 'Product not found.',
@@ -24,5 +24,5 @@ const ERROR_MESSAGES = {
 
 export {
   HTTP_STATUS_CODES,
-  ERROR_MESSAGES
+  MESSAGES
 };

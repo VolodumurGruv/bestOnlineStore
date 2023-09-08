@@ -7,7 +7,7 @@ import sendWelcomeEmail from '../utils/email.js';
 import logger from '../utils/logger.js';
 import {
   HTTP_STATUS_CODES,
-  ERROR_MESSAGES
+  MESSAGES
 } from '../utils/constants.js';
 import handleResponse from '../utils/handleResponse.js';
 
@@ -18,7 +18,7 @@ const getAllUsers = async (req, res) => {
     handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All users in payload.', users);
   } catch (error) {
     logger.error('Error while fetching all users:', error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.DATABASE_ERROR, error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.DATABASE_ERROR, error);
   }
 };
 
@@ -29,7 +29,7 @@ const registerUser = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', ERROR_MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
+      return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
     }
 
     const hashedPassword = bcrypt.hashSync(password, 8);
@@ -56,9 +56,9 @@ const registerUser = async (req, res) => {
 
     sendWelcomeEmail(email);
 
-    handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', ERROR_MESSAGES.NEW_USER_CREATED, newUser);
+    handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', MESSAGES.NEW_USER_CREATED, newUser);
   } catch (error) {
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error.message);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error.message);
   }
 };
 
@@ -73,7 +73,7 @@ const registerUserByGoogle = async (req, res) => {
     });
 
     if (!userInfoResponse.ok) {
-      throw new Error(ERROR_MESSAGES.GOOGLE_FETCH_FAILURE);
+      handleResponse(res, HTTP_STATUS_CODES, 'fault', MESSAGES.GOOGLE_FETCH_FAILURE);
     }
 
     const userJSON = await userInfoResponse.json();
@@ -92,7 +92,7 @@ const registerUserByGoogle = async (req, res) => {
         token
       };
 
-      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', ERROR_MESSAGES.GOOGLE_ACCESS_VERIFIED, userPayload);
+      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', MESSAGES.GOOGLE_ACCESS_VERIFIED, userPayload);
     } else {
       const user = new User({
         googleId: userJSON.sub,
@@ -113,10 +113,10 @@ const registerUserByGoogle = async (req, res) => {
         token
       };
 
-      handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', ERROR_MESSAGES.NEW_USER_CREATED, newUser);
+      handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', MESSAGES.NEW_USER_CREATED, newUser);
     }
   } catch (error) {
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error.message);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -140,11 +140,11 @@ const signInUser = async (req, res) => {
       });
     } else {
       logger.error('Invalid credentials for user:', email);
-      handleResponse(res, HTTP_STATUS_CODES.UNAUTHORIZED, 'fault', ERROR_MESSAGES.INVALID_CREDENTIALS);
+      handleResponse(res, HTTP_STATUS_CODES.UNAUTHORIZED, 'fault', MESSAGES.INVALID_CREDENTIALS);
     }
   } catch (error) {
     logger.error('Error while signing in user:', error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -156,11 +156,11 @@ const getUserById = async (req, res) => {
       handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'User was found.', user);
     } else {
       logger.error('User not found by ID:', req.params.id);
-      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', ERROR_MESSAGES.USER_NOT_FOUND);
+      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.USER_NOT_FOUND);
     }
   } catch (error) {
     logger.error('Error while fetching user by ID:', req.params.id, error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -181,7 +181,7 @@ const updateProfile = async (req, res) => {
       const token = generateToken(updatedUser);
 
       logger.info('User profile updated:', updatedUser._id);
-      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', ERROR_MESSAGES.USER_WAS_UPDATED, {
+      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', MESSAGES.USER_WAS_UPDATED, {
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
@@ -192,7 +192,7 @@ const updateProfile = async (req, res) => {
     }
   } catch (error) {
     logger.error('Error while updating user profile:', error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -206,7 +206,7 @@ const deleteUser = async (req, res) => {
 
     if (user) {
       if (isAdmin(user)) {
-        handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', ERROR_MESSAGES.CANNOT_DELETE_ADMIN);
+        handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.CANNOT_DELETE_ADMIN);
       } else {
         const deletedUser = await user.remove();
         handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'User deleted.', {
@@ -214,10 +214,10 @@ const deleteUser = async (req, res) => {
         });
       }
     } else {
-      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', ERROR_MESSAGES.USER_NOT_FOUND);
+      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.USER_NOT_FOUND);
     }
   } catch (error) {
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -226,7 +226,7 @@ const updateUser = async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', ERROR_MESSAGES.USER_NOT_FOUND);
+      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.USER_NOT_FOUND);
       return;
     }
 
@@ -239,7 +239,7 @@ const updateUser = async (req, res) => {
 
     handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'User updated.', updatedUser);
   } catch (error) {
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', ERROR_MESSAGES.INTERNAL_SERVER_ERROR, error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
