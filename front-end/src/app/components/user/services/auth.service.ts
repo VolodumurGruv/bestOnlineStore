@@ -32,7 +32,7 @@ export class AuthService {
         if (res.payload) {
           this.setLocalStorage(res.payload);
         }
-        this.alertService.success("You've logged in successfully");
+        this.alertService.success('Вхід здійснено успішно');
       });
   }
 
@@ -65,6 +65,7 @@ export class AuthService {
       .subscribe((res: any) => {
         if (res?.payload) {
           this.setLocalStorage(res?.payload);
+          this.alertService.success('Вхід здійснено успішно');
         }
       });
   }
@@ -102,7 +103,6 @@ export class AuthService {
           this.alertService.success('Вихід здійснено успішно!');
         })
         .catch((error) => {
-          console.log(error.message);
           this.alertService.danger(
             'Виникла помилка при виході!',
             error.message

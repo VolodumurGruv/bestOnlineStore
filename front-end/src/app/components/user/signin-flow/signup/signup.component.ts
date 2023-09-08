@@ -60,6 +60,7 @@ export class SignupComponent implements OnDestroy {
         Validators.minLength(8),
         Validators.maxLength(16),
         passwordValidator(),
+        confirmValidator(),
       ],
     ],
     confirmPassword: [

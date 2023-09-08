@@ -61,8 +61,10 @@ export function passwordValidator(): ValidatorFn {
 export function confirmValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const password = control.parent?.getRawValue().password;
-    console.log(password === control.value);
-    return control.value !== password
+    const confirmPassword = control.parent?.getRawValue().confirmPassword;
+    console.log(password, confirmPassword);
+    console.log(password === confirmPassword);
+    return confirmPassword !== password
       ? { confirmPassword: { message: 'паролі мають збігатися' } }
       : null;
   };
