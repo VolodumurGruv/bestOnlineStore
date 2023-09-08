@@ -12,13 +12,5 @@ import { Category } from '@interfaces/catalog.interface';
   styleUrls: ['./categories.component.scss'],
 })
 export class CategoriesComponent {
-  categories: Category[] = mainCategories;
 
-  showSubcategories(category: Category) {
-    category.showSubcategories = true;
-  }
-
-  hideSubcategories() {
-    this.categories.forEach((category) => (category.showSubcategories = false));
-  }
 }
