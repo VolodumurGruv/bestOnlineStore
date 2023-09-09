@@ -79,8 +79,9 @@ export class SignupComponent implements OnDestroy {
   registerUser() {
     const { name, email, password } = this.signupForm.value;
     if (name && email && password) {
-      this.unSub = this.authService
+      this.authService
         .signup({ name, password, email })
+        .pipe(takeUntilDestroyed())
         .subscribe();
     }
   }
