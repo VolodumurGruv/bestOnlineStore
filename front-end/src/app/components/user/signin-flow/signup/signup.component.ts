@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
 import { AuthService } from '../../services/auth.service';
@@ -39,8 +39,9 @@ type IsValid = {
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent implements OnDestroy {
-  private unSub!: Subscription;
+export class SignupComponent {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
 
   public signupForm: FormGroup = this.fb.group({
     name: [
@@ -74,7 +75,6 @@ export class SignupComponent implements OnDestroy {
       ],
     ],
   });
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   registerUser() {
     const { name, email, password } = this.signupForm.value;
@@ -97,9 +97,5 @@ export class SignupComponent implements OnDestroy {
 
   isVisisble(input: { type: string }) {
     input.type = input.type === 'password' ? 'text' : 'password';
-  }
-
-  ngOnDestroy(): void {
-    if (this.unSub) this.unSub.unsubscribe();
   }
 }
