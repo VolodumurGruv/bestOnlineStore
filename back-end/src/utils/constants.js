@@ -9,8 +9,10 @@ const HTTP_STATUS_CODES = {
 
 const MESSAGES = {
   MISSING_REQUIRED_FIELDS: 'Missing required fields.',
+  EMPTY_QUERY_ERROR: 'Your query have a nullable length.',
   ORDER_NOT_FOUND: 'Order was not found.',
   PRODUCT_NOT_FOUND: 'Product not found.',
+  VALIDATION_ERROR: 'Some errors was occured when validate.',
   DATABASE_ERROR: 'Some error occurred on DB.',
   INVALID_CREDENTIALS: 'Wrong email or password.',
   NEW_USER_CREATED: 'New user created.',

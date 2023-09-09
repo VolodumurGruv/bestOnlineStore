@@ -1,3 +1,4 @@
+import { validationResult } from 'express-validator';
 import Product from '../models/productSchema.js';
 import logger from '../utils/logger.js';
 import {
@@ -7,13 +8,44 @@ import {
 import handleResponse from '../utils/handleResponse.js';
 
 const getAllProducts = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const perPage = parseInt(req.query.perPage) || 10;
+  const skip = (page - 1) * perPage;
+
   try {
-    const products = await Product.find({});
+    const products = await Product.find({}).skip(skip).limit(perPage);
     logger.info('All products fetched successfully');
     handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All products in payload.', products);
   } catch (error) {
     logger.error('Error while fetching all products', error);
     handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+  }
+};
+
+const searchProductsByName = async (req, res) => {
+  const query = JSON.parse(JSON.stringify(req.query))['keyword'];
+
+  try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.VALIDATION_ERROR, errors.array());
+    }
+
+    const products = await Product.find({
+      name: { $regex: new RegExp(`${query}`, 'i') },
+    });
+
+    if (products.length > 0) {
+      logger.info('Products found by name:', query);
+      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Products found.', products);
+    } else {
+      logger.info('No products found by name:', query);
+      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.PRODUCT_NOT_FOUND);
+    }
+  } catch (error) {
+    logger.error('Error while searching for products by name:', query, error);
+    handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.EMPTY_QUERY_ERROR, error);
   }
 };
 
@@ -81,6 +113,7 @@ const deleteProduct = async (req, res) => {
 
 export {
   getAllProducts,
+  searchProductsByName,
   getProductById,
   createProduct,
   updateProduct,

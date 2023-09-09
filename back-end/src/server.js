@@ -7,6 +7,7 @@ import mongoSanitize from 'express-mongo-sanitize';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import logger from './utils/logger.js';
+import handleResponse from './utils/handleResponse.js';
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import orderRouter from './routers/orderRouter.js';
@@ -17,7 +18,7 @@ const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
 
 const args = process.argv.slice(2);
-logger.info('args: ' + args);
+
 let mode = 'develop';
 let pathToIndex = '../../tests/';
 
@@ -29,7 +30,6 @@ for (let i = 0; i < args.length; i++) {
 }
 logger.info('mode: ' + mode);
 if (mode === 'production') pathToIndex = '../../front-end/dist/front-end/';
-logger.info('path: ' + pathToIndex);
 
 const port = process.env.PORT || 30000;
 const app = express();
@@ -74,7 +74,6 @@ app.use('/api/review', reviewRouter);
 const staticPath = path.join(__dirName, pathToIndex);
 
 app.use(express.static(staticPath));
-app.use('/images', express.static(path.join(__dirName, '../uploads/images/')));
 
 app.get('/favicon.ico', (req, res) => {
   res.sendFile(path.join(staticPath, 'favicon.ico'));
@@ -87,11 +86,7 @@ app.get('*', (req, res) => {
 
 app.use((error, req, res, next) => {
   logger.error('err: ' + error.message);
-  res.status(500).json({
-    message: 'fault',
-    text: 'Something went wrong!',
-    payload: error
-  });
+  handleResponse(res, 'fault', 'Something went wrong!', error);
 });
 
 const server = app.listen(port, () => {
