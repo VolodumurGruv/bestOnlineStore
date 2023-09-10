@@ -1,43 +1,68 @@
 @use "fonts";
+@use "colors";
+@use "a-link";
+@use "signin";
+@forward "../info/info.component.scss";
 
 .user {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-top: 20px;
-  padding-bottom: 168px;
 
   &__title {
     @include fonts.font-roboto;
-
-    padding-top: 100px;
-    padding-bottom: 160px;
+    color: #000;
     text-align: center;
+
     font-size: 40px;
     font-style: normal;
     font-weight: 500;
-    line-height: 130%;
+    line-height: 130%; /* 52px */
+    padding-top: 100px;
   }
 
-  &__wraper {
+  &__main {
     display: flex;
     justify-content: space-between;
+    padding-top: 160px;
+  }
+
+  &__path-link,
+  &__path {
+    @include a-link.path-link;
+    color: colors.$link-color-grey;
+    text-align: center;
+  }
+
+  &__nav-link {
+    @include a-link.path-link;
+    color: #000;
+    padding-left: 56px;
+  }
+
+  &__nav-items {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+
+  &__nav-item {
+    width: 311px;
+    list-style: none;
+    border-radius: 8px;
+    gap: 10px;
+    cursor: pointer;
   }
 }
 
-.link {
-  @include fonts.font-roboto;
-
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 130%;
-  text-decoration: none;
-  color: #797979;
-  cursor: pointer;
-
-  &:visited,
-  &:active,
-  &:hover {
-    @extend .link;
-  }
+.link__active {
+  display: flex;
+  width: 311px;
+  padding: 10px;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 8px;
+  background: #edebeb;
 }

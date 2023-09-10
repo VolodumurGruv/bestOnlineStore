@@ -12,7 +12,9 @@ import {
 import { AuthService } from '../../services/auth.service';
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
 import { GoogleLoginComponent } from '../google-login/google-login.component';
-import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
+import { emailValidator, passwordValidator } from '../../utils/validators';
+import { ErrorValidationComponent } from '../../error-validation/error-validation.component';
+import { isValid } from '../../utils/is-valid';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +26,7 @@ import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
     ReactiveFormsModule,
     VisibilityIconComponent,
     GoogleLoginComponent,
+    ErrorValidationComponent,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
@@ -31,10 +34,14 @@ import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  public readonly isValid = isValid;
 
   public signinForm: FormGroup = this.fb.group({
-    email: ['vova@mymail.com', [Validators.required, Validators.email]],
-    password: ['voVA123vova', Validators.required],
+    email: [
+      'vova@mymail.com',
+      [Validators.required, Validators.email, emailValidator()],
+    ],
+    password: ['voVA123vova', [Validators.required, passwordValidator()]],
     savePass: [],
   });
 

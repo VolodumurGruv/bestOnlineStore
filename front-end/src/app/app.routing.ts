@@ -66,12 +66,9 @@ export const APP_ROUTING: Routes = [
           ),
       },
       {
-        path: 'user',
-        loadComponent: () =>
-          import('./components/user/user/user.component').then(
-            (m) => m.UserComponent
-          ),
-        canActivate: [authGuard],
+        path: '',
+        loadChildren: () =>
+          import('./components/user/user.routing').then((m) => m.USER_ROUTES),
       },
     ],
   },

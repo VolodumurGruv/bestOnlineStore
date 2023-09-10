@@ -19,11 +19,7 @@ import {
   passwordValidator,
 } from '../../utils/validators';
 import { ErrorValidationComponent } from '../../error-validation/error-validation.component';
-
-type IsValid = {
-  'box-danger': boolean | undefined;
-  'box-success': boolean | undefined;
-};
+import { isValid } from '../../utils/is-valid';
 
 @Component({
   selector: 'app-signup',
@@ -44,6 +40,7 @@ export class SignupComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  public readonly isValid = isValid;
 
   public signupForm: FormGroup = this.fb.group({
     name: [
@@ -90,15 +87,6 @@ export class SignupComponent {
           }
         });
     }
-  }
-
-  isValid(name: string): IsValid {
-    return {
-      'box-danger':
-        !this.signupForm.get(name)?.valid && this.signupForm.get(name)?.touched,
-      'box-success':
-        this.signupForm.get(name)?.valid && this.signupForm.get(name)?.touched,
-    };
   }
 
   isVisisble(input: { type: string }) {
