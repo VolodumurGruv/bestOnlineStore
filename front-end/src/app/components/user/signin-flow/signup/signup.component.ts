@@ -1,6 +1,6 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -40,8 +40,10 @@ type IsValid = {
   styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent {
-  private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   public signupForm: FormGroup = this.fb.group({
     name: [
@@ -81,8 +83,12 @@ export class SignupComponent {
     if (name && email && password) {
       this.authService
         .signup({ name, password, email })
-        .pipe(takeUntilDestroyed())
-        .subscribe();
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((res) => {
+          if (res) {
+            this.router.navigate(['/']);
+          }
+        });
     }
   }
 

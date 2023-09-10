@@ -2,9 +2,8 @@
 @use "colors";
 
 .signup {
-  margin: 120px auto 0;
+  margin: 120px auto 160px auto;
   width: 570px;
-  height: 668px;
 
   &__title {
     @include signin.title;
@@ -58,7 +57,7 @@
 
   &__google {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     border-radius: 8px;
     border: 1px solid #010101;

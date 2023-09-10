@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 import { AuthService } from '../services/auth.service';
 
@@ -12,11 +12,8 @@ import { AuthService } from '../services/auth.service';
 })
 export class UserComponent {
   public authService = inject(AuthService);
-  private router = inject(Router);
 
   logOut() {
-    console.log(this.authService.isAuth());
     this.authService.signOut();
-    this.router.navigate(['/login']);
   }
 }

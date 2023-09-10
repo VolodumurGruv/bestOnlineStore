@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { AbstractControl } from '@angular/forms';
+
 import { getErrorValidationMessage } from '../utils/get-error-message';
 @Component({
   selector: 'app-error-validation',
@@ -14,11 +15,12 @@ export class ErrorValidationComponent {
 
   get errorMessage() {
     for (const validatorName in this.control?.errors) {
-      if (this.control!.touched)
+      if (this.control!.touched) {
         return getErrorValidationMessage(
           validatorName,
           this.control!.errors[validatorName]
         );
+      }
     }
     return null;
   }

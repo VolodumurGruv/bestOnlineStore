@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
@@ -8,11 +8,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Subscription } from 'rxjs';
+
 import { AuthService } from '../../services/auth.service';
-import { AlertService } from '@shared/services/alert.service';
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
 import { GoogleLoginComponent } from '../google-login/google-login.component';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 
 @Component({
   selector: 'app-login',
@@ -28,19 +28,15 @@ import { GoogleLoginComponent } from '../google-login/google-login.component';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnDestroy {
-  private unSub!: Subscription;
+export class LoginComponent {
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
 
   public signinForm: FormGroup = this.fb.group({
     email: ['vova@mymail.com', [Validators.required, Validators.email]],
     password: ['voVA123vova', Validators.required],
     savePass: [],
   });
-  constructor(
-    private fb: FormBuilder,
-    private alertService: AlertService,
-    private authService: AuthService
-  ) {}
 
   onSubmit() {
     this.authService.signIn(this.signinForm.value);
@@ -50,9 +46,5 @@ export class LoginComponent implements OnDestroy {
 
   isVisisble(input: { type: string }) {
     input.type = input.type === 'password' ? 'text' : 'password';
-  }
-
-  ngOnDestroy(): void {
-    if (this.unSub) this.unSub.unsubscribe();
   }
 }

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { DestroyRef, inject, Injectable } from '@angular/core';
 import { catchError, Observable, of, retry, take, tap } from 'rxjs';
 import { Auth, signOut } from '@angular/fire/auth';
 
@@ -7,14 +7,16 @@ import { configs, httpConfig } from '@configs/configs';
 import { User } from '@interfaces/user.interface';
 import { AlertService } from '@shared/services/alert.service';
 import { PAYLOAD } from '@interfaces/request.interface';
+import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(
-    private http: HttpClient,
-    private alertService: AlertService,
-    private auth: Auth
-  ) {}
+  private readonly http = inject(HttpClient);
+  private readonly alertService = inject(AlertService);
+  private readonly googleAuth = inject(Auth);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
 
   signIn(user: User): void {
     if (this.isAuth()) {
@@ -25,14 +27,15 @@ export class AuthService {
       .post<User>(`${configs.URL}/user/signin`, user, httpConfig)
       .pipe(
         retry(3),
-
+        takeUntilDestroyed(this.destroyRef),
         catchError(this.handleError<User>(`Помилка входу. Повторіть спробу!] `))
       )
       .subscribe((res: any) => {
         if (res.payload) {
           this.setLocalStorage(res.payload);
+          // this.alertService.success('Вхід здійснено успішно');
+          this.router.navigate(['/user']);
         }
-        this.alertService.success('Вхід здійснено успішно');
       });
   }
 
@@ -42,6 +45,7 @@ export class AuthService {
         const payload = res.payload;
         if (payload) {
           this.setLocalStorage(payload);
+          this.router.navigate(['/user']);
         }
       }),
       catchError(
@@ -65,7 +69,8 @@ export class AuthService {
       .subscribe((res: any) => {
         if (res?.payload) {
           this.setLocalStorage(res?.payload);
-          this.alertService.success('Вхід здійснено успішно');
+          // this.alertService.success('Вхід здійснено успішно');
+          this.router.navigate(['/user']);
         }
       });
   }
@@ -97,10 +102,11 @@ export class AuthService {
   signOut(): void {
     // remove true
     if (this.isAuth()) {
-      signOut(this.auth)
+      signOut(this.googleAuth)
         .then(() => {
           localStorage.clear();
-          this.alertService.success('Вихід здійснено успішно!');
+          // this.alertService.success('Вихід здійснено успішно!');
+          this.router.navigate(['/']);
         })
         .catch((error) => {
           this.alertService.danger(
@@ -114,7 +120,8 @@ export class AuthService {
   }
 
   setLocalStorage(payload: PAYLOAD) {
-    const expDate = new Date(new Date().getTime() + 360000);
+    // time for session 24h ahead
+    const expDate = new Date(new Date().getTime() + 24 * 3600 * 1000);
 
     localStorage.setItem('token', payload.token);
     localStorage.setItem('id', payload._id);

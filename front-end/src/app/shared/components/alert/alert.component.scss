@@ -16,6 +16,10 @@
   font-weight: 600;
   z-index: 600;
 
+  &__text {
+    padding: 2rem;
+  }
+
   &__danger {
     @include alert-text;
     background: rgba(255, 0, 0, 0.5);

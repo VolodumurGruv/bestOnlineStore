@@ -1,6 +1,6 @@
 <ng-container *ngIf="text">
   <div [ngClass]="alertClass">
-    <p>{{ text }}</p>
+    <p class="alert__text">{{ text }}</p>
     <p *ngIf="errorText">{{ errorText }}</p>
     <button (click)="text = ''">Close</button>
   </div>
