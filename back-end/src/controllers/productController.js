@@ -14,8 +14,9 @@ const getAllProducts = async (req, res) => {
 
   try {
     const products = await Product.find({}).skip(skip).limit(perPage);
+    const totalProducts = await Product.countDocuments({});
     logger.info('All products fetched successfully');
-    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All products in payload.', products);
+    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All products in payload.', { products, totalProducts });
   } catch (error) {
     logger.error('Error while fetching all products', error);
     handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
