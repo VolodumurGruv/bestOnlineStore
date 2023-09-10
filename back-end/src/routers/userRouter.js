@@ -5,6 +5,7 @@ import validateUserData from '../validation/userValidation.js';
 import {
   getAllUsers,
   registerUser,
+  registerAnonymous,
   registerUserByGoogle,
   signInUser,
   getUserById,
@@ -19,6 +20,7 @@ const userRouter = express.Router();
 userRouter.get('/all', getAllUsers);
 userRouter.post('/regtest', registerUser);
 userRouter.post('/register', validateUserData, registerUser);
+userRouter.get('/reganonymous', registerAnonymous);
 userRouter.post('/google', registerUserByGoogle);
 userRouter.post('/signin', signInUser);
 userRouter.get('/:id', getUserById);

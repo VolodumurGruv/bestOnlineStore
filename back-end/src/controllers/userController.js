@@ -22,8 +22,9 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-const registerUser = async (req, res) => {
-  const { name, password, email, phone } = req.body;
+const registerUser = async (req, res, anonymous = null) => {
+  const { name, password, email, phone } = anonymous || req.body;
+  console.log(password);
 
   try {
     const errors = validationResult(req);
@@ -38,7 +39,8 @@ const registerUser = async (req, res) => {
       name,
       password: hashedPassword,
       email,
-      phone
+      phone,
+      isAnonymous: !!anonymous
     });
 
     const createdUser = await user.save();
@@ -51,15 +53,27 @@ const registerUser = async (req, res) => {
       email: createdUser.email,
       phone: createdUser.phone,
       isAdmin: createdUser.isAdmin,
+      isAnonymous: createdUser.isAnonymous,
       token
     };
 
-    sendWelcomeEmail(email);
+    anonymous ? void(0) : sendWelcomeEmail(email);
 
     handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', MESSAGES.NEW_USER_CREATED, newUser);
   } catch (error) {
     handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error.message);
   }
+};
+
+const registerAnonymous = async (req, res) => {
+  const anonymousUser = {
+    name: 'Anonymous',
+    email: `anonymous${Date.now()}@example.com`,
+    password: 'qwW5#ertY1$',
+    phone: null
+  };
+
+  registerUser(req, res, anonymousUser);
 };
 
 const registerUserByGoogle = async (req, res) => {
@@ -246,6 +260,7 @@ const updateUser = async (req, res) => {
 export {
   getAllUsers,
   registerUser,
+  registerAnonymous,
   registerUserByGoogle,
   signInUser,
   getUserById,
