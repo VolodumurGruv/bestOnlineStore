@@ -46,6 +46,8 @@ const corsOptions = {
   credentials: true
 };
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cors(corsOptions));
 app.set('trust proxy', 1);
 app.get('/ip', (req, res) => {
@@ -53,8 +55,6 @@ app.get('/ip', (req, res) => {
 });
 app.use(helmet());
 app.use(limiter);
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(
   mongoSanitize({
     replaceWith: '_',
@@ -111,3 +111,4 @@ app.on('clientServer', (error, socket) => {
   socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
 });
 
+export default app;
