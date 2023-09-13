@@ -10,6 +10,7 @@ import logger from './utils/logger.js';
 import handleResponse from './utils/handleResponse.js';
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
+import cartRouter from './routers/cartRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import uploadRouter from './routers/uploadRouter.js';
 import reviewRouter from './routers/reviewRouter.js';
@@ -67,6 +68,7 @@ app.use('*', (req, res, next) => {
 
 app.use('/api/user', userRouter);
 app.use('/api/product', productRouter);
+app.use('/api/cart', cartRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/review', reviewRouter);
