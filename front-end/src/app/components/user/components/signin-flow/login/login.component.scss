@@ -1,4 +1,5 @@
 @use "colors" as *;
+@use "signin";
 
 .login {
   display: flex;
@@ -57,22 +58,14 @@
 
 .form {
   &__container {
-    width: 570px;
-    border-radius: 8px;
-    border: 1px solid $border-input;
-
-    &:nth-child(-n + 1) {
-      margin-bottom: 24px;
-    }
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
   }
 
   &__input {
-    padding: 12px 0 12px 16px;
-    border: none;
-    outline: none;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 20px;
+    @include signin.input;
 
     &::placeholder {
       font-size: 18px;
@@ -103,10 +96,8 @@
 
 .input {
   &__wrap {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 8px;
+    @include signin.input-wrap;
+    max-width: 570px;
   }
 }
 
@@ -143,7 +134,7 @@
   &-icon {
     width: 24px;
     height: 24px;
-    background-image: url("../../../../../assets/pics/png/flat-color-icons_google.png");
+    background-image: url("../../../../../../assets/pics/png/flat-color-icons_google.png");
     background-size: contain;
     background-repeat: no-repeat;
   }

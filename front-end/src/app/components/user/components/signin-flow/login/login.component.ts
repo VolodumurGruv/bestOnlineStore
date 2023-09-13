@@ -9,12 +9,12 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
 import { GoogleLoginComponent } from '../google-login/google-login.component';
-import { emailValidator, passwordValidator } from '../../utils/validators';
+import { emailValidator, passwordValidator } from '../../../utils/validators';
 import { ErrorValidationComponent } from '../../error-validation/error-validation.component';
-import { isValid } from '../../utils/is-valid';
+import { isValid } from '../../../utils/is-valid';
 
 @Component({
   selector: 'app-login',

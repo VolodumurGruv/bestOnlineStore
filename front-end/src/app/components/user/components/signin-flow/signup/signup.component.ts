@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnDestroy } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import {
@@ -10,16 +10,16 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { GoogleLoginComponent } from '../google-login/google-login.component';
 import {
   confirmValidator,
   emailValidator,
   nameValidator,
   passwordValidator,
-} from '../../utils/validators';
+} from '../../../utils/validators';
 import { ErrorValidationComponent } from '../../error-validation/error-validation.component';
-import { isValid } from '../../utils/is-valid';
+import { isValid } from '../../../utils/is-valid';
 
 @Component({
   selector: 'app-signup',

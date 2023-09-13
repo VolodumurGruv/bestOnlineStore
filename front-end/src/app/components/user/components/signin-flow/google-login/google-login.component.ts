@@ -12,7 +12,7 @@ import {
   signOut,
 } from '@angular/fire/auth';
 import { AlertService } from '@shared/services/alert.service';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-google-login',

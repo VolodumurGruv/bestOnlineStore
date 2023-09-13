@@ -2,20 +2,21 @@
   <div class="login__wrap">
     <div class="login__title">Увійти</div>
     <form class="login__form" [formGroup]="signinForm" (ngSubmit)="onSubmit()">
-      <div class="form__container" [ngClass]="isValid(signinForm, 'email')">
-        <input
-          class="form__input"
-          type="email"
-          id="email"
-          formControlName="email"
-          placeholder="E-mail*"
-        />
-      </div>
-      <app-error-validation
-        [control]="signinForm.get('email')"
-      ></app-error-validation>
-
       <div class="form__container">
+        <div class="input__wrap" [ngClass]="isValid(signinForm, 'email')">
+          <input
+            class="form__input"
+            type="email"
+            id="email"
+            formControlName="email"
+            placeholder="E-mail*"
+          />
+        </div>
+
+        <app-error-validation
+          [control]="signinForm.get('email')"
+        ></app-error-validation>
+
         <div class="input__wrap" [ngClass]="isValid(signinForm, 'password')">
           <input
             #input
@@ -29,10 +30,10 @@
             <app-visibility-icon></app-visibility-icon>
           </span>
         </div>
+        <app-error-validation
+          [control]="signinForm.get('password')"
+        ></app-error-validation>
       </div>
-      <app-error-validation
-        [control]="signinForm.get('password')"
-      ></app-error-validation>
       <div class="form__checkbox">
         <input type="checkbox" id="pass-save" formControlName="savePass" />
         <label class="form__checkbox__label" for="pass-save"

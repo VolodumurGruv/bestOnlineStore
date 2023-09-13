@@ -54,16 +54,16 @@ export const APP_ROUTING: Routes = [
       {
         path: 'login',
         loadComponent: () =>
-          import('./components/user/signin-flow/login/login.component').then(
-            (m) => m.LoginComponent
-          ),
+          import(
+            './components/user/components/signin-flow/login/login.component'
+          ).then((m) => m.LoginComponent),
       },
       {
         path: 'signup',
         loadComponent: () =>
-          import('./components/user/signin-flow/signup/signup.component').then(
-            (m) => m.SignupComponent
-          ),
+          import(
+            './components/user/components/signin-flow/signup/signup.component'
+          ).then((m) => m.SignupComponent),
       },
       {
         path: '',

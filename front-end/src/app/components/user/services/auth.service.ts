@@ -27,8 +27,10 @@ export class AuthService {
       .post<User>(`${configs.URL}/user/signin`, user, httpConfig)
       .pipe(
         retry(3),
-        takeUntilDestroyed(this.destroyRef),
-        catchError(this.handleError<User>(`Помилка входу. Повторіть спробу!] `))
+        catchError(
+          this.handleError<User>(`Помилка входу. Повторіть спробу!] `)
+        ),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((res: any) => {
         if (res.payload) {
@@ -52,7 +54,8 @@ export class AuthService {
         this.handleError<User>(
           `Виникла помилка під час реєстрації. Повторіть спробу!`
         )
-      )
+      ),
+      takeUntilDestroyed(this.destroyRef)
     );
   }
 
@@ -64,7 +67,8 @@ export class AuthService {
         take(1),
         catchError(
           this.handleError<void>('Виникла помилка при здійсненні Google login!')
-        )
+        ),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((res: any) => {
         if (res?.payload) {

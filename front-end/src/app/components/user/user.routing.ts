@@ -5,24 +5,30 @@ export const USER_ROUTES: Route[] = [
   {
     path: 'user',
     loadComponent: () =>
-      import('./user/user.component').then((m) => m.UserComponent),
+      import('./components/user/user.component').then((m) => m.UserComponent),
     canActivate: [authGuard],
     children: [
       { path: '', redirectTo: '/user', pathMatch: 'full' },
       {
         path: '',
         loadComponent: () =>
-          import('./info/info.component').then((m) => m.InfoComponent),
+          import('./components/info/info.component').then(
+            (m) => m.InfoComponent
+          ),
       },
       {
         path: 'orders',
         loadComponent: () =>
-          import('./orders/orders.component').then((m) => m.OrdersComponent),
+          import('./components/orders/orders.component').then(
+            (m) => m.OrdersComponent
+          ),
       },
       {
         path: 'reviews',
         loadComponent: () =>
-          import('./reviews/reviews.component').then((m) => m.ReviewsComponent),
+          import('./components/reviews/reviews.component').then(
+            (m) => m.ReviewsComponent
+          ),
       },
     ],
   },
