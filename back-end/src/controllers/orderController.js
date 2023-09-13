@@ -17,18 +17,16 @@ const getAllOrders = async (req, res) => {
   }
 };
 
-const getUserCart = async (req, res) => {
+const getOrderHistory = async (req, res) => {
   try {
-    if (req.body.orderItems.length === 0) {
-      logger.info('Cart is empty.');
-      handleResponse(res, HTTP_STATUS_CODES.OK, 'fault', 'Cart is empty.');
-    } else {
-      const orders = await Order.find({ user: req.user._id });
-      logger.info('User cart fetched for user:', req.user._id);
-      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Your cart in payload.', orders);
-    }
+    const userId = req.user._id;
+
+    const orders = await Order.find({ user: userId });
+
+    logger.info('Order(s) fetched for user: ', req.user._id);
+    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Your order(s) in payload.', orders);
   } catch (error) {
-    logger.error('Error while fetching user cart for user:', req.user._id, error);
+    logger.error('Error while getting order history: ', error);
     handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
@@ -136,7 +134,7 @@ const deleteOrder = async (req, res) => {
 
 export {
   getAllOrders,
-  getUserCart,
+  getOrderHistory,
   getOrderById,
   createOrder,
   updateOrder,

@@ -77,7 +77,7 @@ const updateCartItem = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const {productId} = req.params;
+    const {productId} = req.body;
     const product = await Product.findById(productId);
 
     if (!product) {

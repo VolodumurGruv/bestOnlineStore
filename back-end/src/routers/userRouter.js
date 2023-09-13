@@ -1,5 +1,6 @@
 import express from 'express';
 import isAuth from '../utils/auth.js';
+import isAnonymous from '../utils/anonymous.js';
 import isAdmin from '../utils/admin.js';
 import validateUserData from '../validation/userValidation.js';
 import {
@@ -18,8 +19,8 @@ const userRouter = express.Router();
 
 
 userRouter.get('/all', getAllUsers);
-userRouter.post('/regtest', registerUser);
-userRouter.post('/register', validateUserData, registerUser);
+userRouter.post('/regtest', isAnonymous, registerUser);
+userRouter.post('/register', isAnonymous, validateUserData, registerUser);
 userRouter.get('/reganonymous', registerAnonymous);
 userRouter.post('/google', registerUserByGoogle);
 userRouter.post('/signin', signInUser);

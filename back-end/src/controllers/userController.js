@@ -22,7 +22,7 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-const registerUser = async (req, res, anonymous = null) => {
+const registerUser = async (req, res, next, anonymous = null) => {
   const { name, password, email, phone } = anonymous || req.body;
   console.log(password);
 
@@ -65,7 +65,7 @@ const registerUser = async (req, res, anonymous = null) => {
   }
 };
 
-const registerAnonymous = async (req, res) => {
+const registerAnonymous = async (req, res, next) => {
   const anonymousUser = {
     name: 'Anonymous',
     email: `anonymous${Date.now()}@example.com`,
@@ -73,7 +73,7 @@ const registerAnonymous = async (req, res) => {
     phone: null
   };
 
-  registerUser(req, res, anonymousUser);
+  registerUser(req, res, next, anonymousUser);
 };
 
 const registerUserByGoogle = async (req, res) => {
@@ -103,6 +103,7 @@ const registerUserByGoogle = async (req, res) => {
         email: existingUser.email,
         phone: existingUser.phone,
         isAdmin: existingUser.isAdmin,
+        isAnonymous: existingUser.isAnonymous,
         token
       };
 
@@ -111,7 +112,8 @@ const registerUserByGoogle = async (req, res) => {
       const user = new User({
         googleId: userJSON.sub,
         name: userJSON.name,
-        email: userJSON.email
+        email: userJSON.email,
+        isAnonymous: false
       });
 
       const createdUser = await user.save();
@@ -124,6 +126,7 @@ const registerUserByGoogle = async (req, res) => {
         email: createdUser.email,
         phone: createdUser.phone,
         isAdmin: createdUser.isAdmin,
+        isAnonymous: createdUser.isAnonymous,
         token
       };
 
@@ -150,6 +153,7 @@ const signInUser = async (req, res) => {
         email: user.email,
         phone: user.phone,
         isAdmin: user.isAdmin,
+        isAnonymous: user.isAnonymous,
         token,
       });
     } else {
@@ -201,6 +205,7 @@ const updateProfile = async (req, res) => {
         email: updatedUser.email,
         phone: updatedUser.phone,
         isAdmin: updatedUser.isAdmin,
+        isAnonymous: updatedUser.isAnonymous,
         token,
       });
     }
@@ -210,9 +215,7 @@ const updateProfile = async (req, res) => {
   }
 };
 
-const isAdmin = (user) => {
-  return user.email === 'markovalekdandr108@gmail.com';
-};
+const isAdmin = (user) => user.isAdmin === true;
 
 const deleteUser = async (req, res) => {
   try {
@@ -248,6 +251,7 @@ const updateUser = async (req, res) => {
     user.email = req.body.email || user.email;
     user.phone = req.body.phone || user.phone;
     user.isAdmin = req.body.isAdmin || user.isAdmin;
+    user.isAnonymous = req.body.isAnonymous || user.isAnonymous;
 
     const updatedUser = await user.save();
 
