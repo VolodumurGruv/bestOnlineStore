@@ -1,0 +1,41 @@
+@use "colors";
+
+.btn {
+  padding: 16px 32px;
+  border-radius: 8px;
+  border: 1px solid #000;
+  text-decoration: none;
+  color: #000;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 130%; /* 26px */
+  text-transform: uppercase;
+  background: transparent;
+
+  &__link {
+    @extend .btn;
+    margin-top: 64px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 274px;
+  }
+
+  &__grey {
+    @extend .btn;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 570px;
+    padding: 16px 12px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #fff;
+    background: colors.$main-color;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    border: 1px solid colors.$light-gray;
+  }
+}

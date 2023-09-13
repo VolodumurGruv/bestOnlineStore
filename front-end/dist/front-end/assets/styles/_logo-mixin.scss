@@ -1,0 +1,25 @@
+@mixin logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  width: 125px;
+}
+
+@mixin text {
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  font-family: "Manrope";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 130%; /* 41.6px */
+  color: #000;
+}
+
+@mixin image {
+  background-image: url("../../assets/pics/logo.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
