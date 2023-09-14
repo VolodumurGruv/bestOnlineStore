@@ -37,11 +37,8 @@ export class LoginComponent {
   public readonly isValid = isValid;
 
   public signinForm: FormGroup = this.fb.group({
-    email: [
-      'vova@mymail.com',
-      [Validators.required, Validators.email, emailValidator()],
-    ],
-    password: ['voVA123vova', [Validators.required, passwordValidator()]],
+    email: [null, [Validators.required, Validators.email, emailValidator()]],
+    password: [null, [Validators.required, passwordValidator()]],
   });
 
   onSubmit() {

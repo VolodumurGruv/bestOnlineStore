@@ -8,6 +8,7 @@ interface NovaPoshtaReq {
 }
 
 export const getAddresses = (city: string) => {
+  console.log(city);
   const reqCityAddresses = {
     apiKey: environment.novaPoshta,
     modelName: 'Address',
@@ -20,13 +21,14 @@ export const getAddresses = (city: string) => {
   return fetchPostReq(URL, reqCityAddresses);
 };
 
-export const getNovaPoshtaDepartment = (city: string) => {
+export const getNovaPoshtaDepartment = () => {
   const reqDepartments = {
     apiKey: environment.novaPoshta,
     modelName: 'Address',
     calledMethod: 'getWarehouses',
     methodProperties: {
-      CityName: city,
+      CityName: 'Харківка',
+      // CityRef: '0ddbfc76-4b3a-11e4-ab6d-005056801329',
     },
   };
 

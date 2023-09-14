@@ -1,13 +1,28 @@
 <div class="user__info-title">Особиста інформація</div>
-<div class="user__info-wrap">
+<form class="user__form" [formGroup]="infoForm" (ngSubmit)="onSubmit()">
   <div class="user__wrap-input">
-    <input type="text" class="user__input" placeholder="Ім'я *" />
+    <input
+      type="text"
+      class="user__input"
+      formGroupName="firstName"
+      placeholder="Ім'я *"
+    />
   </div>
   <div class="user__wrap-input">
-    <input type="text" class="user__input" placeholder="Прізвище *" />
+    <input
+      type="text"
+      class="user__input"
+      formGroupName="lastName"
+      placeholder="Прізвище *"
+    />
   </div>
   <div class="user__wrap-input">
-    <input type="text" class="user__input" placeholder="Email *" />
+    <input
+      type="text"
+      class="user__input"
+      formGroupName="email"
+      placeholder="Email *"
+    />
   </div>
   <div class="user__wrap-input">
     <span>
@@ -35,21 +50,26 @@
         </defs>
       </svg> </span
     ><span>{{ phoneHolder }}</span>
-    <input type="text" class="user__input" />
+    <input type="text" formGroupName="phone" class="user__input" />
   </div>
-  <div class="user__wrap-input">
+  <div class="user__wrap-input" *appInputDropdown>
     <input
-      #address
+      #addresses
       type="phone"
       class="user__input"
+      formGroupName="address"
       placeholder="Адреса *"
-      (keyup)="getAddress(address.value)"
     />
   </div>
   <div class="user__wrap-input">
-    <input type="text" class="user__input" placeholder="Пароль *" />
+    <input
+      type="text"
+      class="user__input"
+      formGroupName="password"
+      placeholder="Пароль *"
+    />
   </div>
-</div>
+</form>
 <div class="delivery">
   <div class="delivery__title">Способи доставки</div>
   <div class="delivery__options">
@@ -83,10 +103,11 @@
     </div>
   </div>
   <div class="delivery__actions">
-    <button class="btn delivery__btn">Зберегти зміни</button>
-    <button class="btn__text">Скасувати всі зміни</button>
+    <button type="submit" class="btn delivery__btn">Зберегти зміни</button>
+    <button type="button" class="btn__text">Скасувати всі зміни</button>
   </div>
 </div>
-<div class="contactus">
+<div class="contactus" (click)="redirectToContact()">
+  <!-- will fix path when the path is ready -->
   <app-contact-us></app-contact-us>
 </div>
