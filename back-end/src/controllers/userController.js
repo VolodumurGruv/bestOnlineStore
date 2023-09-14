@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import User from '../models/userSchema.js';
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/token.js';
-import sendWelcomeEmail from '../utils/email.js';
+import sendEmail from '../utils/email.js';
 import logger from '../utils/logger.js';
 import {
   HTTP_STATUS_CODES,
@@ -57,7 +57,7 @@ const registerUser = async (req, res, next, anonymous = null) => {
       token
     };
 
-    anonymous ? void(0) : sendWelcomeEmail(email);
+    anonymous ? void(0) : sendEmail(email);
 
     handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', MESSAGES.NEW_USER_CREATED, newUser);
   } catch (error) {
@@ -166,6 +166,63 @@ const signInUser = async (req, res) => {
   }
 };
 
+const initRestorePassword = async (req, res) =>  {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.USER_NOT_FOUND);
+    }
+
+    const token = generateToken(user, '5m');
+
+    const resetLink = `https://online-store-api-714z.onrender.com/reset-password?token=${token}`;
+
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = Date.now() + 3600000/12;
+    await user.save();
+
+    sendEmail(email, 'Password restore', resetLink);
+
+    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Посилання для відновлення паролю надіслано на ваш email.');
+  } catch (error) {
+    logger.error(error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+  }
+};
+
+const restorePassword = async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  if (!!token || !!newPassword) {
+    logger.error('Invalid credentials for user.');
+    handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.INVALID_CREDENTIALS);
+  }
+
+  try {
+    const user = await User.findOne({ resetPasswordToken: token });
+
+    if (!user || user.resetPasswordExpires < Date.now()) {
+      return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', 'Your token has expired.');
+    }
+
+    if (req.body.password) {
+      user.password = bcrypt.hashSync(req.body.password, 8);
+    }
+
+    const updatedUser = await user.save();
+    const token = generateToken(updatedUser);
+
+    logger.info('New password created.');
+    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'New password created.', token);
+  } catch (error) {
+    logger.error(error);
+    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+  }
+};
+
 const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -243,8 +300,7 @@ const updateUser = async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.USER_NOT_FOUND);
-      return;
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.USER_NOT_FOUND);
     }
 
     user.name = req.body.name || user.name;
@@ -267,6 +323,8 @@ export {
   registerAnonymous,
   registerUserByGoogle,
   signInUser,
+  initRestorePassword,
+  restorePassword,
   getUserById,
   updateProfile,
   deleteUser,

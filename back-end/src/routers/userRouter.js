@@ -9,6 +9,8 @@ import {
   registerAnonymous,
   registerUserByGoogle,
   signInUser,
+  initRestorePassword,
+  restorePassword,
   getUserById,
   updateProfile,
   deleteUser,
@@ -24,6 +26,8 @@ userRouter.post('/register', isAnonymous, validateUserData, registerUser);
 userRouter.get('/reganonymous', registerAnonymous);
 userRouter.post('/google', registerUserByGoogle);
 userRouter.post('/signin', signInUser);
+userRouter.post('/forgot-password', initRestorePassword);
+userRouter.post('/reset-password', restorePassword);
 userRouter.get('/:id', getUserById);
 userRouter.put('/profile', isAuth, updateProfile);
 userRouter.delete('/:id', isAuth, isAdmin, deleteUser);

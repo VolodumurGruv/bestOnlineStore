@@ -1,8 +1,8 @@
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
+  host: `${process.env.MAILER_HOST}`,
+  port: Number(`${process.env.MAILER_PORT}`),
   secure: false,
   requireTLS: true,
   logger: true,
@@ -13,12 +13,12 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-const sendWelcomeEmail = (email) => {
+const sendEmail = (email, subject, text) => {
   const mailOptions = {
     from: `${process.env.MAILER_EMAIL}`,
     to: email,
-    subject: 'Ласкаво просимо до нашого магазину',
-    text: 'Дякуємо за реєстрацію у нашому магазині!'
+    subject: subject || 'Ласкаво просимо до нашого магазину',
+    text: text || 'Дякуємо за реєстрацію у нашому магазині!'
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
@@ -30,4 +30,4 @@ const sendWelcomeEmail = (email) => {
   });
 };
 
-export default sendWelcomeEmail;
+export default sendEmail;
