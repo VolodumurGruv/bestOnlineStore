@@ -43,7 +43,7 @@ export class SignupComponent {
   public readonly isValid = isValid;
 
   public signupForm: FormGroup = this.fb.group({
-    name: [
+    firstName: [
       null,
       [
         Validators.required,
@@ -76,10 +76,10 @@ export class SignupComponent {
   });
 
   registerUser() {
-    const { name, email, password } = this.signupForm.value;
-    if (name && email && password) {
+    const { firstName, email, password } = this.signupForm.value;
+    if (firstName && email && password) {
       this.authService
-        .signup({ name, password, email })
+        .signup({ firstName, password, email })
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((res) => {
           if (res) {

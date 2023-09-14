@@ -42,7 +42,6 @@ export class LoginComponent {
       [Validators.required, Validators.email, emailValidator()],
     ],
     password: ['voVA123vova', [Validators.required, passwordValidator()]],
-    savePass: [],
   });
 
   onSubmit() {

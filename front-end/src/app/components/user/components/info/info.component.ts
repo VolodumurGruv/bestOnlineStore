@@ -6,11 +6,12 @@ import {
   getNovaPoshtaDepartment,
   getNovaPoshtaStreet,
 } from '../../utils/nova-poshta';
+import { ContactUsComponent } from '@shared/components/icons/contact-us/contact-us.component';
 
 @Component({
   selector: 'app-info',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ContactUsComponent],
   templateUrl: './info.component.html',
   styleUrls: ['./info.component.scss'],
 })
