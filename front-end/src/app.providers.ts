@@ -1,8 +1,4 @@
-import {
-  provideHttpClient,
-  withInterceptors,
-  withRequestsMadeViaParent,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
