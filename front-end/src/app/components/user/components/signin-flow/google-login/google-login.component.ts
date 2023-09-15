@@ -45,13 +45,6 @@ export class GoogleLoginComponent implements OnInit {
   }
 
   getStatus(): void {
-    this.authState$.subscribe((user: User | null) => {
-      console.log(user);
-    });
-    this.idToken$.subscribe((t: string | null) => {
-      console.log(t);
-    });
-
     getRedirectResult(this.auth)
       .then((result: UserCredential | null) => {
         if (result) {

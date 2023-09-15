@@ -52,15 +52,18 @@
     ><span>{{ phoneHolder }}</span>
     <input type="text" formGroupName="phone" class="user__input" />
   </div>
-  <div class="user__wrap-input" *appInputDropdown>
+  <div class="user__wrap-input">
     <input
-      #addresses
+      #addr
       type="phone"
       class="user__input"
       formGroupName="address"
       placeholder="Адреса *"
+      (keyup)="getAddress(addr.value)"
+      [value]="infoForm.get('address')?.value"
     />
   </div>
+
   <div class="user__wrap-input">
     <input
       type="text"
@@ -68,6 +71,18 @@
       formGroupName="password"
       placeholder="Пароль *"
     />
+  </div>
+  <div class="address__list" *ngIf="addresses.length && isChosen">
+    <ul class="address__list-items">
+      <li
+        class="address__list-item"
+        *ngFor="let address of addresses"
+        (click)="chosenAddress(address)"
+      >
+        {{ address.SettlementTypeDescription }} {{ address.Description }}
+        {{ address.RegionsDescription }} {{ address.AreaDescription }}
+      </li>
+    </ul>
   </div>
 </form>
 <div class="delivery">

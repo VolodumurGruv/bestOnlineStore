@@ -60,7 +60,6 @@ export class AuthService {
   }
 
   googleLogin(body: { gtoken: string }): void {
-    console.log(body);
     this.http
       .post(configs.URL + configs.GOOGLE_ROOT, body)
       .pipe(

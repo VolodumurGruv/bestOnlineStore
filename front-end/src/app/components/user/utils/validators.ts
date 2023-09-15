@@ -4,7 +4,7 @@ export function nameValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     let isTrue: boolean = false;
     // it should pass only letters and white spaces
-    const regExp = /[A-Za-z]+[^0-1]\b/g;
+    const regExp = /[A-Za-zА_Яа-я]+[^0-1]\b/g;
     let res!: string[] | null;
 
     if (control.value) {

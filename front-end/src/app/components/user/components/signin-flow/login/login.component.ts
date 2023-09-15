@@ -39,6 +39,7 @@ export class LoginComponent {
   public signinForm: FormGroup = this.fb.group({
     email: [null, [Validators.required, Validators.email, emailValidator()]],
     password: [null, [Validators.required, passwordValidator()]],
+    savePass: [''],
   });
 
   onSubmit() {
