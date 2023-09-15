@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
 import fetch from 'node-fetch';
 import User from '../models/userSchema.js';
@@ -24,24 +25,47 @@ const getAllUsers = async (req, res) => {
 
 const registerUser = async (req, res, next, anonymous = null) => {
   const { name, password, email, phone } = anonymous || req.body;
-  console.log(password);
 
   try {
     const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-      return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
+    if (!errors.isEmpty()) {console.log(errors.array());
+      handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
+      return;
     }
 
     const hashedPassword = bcrypt.hashSync(password, 8);
 
-    const user = new User({
-      name,
-      password: hashedPassword,
-      email,
-      phone,
-      isAnonymous: !!anonymous
-    });
+    let user;
+
+    const {authorization} = req.headers;
+
+    if (authorization) {
+      try {
+        const decodedToken = jwt.verify(authorization, `${process.env.JWT_SECRET}`);
+        const userId = decodedToken._id;
+
+        user = await User.findById(userId);
+
+        if (user) {
+          user.name = name;
+          user.password = hashedPassword;
+          user.email = email;
+          user.phone = phone || user.phone;
+          !!anonymous;
+        }
+      } catch (error) {
+        logger.error(error);
+      }
+    } else {
+      user = new User({
+        name,
+        password: hashedPassword,
+        email,
+        phone: phone || null,
+        isAnonymous: !!anonymous
+      });
+    }
 
     const createdUser = await user.save();
 
@@ -60,7 +84,8 @@ const registerUser = async (req, res, next, anonymous = null) => {
     anonymous ? void(0) : sendEmail(email);
 
     handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', MESSAGES.NEW_USER_CREATED, newUser);
-  } catch (error) {
+
+  } catch (error) {console.log(3);
     handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error.message);
   }
 };
