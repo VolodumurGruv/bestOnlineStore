@@ -13,9 +13,29 @@ const getAllProducts = async (req, res) => {
   const skip = (page - 1) * perPage;
 
   try {
-    const products = await Product.find({}).skip(skip).limit(perPage);
+    let query = Product.find();
+
+    if (req.query.minPrice) {
+      query = query.where('price').gte(parseInt(req.query.minPrice, 10));
+    }
+    if (req.query.maxPrice) {
+      query = query.where('price').lte(parseInt(req.query.maxPrice, 10));
+    }
+
+    if (req.query.category) {
+      query = query.where('category').equals(req.query.category);
+    }
+
+    if (req.query.sortByPrice === 'asc') {
+      query = query.sort({ price: 1 });
+    } else if (req.query.sortByPrice === 'desc') {
+      query = query.sort({ price: -1 });
+    }
+
+    query = query.skip(skip).limit(perPage);
+
+    const products = await query.exec();
     const totalProducts = await Product.countDocuments({});
-    logger.info('All products fetched successfully');
     handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All products in payload.', { products, totalProducts });
   } catch (error) {
     logger.error('Error while fetching all products', error);

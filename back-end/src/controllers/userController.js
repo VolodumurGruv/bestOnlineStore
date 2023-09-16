@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
-import fetch from 'node-fetch';
 import User from '../models/userSchema.js';
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/token.js';
