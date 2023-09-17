@@ -47,7 +47,7 @@
       </div>
     </form>
     <div class="login__section-adittion">
-      <a class="login__link">Забули пароль?</a>
+      <a class="login__link" (click)="recover = !recover">Забули пароль?</a>
       <a class="login__link" routerLink="/signup">Зареєструватися</a>
     </div>
     <p class="or">або</p>
@@ -55,4 +55,7 @@
       <app-google-login></app-google-login>
     </div>
   </div>
+  <ng-container *ngIf="recover">
+    <app-recover-pass (recover)="recoverPass($event)"></app-recover-pass>
+  </ng-container>
 </section>

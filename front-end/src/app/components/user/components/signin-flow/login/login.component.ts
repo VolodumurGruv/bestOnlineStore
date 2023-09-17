@@ -15,6 +15,7 @@ import { GoogleLoginComponent } from '../google-login/google-login.component';
 import { emailValidator, passwordValidator } from '../../../utils/validators';
 import { ErrorValidationComponent } from '../../error-validation/error-validation.component';
 import { isValid } from '../../../utils/is-valid';
+import { RecoverPassComponent } from '../../recover-pass/recover-pass.component';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +28,7 @@ import { isValid } from '../../../utils/is-valid';
     VisibilityIconComponent,
     GoogleLoginComponent,
     ErrorValidationComponent,
+    RecoverPassComponent,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
@@ -35,6 +37,7 @@ export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   public readonly isValid = isValid;
+  public recover = false;
 
   public signinForm: FormGroup = this.fb.group({
     email: [null, [Validators.required, Validators.email, emailValidator()]],
@@ -50,5 +53,9 @@ export class LoginComponent {
 
   isVisisble(input: { type: string }) {
     input.type = input.type === 'password' ? 'text' : 'password';
+  }
+
+  recoverPass(event: boolean) {
+    this.recover = event;
   }
 }
