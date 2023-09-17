@@ -202,7 +202,8 @@ const initRestorePassword = async (req, res) =>  {
 
     const token = generateToken(user, '5m');
 
-    const resetLink = `https://online-store-api-714z.onrender.com/reset-password?token=${token}`;
+    //    const resetLink = `https://online-store-api-714z.onrender.com/reset-password?token=${token}`;
+    const resetLink = `https://volodumurgruv.github.io/bestOnlineStore/login?token=${token}`;
 
     user.resetPasswordToken = token;
     user.resetPasswordExpires = Date.now() + 3600000/12;

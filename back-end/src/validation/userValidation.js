@@ -12,7 +12,14 @@ const validateUserData = [
     .exists()
     .withMessage('Password is required')
     .isLength({ min: 8, max: 16 })
-    .withMessage('Password must be between 8 and 16 characters.'),
+    .withMessage('Password must be between 8 and 16 characters.')
+    .custom((value) => {
+      const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
+      if (!passwordRegex.test(value)) {
+        throw new Error('Password must have required parameters.');
+      }
+      return true;
+    }),
   body('email')
     .isEmail()
     .withMessage('Invalid email format.'),
