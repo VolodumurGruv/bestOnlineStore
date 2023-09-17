@@ -1,14 +1,24 @@
 import { HttpClient } from '@angular/common/http';
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { catchError, Observable, of, retry, take, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  map,
+  Observable,
+  retry,
+  Subject,
+  tap,
+} from 'rxjs';
 import { Auth, signOut } from '@angular/fire/auth';
 
 import { configs, httpConfig } from '@configs/configs';
 import { User } from '@interfaces/user.interface';
-import { AlertService } from '@shared/services/alert.service';
+import { AlertService } from '@shared/services/interaction/alert.service';
 import { PAYLOAD } from '@interfaces/request.interface';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpErrorHandlerService } from '@shared/services/http-error-handler.service';
+import { UserService } from '../user.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -17,6 +27,11 @@ export class AuthService {
   private readonly googleAuth = inject(Auth);
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
+  private readonly httpErrorHandler = inject(HttpErrorHandlerService);
+  private user = new BehaviorSubject<PAYLOAD | null>(
+    JSON.parse(localStorage.getItem('user')!)
+  );
+  private user$: Observable<PAYLOAD | null> = this.user.asObservable();
 
   signIn(user: User): void {
     if (this.isAuth()) {
@@ -24,16 +39,23 @@ export class AuthService {
       // check it later
     }
     this.http
-      .post<User>(`${configs.URL}/user/signin`, user, httpConfig)
+      .post<PAYLOAD>(`${configs.URL}/user/signin`, user, httpConfig)
       .pipe(
         retry(3),
+        map((res) => {
+          localStorage.setItem('user', JSON.stringify(res));
+          this.user.next(res);
+          return res;
+        }),
         catchError(
-          this.handleError<User>(`Помилка входу. Повторіть спробу!] `)
+          this.httpErrorHandler.handleError<User>(
+            `Помилка входу. Повторіть спробу!] `
+          )
         ),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((res: any) => {
-        if (res.payload) {
+        if (res) {
           this.setLocalStorage(res.payload);
           // this.alertService.success('Вхід здійснено успішно');
           this.router.navigate(['/user']);
@@ -41,31 +63,44 @@ export class AuthService {
       });
   }
 
-  signup(user: User): Observable<User> {
-    return this.http.post<User>(configs.URL + configs.REGISTER_ROOT, user).pipe(
-      tap((res: any) => {
+  signup(user: User): void {
+    this.http
+      .post<PAYLOAD>(configs.URL + configs.REGISTER_ROOT, user)
+      .pipe(
+        map((res) => {
+          localStorage.setItem('user', JSON.stringify(res));
+          this.user.next(res);
+          return res;
+        }),
+        catchError(
+          this.httpErrorHandler.handleError<User>(
+            `Виникла помилка під час реєстрації. Повторіть спробу!`
+          )
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((res: any) => {
         const payload = res.payload;
         if (payload) {
           this.setLocalStorage(payload);
           this.router.navigate(['/user']);
         }
-      }),
-      catchError(
-        this.handleError<User>(
-          `Виникла помилка під час реєстрації. Повторіть спробу!`
-        )
-      ),
-      takeUntilDestroyed(this.destroyRef)
-    );
+      });
   }
 
   googleLogin(body: { gtoken: string }): void {
     this.http
       .post(configs.URL + configs.GOOGLE_ROOT, body)
       .pipe(
-        take(1),
+        map((res: any) => {
+          localStorage.setItem('user', JSON.stringify(res));
+          this.user.next(res);
+          return res;
+        }),
         catchError(
-          this.handleError<void>('Виникла помилка при здійсненні Google login!')
+          this.httpErrorHandler.handleError<void>(
+            'Виникла помилка при здійсненні Google login!'
+          )
         ),
         takeUntilDestroyed(this.destroyRef)
       )
@@ -78,36 +113,19 @@ export class AuthService {
       });
   }
 
-  private handleError<T>(operation: string, result?: T) {
-    return (error: any): Observable<T> => {
-      this.alertService.danger(
-        operation,
-        // error.message.split(' ').splice(0, 3).join(' ')
-        error?.error.text
-      );
-
-      return of(result as T);
-    };
-  }
-
   isAuth(): boolean {
-    return localStorage.getItem('token') ? true : false;
-  }
-
-  getAuthToken(): string | null {
+    const user = this.user.value;
     const token = localStorage.getItem('token');
-    if (token) {
-      return token;
-    }
-    return null;
+
+    return token === user?.payload.token && token ? true : false;
   }
 
   signOut(): void {
-    // remove true
     if (this.isAuth()) {
       signOut(this.googleAuth)
         .then(() => {
           localStorage.clear();
+          this.user.next(null);
           // this.alertService.success('Вихід здійснено успішно!');
           this.router.navigate(['/']);
         })
@@ -122,13 +140,16 @@ export class AuthService {
     }
   }
 
-  setLocalStorage(payload: PAYLOAD) {
+  setLocalStorage(payload: any) {
     // time for session 24h ahead
-    const expDate = new Date(new Date().getTime() + 24 * 3600 * 1000);
+    const expDate = new Date(
+      new Date().getTime() + 24 * 3600 * 1000
+    ).toString();
 
-    localStorage.setItem('token', payload.token);
-    localStorage.setItem('id', payload._id);
-    localStorage.setItem('email', payload.email);
-    localStorage.setItem('expDate', expDate.toString());
+    payload.expDate = expDate;
+
+    for (const item in payload) {
+      localStorage.setItem(item, payload[item]);
+    }
   }
 }

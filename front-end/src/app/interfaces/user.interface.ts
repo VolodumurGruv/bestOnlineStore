@@ -1,9 +1,10 @@
 export interface User {
-  firstName: string;
+  name: string;
   password: string;
   email: string;
   isAdmin?: boolean;
   token?: string;
+  _id?: string;
 }
 
 export interface UserInfo extends User {

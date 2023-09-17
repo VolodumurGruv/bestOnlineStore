@@ -9,7 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/signin-flow/auth.service';
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
 import { GoogleLoginComponent } from '../google-login/google-login.component';
 import { emailValidator, passwordValidator } from '../../../utils/validators';

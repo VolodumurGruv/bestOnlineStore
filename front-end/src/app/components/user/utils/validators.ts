@@ -4,11 +4,12 @@ export function nameValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     let isTrue: boolean = false;
     // it should pass only letters and white spaces
-    const regExp = /[A-Za-zА-Яа-я]+[^0-1]\b/g;
+    const nameRegExp =
+      /^[A-Za-zА-Яа-яІіЇїЄєҐґ]{3,30}(?: [A-Za-zА-Яа-яІіЇїЄєҐґ]{3,30}){0,1}$/g;
     let res!: string[] | null;
 
     if (control.value) {
-      res = control.value.match(regExp);
+      res = control.value.match(nameRegExp);
 
       if (res) {
         isTrue = res.join('') === control.value;
@@ -23,10 +24,10 @@ export function nameValidator(): ValidatorFn {
 
 export function emailValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const nameRegExp = /^[\w-\.]+@([\w-]+\.)+[a-zA-Z-]{2,4}$/g;
+    const emailRegExp = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/g;
     let isTrue: boolean = false;
     if (control.value) {
-      const res = control.value.trim().match(nameRegExp);
+      const res = control.value.trim().match(emailRegExp);
       if (res) {
         isTrue = res.join('') === control.value;
       }
@@ -38,10 +39,11 @@ export function emailValidator(): ValidatorFn {
 
 export function passwordValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const nameRegExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/g;
+    const passwordRegExp =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@#$_!%*?&]{8,16}$/g;
     let isTrue: boolean = false;
     if (control.value) {
-      const res = control.value.trim().match(nameRegExp);
+      const res = control.value.trim().match(passwordRegExp);
       if (res) {
         isTrue = res.join('') === control.value;
       }
@@ -71,4 +73,8 @@ export function confirmValidator(): ValidatorFn {
       ? { confirmPassword: { message: 'паролі мають збігатися' } }
       : null;
   };
+}
+
+export function phoneValidator() {
+  const phoneRegExp = /^\+\d{1,3}\s?\(\d{1,3}\)\s?\d{3,}-\d{2,}-\d{2,}$/g;
 }

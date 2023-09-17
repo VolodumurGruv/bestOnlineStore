@@ -3,9 +3,17 @@ export interface REQUEST {
 }
 
 export interface PAYLOAD {
-  name?: string;
-  email: string;
-  _id: string;
-  token: string;
-  expDate?: string;
+  message: string;
+  payload: {
+    name?: string;
+    email: string;
+    _id: string;
+    token: string;
+    expDate?: string;
+    phone?: string;
+    isAdmin?: boolean;
+    isAnonymous?: boolean;
+  };
+  isAdmin: boolean;
+  text: string;
 }

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/signin-flow/auth.service';
 
 @Component({
   selector: 'app-user',

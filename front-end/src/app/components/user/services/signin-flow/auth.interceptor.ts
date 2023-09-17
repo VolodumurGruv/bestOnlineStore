@@ -5,9 +5,9 @@ import {
   HttpHandlerFn,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { configs } from '@configs/configs';
-import { SpinnerService } from '@shared/services/spinner.service';
-import { finalize, Observable, tap } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
+
+import { SpinnerService } from '@shared/services/interaction/spinner.service';
 import { AuthService } from './auth.service';
 
 export const AuthInterceptor: HttpInterceptorFn = (
@@ -16,13 +16,12 @@ export const AuthInterceptor: HttpInterceptorFn = (
 ): Observable<HttpEvent<any>> => {
   const auth = inject(AuthService);
   const spinner = inject(SpinnerService);
-  const token = auth.getAuthToken();
+  const token = localStorage.getItem('token');
   const url = req.url.split('/').includes('google');
 
   spinner.enableSpinner();
 
-  if (token && !url) {
-    console.log(url);
+  if (auth.isAuth() && !url && token) {
     const authToken = req.clone({
       headers: req.headers.set('Authorization', token),
     });
