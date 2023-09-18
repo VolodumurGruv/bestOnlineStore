@@ -1,16 +1,15 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/signin-flow/auth.service';
 import { GoogleLoginComponent } from '../google-login/google-login.component';
 import {
   confirmValidator,
@@ -38,8 +37,6 @@ import { isValid } from '../../../utils/is-valid';
 export class SignupComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
   public readonly isValid = isValid;
 
   public signupForm: FormGroup = this.fb.group({
@@ -78,14 +75,7 @@ export class SignupComponent {
   registerUser() {
     const { name, email, password } = this.signupForm.value;
     if (name && email && password) {
-      this.authService
-        .signup({ name, password, email })
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((res) => {
-          if (res) {
-            this.router.navigate(['/']);
-          }
-        });
+      this.authService.signup({ name, password, email });
     }
   }
 

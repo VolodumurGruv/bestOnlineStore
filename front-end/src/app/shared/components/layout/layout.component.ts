@@ -4,9 +4,10 @@ import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
 
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
-import { AlertComponent } from '../alert/alert.component';
+
 import { SpinnerComponent } from '../spinner/spinner.component';
-import { SpinnerService } from '@shared/services/spinner.service';
+import { SpinnerService } from '@shared/services/interaction/spinner.service';
+import { AlertComponent } from '../alert/alert.component';
 
 @Component({
   selector: 'app-layout',

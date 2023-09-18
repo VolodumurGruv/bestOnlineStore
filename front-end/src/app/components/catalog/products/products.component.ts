@@ -4,9 +4,10 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { mainCategories } from '@interfaces/catalog.data';
 import { SubCategory } from '@interfaces/catalog.interface';
-import { CardComponent } from '../../home-page/components/card/card.component';
+
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
 import { FiltersComponent } from '../filters/filters.component';
+import { CardComponent } from 'app/components/home-page/components/card/card.component';
 
 @Component({
   selector: 'app-products',
@@ -16,7 +17,7 @@ import { FiltersComponent } from '../filters/filters.component';
     CardComponent,
     ProductCardComponent,
     FiltersComponent,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],

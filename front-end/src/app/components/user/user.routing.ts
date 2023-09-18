@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { authGuard } from './services/auth.guard';
+import { authGuard } from './services/signin-flow/auth.guard';
 
 export const USER_ROUTES: Route[] = [
   {

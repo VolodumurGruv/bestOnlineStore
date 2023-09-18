@@ -1,0 +1,75 @@
+@use "signin";
+@use "fonts";
+
+.recover__input {
+  @include signin.input;
+}
+
+.input__wrap {
+  @include signin.input-wrap;
+  max-width: 570px;
+}
+
+.recover {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 100;
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 48px;
+  }
+
+  &__wrap {
+    margin: 10% auto 0 auto;
+    border-radius: 8px;
+    max-width: 670px;
+    padding: 20px;
+    background: #fff;
+
+    p {
+      @include fonts.font-roboto;
+      text-align: center;
+      font-weight: normal;
+      font-size: 18px;
+    }
+  }
+}
+
+.form__container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+}
+
+.email__rec {
+  width: 100%;
+  padding: 20px;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%;
+  color: #000;
+  background: #efeeee;
+}
+
+.icon {
+  cursor: pointer;
+}

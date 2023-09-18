@@ -4,4 +4,11 @@ export interface User {
   email: string;
   isAdmin?: boolean;
   token?: string;
+  _id?: string;
+}
+
+export interface UserInfo extends User {
+  lastName: string;
+  address: string;
+  phone: string;
 }

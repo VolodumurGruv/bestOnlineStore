@@ -5,6 +5,7 @@ export const configs = {
   DOMAIN: 'https://online-store-api-714z.onrender.com',
   GOOGLE_ROOT: '/user/google',
   REGISTER_ROOT: '/user/register',
+  SIGNIN_ROOT: '/user/signin',
 };
 
 export const httpConfig = {

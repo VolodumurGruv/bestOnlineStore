@@ -7,12 +7,11 @@ export const getErrorValidationMessage = (
   let args = messages
     .get(validatorName)
     ?.validatorErrorsKey?.map((name) => validatorErrors?.[name]);
-  if (!args) {
-    console.log(messages.get(validatorName)?.message);
-  }
+
   return args
     ? stringFormat(messages.get(validatorName)?.message, ...args)
-    : messages.get(validatorName)?.message;
+    : validatorErrors?.['message'];
+  // messages.get(validatorName)?.message;
 };
 
 const messages = new Map<
@@ -34,10 +33,16 @@ const messages = new Map<
       validatorErrorsKey: ['requiredLength'],
     },
   ],
-  ['email', { message: 'Email має бути коректним' }],
-  ['confirmPassword', { message: 'Паролі мають збігатися' }],
-  ['name', { message: 'Використовуйте лише букви' }],
-  ['password', { message: '' }],
+  // ['email', { message: 'Email має бути коректним' }],
+  // ['confirmPassword', { message: 'Паролі мають збігатися' }],
+  // ['name', { message: 'Використовуйте лише букви' }],
+  // [
+  //   'password',
+  //   {
+  //     message:
+  //       'Пароль має містити хочаб один символ, одну заголовну літеру та цифру',
+  //   },
+  // ],
 ]);
 
 function stringFormat(template: string | undefined, ...args: any[]) {
