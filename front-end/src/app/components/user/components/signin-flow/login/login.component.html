@@ -58,4 +58,7 @@
   <ng-container *ngIf="recover">
     <app-recover-pass (recover)="recoverPass($event)"></app-recover-pass>
   </ng-container>
+  <ng-container *ngIf="isNewPass">
+    <app-new-pass (isNewPass)="newPass($event)"></app-new-pass>
+  </ng-container>
 </section>

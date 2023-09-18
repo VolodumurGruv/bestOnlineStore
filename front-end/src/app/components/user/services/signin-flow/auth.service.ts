@@ -1,14 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  catchError,
-  map,
-  Observable,
-  retry,
-  Subject,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, retry } from 'rxjs';
 import { Auth, signOut } from '@angular/fire/auth';
 
 import { configs, httpConfig } from '@configs/configs';
@@ -18,7 +10,6 @@ import { PAYLOAD } from '@interfaces/request.interface';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorHandlerService } from '@shared/services/http-error-handler.service';
-import { UserService } from '../user.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -88,9 +79,9 @@ export class AuthService {
       });
   }
 
-  googleLogin(body: { gtoken: string }): void {
+  googleLogin(gtoken: string): void {
     this.http
-      .post(configs.URL + configs.GOOGLE_ROOT, body)
+      .post(configs.URL + configs.GOOGLE_ROOT, { gtoken })
       .pipe(
         map((res: any) => {
           localStorage.setItem('user', JSON.stringify(res));

@@ -1,5 +1,5 @@
 <div class="recover">
-  <div class="recover__wrap">
+  <div class="recover__wrap" *ngIf="notSend; else send">
     <p>Для відновлення паролю введіть e-mail</p>
     <form
       class="recover__form"
@@ -21,6 +21,7 @@
           [control]="recoverPassForm.get('email')"
         ></app-error-validation>
       </div>
+
       <div class="action">
         <div>
           <button class="btn" type="submit" [disabled]="!recoverPassForm.valid">
@@ -29,10 +30,20 @@
         </div>
         <div>
           <button class="btn" type="button" (click)="cancel()">
-            Відмінити
+            Скасувати
           </button>
         </div>
       </div>
     </form>
   </div>
+  <ng-template #send>
+    <div class="recover__form recover__wrap">
+      <div>
+        <p>{{ recoverPass$ | async }}</p>
+      </div>
+      <div>
+        <button class="btn" type="button" (click)="cancel()">Закрити</button>
+      </div>
+    </div>
+  </ng-template>
 </div>

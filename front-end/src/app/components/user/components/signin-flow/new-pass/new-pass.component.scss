@@ -18,7 +18,7 @@
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.2);
-  z-index: 800;
+  z-index: 100;
 
   &__form {
     display: flex;
@@ -45,9 +45,31 @@
   }
 }
 
+.form__container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .action {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 48px;
+}
+
+.email__rec {
+  width: 100%;
+  padding: 20px;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%;
+  color: #000;
+  background: #efeeee;
+}
+
+.icon {
+  cursor: pointer;
 }

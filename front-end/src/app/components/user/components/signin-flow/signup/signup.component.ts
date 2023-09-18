@@ -80,7 +80,6 @@ export class SignupComponent {
   }
 
   isVisisble(input: { type: string }) {
-    console.log(this.signupForm.controls);
     input.type = input.type === 'password' ? 'text' : 'password';
   }
 }

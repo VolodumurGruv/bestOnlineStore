@@ -47,7 +47,7 @@ export class GoogleLoginComponent implements OnInit {
           const gtoken = credential?.accessToken;
 
           if (gtoken) {
-            this.authService.googleLogin({ gtoken });
+            this.authService.googleLogin(gtoken);
           }
         }
       })
@@ -71,7 +71,7 @@ export class GoogleLoginComponent implements OnInit {
         this.alert.success("You've signed out successfully!");
       })
       .catch((error) => {
-        console.log(error.message);
+        console.error(error.message);
         this.alert.danger('Google sign out', error.message);
       });
   }
