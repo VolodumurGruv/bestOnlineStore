@@ -55,6 +55,7 @@ export class LoginComponent implements OnInit {
       const token = params.get('token');
       if (token) {
         this.isNewPass = true;
+        localStorage.setItem('resToken', token);
       }
     });
   }

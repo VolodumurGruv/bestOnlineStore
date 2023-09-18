@@ -1,6 +1,8 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+
 import { ErrorValidationComponent } from '../../error-validation/error-validation.component';
 import { isValid } from 'app/components/user/utils/is-valid';
 import {
@@ -9,8 +11,7 @@ import {
 } from 'app/components/user/utils/validators';
 import { RecoverPassService } from 'app/components/user/services/signin-flow/recover-pass.service';
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
-import { InputTextComponent } from '@shared/components/inputs/input-text/input-text.component';
-import { Observable } from 'rxjs';
+import { AlertService } from '@shared/services/interaction/alert.service';
 
 @Component({
   selector: 'app-new-pass',
@@ -20,7 +21,6 @@ import { Observable } from 'rxjs';
     ReactiveFormsModule,
     ErrorValidationComponent,
     VisibilityIconComponent,
-    InputTextComponent,
   ],
   templateUrl: './new-pass.component.html',
   styleUrls: ['./new-pass.component.scss'],
@@ -31,6 +31,7 @@ export class NewPassComponent {
 
   private readonly fb = inject(FormBuilder);
   private readonly setNewPassword = inject(RecoverPassService);
+  private alertService = inject(AlertService);
 
   public recoverPass$!: Observable<string>;
   public isValid = isValid;
@@ -66,12 +67,14 @@ export class NewPassComponent {
 
   onSubmit() {
     const password = this.newPassForm.get('password')?.value;
-    const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGZiYTZlNTY1NmM5MWI4YWUzNDBiODkiLCJuYW1lIjoiSUFNIiwiZW1haWwiOiJncnVzaHZvbG9AZ21haWwuY29tIiwiaWF0IjoxNjk1MDcwNDUwLCJleHAiOjE2OTUwNzA3NTB9.TBd0iycQ98qgyvtkUBrKjwBhIcvbamKSLkOmm-uYaaY`;
+    const token = localStorage.getItem('resToken');
 
-    if (password) {
+    if (password && token) {
       this.setNewPassword.setNewPass(token, password);
       this.recoverPass$ = this.setNewPassword.getRecoverRes();
       this.isRecover = false;
+    } else {
+      this.alertService.warning('Сталася помилка! Спробуйте ще раз!');
     }
   }
 
