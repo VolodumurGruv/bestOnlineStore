@@ -116,7 +116,7 @@ const registerUserByGoogle = async (req, res) => {
 
     const userJSON = await userInfoResponse.json();
 
-    const existingUser = await User.findOne({ googleId: userJSON.sub });
+    const existingUser = await User.findOne({ email: userJSON.email });
 
     if (existingUser) {
       const token = generateToken(existingUser);
@@ -131,7 +131,7 @@ const registerUserByGoogle = async (req, res) => {
         token
       };
 
-      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', MESSAGES.GOOGLE_ACCESS_VERIFIED, userPayload);
+      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', MESSAGES.GOOGLE_ACCESS_VERIFIED, userPayload);
     } else {
       const user = new User({
         googleId: userJSON.sub,
@@ -154,10 +154,12 @@ const registerUserByGoogle = async (req, res) => {
         token
       };
 
-      handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', MESSAGES.NEW_USER_CREATED, newUser);
+      sendEmail(createdUser.email);
+
+      return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', MESSAGES.NEW_USER_CREATED, newUser);
     }
   } catch (error) {
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
