@@ -25,7 +25,7 @@ const getAllProducts = async (req, res) => {
     if (req.query.category) {
       query = query.where('category').equals(req.query.category);
     }
-    console.log(req.query.sortByPrice);
+    console.log('sort: ' + req.query.sortByPrice);
     if (req.query.sortByPrice === 'asc') {
       query = query.sort({ price: 1 });
     } else if (req.query.sortByPrice === 'desc') {

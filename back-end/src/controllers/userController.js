@@ -111,7 +111,7 @@ const registerUserByGoogle = async (req, res) => {
     });
 
     if (!userInfoResponse.ok) {
-      handleResponse(res, HTTP_STATUS_CODES, 'fault', MESSAGES.GOOGLE_FETCH_FAILURE);
+      return handleResponse(res, HTTP_STATUS_CODES, 'fault', MESSAGES.GOOGLE_FETCH_FAILURE);
     }
 
     const userJSON = await userInfoResponse.json();
@@ -173,7 +173,7 @@ const signInUser = async (req, res) => {
       const token = generateToken(user);
 
       logger.info('User signed in successfully:', user._id);
-      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Correct credentials.', {
+      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Correct credentials.', {
         _id: user._id,
         name: user.name,
         email: user.email,
@@ -184,11 +184,11 @@ const signInUser = async (req, res) => {
       });
     } else {
       logger.error('Invalid credentials for user:', email);
-      handleResponse(res, HTTP_STATUS_CODES.UNAUTHORIZED, 'fault', MESSAGES.INVALID_CREDENTIALS);
+      return handleResponse(res, HTTP_STATUS_CODES.UNAUTHORIZED, 'fault', MESSAGES.INVALID_CREDENTIALS);
     }
   } catch (error) {
     logger.error('Error while signing in user:', error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -213,19 +213,19 @@ const initRestorePassword = async (req, res) =>  {
 
     sendEmail(email, 'Password restore', resetLink);
 
-    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Посилання для відновлення паролю надіслано на ваш email.');
+    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Посилання для відновлення паролю надіслано на ваш email.');
   } catch (error) {
     logger.error(error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
 const restorePassword = async (req, res) => {
   const { token, newPassword } = req.body;
 
-  if (!!token || !!newPassword) {
+  if (!token || !newPassword) {
     logger.error('Invalid credentials for user.');
-    handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.INVALID_CREDENTIALS);
+    return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.INVALID_CREDENTIALS);
   }
 
   try {
@@ -235,18 +235,18 @@ const restorePassword = async (req, res) => {
       return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', 'Your token has expired.');
     }
 
-    if (req.body.password) {
-      user.password = bcrypt.hashSync(req.body.password, 8);
+    if (req.body.newPassword) {
+      user.password = bcrypt.hashSync(req.body.newPassword, 8);
     }
 
     const updatedUser = await user.save();
-    const token = generateToken(updatedUser);
+    const newToken = generateToken(updatedUser);
 
     logger.info('New password created.');
-    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'New password created.', token);
+    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'New password created.', newToken);
   } catch (error) {
     logger.error(error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
