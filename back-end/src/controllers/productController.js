@@ -11,7 +11,7 @@ const getAllProducts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const perPage = parseInt(req.query.perPage) || 10;
   const skip = (page - 1) * perPage;
-
+  console.dir(req.query);
   try {
     let query = Product.find();
 
@@ -32,14 +32,20 @@ const getAllProducts = async (req, res) => {
       query = query.sort({ price: -1 });
     }
 
+    if (req.query.sortByRating === 'asc') {
+      query = query.sort({ raiting: 1 });
+    } else if (req.query.sortByRating === 'desc') {
+      query = query.sort({ raiting: -1 });
+    }
+
     query = query.skip(skip).limit(perPage);
 
     const products = await query.exec();
-    const totalProducts = await Product.countDocuments({});
-    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All products in payload.', { products, totalProducts });
+    const totalProducts = await Product.countDocuments(query.getQuery());
+    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All products in payload.', { products, totalProducts });
   } catch (error) {
     logger.error('Error while fetching all products', error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -59,14 +65,14 @@ const searchProductsByName = async (req, res) => {
 
     if (products.length > 0) {
       logger.info('Products found by name:', query);
-      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Products found.', products);
+      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Products found.', products);
     } else {
       logger.info('No products found by name:', query);
-      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.PRODUCT_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.PRODUCT_NOT_FOUND);
     }
   } catch (error) {
     logger.error('Error while searching for products by name:', query, error);
-    handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.EMPTY_QUERY_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.EMPTY_QUERY_ERROR, error);
   }
 };
 
@@ -75,14 +81,14 @@ const getProductById = async (req, res) => {
     const product = await Product.findById(req.params.id).populate('reviews');
     if (product) {
       logger.info('Product found by ID:', req.params.id);
-      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Product found.', product);
+      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Product found.', product);
     } else {
       logger.error('Product not found by ID:', req.params.id);
-      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.PRODUCT_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.PRODUCT_NOT_FOUND);
     }
   } catch (error) {
     logger.error('Error while fetching product by ID:', req.params.id, error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -91,10 +97,10 @@ const createProduct = async (req, res) => {
     const newProductData = req.body;
     const createdProduct = await Product.create(newProductData);
     logger.info('Product created:', createdProduct._id);
-    handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', 'Product created.', createdProduct);
+    return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', 'Product created.', createdProduct);
   } catch (error) {
     logger.error('Error while creating product', error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -104,14 +110,14 @@ const updateProduct = async (req, res) => {
     const updatedProduct = await Product.findByIdAndUpdate(productId, req.body, { new: true });
     if (updatedProduct) {
       logger.info('Product updated:', productId);
-      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Product updated.', updatedProduct);
+      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Product updated.', updatedProduct);
     } else {
       logger.error('Product not found for update:', productId);
-      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.PRODUCT_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.PRODUCT_NOT_FOUND);
     }
   } catch (error) {
     logger.error('Error while updating product:', req.params.id, error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -121,14 +127,14 @@ const deleteProduct = async (req, res) => {
     const deletedProduct = await Product.findByIdAndRemove(productId);
     if (deletedProduct) {
       logger.info('Product deleted:', productId);
-      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Product deleted.', deletedProduct);
+      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Product deleted.', deletedProduct);
     } else {
       logger.error('Product not found for delete:', productId);
-      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.PRODUCT_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.PRODUCT_NOT_FOUND);
     }
   } catch (error) {
     logger.error('Error while deleting product:', req.params.id, error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
