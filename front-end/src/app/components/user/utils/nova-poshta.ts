@@ -21,14 +21,22 @@ export const getAddresses = (city: string) => {
   return fetchPostReq(URL, reqCityAddresses);
 };
 
-export const getNovaPoshtaDepartment = () => {
+export const getNovaPoshtaDepartment = (
+  cityName: string,
+  cityRef: string,
+  area: string,
+  region: string
+) => {
+  console.log(cityName, cityRef);
   const reqDepartments = {
     apiKey: environment.novaPoshta,
     modelName: 'Address',
     calledMethod: 'getWarehouses',
     methodProperties: {
-      CityName: 'Харківка',
-      // CityRef: '0ddbfc76-4b3a-11e4-ab6d-005056801329',
+      // CityName: cityName,
+      SettlementRef: cityRef,
+      Area: area,
+      RegionDescription: region,
     },
   };
 

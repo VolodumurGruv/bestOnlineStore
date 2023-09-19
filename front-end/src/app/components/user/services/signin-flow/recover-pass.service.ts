@@ -28,9 +28,11 @@ export class RecoverPassService {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((res: any) => {
-        if (res.message && res.text) {
+        if (res && res.message && res.text) {
           this.recoverRes.next(res.text);
           this.router.navigate(['/login', { token: 'token' }]);
+        } else {
+          this.recoverRes.next('Сталася помилка! Повторіть спробу!');
         }
       });
   }
@@ -49,9 +51,11 @@ export class RecoverPassService {
         )
       )
       .subscribe((res: any) => {
-        if (res.message && res.text) {
-          this.recoverRes.next(res.text);
+        if (res && res.message && res.text) {
+          this.recoverRes.next('Здійсніть вхід з новим паролем');
           this.router.navigate(['/login', { token: 'token' }]);
+        } else {
+          this.recoverRes.next('Сталася помилка! Повторіть спробу!');
         }
       });
   }

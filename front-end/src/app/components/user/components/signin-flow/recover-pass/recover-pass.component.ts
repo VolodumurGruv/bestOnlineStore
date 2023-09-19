@@ -1,15 +1,11 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { ErrorValidationComponent } from '../../error-validation/error-validation.component';
-import {
-  confirmValidator,
-  emailValidator,
-  passwordValidator,
-} from '../../../utils/validators';
+import { emailValidator } from '../../../utils/validators';
 import { isValid } from '../../../utils/is-valid';
 import { RecoverPassService } from '../../../services/signin-flow/recover-pass.service';
 

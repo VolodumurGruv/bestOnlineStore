@@ -94,7 +94,11 @@
       ><span class="text-company">Нова Пошта</span>
       <div class="delivery__options-select">
         <select class="select">
-          <option class="select__option" value="">Оберіть відділення</option>
+          <ng-container *ngFor="let department of departments">
+            <option class="select__option" [value]="department">
+              {{ department }}
+            </option>
+          </ng-container>
         </select>
       </div>
       <div class="delivery__opitions-btn">

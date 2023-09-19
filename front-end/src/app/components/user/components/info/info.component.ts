@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgFor, NgIf } from '@angular/common';
+import { JsonPipe, NgFor, NgIf } from '@angular/common';
 
 import {
   getAddresses,
@@ -16,11 +16,14 @@ interface Address {
   SettlementTypeDescription: string;
   RegionsDescription: string;
   SettlementRef?: string;
+  Ref?: string;
+  Area?: string;
 }
+
 @Component({
   selector: 'app-info',
   standalone: true,
-  imports: [ReactiveFormsModule, NgFor, NgIf, ContactUsComponent],
+  imports: [ReactiveFormsModule, NgFor, NgIf, JsonPipe, ContactUsComponent],
   templateUrl: './info.component.html',
   styleUrls: ['./info.component.scss'],
 })
@@ -51,12 +54,6 @@ export class InfoComponent implements OnInit {
     //   .catch((e) => {
     //     console.error(e);
     //   });
-    getNovaPoshtaDepartment()
-      .then((res: any) => res.json())
-      .then((res: any) => console.log(res))
-      .catch((e: any) => {
-        console.error(e);
-      });
     // getNovaPoshtaStreet('Баришівка')
     //   .then((res: any) => res.json())
     //   .then((res: any) => console.log(res));
@@ -73,17 +70,32 @@ export class InfoComponent implements OnInit {
   }
 
   chosenAddress(address: any) {
+    console.log(this.addresses);
     const {
       Description,
       AreaDescription,
       SettlementTypeDescription,
       RegionsDescription,
+      Ref,
+      Area,
     } = address;
     this.infoForm
       .get('address')
       ?.setValue(
         `${SettlementTypeDescription} ${Description} ${RegionsDescription} ${AreaDescription}`
       );
+
+    getNovaPoshtaDepartment(Description, Ref, Area, RegionsDescription)
+      .then((res: any) => res.json())
+      .then((res: any) => {
+        console.log(res);
+        return (this.departments = res.data.map(
+          (data: any) => data.Description
+        ));
+      })
+      .catch((e: any) => {
+        console.error(e);
+      });
 
     this.isChosen = false;
   }
