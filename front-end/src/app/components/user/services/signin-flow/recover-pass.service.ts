@@ -29,7 +29,9 @@ export class RecoverPassService {
       )
       .subscribe((res: any) => {
         if (res && res.message && res.text) {
-          this.recoverRes.next(res.text);
+          this.recoverRes.next(
+            'Для подальшого відновлення перейдіть за посиланням надісланим на Ваш e-mail'
+          );
           this.router.navigate(['/login', { token: 'token' }]);
         } else {
           this.recoverRes.next('Сталася помилка! Повторіть спробу!');
