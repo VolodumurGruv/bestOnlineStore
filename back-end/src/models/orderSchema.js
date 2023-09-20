@@ -20,6 +20,11 @@ const orderSchema = new mongoose.Schema({
     update_time: String, email_address: String },
   paymentMethod: { type: String, required: true },
   itemsPrice: { type: Number, required: true },
+  status: {
+    type: String,
+    enum: ['В обробці', 'Відправлено', 'Доставлено'],
+    default: 'В обробці'
+  },
   user: { type: mongoose.Schema.Types.ObjectId,
     ref: 'User', required: true },
   isPaid: { type: Boolean, default: false },
