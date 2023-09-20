@@ -217,9 +217,8 @@
     border-top: none;
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
-    width: 402px;
     top: 35px;
-    left: -292px;
+    left: -311px;
     width: 330px;
     overflow-y: auto;
     max-height: 50vh;
@@ -267,4 +266,8 @@
   font-weight: 400;
   line-height: 130%;
   color: #6a6a6a;
+}
+
+.icon {
+  cursor: pointer;
 }

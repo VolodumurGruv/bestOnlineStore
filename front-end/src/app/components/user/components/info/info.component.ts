@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
@@ -57,12 +57,13 @@ export class InfoComponent {
   }
 
   chosenAddress(address: any) {
-    console.log(this.addresses);
+    console.log(address);
     const {
       Description,
       AreaDescription,
       SettlementTypeDescription,
       RegionsDescription,
+      Ref,
     } = address;
     this.infoForm
       .get('address')
@@ -70,31 +71,35 @@ export class InfoComponent {
         `${SettlementTypeDescription} ${Description} ${RegionsDescription} ${AreaDescription}`
       );
 
-    this.getDepartments(Description);
+    this.getDepartments(Description, Ref);
 
     this.isChosen = false;
   }
 
   onSubmit() {}
 
-  getDepartments(city: string) {
-    getNovaPoshtaDepartment(city)
+  getDepartments(city: string, ref: string = '') {
+    getNovaPoshtaDepartment(city, ref)
       .then((res: any) => res.json())
       .then((res: any) => {
-        this.isDepartment = true;
-        return (this.departments = res.data.map(
-          (data: any) => data.Description
-        ));
+        console.log(res);
+        return (this.departments = res.data.map((data: any) => {
+          return { description: data.Description, city: data.CityDescription };
+        }));
       })
       .catch((e: any) => {
         console.error(e);
       });
   }
 
-  chosenDepartment(department: string) {
-    console.log(department);
-    this.infoForm.get('department')?.setValue(department);
-    this.isDepartment = false;
+  chosenDepartment(department: { city: string; description: string }) {
+    if (department) {
+      console.log(department);
+      this.infoForm
+        .get('department')
+        ?.setValue(`${department.city} ${department.description}`);
+      this.isDepartment = false;
+    }
   }
 
   redirectToContact() {

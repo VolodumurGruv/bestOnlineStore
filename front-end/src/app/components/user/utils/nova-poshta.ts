@@ -21,14 +21,14 @@ export const getAddresses = (city: string) => {
   return fetchPostReq(URL, reqCityAddresses);
 };
 
-export const getNovaPoshtaDepartment = (cityName: string) => {
+export const getNovaPoshtaDepartment = (cityName: string, ref: string) => {
   const reqDepartments = {
     apiKey: environment.novaPoshta,
     modelName: 'Address',
     calledMethod: 'getWarehouses',
     methodProperties: {
       CityName: cityName,
-      // SettlementRef: cityRef,
+      SettlementRef: ref,
       // Area: area,
       // RegionDescription: region,
     },
