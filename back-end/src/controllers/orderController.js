@@ -8,8 +8,16 @@ import {
 import handleResponse from '../utils/handleResponse.js';
 
 const getAllOrders = async (req, res) => {
+  const { status } = req.query;
+
   try {
-    const orders = await Order.find({}).populate('user', 'name');
+    const orders = await Order.find(status ? { status } : {}).populate('user', 'name');
+
+    if (!orders || orders.length === 0) {
+      logger.error(MESSAGES.ORDER_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
+    }
+
     logger.info('All orders fetched successfully');
     handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All orders in payload.', orders);
   } catch (error) {
