@@ -61,6 +61,7 @@
       placeholder="Адреса *"
       (keyup)="getAddress(addr.value)"
       [value]="infoForm.get('address')?.value"
+      (blur)="onblur()"
     />
   </div>
 
@@ -99,6 +100,7 @@
             (keyup)="getDepartments(city.value)"
             formControlName="department"
             placeholder="Оберіть відділення"
+            (blur)="onblur()"
           />
           <div class="icon" (click)="isDepartment = !isDepartment">
             <svg

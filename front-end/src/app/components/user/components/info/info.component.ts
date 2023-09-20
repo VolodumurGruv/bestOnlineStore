@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
@@ -27,7 +27,7 @@ interface Address {
   templateUrl: './info.component.html',
   styleUrls: ['./info.component.scss'],
 })
-export class InfoComponent {
+export class InfoComponent implements OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   public phoneHolder: any = '+380';
@@ -35,6 +35,7 @@ export class InfoComponent {
   public departments: any;
   public isChosen: boolean = false;
   public isDepartment: boolean = false;
+  clearTimeOut: any;
 
   public infoForm = this.fb.group({
     firstName: [''],
@@ -47,6 +48,7 @@ export class InfoComponent {
   });
 
   getAddress(city: string): void {
+    this.infoForm.get('department')?.reset();
     if (city) {
       getAddresses(city)
         .then((res) => res.json())
@@ -72,24 +74,30 @@ export class InfoComponent {
       );
 
     this.getDepartments(Description, Ref);
-
+    this.isDepartment = false;
     this.isChosen = false;
   }
 
   onSubmit() {}
 
   getDepartments(city: string, ref: string = '') {
-    getNovaPoshtaDepartment(city, ref)
-      .then((res: any) => res.json())
-      .then((res: any) => {
-        console.log(res);
-        return (this.departments = res.data.map((data: any) => {
-          return { description: data.Description, city: data.CityDescription };
-        }));
-      })
-      .catch((e: any) => {
-        console.error(e);
-      });
+    if (city) {
+      getNovaPoshtaDepartment(city, ref)
+        .then((res: any) => res.json())
+        .then((res: any) => {
+          console.log(res);
+          this.isDepartment = true;
+          return (this.departments = res.data.map((data: any) => {
+            return {
+              description: data.Description,
+              city: data.CityDescription,
+            };
+          }));
+        })
+        .catch((e: any) => {
+          console.error(e);
+        });
+    }
   }
 
   chosenDepartment(department: { city: string; description: string }) {
@@ -104,5 +112,17 @@ export class InfoComponent {
 
   redirectToContact() {
     this.router.navigate(['/']);
+  }
+
+  onblur() {
+    this.clearTimeOut = setTimeout(() => {
+      clearTimeout(this.clearTimeOut);
+      this.isChosen = false;
+      this.isDepartment = false;
+    }, 100);
+  }
+
+  ngOnDestroy(): void {
+    clearTimeout(this.clearTimeOut);
   }
 }
