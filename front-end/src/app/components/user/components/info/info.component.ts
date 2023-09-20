@@ -27,13 +27,14 @@ interface Address {
   templateUrl: './info.component.html',
   styleUrls: ['./info.component.scss'],
 })
-export class InfoComponent implements OnInit {
+export class InfoComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   public phoneHolder: any = '+380';
   public addresses: Address[] = [];
   public departments: any;
   public isChosen: boolean = false;
+  public isDepartment: boolean = false;
 
   public infoForm = this.fb.group({
     firstName: [''],
@@ -42,22 +43,8 @@ export class InfoComponent implements OnInit {
     address: [''],
     phone: [''],
     password: [''],
+    department: [''],
   });
-
-  ngOnInit(): void {
-    // getAddresses('Яготин')
-    //   .then((res) => res.json())
-    //   .then((res) => {
-    //     console.log(res);
-    //     this.addresses = res.data;
-    //   })
-    //   .catch((e) => {
-    //     console.error(e);
-    //   });
-    // getNovaPoshtaStreet('Баришівка')
-    //   .then((res: any) => res.json())
-    //   .then((res: any) => console.log(res));
-  }
 
   getAddress(city: string): void {
     if (city) {
@@ -76,8 +63,6 @@ export class InfoComponent implements OnInit {
       AreaDescription,
       SettlementTypeDescription,
       RegionsDescription,
-      Ref,
-      Area,
     } = address;
     this.infoForm
       .get('address')
@@ -85,10 +70,18 @@ export class InfoComponent implements OnInit {
         `${SettlementTypeDescription} ${Description} ${RegionsDescription} ${AreaDescription}`
       );
 
-    getNovaPoshtaDepartment(Description, Ref, Area, RegionsDescription)
+    this.getDepartments(Description);
+
+    this.isChosen = false;
+  }
+
+  onSubmit() {}
+
+  getDepartments(city: string) {
+    getNovaPoshtaDepartment(city)
       .then((res: any) => res.json())
       .then((res: any) => {
-        console.log(res);
+        this.isDepartment = true;
         return (this.departments = res.data.map(
           (data: any) => data.Description
         ));
@@ -96,11 +89,13 @@ export class InfoComponent implements OnInit {
       .catch((e: any) => {
         console.error(e);
       });
-
-    this.isChosen = false;
   }
 
-  onSubmit() {}
+  chosenDepartment(department: string) {
+    console.log(department);
+    this.infoForm.get('department')?.setValue(department);
+    this.isDepartment = false;
+  }
 
   redirectToContact() {
     this.router.navigate(['/']);

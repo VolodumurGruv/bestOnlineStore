@@ -1,1 +1,11 @@
-<p>input-select works!</p>
+<input
+  #input
+  class="input"
+  type="text"
+  (keyup)="writeValue(input.value)"
+  (focus)="onTouched()"
+  [disabled]="disabled"
+/>
+<ul class="input__select-items" *ngIf="items?.length">
+  <li class="input__select-item" *ngFor="let item of items">{{ item }}</li>
+</ul>

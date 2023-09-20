@@ -84,48 +84,63 @@
       </li>
     </ul>
   </div>
+  <div class="delivery">
+    <div class="delivery__title">Способи доставки</div>
+    <div class="delivery__options">
+      <div class="delivery__options-checkbox">
+        <input type="checkbox" class="checkbox" />
+        <span class="logo-company">logo</span
+        ><span class="text-company">Нова Пошта</span>
+        <div class="delivery__options-select">
+          <input
+            #city
+            type="text"
+            class="input-select"
+            (keyup)="getDepartments(city.value)"
+            formControlName="department"
+          />
+          <div
+            class="department__list"
+            *ngIf="departments?.length && isDepartment"
+          >
+            <ul class="department__list-items">
+              <li
+                class="department__list-item"
+                *ngFor="let department of departments"
+                (click)="chosenDepartment(department)"
+              >
+                {{ department }}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="delivery__opitions-btn">
+          <span>Заберіть посилку у найближчому відділенні Нової Пошти</span>
+        </div>
+      </div>
+      <div class="delivery__options-checkbox">
+        <input type="checkbox" name="delivery" id="" class="checkbox" />
+        <span class="logo-company">logo</span
+        ><span class="text-company">УкрПошта</span>
+      </div>
+      <div class="delivery__options-checkbox">
+        <input type="checkbox" name="delivery" id="" class="checkbox" />
+        <span class="logo-company">logo</span
+        ><span class="text-company">Самовивіз</span>
+      </div>
+      <div class="delivery__options-checkbox">
+        <input type="checkbox" name="delivery" id="" class="checkbox" />
+        <span class="logo-company">logo</span
+        ><span class="text-company">Кур’єрська доставка</span>
+      </div>
+    </div>
+    <div class="delivery__actions">
+      <button type="submit" class="btn delivery__btn">Зберегти зміни</button>
+      <button type="button" class="btn__text">Скасувати всі зміни</button>
+    </div>
+  </div>
 </form>
-<div class="delivery">
-  <div class="delivery__title">Способи доставки</div>
-  <div class="delivery__options">
-    <div class="delivery__options-checkbox">
-      <input type="checkbox" class="checkbox" />
-      <span class="logo-company">logo</span
-      ><span class="text-company">Нова Пошта</span>
-      <div class="delivery__options-select">
-        <select class="select">
-          <ng-container *ngFor="let department of departments">
-            <option class="select__option" [value]="department">
-              {{ department }}
-            </option>
-          </ng-container>
-        </select>
-      </div>
-      <div class="delivery__opitions-btn">
-        <span>Заберіть посилку у найближчому відділенні Нової Пошти</span>
-      </div>
-    </div>
-    <div class="delivery__options-checkbox">
-      <input type="checkbox" name="delivery" id="" class="checkbox" />
-      <span class="logo-company">logo</span
-      ><span class="text-company">УкрПошта</span>
-    </div>
-    <div class="delivery__options-checkbox">
-      <input type="checkbox" name="delivery" id="" class="checkbox" />
-      <span class="logo-company">logo</span
-      ><span class="text-company">Самовивіз</span>
-    </div>
-    <div class="delivery__options-checkbox">
-      <input type="checkbox" name="delivery" id="" class="checkbox" />
-      <span class="logo-company">logo</span
-      ><span class="text-company">Кур’єрська доставка</span>
-    </div>
-  </div>
-  <div class="delivery__actions">
-    <button type="submit" class="btn delivery__btn">Зберегти зміни</button>
-    <button type="button" class="btn__text">Скасувати всі зміни</button>
-  </div>
-</div>
+
 <div class="contactus" (click)="redirectToContact()">
   <!-- will fix path when the path is ready -->
   <app-contact-us></app-contact-us>

@@ -1,0 +1,25 @@
+@use "signin";
+
+.input {
+  @include signin.input;
+
+  &__select-items {
+    display: block;
+    position: absolute;
+    list-style: none;
+    padding: 20px 20px;
+    border: 1px solid grey;
+    border-top: none;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    margin-top: 10px;
+    width: 530px;
+    margin-left: -19px;
+    background: #fff;
+  }
+
+  &__select-item {
+    position: relative;
+    top: 10px;
+  }
+}

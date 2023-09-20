@@ -84,7 +84,6 @@
       @include fonts.font-roboto;
 
       display: flex;
-      width: 300px;
       justify-content: space-between;
       align-items: center;
       flex-shrink: 0;
@@ -186,18 +185,22 @@
   cursor: pointer;
 }
 
-.address__list {
+.list {
   position: relative;
-  top: -20px;
-  max-width: 402px;
   border: 1px solid #4c4c4c;
   border-top: none;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   border-top-right-radius: none;
   border-top-left-radius: none;
+  background: #fff;
+}
+
+.department__list {
+  @extend .list;
 
   &-item {
+    position: relative;
     border-radius: 8px;
     padding: 0 20px 10px 10px;
     cursor: pointer;
@@ -207,6 +210,61 @@
   }
 
   &-items {
+    display: block;
+    position: absolute;
     list-style: none;
+    border: 1px solid #000;
+    border-top: none;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    width: 402px;
+    top: 35px;
+    left: -292px;
+    width: 330px;
+    overflow-y: auto;
+    max-height: 50vh;
+    background: #fff;
   }
+}
+
+.address__list {
+  @extend .list;
+  top: -20px;
+  max-width: 402px;
+
+  &-item {
+    position: relative;
+    border-radius: 8px;
+    padding: 0 20px 10px 10px;
+    cursor: pointer;
+    &:hover {
+      background: #efeeee;
+    }
+  }
+
+  &-items {
+    display: block;
+    position: absolute;
+    list-style: none;
+    border: 1px solid #000;
+    border-top: none;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    width: 402px;
+    overflow-y: auto;
+    max-height: 50vh;
+    background: #fff;
+  }
+}
+
+.input-select {
+  @include signin.input;
+  @include fonts.font-roboto;
+
+  width: 90%;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+  color: #6a6a6a;
 }
