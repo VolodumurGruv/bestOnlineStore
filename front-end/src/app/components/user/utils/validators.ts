@@ -75,6 +75,17 @@ export function confirmValidator(): ValidatorFn {
   };
 }
 
-export function phoneValidator() {
-  const phoneRegExp = /^\+\d{1,3}\s?\(\d{1,3}\)\s?\d{3,}-\d{2,}-\d{2,}$/g;
+export function phoneValidator(): ValidatorFn {
+  const phoneRegExp = /[0-9]{7,7}$/g;
+
+  return (control: AbstractControl): ValidationErrors | null => {
+    const res = control.value.match(phoneRegExp);
+    let isTrue = false;
+
+    if (res) {
+      isTrue = res.join('') === control.value;
+    }
+
+    return isTrue ? null : { phone: { message: 'Некоректний номер телефону' } };
+  };
 }

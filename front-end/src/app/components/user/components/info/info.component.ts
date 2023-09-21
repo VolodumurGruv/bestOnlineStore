@@ -1,7 +1,7 @@
-import { Component, OnDestroy, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { JsonPipe, NgFor, NgIf } from '@angular/common';
+import { JsonPipe, NgClass, NgFor, NgIf } from '@angular/common';
 
 import {
   getAddresses,
@@ -9,6 +9,14 @@ import {
   getNovaPoshtaStreet,
 } from '../../utils/nova-poshta';
 import { ContactUsComponent } from '@shared/components/icons/contact-us/contact-us.component';
+import {
+  emailValidator,
+  nameValidator,
+  passwordValidator,
+  phoneValidator,
+} from '../../utils/validators';
+import { ErrorValidationComponent } from '../error-validation/error-validation.component';
+import { isValid } from '../../utils/is-valid';
 
 interface Address {
   Description: string;
@@ -23,11 +31,19 @@ interface Address {
 @Component({
   selector: 'app-info',
   standalone: true,
-  imports: [ReactiveFormsModule, NgFor, NgIf, JsonPipe, ContactUsComponent],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    NgIf,
+    NgClass,
+    JsonPipe,
+    ContactUsComponent,
+    ErrorValidationComponent,
+  ],
   templateUrl: './info.component.html',
   styleUrls: ['./info.component.scss'],
 })
-export class InfoComponent implements OnDestroy {
+export class InfoComponent implements OnDestroy, OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   public phoneHolder: any = '+380';
@@ -35,20 +51,59 @@ export class InfoComponent implements OnDestroy {
   public departments: any;
   public isChosen: boolean = false;
   public isDepartment: boolean = false;
-  clearTimeOut: any;
+  public isValid = isValid;
+  private clearTimeOut: any;
+
+  ngOnInit(): void {}
 
   public infoForm = this.fb.group({
-    firstName: [''],
-    lastName: [''],
-    email: [''],
-    address: [''],
-    phone: [''],
-    password: [''],
-    department: [''],
+    name: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30),
+        nameValidator(),
+      ],
+    ],
+    lastName: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30),
+        nameValidator(),
+      ],
+    ],
+    email: ['', [Validators.required, Validators.email, emailValidator()]],
+    address: ['', [Validators.required]],
+    phone: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(7),
+        Validators.maxLength(7),
+        phoneValidator(),
+      ],
+    ],
+    password: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(16),
+        passwordValidator(),
+      ],
+    ],
+    department: ['', [Validators.required]],
+    delivery: ['', [Validators.required]],
   });
 
   getAddress(city: string): void {
     this.infoForm.get('department')?.reset();
+    this.isDepartment = false;
+    this.departments = [];
+
     if (city) {
       getAddresses(city)
         .then((res) => res.json())
@@ -87,12 +142,16 @@ export class InfoComponent implements OnDestroy {
         .then((res: any) => {
           console.log(res);
           this.isDepartment = true;
-          return (this.departments = res.data.map((data: any) => {
-            return {
-              description: data.Description,
-              city: data.CityDescription,
-            };
-          }));
+          return (this.departments = res.data
+            .filter((data: any) => {
+              return data.CategoryOfWarehouse !== 'Postomat';
+            })
+            .map((data: any) => {
+              return {
+                city: data.CityDescription,
+                description: data.Description,
+              };
+            }));
         })
         .catch((e: any) => {
           console.error(e);
