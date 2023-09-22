@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
 import User from '../models/userSchema.js';
+import ShippingAddress from '../models/shippingAddressSchema.js';
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/token.js';
 import sendEmail from '../utils/email.js';
@@ -268,7 +269,7 @@ const getUserById = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id).populate('shippingAddress');
 
     if (user) {
       user.name = req.body.name || user.name;
@@ -282,15 +283,33 @@ const updateProfile = async (req, res) => {
       const updatedUser = await user.save();
       const token = generateToken(updatedUser);
 
+      let address = await ShippingAddress.findOne({ user: req.user._id });
+
+      if (address) {
+        address.deliveryMethod = req.body.deliveryMethod || address.deliveryMethod;
+        address.address = req.body.address || address.address;
+        address.city = req.body.city || address.city;
+        address.country = req.body.country || address.country;
+        address.postalCode = req.body.postalCode || address.postalCode;
+        address.novaPoshtaAddress = req.body.novaPoshtaAddress || address.novaPoshtaAddress;
+      } else {
+        address = new ShippingAddress({
+          deliveryMethod: req.body?.deliveryMethod,
+          address: req?.body.address,
+          city: req.body?.city,
+          country: req.body?.country,
+          postalCode: req.body?.postalCode,
+          novaPoshtaAddress: req.body?.novaPoshtaAddress
+        });
+      }
+
+      const updatedAddress = await address.save();
+
       logger.info('User profile updated:', updatedUser._id);
       handleResponse(res, HTTP_STATUS_CODES.OK, 'success', MESSAGES.USER_WAS_UPDATED, {
-        _id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        phone: updatedUser.phone,
-        isAdmin: updatedUser.isAdmin,
-        isAnonymous: updatedUser.isAnonymous,
+        updatedUser,
         token,
+        updatedAddress,
       });
     }
   } catch (error) {

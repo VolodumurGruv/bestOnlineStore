@@ -9,7 +9,11 @@ const userSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, required: true, default: false },
   isAnonymous: { type: Boolean, default: false },
   resetPasswordToken: { type: String, default: '' },
-  resetPasswordExpires: { type: Number, default: 0 }
+  resetPasswordExpires: { type: Number, default: 0 },
+  shippingAddresses: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'ShippingAddress',
+  }
 }, { timestamps: true }
 );
 
