@@ -1,6 +1,8 @@
 // @import url("https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Satisfy&display=swap");
 // @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap");
 
+@use "colors";
+
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Roboto:ital,wght@0,400;0,500;1,300&family=Satisfy&family=Titan+One&display=swap");
 
 @mixin satisfy {
@@ -11,4 +13,14 @@
 }
 @mixin font-roboto {
   font-family: "Roboto", sans-serif;
+}
+
+@mixin primary-roboto($size, $weight, $style, $height) {
+  @include font-roboto;
+
+  font-size: $size;
+  font-weight: $weight;
+  font-style: $style;
+  line-height: $height;
+  color: colors.$black;
 }

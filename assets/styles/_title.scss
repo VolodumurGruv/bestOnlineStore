@@ -1,0 +1,13 @@
+@use "fonts";
+@use "colors";
+
+@mixin user-title {
+  @include fonts.font-roboto;
+
+  text-align: center;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%; /* 36.4px */
+  color: colors.$black;
+}

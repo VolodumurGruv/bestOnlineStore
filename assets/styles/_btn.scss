@@ -1,11 +1,12 @@
 @use "colors";
+@use "fonts";
 
 .btn {
   padding: 16px 32px;
   border-radius: 8px;
-  border: 1px solid #000;
+  border: 1px solid colors.$black;
   text-decoration: none;
-  color: #000;
+  color: colors.$black;
   font-size: 18px;
   font-style: normal;
   font-weight: 300;
@@ -30,7 +31,7 @@
     padding: 16px 12px;
     font-size: 20px;
     font-weight: 500;
-    color: #fff;
+    color: colors.$white;
     background: colors.$main-color;
   }
 
@@ -38,4 +39,18 @@
     opacity: 0.4;
     border: 1px solid colors.$light-gray;
   }
+}
+
+@mixin btn-text($size) {
+  @include fonts.font-roboto;
+
+  font-size: $size;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%; /* 26px */
+  text-decoration-line: underline;
+  border: none;
+  background: transparent;
+  color: colors.$black;
+  cursor: pointer;
 }
