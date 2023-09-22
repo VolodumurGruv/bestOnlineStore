@@ -4,6 +4,8 @@
 @use "signin";
 @use "title";
 @use "btn";
+@forward "../error-validation/error-validation.component.scss";
+@forward "custom-checkbox";
 
 .user {
   &__info {
@@ -13,10 +15,11 @@
   }
 
   &__info-title {
-    @include title.user-title; /* 36.4px */
+    @include title.user-title;
 
     padding-bottom: 72px;
   }
+
   &__form {
     display: flex;
     flex-wrap: wrap;
@@ -46,15 +49,10 @@
   width: 829px;
 
   &__title {
-    @include fonts.font-roboto;
+    @include fonts.primary-roboto(28px, 400, normal, 130%);
 
     width: 100%;
     text-align: center;
-    font-size: 28px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 130%;
-    color: #000;
   }
 
   &__options {
@@ -65,28 +63,24 @@
   }
 
   &__options-select {
+    display: flex;
+    align-items: center;
     margin-bottom: 32px;
     margin-top: 32px;
     margin-left: 72px;
-    display: flex;
     width: 332px;
     padding: 12px 16px;
-    align-items: center;
     gap: 8px;
     border-radius: 8px;
     border: 1px solid #949494;
 
     .select {
-      @include fonts.font-roboto;
+      @include fonts.primary-roboto(18px, 400, normal, 130%);
 
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-shrink: 0;
-      font-size: 18px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 130%; /* 23.4px */
       outline: none;
       border: none;
       background: transparent;
@@ -96,22 +90,16 @@
 
   &__options-btn {
     display: flex;
+    align-items: center;
     width: 757px;
     padding: 16px;
     margin-left: 72px;
-    align-items: center;
     gap: 10px;
     border-radius: 8px;
     background: #efeeee;
 
     span {
-      @include fonts.font-roboto;
-      color: #000;
-
-      font-size: 16px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 130%;
+      @include fonts.primary-roboto(16px, 400, normal, 130%);
     }
   }
 
@@ -124,14 +112,9 @@
   }
 
   &__btn {
-    @include fonts.font-roboto;
+    @include fonts.primary-roboto(18px, 300, normal, 130%);
 
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: 130%; /* 23.4px */
     text-transform: none;
-    color: #000;
   }
 }
 
@@ -141,71 +124,25 @@
   justify-content: flex-start;
 }
 
-input[type="radio"] {
-  @include fonts.font-roboto;
-
-  /* Add if not using autoprefixer */
-  -webkit-appearance: none;
-  /* Remove most all native input styles */
-  appearance: none;
-  /* For iOS < 15 */
-  background-color: var(--form-background);
-  /* Not removed via appearance */
-  margin: 0;
-
-  width: 20px;
-  height: 20px;
-  border: 1px solid #000;
-  border-radius: 0.15em;
-  transform: translateY(-0.075em);
-
-  display: grid;
-  place-content: center;
-  z-index: 0;
-}
-
-input[type="radio"]::before {
-  content: "";
-  width: 18px;
-  height: 18px;
-  clip-path: polygon(0% 27%, 0 25%, 50% 95%, 80% 16%, 80% 0%, 43% 62%);
-  transform: scale(0);
-  transform-origin: bottom left;
-  transition: 120ms transform ease-in-out;
-  box-shadow: inset 5px 5px var(--form-control-color);
-  /* Windows High Contrast Mode */
-  background-color: CanvasText;
-  z-index: 0;
-}
-
-input[type="radio"]:checked::before {
-  transform: scale(1);
-  z-index: 0;
-}
-
 .logo-company {
   padding-left: 48px;
   padding-right: 24px;
 }
 
 .phone-holder {
-  @include fonts.font-roboto;
-  text-align: center;
+  @include fonts.primary-roboto(18px, 400, normal, 130%);
 
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 130%; /* 23.4px */
+  text-align: center;
   color: #5d5d5d;
 }
 
 .text-company {
-  @include fonts.font-roboto;
+  @include fonts.primary-roboto(20px, 400, normal, 130%);
+
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: 130%;
-  color: #000;
 }
 
 .btn__text {
@@ -300,20 +237,11 @@ input[type="radio"]:checked::before {
 
 .input-select {
   @include signin.input;
-  @include fonts.font-roboto;
+  @include fonts.primary-roboto(18px, 400, normal, 130%);
 
-  width: 90%;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 130%;
   color: #6a6a6a;
 }
 
 .icon {
   cursor: pointer;
-}
-
-app-error-validation {
-  position: absolute;
 }

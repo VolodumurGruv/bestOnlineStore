@@ -10,14 +10,17 @@
 
   &__title {
     @include title.user-title;
+    padding-bottom: 60px;
   }
 
   &__card {
     display: flex;
     flex-direction: column;
-    padding: 40px 40px 0 40px;
+    padding: 40px;
     width: 901px;
     gap: 24px;
+    border-radius: 8px;
+    border: 1px solid #949494;
   }
 
   &__date {
@@ -55,7 +58,7 @@
     width: 821px;
 
     p {
-      font-weight: 500;
+      @include fonts.primary-roboto(22px, 500, normal, 130%);
     }
   }
 

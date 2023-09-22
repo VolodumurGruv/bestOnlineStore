@@ -14,9 +14,7 @@
         </div>
       </div>
       <div class="orders__item-text">
-        <div class="state">
-          {{ order.state }}
-        </div>
+        <div class="state">Статус: {{ order.state }}</div>
         <div class="action" (click)="completeAction()">
           {{ action }}
         </div>

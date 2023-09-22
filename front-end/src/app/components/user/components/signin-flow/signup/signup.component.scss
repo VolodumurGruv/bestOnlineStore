@@ -1,5 +1,8 @@
 @use "signin";
 @use "colors";
+@use "flex";
+@use "fonts";
+@forward "../../error-validation/error-validation.component.scss";
 
 .signup {
   margin: 120px auto 160px auto;
@@ -14,9 +17,7 @@
   }
 
   &__form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @include flex.flex-col-ac;
     justify-content: center;
     gap: 24px;
   }
@@ -42,45 +43,13 @@
   }
 
   &__link {
+    @include fonts.primary-roboto(15px, 400, normal, 130%);
     padding-top: 8px;
     padding-bottom: 28px;
     text-decoration: none;
-
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 130%; /* 19.5px */
     text-decoration-line: underline;
     color: colors.$gray-text;
     cursor: pointer;
-  }
-
-  &__google {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    border-radius: 8px;
-    border: 1px solid #010101;
-    width: 274px;
-
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 130%;
-    color: #010101;
-    cursor: pointer;
-
-    &-icon {
-      width: 24px;
-      height: 24px;
-      background-image: url("../../../../../../assets/pics/png/flat-color-icons_google.png");
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-
-    &-text {
-      padding: 8px;
-    }
   }
 }
 

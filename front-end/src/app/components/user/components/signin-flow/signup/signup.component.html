@@ -13,10 +13,10 @@
           placeholder="І'мя Призвіще*"
           formControlName="name"
         />
+        <app-error-validation
+          [control]="signupForm.get('name')"
+        ></app-error-validation>
       </div>
-      <app-error-validation
-        [control]="signupForm.get('name')"
-      ></app-error-validation>
 
       <div class="signup__input-wrap" [ngClass]="isValid(signupForm, 'email')">
         <input
@@ -25,10 +25,10 @@
           placeholder="E-mail*"
           formControlName="email"
         />
+        <app-error-validation
+          [control]="signupForm.get('email')"
+        ></app-error-validation>
       </div>
-      <app-error-validation
-        [control]="signupForm.get('email')"
-      ></app-error-validation>
       <div
         class="signup__input-wrap"
         [ngClass]="isValid(signupForm, 'password')"
@@ -43,10 +43,10 @@
         <span class="icon" (click)="isVisisble(input)">
           <app-visibility-icon></app-visibility-icon>
         </span>
+        <app-error-validation
+          [control]="signupForm.get('password')"
+        ></app-error-validation>
       </div>
-      <app-error-validation
-        [control]="signupForm.get('password')"
-      ></app-error-validation>
       <div
         class="signup__input-wrap"
         [ngClass]="isValid(signupForm, 'confirmPassword')"
@@ -61,10 +61,10 @@
         <span class="icon" (click)="isVisisble(confirm)">
           <app-visibility-icon></app-visibility-icon>
         </span>
+        <app-error-validation
+          [control]="signupForm.get('confirmPassword')"
+        ></app-error-validation>
       </div>
-      <app-error-validation
-        [control]="signupForm.get('confirmPassword')"
-      ></app-error-validation>
       <div class="signup__btn-wrap">
         <button
           class="btn__grey btn"
@@ -79,7 +79,7 @@
       <a class="signup__link" routerLink="/login">Увійти</a>
     </div>
     <p class="or">або</p>
-    <div class="signup__google">
+    <div>
       <app-google-login></app-google-login>
     </div>
   </div>

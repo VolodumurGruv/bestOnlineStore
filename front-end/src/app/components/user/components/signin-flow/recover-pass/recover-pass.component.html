@@ -15,11 +15,10 @@
             formControlName="email"
             placeholder="E-mail*"
           />
+          <app-error-validation
+            [control]="recoverPassForm.get('email')"
+          ></app-error-validation>
         </div>
-
-        <app-error-validation
-          [control]="recoverPassForm.get('email')"
-        ></app-error-validation>
       </div>
 
       <div class="action">

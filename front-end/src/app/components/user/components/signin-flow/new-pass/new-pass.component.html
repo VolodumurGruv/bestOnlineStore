@@ -19,11 +19,11 @@
           <span class="icon" (click)="isVisisble(passVis)">
             <app-visibility-icon></app-visibility-icon>
           </span>
+          <app-error-validation
+            [control]="newPassForm.get('password')"
+          ></app-error-validation>
         </div>
 
-        <app-error-validation
-          [control]="newPassForm.get('password')"
-        ></app-error-validation>
         <div
           class="input__wrap"
           [ngClass]="isValid(newPassForm, 'confirmPassword')"
@@ -38,11 +38,10 @@
           <span class="icon" (click)="isVisisble(confPassVis)">
             <app-visibility-icon></app-visibility-icon>
           </span>
+          <app-error-validation
+            [control]="newPassForm.get('confirmPassword')"
+          ></app-error-validation>
         </div>
-
-        <app-error-validation
-          [control]="newPassForm.get('confirmPassword')"
-        ></app-error-validation>
       </div>
 
       <div class="action">
