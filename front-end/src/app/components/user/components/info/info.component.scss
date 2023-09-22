@@ -2,24 +2,20 @@
 @use "colors";
 @use "a-link";
 @use "signin";
+@use "title";
+@use "btn";
 
 .user {
   &__info {
     display: flex;
     align-items: flex-start;
-    padding-left: 100px;
-    gap: 72px;
+    gap: 100px;
   }
 
   &__info-title {
-    @include fonts.font-roboto;
-    color: #000;
-    text-align: center;
+    @include title.user-title; /* 36.4px */
+
     padding-bottom: 72px;
-    font-size: 28px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 130%; /* 36.4px */
   }
   &__form {
     display: flex;
@@ -192,6 +188,17 @@ input[type="radio"]:checked::before {
   padding-right: 24px;
 }
 
+.phone-holder {
+  @include fonts.font-roboto;
+  text-align: center;
+
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%; /* 23.4px */
+  color: #5d5d5d;
+}
+
 .text-company {
   @include fonts.font-roboto;
   font-size: 20px;
@@ -202,16 +209,7 @@ input[type="radio"]:checked::before {
 }
 
 .btn__text {
-  @include fonts.font-roboto;
-
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 130%; /* 26px */
-  text-decoration-line: underline;
-  border: none;
-  background: transparent;
-  color: #000;
+  @include btn.btn-text(20px);
 }
 
 .contactus {
@@ -240,7 +238,7 @@ input[type="radio"]:checked::before {
 
 .department__list {
   @extend .list;
-
+  z-index: 100;
   &-item {
     position: relative;
     border-radius: 8px;

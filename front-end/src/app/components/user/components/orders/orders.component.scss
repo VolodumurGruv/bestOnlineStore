@@ -1,0 +1,87 @@
+@use "title";
+@use "fonts";
+
+.orders {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  width: 829px;
+
+  &__title {
+    @include title.user-title;
+  }
+
+  &__items {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  &__item-img {
+    width: 170px;
+    height: 122px;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 55px;
+    width: 639px;
+    height: 122px;
+  }
+
+  &__item-text {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.description,
+.action {
+  font-weight: 400;
+}
+
+.action {
+  cursor: pointer;
+  text-decoration-line: underline;
+}
+
+.state {
+  font-weight: 500;
+}
+
+.description,
+.state,
+.action {
+  @include fonts.font-roboto;
+
+  font-size: 18px;
+  font-style: normal;
+  line-height: 130%; /* 23.4px */
+  color: #000;
+}
+
+.price {
+  @include fonts.font-roboto;
+
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+  color: #000;
+}
+
+.discount {
+  @include fonts.font-roboto;
+
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%; /* 18.2px */
+  text-decoration-line: line-through;
+  color: #da3838;
+}

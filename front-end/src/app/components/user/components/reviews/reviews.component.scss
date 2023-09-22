@@ -1,0 +1,136 @@
+@use "title";
+@use "colors";
+@use "fonts";
+@use "btn";
+
+.review {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__title {
+    @include title.user-title;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    padding: 40px 40px 0 40px;
+    width: 901px;
+    gap: 24px;
+  }
+
+  &__date {
+    @include fonts.primary-roboto(22px, 400, normal, 130%);
+  }
+
+  &__wrap-data {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px 8px 24px;
+  }
+
+  &-image {
+    width: 162px;
+    height: 162px;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  &-images {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 0 24px;
+  }
+
+  &__text {
+    @include fonts.primary-roboto(22px, 400, normal, 130%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 0 24px;
+    width: 821px;
+
+    p {
+      font-weight: 500;
+    }
+  }
+
+  &__btn-text {
+    @include btn.btn-text(22px);
+    text-align: center;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 819px;
+    padding: 48px 24px 0 24px;
+  }
+
+  &__footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+
+    div {
+      @include btn.btn-text(22px);
+    }
+  }
+}
+
+.reviewer {
+  &__name {
+    @include fonts.primary-roboto(22px, 500, normal, 130%);
+  }
+
+  &__data {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  &__rate {
+    @include fonts.primary-roboto(22px, 400, normal, 130%);
+
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+
+    .stars {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 8px;
+    }
+  }
+}
+
+.advantage,
+.disadvantage {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.rating {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+
+  &__likes {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+
+    span {
+      @include fonts.primary-roboto(22px, 400, normal, 130%);
+    }
+  }
+}

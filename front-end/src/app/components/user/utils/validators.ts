@@ -76,7 +76,7 @@ export function confirmValidator(): ValidatorFn {
 }
 
 export function phoneValidator(): ValidatorFn {
-  const phoneRegExp = /[0-9]{7,7}$/g;
+  const phoneRegExp = /[0-9]{9,9}$/g;
 
   return (control: AbstractControl): ValidationErrors | null => {
     const res = control.value.match(phoneRegExp);

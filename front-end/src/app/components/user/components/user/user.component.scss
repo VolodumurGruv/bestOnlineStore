@@ -58,12 +58,8 @@
 }
 
 .link__active {
-  display: flex;
   width: 311px;
-  padding: 10px;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 10px;
+  padding: 10px 10px 10px 55px;
   border-radius: 8px;
   background: #edebeb;
 }

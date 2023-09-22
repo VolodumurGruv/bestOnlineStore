@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NgClass, NgIf, NgOptimizedImage } from '@angular/common';
 import { Product } from '@interfaces/product.interfaces';
-import { TransformPricePipe } from '@shared/services/transform-price.pipe';
+import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
 
 @Component({
   selector: 'app-about-product',

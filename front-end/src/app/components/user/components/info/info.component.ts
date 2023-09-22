@@ -1,13 +1,9 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JsonPipe, NgClass, NgFor, NgIf } from '@angular/common';
 
-import {
-  getAddresses,
-  getNovaPoshtaDepartment,
-  getNovaPoshtaStreet,
-} from '../../utils/nova-poshta';
+import { getAddresses, getNovaPoshtaDepartment } from '../../utils/nova-poshta';
 import { ContactUsComponent } from '@shared/components/icons/contact-us/contact-us.component';
 import {
   emailValidator,
@@ -17,16 +13,7 @@ import {
 } from '../../utils/validators';
 import { ErrorValidationComponent } from '../error-validation/error-validation.component';
 import { isValid } from '../../utils/is-valid';
-
-interface Address {
-  Description: string;
-  AreaDescription: string;
-  SettlementTypeDescription: string;
-  RegionsDescription: string;
-  SettlementRef?: string;
-  Ref?: string;
-  Area?: string;
-}
+import { Address } from '@interfaces/address';
 
 @Component({
   selector: 'app-info',
@@ -43,7 +30,7 @@ interface Address {
   templateUrl: './info.component.html',
   styleUrls: ['./info.component.scss'],
 })
-export class InfoComponent implements OnDestroy, OnInit {
+export class InfoComponent implements OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   public phoneHolder: any = '+380';
@@ -53,8 +40,6 @@ export class InfoComponent implements OnDestroy, OnInit {
   public isDepartment: boolean = false;
   public isValid = isValid;
   private clearTimeOut: any;
-
-  ngOnInit(): void {}
 
   public infoForm = this.fb.group({
     name: [
@@ -81,8 +66,8 @@ export class InfoComponent implements OnDestroy, OnInit {
       '',
       [
         Validators.required,
-        Validators.minLength(7),
-        Validators.maxLength(7),
+        Validators.minLength(9),
+        Validators.maxLength(9),
         phoneValidator(),
       ],
     ],
