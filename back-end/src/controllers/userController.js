@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import fetch from 'node-fetch';
 import { validationResult } from 'express-validator';
 import User from '../models/userSchema.js';
 import ShippingAddress from '../models/shippingAddressSchema.js';
