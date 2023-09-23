@@ -17,8 +17,9 @@ export interface Orders {
   image: string;
   description: string;
   price: number;
-  state: string;
+  state?: string;
   discount?: number | undefined;
+  amount?: number;
 }
 
 export interface Review {

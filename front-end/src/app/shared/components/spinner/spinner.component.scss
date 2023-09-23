@@ -1,6 +1,6 @@
 .disabled {
   display: block;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
@@ -8,6 +8,7 @@
   background: rgba(0, 0, 0, 0.2);
   z-index: 800;
   padding-top: 20rem;
+  overflow: hidden;
 }
 
 .loader {

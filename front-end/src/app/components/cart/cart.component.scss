@@ -1,0 +1,41 @@
+@use "flex";
+@use "fonts";
+
+.shadow {
+  @include flex.flex-col-ac;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 800;
+}
+
+.cart {
+  width: 984px;
+  height: 1132px;
+  flex-shrink: 0;
+  overflow-x: auto;
+  background: #f4f4f4;
+  z-index: 900;
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 984px;
+    padding: 20px 39px 8px 16px;
+    border-bottom: 1px solid #ababab;
+  }
+
+  &__title-text {
+    @include fonts.font-manrope(36px, 500, normal, normal);
+  }
+}
+
+.btn__close {
+  cursor: pointer;
+}
