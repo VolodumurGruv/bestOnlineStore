@@ -5,6 +5,8 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Roboto:ital,wght@0,400;0,500;1,300&family=Satisfy&family=Titan+One&display=swap");
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Manrope&family=Roboto:ital,wght@0,400;0,500;1,300&family=Satisfy&family=Titan+One&display=swap");
+
 @mixin satisfy {
   font-family: "Satisfy", cursive;
 }
@@ -18,6 +20,15 @@
 @mixin primary-roboto($size, $weight, $style, $height) {
   @include font-roboto;
 
+  font-size: $size;
+  font-weight: $weight;
+  font-style: $style;
+  line-height: $height;
+  color: colors.$black;
+}
+
+@mixin font-manrope($size, $weight, $style, $height) {
+  font-family: "Manrope", sans-serif;
   font-size: $size;
   font-weight: $weight;
   font-style: $style;
