@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   isAnonymous: { type: Boolean, default: false },
   resetPasswordToken: { type: String, default: '' },
   resetPasswordExpires: { type: Number, default: 0 },
-  shippingAddresses: {
+  shippingAddress: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'ShippingAddress',
   }

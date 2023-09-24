@@ -17,10 +17,10 @@ const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({});
     logger.info('All users fetched successfully.');
-    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All users in payload.', users);
+    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All users in payload.', users);
   } catch (error) {
     logger.error('Error while fetching all users:', error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.DATABASE_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.DATABASE_ERROR, error);
   }
 };
 
@@ -31,8 +31,7 @@ const registerUser = async (req, res, next, anonymous = null) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {console.log(errors.array());
-      handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
-      return;
+      return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
     }
 
     const hashedPassword = bcrypt.hashSync(password, 8);
@@ -84,10 +83,10 @@ const registerUser = async (req, res, next, anonymous = null) => {
 
     anonymous ? void(0) : sendEmail(email);
 
-    handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', MESSAGES.NEW_USER_CREATED, newUser);
+    return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', MESSAGES.NEW_USER_CREATED, newUser);
 
   } catch (error) {console.log(3);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error.message);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error.message);
   }
 };
 
@@ -257,14 +256,14 @@ const getUserById = async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
       logger.info('User found by ID:', req.params.id);
-      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'User was found.', user);
+      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'User was found.', user);
     } else {
       logger.error('User not found by ID:', req.params.id);
-      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.USER_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.USER_NOT_FOUND);
     }
   } catch (error) {
     logger.error('Error while fetching user by ID:', req.params.id, error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -295,6 +294,7 @@ const updateProfile = async (req, res) => {
         address.novaPoshtaAddress = req.body.novaPoshtaAddress || address.novaPoshtaAddress;
       } else {
         address = new ShippingAddress({
+          user: req.user._id,
           deliveryMethod: req.body?.deliveryMethod,
           address: req?.body.address,
           city: req.body?.city,
@@ -307,7 +307,7 @@ const updateProfile = async (req, res) => {
       const updatedAddress = await address.save();
 
       logger.info('User profile updated:', updatedUser._id);
-      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', MESSAGES.USER_WAS_UPDATED, {
+      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', MESSAGES.USER_WAS_UPDATED, {
         updatedUser,
         token,
         updatedAddress,
@@ -315,7 +315,7 @@ const updateProfile = async (req, res) => {
     }
   } catch (error) {
     logger.error('Error while updating user profile:', error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -327,18 +327,18 @@ const deleteUser = async (req, res) => {
 
     if (user) {
       if (isAdmin(user)) {
-        handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.CANNOT_DELETE_ADMIN);
+        return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.CANNOT_DELETE_ADMIN);
       } else {
         const deletedUser = await user.remove();
-        handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'User deleted.', {
+        return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'User deleted.', {
           user: deletedUser
         });
       }
     } else {
-      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.USER_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.USER_NOT_FOUND);
     }
   } catch (error) {
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -358,9 +358,9 @@ const updateUser = async (req, res) => {
 
     const updatedUser = await user.save();
 
-    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'User updated.', updatedUser);
+    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'User updated.', updatedUser);
   } catch (error) {
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
