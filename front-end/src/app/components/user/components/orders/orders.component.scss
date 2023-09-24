@@ -1,4 +1,4 @@
-@use "title";
+@use "text";
 @use "fonts";
 @use "colors";
 
@@ -9,7 +9,7 @@
   width: 829px;
 
   &__title {
-    @include title.user-title;
+    @include text.user-title;
   }
 
   &__items {

@@ -11,14 +11,9 @@
   padding-bottom: 160px;
 
   &__title {
-    @include fonts.font-roboto;
-    color: #000;
-    text-align: center;
+    @include fonts.primary-roboto(40px, 500, normal, 130%);
 
-    font-size: 40px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 130%; /* 52px */
+    text-align: center;
     padding-top: 100px;
   }
 

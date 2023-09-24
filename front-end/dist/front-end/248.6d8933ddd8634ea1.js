@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkfront_end=self.webpackChunkfront_end||[]).push([[248],{4248:(h,t,n)=>{n.r(t),n.d(t,{ADMIN_ROUTING:()=>o});const o=[{path:"admin",loadComponent:()=>n.e(336).then(n.bind(n,6336)).then(d=>d.LayoutComponent)}]}}]);
