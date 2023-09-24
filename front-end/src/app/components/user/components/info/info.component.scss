@@ -2,7 +2,7 @@
 @use "colors";
 @use "a-link";
 @use "signin";
-@use "title";
+@use "text";
 @use "btn";
 @forward "../error-validation/error-validation.component.scss";
 @forward "custom-checkbox";
@@ -15,7 +15,7 @@
   }
 
   &__info-title {
-    @include title.user-title;
+    @include text.user-title;
 
     padding-bottom: 72px;
   }

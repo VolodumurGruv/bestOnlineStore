@@ -1,4 +1,4 @@
-import { Component, OnDestroy, inject } from '@angular/core';
+import { Component, OnDestroy, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JsonPipe, NgClass, NgFor, NgIf } from '@angular/common';
@@ -14,6 +14,8 @@ import {
 import { ErrorValidationComponent } from '../error-validation/error-validation.component';
 import { isValid } from '../../utils/is-valid';
 import { Address } from '@interfaces/address';
+import { setupInitialValue } from '../../utils/initial-from-local';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-info',
@@ -30,9 +32,10 @@ import { Address } from '@interfaces/address';
   templateUrl: './info.component.html',
   styleUrls: ['./info.component.scss'],
 })
-export class InfoComponent implements OnDestroy {
+export class InfoComponent implements OnDestroy, OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly userService = inject(UserService);
   public phoneHolder: any = '+380';
   public addresses: Address[] = [];
   public departments: any;
@@ -80,15 +83,15 @@ export class InfoComponent implements OnDestroy {
         passwordValidator(),
       ],
     ],
-    department: ['', [Validators.required]],
-    delivery: ['', [Validators.required]],
+    department: [''],
+    deliveryMethod: ['', [Validators.required]],
   });
 
-  getAddress(city: string): void {
-    this.infoForm.get('department')?.reset();
-    this.isDepartment = false;
-    this.departments = [];
+  ngOnInit() {
+    setupInitialValue(this.infoForm);
+  }
 
+  getAddress(city: string): void {
     if (city) {
       getAddresses(city)
         .then((res) => res.json())
@@ -99,7 +102,6 @@ export class InfoComponent implements OnDestroy {
   }
 
   chosenAddress(address: any) {
-    console.log(address);
     const {
       Description,
       AreaDescription,
@@ -118,14 +120,19 @@ export class InfoComponent implements OnDestroy {
     this.isChosen = false;
   }
 
-  onSubmit() {}
+  onSubmit() {
+    this.userService.updateUser(this.infoForm.value);
+  }
+
+  cancel() {
+    setupInitialValue(this.infoForm, this.infoForm.controls);
+  }
 
   getDepartments(city: string, ref: string = '') {
     if (city) {
       getNovaPoshtaDepartment(city, ref)
         .then((res: any) => res.json())
         .then((res: any) => {
-          console.log(res);
           this.isDepartment = true;
           return (this.departments = res.data
             .filter((data: any) => {
@@ -146,7 +153,6 @@ export class InfoComponent implements OnDestroy {
 
   chosenDepartment(department: { city: string; description: string }) {
     if (department) {
-      console.log(department);
       this.infoForm
         .get('department')
         ?.setValue(`${department.city} ${department.description}`);

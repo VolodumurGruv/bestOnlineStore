@@ -11,6 +11,8 @@ export interface UserInfo extends User {
   lastName: string;
   address: string;
   phone: string;
+  delivery?: string;
+  department?: string;
 }
 
 export interface Orders {

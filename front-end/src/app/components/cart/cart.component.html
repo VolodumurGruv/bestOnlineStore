@@ -3,7 +3,7 @@
     <div class="cart__wrap">
       <div class="cart__title">
         <div class="cart__title-text">Кошик</div>
-        <div class="btn__close" (click)="navigate()">
+        <div class="btn__close" (click)="close()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="44"
@@ -28,8 +28,8 @@
           </div>
           <div class="cart__order-text">
             <div class="cart__order-description">
-              <p class="text">{{ order.description }}</p>
-              <p class="btn-delete">
+              <div class="text">{{ order.description }}</div>
+              <div class="btn-delete">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -66,37 +66,88 @@
                     stroke-linejoin="round"
                   />
                 </svg>
-              </p>
+              </div>
             </div>
             <div class="cart__order-data">
-              <div class="cart__order-amount">- <input type="number" /> +</div>
+              <div class="cart__order-amount">
+                <span class="decrease" (click)="decrease()">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="26"
+                    height="27"
+                    viewBox="0 0 26 27"
+                    fill="none"
+                  >
+                    <path
+                      d="M6.5 13.5H19.5"
+                      stroke="#676767"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                <input
+                  type="number"
+                  [min]="minQuantity"
+                  [max]="maxQuantity"
+                  [value]="quantity"
+                  class="cart__input"
+                />
+                <span class="increase" (click)="increase()">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="26"
+                    height="27"
+                    viewBox="0 0 26 27"
+                    fill="none"
+                  >
+                    <path
+                      d="M6.5 13.5H13M13 13.5H19.5M13 13.5V7M13 13.5V20"
+                      stroke="#676767"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+              </div>
               <div class="cart__order-price">
-                {{ order.price }}
+                <p class="price">{{ order.price | transformPrice }}</p>
+                <p class="price__discount">
+                  {{ order.discount | transformPrice }}
+                </p>
               </div>
             </div>
           </div>
         </div>
         <div class="cart__order-total">
-          <span>Загальна сума:</span> <span>{{ 11000 | transformPrice }}</span>
+          <p>Загальна сума: {{ 11000 | transformPrice }}</p>
         </div>
         <div class="cart__order-actions">
-          <button class="btn" type="button">Продовжити покупки</button>
-          <button class="btn btn__grey" type="submit">
+          <button class="cart__btn" type="button" (click)="close()">
+            Продовжити покупки
+          </button>
+          <button class="cart__btn-dark-grey" type="submit">
             Оформити замовлення
           </button>
         </div>
       </div>
       <div class="adv">
-        <div class="adv__title"></div>
-        <div class="adv__body" *ngFor="let adv of advs">
-          <div class="adv__img">
-            <img [src]="adv.image" alt="" />
+        <div class="adv__title">Вам може сподобатися:</div>
+        <div class="adv__wrap">
+          <div class="adv__body" *ngFor="let adv of advs">
+            <div class="adv__img">
+              <img [src]="adv.image" alt="" />
+            </div>
+            <div class="adv__text">
+              <div class="adv__description">
+                {{ adv.description }}
+              </div>
+              <div class="adv__review">Залишити відгук</div>
+              <div class="adv__price">{{ 5500 | transformPrice }}</div>
+            </div>
           </div>
-          <div class="adv__description">
-            {{ adv.description }}
-          </div>
-          <div class="adv__review">Залишити відгук</div>
-          <div class="adv__price">{{ 5500 | transformPrice }}</div>
         </div>
       </div>
     </div>

@@ -36,6 +36,7 @@ export const APP_ROUTING: Routes = [
           import('./components/cart/cart.component').then(
             (m) => m.CartComponent
           ),
+        outlet: 'cart',
       },
       {
         path: 'sales',

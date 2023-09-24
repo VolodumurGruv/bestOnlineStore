@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { DestroyRef, Injectable, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { configs } from '@configs/configs';
-import { User } from '@interfaces/user.interface';
+import { User, UserInfo } from '@interfaces/user.interface';
 import { HttpErrorHandlerService } from '@shared/services/http-error-handler.service';
 import { Observable, catchError, tap } from 'rxjs';
 
@@ -39,4 +39,24 @@ export class UserService {
         )
       );
   }
+
+  updateUser(user: any) {
+    this.http
+      .put(`${configs.URL}/user/profile`, user)
+      .pipe(
+        catchError(
+          this.httpErrorHeandler.handleError<User>('Невдалося оновити дані!')
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((res) => console.log(res));
+  }
+
+  // getCart() {
+  //   this.http
+  //     .get(`${configs.URL}/cart/get-cart`, {
+  //       headers: { Authorization: '64dbcb2b89d28683ec4084a2' },
+  //     })
+  //     .subscribe((res) => console.log(res));
+  // }
 }

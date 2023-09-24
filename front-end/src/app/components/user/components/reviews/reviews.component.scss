@@ -1,4 +1,4 @@
-@use "title";
+@use "text";
 @use "colors";
 @use "fonts";
 @use "btn";
@@ -9,7 +9,7 @@
   align-items: center;
 
   &__title {
-    @include title.user-title;
+    @include text.user-title;
     padding-bottom: 60px;
   }
 

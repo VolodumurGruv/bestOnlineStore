@@ -30,7 +30,10 @@
 
   <div class="nav__icon">
     <span class="nav__icon_cart">
-      <a class="nav__icon__link" routerLink="/cart">
+      <a
+        class="nav__icon__link"
+        [routerLink]="[{ outlets: { cart: ['cart'] } }]"
+      >
         <svg
           width="32"
           height="32"
