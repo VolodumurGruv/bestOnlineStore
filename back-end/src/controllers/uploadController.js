@@ -30,7 +30,7 @@ const uploadFile = async (req, res) => {
 
     fileStream.on('error', (error) => {
       logger.error('Error uploading file to GCS:', error);
-      handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+      return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
     });
 
     fileStream.on('finish', async () => {
@@ -47,17 +47,17 @@ const uploadFile = async (req, res) => {
 
         await product.save();
 
-        handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', 'File saved on Google Cloud Storage.', fileName);
+        return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', 'File saved on Google Cloud Storage.', fileName);
       } else {
         logger.error('Product not found for file upload:', productId);
-        handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.PRODUCT_NOT_FOUND);
+        return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.PRODUCT_NOT_FOUND);
       }
     });
 
     fileStream.end(file.buffer);
   } catch (error) {
     logger.error('Error handling file upload:', error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 

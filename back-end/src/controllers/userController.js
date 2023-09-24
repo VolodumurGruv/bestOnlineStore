@@ -30,7 +30,7 @@ const registerUser = async (req, res, next, anonymous = null) => {
   try {
     const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {console.log(errors.array());
+    if (!errors.isEmpty()) {
       return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
     }
 

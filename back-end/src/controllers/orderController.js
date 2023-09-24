@@ -19,10 +19,10 @@ const getAllOrders = async (req, res) => {
     }
 
     logger.info('All orders fetched successfully');
-    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All orders in payload.', orders);
+    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All orders in payload.', orders);
   } catch (error) {
     logger.error('Error while fetching all orders', error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -33,10 +33,10 @@ const getOrderHistory = async (req, res) => {
     const orders = await Order.find({ user: userId });
 
     logger.info('Order(s) fetched for user: ', req.user._id);
-    handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Your order(s) in payload.', orders);
+    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Your order(s) in payload.', orders);
   } catch (error) {
     logger.error('Error while getting order history: ', error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -45,14 +45,14 @@ const getOrderById = async (req, res) => {
     const order = await Order.findById(req.params.id);
     if (order) {
       logger.info('Order found by ID:', req.params.id);
-      handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order found.', order);
+      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order found.', order);
     } else {
       logger.error('Order not found by ID:', req.params.id);
-      handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
     }
   } catch (error) {
     logger.error('Error while fetching order by ID:', req.params.id, error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 

@@ -25,10 +25,10 @@ const addReview = async (req, res) => {
     await newReview.save();
 
     logger.info('Review added successfully:', newReview._id);
-    handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', 'Review added successfully', { review: newReview });
+    return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', 'Review added successfully', { review: newReview });
   } catch (error) {
     logger.error('Error while adding review', error);
-    handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 

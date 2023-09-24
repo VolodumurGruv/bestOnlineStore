@@ -13,7 +13,7 @@ const shippingAddressSchema = new mongoose.Schema({
   deliveryMethod: {
     type: String,
     enum: ['Нова пошта', 'Укрпошта', 'Самовивіз', 'Кур\'єрська доставка'],
-    required: true,
+    default: 'Самовивіз'
   },
   novaPoshtaAddress: {
     type: String,
