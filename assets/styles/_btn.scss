@@ -2,15 +2,12 @@
 @use "fonts";
 
 .btn {
+  @include fonts.primary-roboto(18px, 300, normal, 130%);
+
   padding: 16px 32px;
   border-radius: 8px;
   border: 1px solid colors.$black;
   text-decoration: none;
-  color: colors.$black;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 130%; /* 26px */
   text-transform: uppercase;
   background: transparent;
 
@@ -24,13 +21,13 @@
 
   &__grey {
     @extend .btn;
+    @include fonts.primary-roboto(20px, 500, normal, 130%);
+
     display: flex;
     justify-content: center;
     align-items: center;
     width: 570px;
     padding: 16px 12px;
-    font-size: 20px;
-    font-weight: 500;
     color: colors.$white;
     background: colors.$main-color;
   }
@@ -42,15 +39,10 @@
 }
 
 @mixin btn-text($size) {
-  @include fonts.font-roboto;
+  @include fonts.primary-roboto($size, 400, normal, 130%);
 
-  font-size: $size;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 130%; /* 26px */
   text-decoration-line: underline;
   border: none;
   background: transparent;
-  color: colors.$black;
   cursor: pointer;
 }
