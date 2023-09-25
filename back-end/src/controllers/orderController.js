@@ -1,5 +1,5 @@
 import Order from '../models/orderSchema.js';
-//import sendEmail from '../utils/email.js';
+import sendEmail from '../utils/email.js';
 import logger from '../utils/logger.js';
 import {
   HTTP_STATUS_CODES,
@@ -112,6 +112,8 @@ const updateOrder = async (req, res) => {
       };
 
       const updatedOrder = await order.save();
+
+      sendEmail(req.user.email, 'Changes on your order', `Order ${req.params.id} was paid.`);
       logger.info('Order paid:', req.params.id);
       return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order has been paid.', updatedOrder);
     } else {
@@ -142,6 +144,7 @@ const changeStatus = async (req, res) => {
       return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
     }
 
+    sendEmail(req.user.email, 'Changes on your order', `Order ${orderId} was updated.`);
     logger.info('Order updated:', orderId);
     return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order updated.', order);
   } catch (error) {
