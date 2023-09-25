@@ -21,7 +21,7 @@ export interface Orders {
   price: number;
   state?: string;
   discount?: number | undefined;
-  amount?: number;
+  quantity: number;
 }
 
 export interface Review {

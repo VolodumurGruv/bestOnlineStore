@@ -1,0 +1,48 @@
+@use "colors";
+@use "fonts";
+
+.btn {
+  @include fonts.primary-roboto(18px, 300, normal, 130%);
+
+  padding: 16px 32px;
+  border-radius: 8px;
+  border: 1px solid colors.$black;
+  text-decoration: none;
+  text-transform: uppercase;
+  background: transparent;
+
+  &__link {
+    @extend .btn;
+    margin-top: 64px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 274px;
+  }
+
+  &__grey {
+    @extend .btn;
+    @include fonts.primary-roboto(20px, 500, normal, 130%);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 570px;
+    padding: 16px 12px;
+    color: colors.$white;
+    background: colors.$main-color;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    border: 1px solid colors.$light-gray;
+  }
+}
+
+@mixin btn-text($size) {
+  @include fonts.primary-roboto($size, 400, normal, 130%);
+
+  text-decoration-line: underline;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}

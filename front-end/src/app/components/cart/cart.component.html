@@ -22,134 +22,17 @@
         </div>
       </div>
       <div class="cart__orders">
-        <div class="cart__order" *ngFor="let order of orders">
-          <div class="cart__order-img">
-            <img [src]="order.image" alt="" />
-          </div>
-          <div class="cart__order-text">
-            <div class="cart__order-description">
-              <div class="text">{{ order.description }}</div>
-              <div class="btn-delete">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="25"
-                  viewBox="0 0 24 25"
-                  fill="none"
-                >
-                  <path
-                    d="M3 6.5H5H21"
-                    stroke="black"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M19 6.5V20.5C19 21.0304 18.7893 21.5391 18.4142 21.9142C18.0391 22.2893 17.5304 22.5 17 22.5H7C6.46957 22.5 5.96086 22.2893 5.58579 21.9142C5.21071 21.5391 5 21.0304 5 20.5V6.5M8 6.5V4.5C8 3.96957 8.21071 3.46086 8.58579 3.08579C8.96086 2.71071 9.46957 2.5 10 2.5H14C14.5304 2.5 15.0391 2.71071 15.4142 3.08579C15.7893 3.46086 16 3.96957 16 4.5V6.5"
-                    stroke="black"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M10 11.5V17.5"
-                    stroke="black"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M14 11.5V17.5"
-                    stroke="black"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-            </div>
-            <div class="cart__order-data">
-              <div class="cart__order-amount">
-                <span class="decrease" (click)="decrease()">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="26"
-                    height="27"
-                    viewBox="0 0 26 27"
-                    fill="none"
-                  >
-                    <path
-                      d="M6.5 13.5H19.5"
-                      stroke="#676767"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </span>
-                <input
-                  type="number"
-                  [min]="minQuantity"
-                  [max]="maxQuantity"
-                  [value]="quantity"
-                  class="cart__input"
-                />
-                <span class="increase" (click)="increase()">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="26"
-                    height="27"
-                    viewBox="0 0 26 27"
-                    fill="none"
-                  >
-                    <path
-                      d="M6.5 13.5H13M13 13.5H19.5M13 13.5V7M13 13.5V20"
-                      stroke="#676767"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </span>
-              </div>
-              <div class="cart__order-price">
-                <p class="price">{{ order.price | transformPrice }}</p>
-                <p class="price__discount">
-                  {{ order.discount | transformPrice }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="cart__order-total">
-          <p>Загальна сума: {{ 11000 | transformPrice }}</p>
-        </div>
+        <app-cart-orders class="cart__orders"></app-cart-orders>
         <div class="cart__order-actions">
           <button class="cart__btn" type="button" (click)="close()">
             Продовжити покупки
           </button>
-          <button class="cart__btn-dark-grey" type="submit">
+          <button class="cart__btn-dark-grey" type="button" (click)="submit()">
             Оформити замовлення
           </button>
         </div>
       </div>
-      <div class="adv">
-        <div class="adv__title">Вам може сподобатися:</div>
-        <div class="adv__wrap">
-          <div class="adv__body" *ngFor="let adv of advs">
-            <div class="adv__img">
-              <img [src]="adv.image" alt="" />
-            </div>
-            <div class="adv__text">
-              <div class="adv__description">
-                {{ adv.description }}
-              </div>
-              <div class="adv__review">Залишити відгук</div>
-              <div class="adv__price">{{ 5500 | transformPrice }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <app-cart-ad></app-cart-ad>
     </div>
   </div>
 </div>

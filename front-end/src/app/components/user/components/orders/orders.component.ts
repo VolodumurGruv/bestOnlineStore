@@ -20,6 +20,7 @@ export class OrdersComponent {
       price: 5500,
       discount: 6500,
       state: 'Комплектується',
+      quantity: 0,
     },
     {
       image:
@@ -28,6 +29,7 @@ export class OrdersComponent {
       price: 5500,
       // discount: 6500,
       state: 'Отримано',
+      quantity: 0,
     },
   ];
 
