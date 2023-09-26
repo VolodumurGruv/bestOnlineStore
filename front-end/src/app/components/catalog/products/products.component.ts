@@ -21,6 +21,7 @@ import { CardComponent } from 'app/components/home-page/components/card/card.com
 })
 export class ProductsComponent implements OnInit {
   public isClickFilter: boolean = false;
+  isClickSort = false;
 
   constructor(private route: ActivatedRoute) {}
   onIsClickFilterChange(newValue: boolean) {
