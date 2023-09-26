@@ -5,7 +5,7 @@
   <div class="cart__order-text">
     <div class="cart__order-description">
       <div class="text">{{ order.description }}</div>
-      <div class="btn-delete">
+      <div class="btn-delete" (click)="delete(order?.id)">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -46,7 +46,7 @@
     </div>
     <div class="cart__order-data">
       <div class="cart__order-amount">
-        <span class="decrease" (click)="decrease(order)">
+        <span class="decrease" (click)="decrease(id)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="26"
@@ -69,7 +69,7 @@
           [max]="maxQuantity"
           [(ngModel)]="order.quantity"
           class="cart__input"
-          (keyup)="checkQuantity(order)"
+          (keyup)="checkQuantity(order, id)"
         />
         <span class="increase" (click)="increase(id)">
           <svg
@@ -90,8 +90,8 @@
         </span>
       </div>
       <div class="cart__order-price">
-        <p class="price">
-          {{ order.price * order.quantity | transformPrice }}
+        <p class="price" #price>
+          {{ order.price | transformPrice }}
         </p>
         <p class="price__discount">
           {{ order.discount | transformPrice }}

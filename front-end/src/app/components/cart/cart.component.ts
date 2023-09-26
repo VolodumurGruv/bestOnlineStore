@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CartService } from './services/cart.service';
 import { CartOrdersComponent } from './cart-orders/cart-orders.component';
 import { CartAdComponent } from './cart-ad/cart-ad.component';
+import { Orders } from '@interfaces/user.interface';
 
 @Component({
   selector: 'app-cart',
@@ -18,12 +19,13 @@ export class CartComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly cartService = inject(CartService);
 
+
   close() {
     this.router.navigate([{ outlets: { cart: null } }], {
       relativeTo: this.route.parent,
     });
   }
-  submit() {
+  submit( ) {
     this.cartService.getCart();
   }
 }

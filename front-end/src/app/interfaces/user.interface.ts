@@ -16,12 +16,14 @@ export interface UserInfo extends User {
 }
 
 export interface Orders {
+  id?: number;
   image: string;
   description: string;
   price: number;
   state?: string;
   discount?: number | undefined;
   quantity: number;
+  summa?: number;
 }
 
 export interface Review {
