@@ -1,0 +1,15 @@
+allow-uncaught: false
+async-only: false
+bail: true
+check-leaks: true
+color: true
+delay: false
+diff: true
+exit: true
+extension: ['js', 'cjs', 'mjs']
+fail-zero: true
+#file:
+#  - '/path/to/some/file'
+reporter: spec
+timeout: 20000
+recursive: true

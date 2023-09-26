@@ -1,6 +1,7 @@
 module.exports = {
   "plugins": [
-    "mongo"
+    "mongo",
+    "mocha"
   ],
   "env": {
     "browser": true,
@@ -12,7 +13,8 @@ module.exports = {
     "eslint:recommended",
     "plugin:node/recommended",
     "plugin:security/recommended",
-    "plugin:import/recommended"
+    "plugin:import/recommended",
+    "plugin:mocha/recommended"
   ],
   "globals": {
     "Atomics": "readonly",
@@ -90,6 +92,12 @@ module.exports = {
     "class-methods-use-this": "off",
     "prefer-destructuring": ["error", { "object": true, "array": false }],
     "no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next|val" }],
+    "node/no-unpublished-import": ["error", {
+      "allowModules": [
+        "chai",
+        "chai-http"
+      ]
+    }],
     "node/no-unsupported-features/es-syntax": [
       "error",
       {

@@ -1,8 +1,10 @@
 import express from 'express';
 import isAuth from '../utils/auth.js';
 import isAdmin from '../utils/admin.js';
+import validateProductSearch from '../validation/productSearchValidation.js';
 import {
   getAllProducts,
+  searchProductsByName,
   getProductById,
   createProduct,
   updateProduct,
@@ -12,6 +14,7 @@ import {
 const productRouter = express.Router();
 
 productRouter.get('/', getAllProducts);
+productRouter.get('/search', validateProductSearch, searchProductsByName);
 productRouter.get('/:id', getProductById);
 productRouter.post('/', isAuth, isAdmin, createProduct);
 productRouter.put('/:id', isAuth, isAdmin, updateProduct);
