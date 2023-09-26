@@ -52,11 +52,5 @@ export class UserService {
       .subscribe((res) => console.log(res));
   }
 
-  // getCart() {
-  //   this.http
-  //     .get(`${configs.URL}/cart/get-cart`, {
-  //       headers: { Authorization: '64dbcb2b89d28683ec4084a2' },
-  //     })
-  //     .subscribe((res) => console.log(res));
-  // }
+
 }
