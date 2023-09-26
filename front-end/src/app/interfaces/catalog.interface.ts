@@ -1,16 +1,11 @@
-import {Product} from "./product.interfaces";
-
+import {Product} from "@interfaces/product.interfaces";
 export interface SubCategory {
-  id: number;
-  name: string;
-  routerLink: string;
-  products?: Product[];
+  name: string,
+  routerLink: string
 }
-
 export interface Category {
-  id: number;
-  name: string;
-  routerLink: string;
+  name: string,
+  routerLink: string,
   showSubcategories: boolean,
   subcategories?: SubCategory[];
 }

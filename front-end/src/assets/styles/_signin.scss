@@ -1,0 +1,62 @@
+@use "colors";
+@use "fonts";
+@use "flex";
+
+@mixin input-wrap {
+  display: flex;
+  padding: 12px 16px;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  border: 1px solid colors.$border-input;
+}
+
+@mixin input {
+  // padding: 16px 12px;
+  width: 536px;
+  height: 29px;
+  border: none;
+  outline: none;
+
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+
+  &::placeholder {
+    color: colors.$border-input;
+  }
+}
+
+@mixin form-wrap {
+  @include flex.flex-col-ac;
+  height: auto;
+}
+
+@mixin title {
+  @include fonts.primary-roboto(40px, 500, normal, 130%);
+  padding-bottom: 60px;
+}
+
+@mixin btn {
+  border: none;
+  padding: 16px 12px;
+
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 130%;
+  color: #fff;
+  background: transparent;
+}
+
+@mixin btn-wrap {
+  display: flex;
+  width: 570px;
+  padding: 16px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  background: $main-color;
+}

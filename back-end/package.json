@@ -5,7 +5,7 @@
     "node": ">=14"
   },
   "description": "Server for online store.",
-  "main": "dist/api/index.js",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
     "start:dev": "node src/server.js --mode develop",
@@ -53,9 +53,7 @@
   },
   "keywords": [
     "nodejs",
-    "server",
-    "mongodb",
-    "expressjs"
+    "server"
   ],
   "author": "markalexi",
   "license": "MIT",

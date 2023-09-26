@@ -1,0 +1,9 @@
+<section class="features wrapper">
+  <h3 class="features__title">Характеристика</h3>
+  <table class="features__table">
+    <tr *ngFor="let feature of features">
+      <td class="features__name">{{ feature.nameFeature }}</td>
+      <td class="features__descr">{{ feature.descFeature }}</td>
+    </tr>
+  </table>
+</section>

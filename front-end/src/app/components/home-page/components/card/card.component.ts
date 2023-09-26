@@ -1,16 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MockData } from 'src/app/interfaces/mock-data';
+import { RouterLink } from '@angular/router';
+import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
+import {Product} from "@interfaces/product.interfaces";
 
 @Component({
   selector: 'app-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ProductCardComponent, RouterLink],
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
 })
 export class CardComponent {
-  @Input() mockData!: MockData;
+  @Input() mockData!: Product[];
 
   constructor() {}
 }

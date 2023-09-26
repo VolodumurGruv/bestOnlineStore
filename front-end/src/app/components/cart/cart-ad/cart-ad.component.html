@@ -1,0 +1,17 @@
+<div class="adv">
+  <div class="adv__title">Вам може сподобатися:</div>
+  <div class="adv__wrap">
+    <div class="adv__body" *ngFor="let adv of advs">
+      <div>
+        <img class="adv__img" [src]="adv.image" alt="" />
+      </div>
+      <div class="adv__text">
+        <div class="adv__description">
+          {{ adv.description }}
+        </div>
+        <div class="adv__review">Залишити відгук</div>
+        <div class="adv__price">{{ 5500 | transformPrice }}</div>
+      </div>
+    </div>
+  </div>
+</div>

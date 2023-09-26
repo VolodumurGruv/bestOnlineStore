@@ -1,10 +1,13 @@
 import { Routes } from '@angular/router';
+import { loginGuard } from './components/user/services/signin-flow/auth.guard';
 
 export const APP_ROUTING: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./shared/layout/layout.component').then((m) => m.LayoutComponent),
+      import('./shared/components/layout/layout.component').then(
+        (m) => m.LayoutComponent
+      ),
     children: [
       {
         path: '',
@@ -33,6 +36,7 @@ export const APP_ROUTING: Routes = [
           import('./components/cart/cart.component').then(
             (m) => m.CartComponent
           ),
+        outlet: 'cart',
       },
       {
         path: 'sales',
@@ -51,16 +55,23 @@ export const APP_ROUTING: Routes = [
       {
         path: 'login',
         loadComponent: () =>
-          import('./components/signin-flow/login/login.component').then(
-            (m) => m.LoginComponent
-          ),
+          import(
+            './components/user/components/signin-flow/login/login.component'
+          ).then((m) => m.LoginComponent),
+        canActivate: [loginGuard],
       },
       {
         path: 'signup',
         loadComponent: () =>
-          import('./components/signin-flow/signup/signup.component').then(
-            (m) => m.SignupComponent
-          ),
+          import(
+            './components/user/components/signin-flow/signup/signup.component'
+          ).then((m) => m.SignupComponent),
+        canActivate: [loginGuard],
+      },
+      {
+        path: '',
+        loadChildren: () =>
+          import('./components/user/user.routing').then((m) => m.USER_ROUTES),
       },
     ],
   },

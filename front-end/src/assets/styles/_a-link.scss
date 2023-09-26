@@ -1,0 +1,12 @@
+@use "fonts";
+@use "colors";
+
+@mixin path-link {
+  @include fonts.font-roboto;
+
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+  text-decoration: none;
+}

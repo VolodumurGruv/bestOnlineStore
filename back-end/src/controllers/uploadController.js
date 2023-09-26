@@ -61,4 +61,4 @@ const uploadFile = async (req, res) => {
   }
 };
 
-export { upload, uploadFile };
+export { uploadFile };

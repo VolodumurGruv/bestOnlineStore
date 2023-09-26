@@ -1,0 +1,33 @@
+@import "fonts";
+@import "colors";
+
+*,
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  @include font-roboto;
+}
+
+.wrapper {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  display: inline-block;
+}
+
+.path {
+  text-align: center;
+  color: $light-gray;
+  font-size: 20px;
+}
