@@ -25,6 +25,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
     const authToken = req.clone({
       headers: req.headers.set('Authorization', token),
     });
+
     return next(authToken).pipe(finalize(() => spinner.disableSpinner()));
   }
   return next(req).pipe(finalize(() => spinner.disableSpinner()));
