@@ -1,4 +1,6 @@
 import Review from '../models/reviewSchema.js';
+import User from '../models/userSchema.js';
+import Product from '../models/productSchema.js';
 import logger from '../utils/logger.js';
 import {
   HTTP_STATUS_CODES,
@@ -15,6 +17,14 @@ const addReview = async (req, res) => {
       return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', MESSAGES.MISSING_REQUIRED_FIELDS);
     }
 
+    const existingUser = await User.findById(user);
+    const productToUpdate = await Product.findById(product);
+
+    if (!productToUpdate || !existingUser) {
+      logger.error('User or product not exist.');
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.PRODUCT_NOT_FOUND);
+    }
+
     const newReview = new Review({
       user,
       product,
@@ -23,6 +33,11 @@ const addReview = async (req, res) => {
     });
 
     await newReview.save();
+
+    productToUpdate.numReviews += 1;
+    productToUpdate.raiting = ((productToUpdate.raiting * (productToUpdate.numReviews - 1)) + rating) / productToUpdate.numReviews;
+
+    await productToUpdate.save();
 
     logger.info('Review added successfully:', newReview._id);
     return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', 'Review added successfully', { review: newReview });
