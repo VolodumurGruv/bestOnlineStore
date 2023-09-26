@@ -17,15 +17,10 @@ import { Orders } from '@interfaces/user.interface';
 export class CartComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly cartService = inject(CartService);
-
 
   close() {
     this.router.navigate([{ outlets: { cart: null } }], {
       relativeTo: this.route.parent,
     });
-  }
-  submit( ) {
-    this.cartService.getCart();
   }
 }

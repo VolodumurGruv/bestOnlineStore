@@ -16,7 +16,7 @@ export interface UserInfo extends User {
 }
 
 export interface Orders {
-  id?: number;
+  _id?: string;
   image: string;
   description: string;
   price: number;

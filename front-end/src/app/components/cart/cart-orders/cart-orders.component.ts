@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, inject } from '@angular/core';
 import { NgFor } from '@angular/common';
 
 import { Orders } from '@interfaces/user.interface';
 import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CartService } from '../services/cart.service';
 
 @Component({
   selector: 'app-cart-orders',
@@ -13,13 +15,17 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./cart-orders.component.scss'],
 })
 export class CartOrdersComponent implements OnInit {
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly cartService = inject(CartService);
+
   public maxQuantity = 100;
   public minQuantity = 1;
   public total = 0;
 
   public orders: Orders[] = [
     {
-      id: 1,
+      _id: '64e7af152f011665dfd7f194',
       image:
         'https://img.freepik.com/premium-photo/blue-color-chair-product-image-web-page-scandinavian-design-clean-soft-chair-comfortable-with-copy-space-generatiev-ai_834602-16335.jpg',
       description: 'Кавовий столик Кавовий столикКавовий столик',
@@ -29,7 +35,7 @@ export class CartOrdersComponent implements OnInit {
       summa: 5500,
     },
     {
-      id: 2,
+      _id: '64e7cd1adeff9daacd5a62e2',
       image:
         'https://img.freepik.com/premium-photo/blue-color-chair-product-image-web-page-scandinavian-design-clean-soft-chair-comfortable-with-copy-space-generatiev-ai_834602-16335.jpg',
       description: 'Кавовий столик ',
@@ -87,8 +93,16 @@ export class CartOrdersComponent implements OnInit {
     console.log(this.total);
   }
 
-  delete(id: number | undefined) {
-    this.orders = this.orders.filter((order: Orders) => order.id !== id);
+  delete(id: string | undefined) {
+    this.orders = this.orders.filter((order: Orders) => order._id !== id);
     this.countTotal();
+  }
+  close() {
+    this.router.navigate([{ outlets: { cart: null } }], {
+      relativeTo: this.route.parent,
+    });
+  }
+  submit() {
+    this.cartService.makeOrder('64e7af152f011665dfd7f194', 3);
   }
 }

@@ -11,4 +11,10 @@ export class CartService {
       .get(`${configs.URL}/get-cart`)
       .subscribe((res) => console.log(res));
   }
+
+  makeOrder(id: string, quantity: number) {
+    this.http
+      .post(`${configs.URL}/add-to-cart`, { id, quantity })
+      .subscribe((res) => console.log(res));
+  }
 }
