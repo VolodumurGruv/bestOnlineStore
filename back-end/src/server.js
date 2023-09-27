@@ -4,6 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import RateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
+import { xss } from 'express-xss-sanitizer';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import logger from './utils/logger.js';
@@ -56,6 +57,7 @@ app.get('/ip', (req, res) => {
 });
 app.use(helmet());
 app.use(limiter);
+app.use(xss());
 app.use(
   mongoSanitize({
     replaceWith: '_',
