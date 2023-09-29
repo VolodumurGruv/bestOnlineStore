@@ -2,47 +2,108 @@
 @use "fonts";
 
 .btn {
-  @include fonts.primary-roboto(18px, 300, normal, 130%);
-
-  padding: 16px 32px;
-  border-radius: 8px;
-  border: 1px solid colors.$black;
-  text-decoration: none;
-  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
   background: transparent;
+  border-radius: 8px;
+  flex-shrink: 0;
 
-  &__link {
-    @extend .btn;
-    margin-top: 64px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 274px;
-  }
-
-  &__grey {
-    @extend .btn;
-    @include fonts.primary-roboto(20px, 500, normal, 130%);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  &__login {
+    @include fonts.montserrat(20px, 500, normal, 130%);
     width: 570px;
+    height: 60px;
     padding: 16px 12px;
+    gap: 8;
+    background: colors.$light-black;
     color: colors.$white;
-    background: colors.$main-color;
+
+    &:hover {
+      box-shadow: 0px 4px 4px 0px rgba(9, 9, 9, 0.4);
+    }
+
+    &:active {
+      box-shadow: none;
+    }
+
+    &:disabled {
+      @extend .disabled-grey;
+    }
   }
 
-  &:disabled {
-    opacity: 0.4;
-    border: 1px solid colors.$light-gray;
+  &__buy {
+    @include fonts.montserrat(24px, 400, normal, 130%);
+
+    // width: 276px;
+    height: 64px;
+    padding: 8px 16px;
+    text-transform: uppercase;
+    gap: 8;
+    background: colors.$light-black;
+    color: colors.$white100;
+
+    &:hover {
+      box-shadow: 0px 4px 4px 0px rgba(9, 9, 9, 0.4);
+    }
+
+    &:active {
+      box-shadow: none;
+    }
+
+    &:disabled {
+      @extend .disabled-grey;
+    }
+  }
+
+  &__add {
+    @include fonts.primary-roboto(20px, 300, normal, 130%);
+    // width: 274px;
+    height: 64px;
+    padding: 16px 32px;
+    text-transform: uppercase;
+    gap: 16px;
+    border: 1px solid colors.$color-text;
+    color: colors.$color-text;
+
+    &:hover {
+      background: colors.$color-text;
+      color: colors.$white100;
+    }
+
+    &:active {
+      background: transparent;
+      color: colors.$color-text;
+    }
+
+    &:disabled {
+      @extend .disabled;
+    }
+  }
+
+  &__reply {
+    @include fonts.primary-roboto(22px, 400, normal, 130%);
+
+    padding: 16px;
+    gap: 16px;
+    border: 1px solid colors.$gray-active-input;
+    color: colors.$color-text;
+
+    &:disabled {
+      @extend .disabled;
+    }
   }
 }
 
-@mixin btn-text($size) {
-  @include fonts.primary-roboto($size, 400, normal, 130%);
-
-  text-decoration-line: underline;
-  border: none;
+.disabled {
+  border: 1px solid colors.$gray;
+  color: colors.$gray;
+  box-shadow: none;
   background: transparent;
-  cursor: pointer;
+}
+
+.disabled-grey {
+  background: colors.$gray;
+  color: colors.$white;
+  box-shadow: none;
 }

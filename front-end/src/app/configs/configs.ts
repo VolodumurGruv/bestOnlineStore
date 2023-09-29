@@ -19,3 +19,7 @@ export const googleLoginHeaders = {
     'A-Type': 'application/json',
   }),
 };
+
+export const routes = {
+  favorite: "Обране",
+}

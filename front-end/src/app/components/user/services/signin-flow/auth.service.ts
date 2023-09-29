@@ -25,10 +25,6 @@ export class AuthService {
   private user$: Observable<PAYLOAD | null> = this.user.asObservable();
 
   signIn(user: User): void {
-    if (this.isAuth()) {
-      this.alertService.warning('Вхід вже здійснено!');
-      // check it later
-    }
     this.http
       .post<PAYLOAD>(`${configs.URL}/user/signin`, user, httpConfig)
       .pipe(

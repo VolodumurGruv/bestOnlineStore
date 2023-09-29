@@ -27,13 +27,10 @@ export const authGuard = () => {
 export const loginGuard = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  const alert = inject(AlertService);
 
   if (!authService.isAuth()) {
     return true;
   }
-
-  alert.warning('Вхід вже здійснено!');
 
   return router.parseUrl('/');
 };

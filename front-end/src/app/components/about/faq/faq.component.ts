@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-about',
+  selector: 'app-faq',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.scss']
+  templateUrl: './faq.component.html',
+  styleUrls: ['./faq.component.scss']
 })
-export class AboutComponent {
+export class FaqComponent {
 
 }

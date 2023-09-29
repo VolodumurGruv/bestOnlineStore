@@ -12,14 +12,14 @@ import { Observable, catchError, tap } from 'rxjs';
 export class UserService {
   private readonly http = inject(HttpClient);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly httpErrorHeandler = inject(HttpErrorHandlerService);
+  private readonly httpErrorHandler = inject(HttpErrorHandlerService);
 
   getUsers() {
     this.http
       .get(`${configs.URL}/user/all`)
       .pipe(
         catchError(
-          this.httpErrorHeandler.handleError<User>(
+          this.httpErrorHandler.handleError<User>(
             'Невдалося отримати користувачів!'
           )
         ),
@@ -33,7 +33,7 @@ export class UserService {
       .get<User>(`${configs.URL}/user/${userID}`)
       .pipe(
         catchError(
-          this.httpErrorHeandler.handleError<User>(
+          this.httpErrorHandler.handleError<User>(
             'Невдалося отримати користувача!'
           )
         )
@@ -45,12 +45,10 @@ export class UserService {
       .put(`${configs.URL}/user/profile`, user)
       .pipe(
         catchError(
-          this.httpErrorHeandler.handleError<User>('Невдалося оновити дані!')
+          this.httpErrorHandler.handleError<User>('Невдалося оновити дані!')
         ),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((res) => console.log(res));
   }
-
-
 }

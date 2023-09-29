@@ -161,7 +161,7 @@ export class InfoComponent implements OnDestroy, OnInit {
   }
 
   redirectToContact() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/about/contact']);
   }
 
   onblur() {

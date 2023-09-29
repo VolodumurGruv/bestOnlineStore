@@ -12,7 +12,7 @@
   height: 100vh;
   overflow-x: hidden;
   background: rgba(0, 0, 0, 0.2);
-  z-index: 800;
+  z-index: 300;
 }
 
 .cart {
@@ -20,17 +20,16 @@
   height: 1132px;
   flex-shrink: 0;
   overflow-x: auto;
-  background: #f4f4f4;
-  z-index: 900;
+  background: colors.$white;
+  z-index: 400;
 
   &__orders {
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 8px 0 20px 0;
+
     margin: 0;
     align-items: center;
-    gap: 20px;
   }
 
   &__title {
@@ -38,7 +37,7 @@
     justify-content: space-between;
     align-items: center;
     width: 984px;
-    padding: 20px 39px 8px 16px;
+    padding: 20px 48px 8px 24px;
     border-bottom: 1px solid #ababab;
   }
 

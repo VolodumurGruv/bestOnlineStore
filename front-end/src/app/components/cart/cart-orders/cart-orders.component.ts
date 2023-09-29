@@ -1,16 +1,16 @@
-import { Component, OnInit, ViewContainerRef, inject } from '@angular/core';
-import { NgFor } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
 
 import { Orders } from '@interfaces/user.interface';
 import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CartService } from '../services/cart.service';
 
 @Component({
   selector: 'app-cart-orders',
   standalone: true,
-  imports: [NgFor, TransformPricePipe, FormsModule],
+  imports: [NgFor, NgIf, TransformPricePipe, FormsModule, RouterLink],
   templateUrl: './cart-orders.component.html',
   styleUrls: ['./cart-orders.component.scss'],
 })
@@ -22,6 +22,7 @@ export class CartOrdersComponent implements OnInit {
   public maxQuantity = 100;
   public minQuantity = 1;
   public total = 0;
+  private prevValue = 1;
 
   public orders: Orders[] = [
     {
@@ -53,6 +54,7 @@ export class CartOrdersComponent implements OnInit {
     if (this.orders[id].quantity < this.maxQuantity) {
       this.orders[id].quantity += 1;
       this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
+      this.prevValue = this.orders[id].quantity;
     }
 
     this.checkQuantity(this.orders[id], id);
@@ -62,27 +64,37 @@ export class CartOrdersComponent implements OnInit {
     if (this.orders[id].quantity > this.minQuantity) {
       this.orders[id].quantity -= 1;
       this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
+      this.prevValue = this.orders[id].quantity;
     }
 
     this.checkQuantity(this.orders[id], id);
   }
 
-  checkQuantity(order: Orders, id: number) {
+  onKeyup(order: Orders, id: number) {
+    this.checkQuantity(order, id);
+
     if (
-      order.quantity >= this.maxQuantity ||
-      order.quantity > this.orders[id].quantity
+      order.quantity <= this.maxQuantity &&
+      order.quantity >= this.minQuantity
     ) {
+      this.orders[id].quantity = order.quantity;
+      this.orders[id].summa = this.orders[id].price * order.quantity;
+    }
+
+    this.countTotal();
+  }
+
+  checkQuantity(order: Orders, id: number) {
+    if (order.quantity >= this.maxQuantity) {
       order.quantity = this.maxQuantity;
       this.orders[id].quantity = order.quantity;
     }
 
-    if (
-      order.quantity <= this.minQuantity ||
-      order.quantity < this.orders[id].quantity
-    ) {
+    if (order.quantity <= this.minQuantity) {
       order.quantity = this.minQuantity;
       this.orders[id].quantity = order.quantity;
     }
+
     this.countTotal();
   }
 

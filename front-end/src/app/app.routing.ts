@@ -46,12 +46,18 @@ export const APP_ROUTING: Routes = [
           ),
       },
       {
+        path: '',
+        loadChildren: () =>
+          import('./components/user/user.routing').then((m) => m.USER_ROUTES),
+      },
+      {
         path: 'about',
-        loadComponent: () =>
-          import('./components/about/about.component').then(
-            (m) => m.AboutComponent
+        loadChildren: () =>
+          import('./components/about/about.routing').then(
+            (m) => m.ABOUT_ROUTING
           ),
       },
+
       {
         path: 'login',
         loadComponent: () =>
@@ -67,11 +73,6 @@ export const APP_ROUTING: Routes = [
             './components/user/components/signin-flow/signup/signup.component'
           ).then((m) => m.SignupComponent),
         canActivate: [loginGuard],
-      },
-      {
-        path: '',
-        loadChildren: () =>
-          import('./components/user/user.routing').then((m) => m.USER_ROUTES),
       },
     ],
   },

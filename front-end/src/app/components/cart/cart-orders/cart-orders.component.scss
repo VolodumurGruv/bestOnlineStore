@@ -1,6 +1,7 @@
 @use "fonts";
 @use "text";
 @use "colors";
+@forward "btn";
 
 .cart {
   &__order-img {
@@ -8,7 +9,7 @@
       width: 170px;
       height: 122px;
       flex-shrink: 0;
-      background-size: contain;
+      background-size: cover;
       background-repeat: no-repeat;
     }
   }
@@ -16,7 +17,7 @@
   &__order {
     display: flex;
     width: 100%;
-    padding: 8px 16px 20px 16px;
+    padding: 8px 48px 20px 24px;
     align-items: center;
     gap: 20px;
     border-bottom: 1px solid #ababab;
@@ -46,11 +47,12 @@
   }
 
   &__order-total {
-    @include fonts.primary-roboto(24px, 400, normal, 130%);
+    @extend .text;
+
     display: flex;
     justify-content: flex-end;
     width: 100%;
-    padding: 8px 26px 27px 0;
+    padding: 52px 48px 44px 0;
   }
 
   &__input {
@@ -70,8 +72,8 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding-left: 16px;
-    padding-right: 26px;
+    padding-left: 24px;
+    padding-right: 48px;
   }
 }
 
@@ -86,16 +88,9 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
-.price {
-  @include fonts.primary-roboto(20px, 400, normal, 130%);
-
-  &__discount {
-    @include text.price-discount;
-  }
-}
 
 .text {
-  @include fonts.primary-roboto(18px, 400, normal, 130%);
+  @include fonts.montserrat(18px, 400, normal, 130%);
 }
 
 .btn__close,
@@ -105,29 +100,27 @@ input[type="number"] {
   cursor: pointer;
 }
 
-.cart__btn {
-  @include fonts.primary-roboto(18px, 400, normal, 130%);
-
+.noorders {
   display: flex;
-  padding: 14px 8px;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  border: 1px solid #636363;
-  border-radius: 8px;
-  color: #1a1a1a;
+  justify-content: center;
+  gap: 28px;
 
-  &-dark-grey {
-    @include fonts.primary-roboto(20px, 400, normal, 130%);
-
-    display: flex;
-    padding: 16px 12px;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    border: none;
-    border-radius: 8px;
-    background: #4f4f4f;
-    color: colors.$white;
+  img {
+    padding-bottom: 12px;
   }
+}
+
+.text-empty {
+  @include fonts.montserrat(48px, 500, normal, normal);
+  color: colors.$black;
+}
+
+.text-link {
+  @include fonts.montserrat(18px, 500, normal, 130%);
+
+  text-decoration: underline;
+  color: colors.$black;
+  cursor: pointer;
 }

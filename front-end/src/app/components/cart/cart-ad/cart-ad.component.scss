@@ -6,10 +6,12 @@
   flex-direction: column;
   width: 100%;
   gap: 16px;
-  padding: 40px 16px 16px 16px;
+  padding: 58px 16px 16px 24px;
 
   &__title {
-    @include fonts.primary-roboto(32px, 400, normal, 130%);
+    @include fonts.montserrat(32px, 500, normal, 130%);
+
+    color: colors.$black;
   }
 
   &__img {
@@ -18,12 +20,12 @@
     flex-shrink: 0;
     background-size: cover;
     background-repeat: no-repeat;
-    padding-bottom: 20px;
+    padding-bottom: 28px;
   }
 
   &__wrap {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     align-items: flex-start;
     gap: 28px;
   }
@@ -42,13 +44,15 @@
   }
 
   &__description {
-    @include fonts.primary-roboto(16px, 400, normal, 130%);
+    @include fonts.montserrat(16px, 400, normal, 130%);
+
+    color: colors.$black;
   }
 
   &__review {
     @include fonts.primary-roboto(12px, 400, normal, 130%);
 
-    color: #595959;
+    color: #949494;
     cursor: pointer;
 
     &:hover {
@@ -57,6 +61,28 @@
   }
 
   &__price {
-    @include fonts.primary-roboto(18px, 400, normal, 130%);
+    @include fonts.montserrat(18px, 400, normal, 130%);
   }
+}
+
+.adv__body-wrap {
+  position: relative;
+}
+
+.like,
+.like-hover {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+.like-hover {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.like-wrap {
+  &:hover .like-hover {
+    opacity: 1;
+  }
+  cursor: pointer;
 }
