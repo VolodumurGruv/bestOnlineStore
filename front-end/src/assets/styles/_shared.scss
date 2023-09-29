@@ -10,7 +10,7 @@
 }
 
 body {
-  @include font-montserrat;
+  @include fonts.font-montserrat;
 }
 
 .wrapper {
