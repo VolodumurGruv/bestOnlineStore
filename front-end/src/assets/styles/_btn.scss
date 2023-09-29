@@ -9,6 +9,7 @@
   background: transparent;
   border-radius: 8px;
   flex-shrink: 0;
+  cursor: pointer;
 
   &__login {
     @include fonts.montserrat(20px, 500, normal, 130%);

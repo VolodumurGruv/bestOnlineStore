@@ -1,7 +1,7 @@
 @use "text";
 @use "colors";
 @use "fonts";
-@use "btn";
+@forward "btn";
 
 .review {
   display: flex;
@@ -63,8 +63,9 @@
   }
 
   &__btn-text {
-    @include btn.btn-text(22px);
+
     text-align: center;
+    color: colors.$black;
   }
 
   &__footer {
@@ -81,7 +82,8 @@
     gap: 32px;
 
     div {
-      @include btn.btn-text(22px);
+
+      color: colors.$black;
     }
   }
 }
