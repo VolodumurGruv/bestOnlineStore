@@ -13,7 +13,11 @@ const userSchema = new mongoose.Schema({
   shippingAddress: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'ShippingAddress',
-  }
+  },
+  wishList: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product'
+  }],
 }, { timestamps: true }
 );
 
