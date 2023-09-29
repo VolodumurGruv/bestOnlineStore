@@ -16,7 +16,7 @@
       <div class="orders__item-text">
         <div class="state">Статус: {{ order.state }}</div>
         <div class="action" (click)="completeAction()">
-          {{ action }}
+          {{ order.state == "Отримано" ? "Повернути" : "Скасувати" }}
         </div>
       </div>
     </div>

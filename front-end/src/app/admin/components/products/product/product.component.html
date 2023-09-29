@@ -1,0 +1,10 @@
+<section class="product">
+  <ng-container *ngIf="product$ | async as product">
+    <app-product-card class="product__card" [product]="product">
+    </app-product-card>
+    <div class="action">
+      <span class="link">Редагувати</span>
+      <span class="link" routerLink="/admin/products">Назад до продукції</span>
+    </div>
+  </ng-container>
+</section>

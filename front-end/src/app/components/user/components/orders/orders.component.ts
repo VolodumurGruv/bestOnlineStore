@@ -11,7 +11,6 @@ import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
   styleUrls: ['./orders.component.scss'],
 })
 export class OrdersComponent {
-  public action: string = 'Повернути';
   public orders: Orders[] = [
     {
       image:

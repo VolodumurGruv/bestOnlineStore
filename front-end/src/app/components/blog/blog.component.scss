@@ -1,7 +1,7 @@
-@use "signin";
+@use "inputs";
 
 .input-wrap {
-  @include signin.input-wrap;
+  @include inputs.input-wrap;
   width: 530px;
   margin: 20px auto;
 }

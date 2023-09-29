@@ -13,6 +13,8 @@ export interface UserInfo extends User {
   phone: string;
   delivery?: string;
   department?: string;
+  isAnonymous?: boolean;
+  wishList?: string[];
 }
 
 export interface Orders {
