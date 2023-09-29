@@ -1,5 +1,5 @@
-@import "fonts";
-@import "colors";
+@use "fonts";
+@use "colors";
 
 *,
 *:before,
@@ -10,7 +10,7 @@
 }
 
 body {
-  @include font-roboto;
+  @include fonts.font-montserrat;
 }
 
 .wrapper {
@@ -19,6 +19,7 @@ body {
 }
 
 button {
+  background: none;
   cursor: pointer;
 }
 
@@ -28,6 +29,10 @@ a {
 
 .path {
   text-align: center;
-  color: $light-gray;
+  color: colors.$light-gray;
   font-size: 20px;
+}
+
+ul {
+  list-style: none;
 }
