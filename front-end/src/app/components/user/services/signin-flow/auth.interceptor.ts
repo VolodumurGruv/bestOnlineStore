@@ -21,7 +21,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
 
   spinner.enableSpinner();
 
-  if (auth.isAuth() && !url && token) {
+  if (!url && token) {
     const authToken = req.clone({
       headers: req.headers.set('Authorization', token),
     });

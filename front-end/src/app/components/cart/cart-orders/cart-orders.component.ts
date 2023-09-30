@@ -6,27 +6,20 @@ import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CartService } from '../services/cart.service';
-import { OrderService } from '@shared/services/order.service';
-import { InfoFormComponent } from '@shared/components/info-form/info-form.component';
+import { UserService } from 'app/components/user/services/user.service';
 
 @Component({
   selector: 'app-cart-orders',
   standalone: true,
-  imports: [
-    NgFor,
-    NgIf,
-    TransformPricePipe,
-    FormsModule,
-    RouterLink,
-    InfoFormComponent,
-  ],
+  imports: [NgFor, NgIf, TransformPricePipe, FormsModule, RouterLink],
   templateUrl: './cart-orders.component.html',
   styleUrls: ['./cart-orders.component.scss'],
 })
 export class CartOrdersComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly cartService = inject(OrderService);
+  private readonly cartService = inject(CartService);
+  private readonly userService = inject(UserService);
 
   public maxQuantity = 100;
   public minQuantity = 1;
@@ -58,6 +51,8 @@ export class CartOrdersComponent implements OnInit {
 
   ngOnInit(): void {
     this.countTotal();
+    this.cartService.getCart();
+    this.userService.regAnonymous();
   }
 
   increase(id: number) {
@@ -132,7 +127,7 @@ export class CartOrdersComponent implements OnInit {
   }
 
   submit() {
-    this.cartService.makeOrder(this.orders);
+    this.cartService.addToCart(this.orders[0]._id, 3);
   }
 
   order(event: any) {

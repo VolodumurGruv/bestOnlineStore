@@ -48,4 +48,17 @@ export class UserService {
       )
       .subscribe((res) => console.log(res));
   }
+
+  regAnonymous() {
+    this.http.get(`${configs.URL}/user/reganonymous`).subscribe((res: any) => {
+      const payload: any = res.payload;
+      const expDate = new Date(new Date().getTime() + 3600 * 1000).toString();
+
+      payload.expDate = expDate;
+
+      for (const item in payload) {
+        localStorage.setItem(item, payload[item]);
+      }
+    });
+  }
 }

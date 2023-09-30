@@ -1,133 +1,122 @@
-<ng-container *ngIf="isComplete; else complete">
-  <ng-container *ngIf="orders.length; else isOrders">
-    <div class="cart__order" *ngFor="let order of orders; index as id">
-      <div class="cart__order-img">
-        <img [src]="order.image" alt="" />
+<ng-container *ngIf="orders.length; else isOrders">
+  <div class="cart__order" *ngFor="let order of orders; index as id">
+    <div class="cart__order-img">
+      <img [src]="order.image" alt="" />
+    </div>
+    <div class="cart__order-text">
+      <div class="cart__order-description">
+        <div class="text">{{ order.description }}</div>
+        <div class="btn-delete" (click)="delete(order?._id)">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="25"
+            viewBox="0 0 24 25"
+            fill="none"
+          >
+            <path
+              d="M3 6.5H5H21"
+              stroke="#DA3838"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M19 6.5V20.5C19 21.0304 18.7893 21.5391 18.4142 21.9142C18.0391 22.2893 17.5304 22.5 17 22.5H7C6.46957 22.5 5.96086 22.2893 5.58579 21.9142C5.21071 21.5391 5 21.0304 5 20.5V6.5M8 6.5V4.5C8 3.96957 8.21071 3.46086 8.58579 3.08579C8.96086 2.71071 9.46957 2.5 10 2.5H14C14.5304 2.5 15.0391 2.71071 15.4142 3.08579C15.7893 3.46086 16 3.96957 16 4.5V6.5"
+              stroke="#DA3838"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M10 11.5V17.5"
+              stroke="#DA3838"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M14 11.5V17.5"
+              stroke="#DA3838"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
       </div>
-      <div class="cart__order-text">
-        <div class="cart__order-description">
-          <div class="text">{{ order.description }}</div>
-          <div class="btn-delete" (click)="delete(order?._id)">
+      <div class="cart__order-data">
+        <div class="cart__order-amount">
+          <span class="decrease" (click)="decrease(id)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="25"
-              viewBox="0 0 24 25"
+              width="26"
+              height="27"
+              viewBox="0 0 26 27"
               fill="none"
             >
               <path
-                d="M3 6.5H5H21"
-                stroke="#DA3838"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M19 6.5V20.5C19 21.0304 18.7893 21.5391 18.4142 21.9142C18.0391 22.2893 17.5304 22.5 17 22.5H7C6.46957 22.5 5.96086 22.2893 5.58579 21.9142C5.21071 21.5391 5 21.0304 5 20.5V6.5M8 6.5V4.5C8 3.96957 8.21071 3.46086 8.58579 3.08579C8.96086 2.71071 9.46957 2.5 10 2.5H14C14.5304 2.5 15.0391 2.71071 15.4142 3.08579C15.7893 3.46086 16 3.96957 16 4.5V6.5"
-                stroke="#DA3838"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M10 11.5V17.5"
-                stroke="#DA3838"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M14 11.5V17.5"
-                stroke="#DA3838"
-                stroke-width="2"
+                d="M6.5 13.5H19.5"
+                stroke="#676767"
+                stroke-width="1.5"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
             </svg>
-          </div>
+          </span>
+          <input
+            type="number"
+            [min]="minQuantity"
+            [max]="maxQuantity"
+            [(ngModel)]="order.quantity"
+            class="cart__input"
+            (keyup)="onKeyup(order, id)"
+          />
+          <span class="increase" (click)="increase(id)">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="26"
+              height="27"
+              viewBox="0 0 26 27"
+              fill="none"
+            >
+              <path
+                d="M6.5 13.5H13M13 13.5H19.5M13 13.5V7M13 13.5V20"
+                stroke="#676767"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
         </div>
-        <div class="cart__order-data">
-          <div class="cart__order-amount">
-            <span class="decrease" (click)="decrease(id)">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="26"
-                height="27"
-                viewBox="0 0 26 27"
-                fill="none"
-              >
-                <path
-                  d="M6.5 13.5H19.5"
-                  stroke="#676767"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span>
-            <input
-              type="number"
-              [min]="minQuantity"
-              [max]="maxQuantity"
-              [(ngModel)]="order.quantity"
-              class="cart__input"
-              (keyup)="onKeyup(order, id)"
-            />
-            <span class="increase" (click)="increase(id)">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="26"
-                height="27"
-                viewBox="0 0 26 27"
-                fill="none"
-              >
-                <path
-                  d="M6.5 13.5H13M13 13.5H19.5M13 13.5V7M13 13.5V20"
-                  stroke="#676767"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span>
-          </div>
-          <div class="cart__order-price">
-            <p class="text" #price>
-              {{ order.summa | transformPrice }}
-            </p>
-          </div>
+        <div class="cart__order-price">
+          <p class="text" #price>
+            {{ order.summa | transformPrice }}
+          </p>
         </div>
       </div>
     </div>
-    <div class="cart__order-total">
-      <p>Загальна сума: {{ total | transformPrice }}</p>
-    </div>
-    <div class="cart__order-actions">
-      <button class="btn btn__add" type="button" (click)="close()">
-        Продовжити покупки
-      </button>
-      <button class="btn btn__buy" type="button" (click)="completeOrder()">
-        Оформити замовлення
-      </button>
-    </div>
-  </ng-container>
-  <ng-template #isOrders>
-    <div class="noorders">
-      <div>
-        <img src="../../../../assets/pics/png/bascket.png" alt="" />
-      </div>
-      <p class="text-empty">Ваш кошик ще порожній</p>
-
-      <a class="text-link" [routerLink]="['/catalog']">Розпочати покупки</a>
-    </div>
-  </ng-template>
-</ng-container>
-
-<ng-template #complete>
-  <app-info-form (order)="order($event)" [orders]="orders">
-    <button class="btn btn__buy" type="submit">Замовити</button>
-    <button class="btn btn__buy" type="button" (click)="backToOrder()">
-      Скасувати
+  </div>
+  <div class="cart__order-total">
+    <p>Загальна сума: {{ total | transformPrice }}</p>
+  </div>
+  <div class="cart__order-actions">
+    <button class="btn btn__add" type="button" (click)="close()">
+      Продовжити покупки
     </button>
-  </app-info-form>
+    <button class="btn btn__buy" type="button" (click)="submit()">
+      Оформити замовлення
+    </button>
+  </div>
+</ng-container>
+<ng-template #isOrders>
+  <div class="noorders">
+    <div>
+      <img src="../../../../assets/pics/png/bascket.png" alt="" />
+    </div>
+    <p class="text-empty">Ваш кошик ще порожній</p>
+
+    <a class="text-link" [routerLink]="['/catalog']">Розпочати покупки</a>
+  </div>
 </ng-template>
