@@ -28,7 +28,7 @@ export class UserService {
 
   getUserById(userID: string): Observable<UserInfo> {
     return this.http.get<UserInfo>(`${configs.URL}/user/${userID}`).pipe(
-      map((res: any) => res.payload),
+      map((res: any) => res),
       catchError(
         this.httpErrorHandler.handleError<UserInfo>(
           'Невдалося отримати користувача!'

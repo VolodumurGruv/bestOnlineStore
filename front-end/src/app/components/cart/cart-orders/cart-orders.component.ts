@@ -6,23 +6,34 @@ import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CartService } from '../services/cart.service';
+import { OrderService } from '@shared/services/order.service';
+import { InfoComponent } from 'app/components/user/components/info/info.component';
 
 @Component({
   selector: 'app-cart-orders',
   standalone: true,
-  imports: [NgFor, NgIf, TransformPricePipe, FormsModule, RouterLink],
+  imports: [
+    NgFor,
+    NgIf,
+    TransformPricePipe,
+    FormsModule,
+    RouterLink,
+    InfoComponent,
+  ],
   templateUrl: './cart-orders.component.html',
   styleUrls: ['./cart-orders.component.scss'],
 })
 export class CartOrdersComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly cartService = inject(CartService);
+  private readonly cartService = inject(OrderService);
 
   public maxQuantity = 100;
   public minQuantity = 1;
   public total = 0;
   private prevValue = 1;
+
+  isComplete = false;
 
   public orders: Orders[] = [
     {
@@ -114,7 +125,16 @@ export class CartOrdersComponent implements OnInit {
       relativeTo: this.route.parent,
     });
   }
+
+  completeOrder(): boolean {
+    return !this.isComplete;
+  }
+
+  backToOrder() {
+    return this.isComplete;
+  }
+
   submit() {
-    this.cartService.makeOrder('64e7af152f011665dfd7f194', 3);
+    this.cartService.makeOrder(this.orders);
   }
 }

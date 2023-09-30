@@ -2,7 +2,7 @@ import { Route } from '@angular/router';
 
 export const USERS_ROUTING: Route[] = [
   {
-    path: 'users',
+    path: '',
 
     children: [
       { path: '', redirectTo: '/admin/users', pathMatch: 'full' },
