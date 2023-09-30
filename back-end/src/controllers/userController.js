@@ -15,7 +15,7 @@ import handleResponse from '../utils/handleResponse.js';
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({}, '-password -isAdmin -resetPasswordToken -resetPasswordExpires');
     logger.info('All users fetched successfully.');
     return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All users in payload.', users);
   } catch (error) {
@@ -45,7 +45,9 @@ const registerUser = async (req, res, next, anonymous = null) => {
         const decodedToken = jwt.verify(authorization, `${process.env.JWT_SECRET}`);
         const userId = decodedToken._id;
 
-        user = await User.findById(userId);
+        user = await User
+          .findById(userId)
+          .select('-password isAdmin -resetPasswordToken -resetPasswordExpires');
 
         if (user) {
           user.name = name;
