@@ -13,6 +13,7 @@ import { InfoFormComponent } from '@shared/components/info-form/info-form.compon
 })
 export class InfoComponent {
   private readonly router = inject(Router);
+
   redirectToContact() {
     this.router.navigate(['/about/contact']);
   }
