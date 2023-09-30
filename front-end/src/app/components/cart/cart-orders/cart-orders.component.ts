@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CartService } from '../services/cart.service';
 import { OrderService } from '@shared/services/order.service';
-import { InfoComponent } from 'app/components/user/components/info/info.component';
+import { InfoFormComponent } from '@shared/components/info-form/info-form.component';
 
 @Component({
   selector: 'app-cart-orders',
@@ -18,7 +18,7 @@ import { InfoComponent } from 'app/components/user/components/info/info.componen
     TransformPricePipe,
     FormsModule,
     RouterLink,
-    InfoComponent,
+    InfoFormComponent,
   ],
   templateUrl: './cart-orders.component.html',
   styleUrls: ['./cart-orders.component.scss'],
@@ -31,9 +31,8 @@ export class CartOrdersComponent implements OnInit {
   public maxQuantity = 100;
   public minQuantity = 1;
   public total = 0;
-  private prevValue = 1;
 
-  isComplete = false;
+  isComplete = true;
 
   public orders: Orders[] = [
     {
@@ -65,7 +64,6 @@ export class CartOrdersComponent implements OnInit {
     if (this.orders[id].quantity < this.maxQuantity) {
       this.orders[id].quantity += 1;
       this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
-      this.prevValue = this.orders[id].quantity;
     }
 
     this.checkQuantity(this.orders[id], id);
@@ -75,7 +73,6 @@ export class CartOrdersComponent implements OnInit {
     if (this.orders[id].quantity > this.minQuantity) {
       this.orders[id].quantity -= 1;
       this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
-      this.prevValue = this.orders[id].quantity;
     }
 
     this.checkQuantity(this.orders[id], id);
@@ -113,7 +110,6 @@ export class CartOrdersComponent implements OnInit {
     let res = 0;
     this.orders.forEach((order: Orders) => (res += order.summa!));
     this.total = res;
-    console.log(this.total);
   }
 
   delete(id: string | undefined) {
@@ -126,15 +122,20 @@ export class CartOrdersComponent implements OnInit {
     });
   }
 
-  completeOrder(): boolean {
-    return !this.isComplete;
+  completeOrder() {
+    localStorage.setItem('order', JSON.stringify(this.orders));
+    this.isComplete = false;
   }
 
   backToOrder() {
-    return this.isComplete;
+    this.isComplete = true;
   }
 
   submit() {
     this.cartService.makeOrder(this.orders);
+  }
+
+  order(event: any) {
+    console.log(event);
   }
 }
