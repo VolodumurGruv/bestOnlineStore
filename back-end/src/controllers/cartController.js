@@ -14,19 +14,19 @@ const addToCart = async (req, res) => {
 
     if (!userId || !productId || !quantity || !Number.isInteger(quantity) || quantity <= 0) {
       logger.error('Invalid input data.');
-      return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'fault', 'Invalid input data.');
+      return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'Invalid input data.');
     }
 
     const product = await Product.findById(productId);
 
     if (!product) {
       logger.error('Product not found.');
-      return handleResponse(res, HTTP_STATUS_CODES.PRODUCT_NOT_FOUND, 'fault', MESSAGES.PRODUCT_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.PRODUCT_NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
     }
 
     if (product.instock && quantity > product.countInStock) {
       logger.error('Insufficient stock.');
-      return handleResponse(res, HTTP_STATUS_CODES.INSUFFICIENT_STOCK, 'fault', 'Insufficient stock.');
+      return handleResponse(res, HTTP_STATUS_CODES.INSUFFICIENT_STOCK, 'Insufficient stock.');
     }
 
     let cart = await Cart.findOne({ user: userId });
@@ -57,12 +57,14 @@ const addToCart = async (req, res) => {
 
     await cart.save();
 
-    const message = cartItem.quantity > 0 ? 'Product was successfully updated in cart.' : 'Product was successfully removed from cart.';
+    const message = cartItem.quantity > 0
+      ? 'Product was successfully updated in cart.'
+      : 'Product was successfully removed from cart.';
     logger.info(message);
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', message, cart);
+    return handleResponse(res, HTTP_STATUS_CODES.OK, message, cart);
   } catch (error) {
     logger.error('Internal Server Error: ', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.DATABASE_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
   }
 };
 
@@ -74,14 +76,14 @@ const getCart = async (req, res) => {
 
     if (!cart) {
       logger.error('Consumer cart is empty.');
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', 'Consumer cart is empty.');
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
     }
 
     logger.info('Cart successfully fetched.');
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'User cart in payload.', cart);
+    return handleResponse(res, HTTP_STATUS_CODES.OK, 'User cart in payload.', cart);
   } catch (error) {
     logger.error('Internal Server Error.', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.DATABASE_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
   }
 };
 
@@ -93,7 +95,7 @@ const clearCart = async (req, res) => {
 
     if (!cart) {
       logger.error('Consumer cart is empty.');
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', 'Consumer cart is empty.');
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
     }
 
     cart.items = [];
@@ -102,10 +104,10 @@ const clearCart = async (req, res) => {
     await cart.save();
 
     logger.info('Cart is successfuly cleared.');
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Cart is succcessfuly cleared.');
+    return handleResponse(res, HTTP_STATUS_CODES.OK, 'Cart is succcessfuly cleared.');
   } catch (error) {
     logger.error('Internal Server Error: ', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.DATABASE_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
   }
 };
 

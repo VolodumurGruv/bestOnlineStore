@@ -15,14 +15,14 @@ const getAllOrders = async (req, res) => {
 
     if (!orders || orders.length === 0) {
       logger.error(MESSAGES.ORDER_NOT_FOUND);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
 
     logger.info('All orders fetched successfully');
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All orders in payload.', orders);
+    return handleResponse(res, HTTP_STATUS_CODES.OK, 'All orders in payload.', orders);
   } catch (error) {
     logger.error('Error while fetching all orders', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -33,10 +33,10 @@ const getOrderHistory = async (req, res) => {
     const orders = await Order.find({ user: userId });
 
     logger.info('Order(s) fetched for user: ', req.user._id);
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Your order(s) in payload.', orders);
+    return handleResponse(res, HTTP_STATUS_CODES.OK, 'Your order(s) in payload.', orders);
   } catch (error) {
     logger.error('Error while getting order history: ', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -45,14 +45,14 @@ const getOrderById = async (req, res) => {
     const order = await Order.findById(req.params.id);
     if (order) {
       logger.info('Order found by ID:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order found.', order);
+      return handleResponse(res, HTTP_STATUS_CODES.OK, 'Order found.', order);
     } else {
       logger.error('Order not found by ID:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
   } catch (error) {
     logger.error('Error while fetching order by ID:', req.params.id, error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -89,10 +89,10 @@ const createOrder = async (req, res) => {
 
     const createdOrder = await Order.create(newOrderData);
     logger.info('Order created:', createdOrder._id);
-    return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', 'Order created.', createdOrder);
+    return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'Order created.', createdOrder);
   } catch (error) {
     logger.error('Error while creating order', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -115,14 +115,14 @@ const updateOrder = async (req, res) => {
 
       sendEmail(req.user.email, 'Changes on your order', `Order ${req.params.id} was paid.`);
       logger.info('Order paid:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order has been paid.', updatedOrder);
+      return handleResponse(res, HTTP_STATUS_CODES.OK, 'Order has been paid.', updatedOrder);
     } else {
       logger.error('Order not found for payment:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
   } catch (error) {
     logger.error('Error while updating order to paid:', req.params.id, error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -141,15 +141,15 @@ const changeStatus = async (req, res) => {
 
     if (!order) {
       logger.error('Order not found for update:', orderId);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
 
     sendEmail(req.user.email, 'Changes on your order', `Order ${orderId} was updated.`);
     logger.info('Order updated:', orderId);
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order updated.', order);
+    return handleResponse(res, HTTP_STATUS_CODES.OK, 'Order updated.', order);
   } catch (error) {
     logger.error(error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_RVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_RVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -159,14 +159,14 @@ const deleteOrder = async (req, res) => {
     const deletedOrder = await Order.findByIdAndRemove(orderId);
     if (deletedOrder) {
       logger.info('Order deleted:', orderId);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order deleted.', deletedOrder);
+      return handleResponse(res, HTTP_STATUS_CODES.OK, 'Order deleted.', deletedOrder);
     } else {
       logger.error('Order not found for delete:', orderId);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
   } catch (error) {
     logger.error('Error while deleting order:', req.params.id, error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
