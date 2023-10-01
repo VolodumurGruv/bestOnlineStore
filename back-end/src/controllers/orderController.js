@@ -1,4 +1,5 @@
 import Order from '../models/orderSchema.js';
+import Cart from '../models/cartSchema.js';
 import sendEmail from '../utils/email.js';
 import logger from '../utils/logger.js';
 import {
@@ -57,42 +58,35 @@ const getOrderById = async (req, res) => {
 };
 
 const createOrder = async (req, res) => {
-  if (!req.user || !req.user._id) {
-    return handleResponse(res, HTTP_STATUS_CODES.UNAUTHORIZED, 'Unauthorized');
-  }
   try {
-    const {
-      orderItems,
-      shippingAddress,
-      paymentMethod,
-      itemsPrice,
-      totalPrice,
-      isPaid
-    } = req.body;
+    const userId = req.user._id;
 
-    const newOrderData = {
-      orderItems,
-      shippingAddress,
-      paymentMethod,
-      itemsPrice,
-      totalPrice,
-      user: req.user._id,
-      isPaid,
-      paidAt: Date.now(),
-      paymentResult: {
-        id: 'real_payment_id',
-        status: 'success',
-        update_time: Date.now(),
-        email_address: req.user.email,
-      },
-    };
+    const cart = await Cart.findOne({ user: userId });
 
-    const createdOrder = await Order.create(newOrderData);
-    logger.info('Order created:', createdOrder._id);
-    return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'Order created.', createdOrder);
+    if (!cart) {
+      logger.error('Consumer cart is empty.');
+      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
+    }
+
+    const order = new Order({
+      cart: cart._id,
+      shippingAddress: req.user.shippingAddress,
+      paymentMethod: req.body.paymentMethod,
+      itemsPrice: cart.totalPrice,
+      user: userId,
+    });
+
+    const createdOrder = await order.save();
+
+    cart.items = [];
+    cart.totalPrice = 0;
+    await cart.save();
+
+    logger.info('Order successfully created.');
+    return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'Order created successfully.', createdOrder);
   } catch (error) {
-    logger.error('Error while creating order', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    logger.error('Internal Server Error.', error);
+    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
   }
 };
 
