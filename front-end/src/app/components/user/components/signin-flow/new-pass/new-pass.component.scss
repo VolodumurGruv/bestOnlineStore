@@ -1,7 +1,7 @@
 @use "inputs";
 @use "fonts";
 @use "flex";
-@forward "../../error-validation/error-validation.component.scss";
+@forward "../../../../../shared/components/error-validation/error-validation.component.scss";
 @forward "btn";
 
 .recover__input {
