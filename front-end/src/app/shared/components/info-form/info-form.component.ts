@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 
 import { UserService } from 'app/components/user/services/user.service';
 import { Address } from '@interfaces/address';
@@ -30,6 +30,7 @@ import { CartService } from 'app/components/cart/services/cart.service';
 export class InfoFormComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly userService = inject(UserService);
   private readonly cartService = inject(CartService);
   public phoneHolder: string = '+380';
@@ -39,6 +40,7 @@ export class InfoFormComponent implements OnInit, OnDestroy {
   public isDepartment: boolean = false;
   public isValid = isValid;
   private clearTimeOut: any;
+  public path!: string;
 
   @Input() isCart = false;
 
@@ -87,6 +89,11 @@ export class InfoFormComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     setupInitialValue(this.infoForm);
+    this.route.url.subscribe((urlSegment: UrlSegment[]) => {
+      if (urlSegment[0]) {
+        this.path = urlSegment[0].path;
+      }
+    });
   }
 
   getAddress(city: string): void {

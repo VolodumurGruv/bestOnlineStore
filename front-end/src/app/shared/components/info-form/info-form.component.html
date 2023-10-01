@@ -1,5 +1,10 @@
 <div class="user__info-title">Особиста інформація</div>
-<form class="user__form" [formGroup]="infoForm" (ngSubmit)="onSubmit()">
+<form
+  class="user__form"
+  [formGroup]="infoForm"
+  (ngSubmit)="path == 'cart' ? makeOrder() : updateUser()"
+  autocomplete="on"
+>
   <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'name')">
     <input
       type="text"

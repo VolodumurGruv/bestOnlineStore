@@ -1,4 +1,6 @@
 import {
+  AfterViewChecked,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   OnInit,
@@ -31,18 +33,23 @@ import { InfoFormComponent } from '@shared/components/info-form/info-form.compon
   templateUrl: './cart-orders.component.html',
   styleUrls: ['./cart-orders.component.scss'],
 })
-export class CartOrdersComponent implements OnInit {
+export class CartOrdersComponent implements OnInit, AfterViewChecked {
+  @Output() advertisement = new EventEmitter<boolean>();
+  @ViewChild(InfoFormComponent) infoForm!: InfoFormComponent;
+
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly cartService = inject(CartService);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   public maxQuantity = 100;
   public minQuantity = 1;
   public total = 0;
 
-  isComplete = true;
-  isAdv = true;
-  isCart = true;
+  public isComplete = true;
+  public isAdv = true;
+  public isCart = true;
+  public isValid = false;
 
   public orders: Orders[] = [
     {
@@ -66,14 +73,20 @@ export class CartOrdersComponent implements OnInit {
     },
   ];
 
-  @Output() advertisement = new EventEmitter<boolean>();
-
-  @ViewChild(InfoFormComponent) infoForm!: InfoFormComponent;
-
   ngOnInit(): void {
     this.countTotal();
     this.cartService.getCart();
     this.isCart = true;
+  }
+
+  ngAfterViewChecked(): void {
+    if (!this.isComplete) {
+      this.infoForm.infoForm.get('password')?.setErrors(null);
+
+      this.isValid = this.infoForm.infoForm.valid;
+      this.changeDetectorRef.detectChanges();
+      console.log(this.infoForm.infoForm.controls);
+    }
   }
 
   increase(id: number) {
@@ -147,8 +160,6 @@ export class CartOrdersComponent implements OnInit {
   backToCart() {
     this.isComplete = true;
     this.advertisement.emit(true);
-
-    console.log(this.infoForm.infoForm.valid);
   }
 
   submit() {
