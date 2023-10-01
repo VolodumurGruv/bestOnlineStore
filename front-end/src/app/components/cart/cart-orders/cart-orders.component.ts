@@ -85,7 +85,6 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
 
       this.isValid = this.infoForm.infoForm.valid;
       this.changeDetectorRef.detectChanges();
-      console.log(this.infoForm.infoForm.controls);
     }
   }
 
@@ -139,7 +138,6 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
     let res = 0;
     this.orders.forEach((order: Orders) => (res += order.summa!));
     this.total = res;
-    console.log(this.total);
   }
 
   delete(id: string | undefined) {

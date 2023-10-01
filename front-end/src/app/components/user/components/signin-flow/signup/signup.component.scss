@@ -2,7 +2,7 @@
 @use "colors";
 @use "flex";
 @use "fonts";
-@forward "../../error-validation/error-validation.component.scss";
+@forward "../../../../../shared/components/error-validation/error-validation.component.scss";
 
 .signup {
   margin: 120px auto 160px auto;

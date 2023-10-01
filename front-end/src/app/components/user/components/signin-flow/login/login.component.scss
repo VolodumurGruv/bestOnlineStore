@@ -2,7 +2,7 @@
 @use "inputs";
 @use "flex";
 @use "fonts";
-@forward "../../error-validation/error-validation.component.scss";
+@forward "../../../../../shared/components/error-validation/error-validation.component.scss";
 @forward "btn";
 
 .login {
