@@ -8,13 +8,13 @@ export class CartService {
 
   getCart() {
     this.http
-      .get(`${configs.URL}/get-cart`)
+      .get(`${configs.URL}/cart/get-cart`)
       .subscribe((res) => console.log(res));
   }
 
   makeOrder(id: string, quantity: number) {
     this.http
-      .post(`${configs.URL}/add-to-cart`, { id, quantity })
+      .post(`${configs.URL}/cart/add-to-cart`, { id, quantity })
       .subscribe((res) => console.log(res));
   }
 }

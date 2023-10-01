@@ -1,4 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 
 import { Orders } from '@interfaces/user.interface';
@@ -6,8 +13,8 @@ import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CartService } from '../services/cart.service';
-import { OrderService } from '@shared/services/order.service';
 import { InfoComponent } from 'app/components/user/components/info/info.component';
+import { InfoFormComponent } from '@shared/components/info-form/info-form.component';
 
 @Component({
   selector: 'app-cart-orders',
@@ -19,6 +26,7 @@ import { InfoComponent } from 'app/components/user/components/info/info.componen
     FormsModule,
     RouterLink,
     InfoComponent,
+    InfoFormComponent,
   ],
   templateUrl: './cart-orders.component.html',
   styleUrls: ['./cart-orders.component.scss'],
@@ -26,14 +34,15 @@ import { InfoComponent } from 'app/components/user/components/info/info.componen
 export class CartOrdersComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly cartService = inject(OrderService);
+  private readonly cartService = inject(CartService);
 
   public maxQuantity = 100;
   public minQuantity = 1;
   public total = 0;
-  private prevValue = 1;
 
-  isComplete = false;
+  isComplete = true;
+  isAdv = true;
+  isCart = true;
 
   public orders: Orders[] = [
     {
@@ -57,15 +66,20 @@ export class CartOrdersComponent implements OnInit {
     },
   ];
 
+  @Output() advertisement = new EventEmitter<boolean>();
+
+  @ViewChild(InfoFormComponent) infoForm!: InfoFormComponent;
+
   ngOnInit(): void {
     this.countTotal();
+    this.cartService.getCart();
+    this.isCart = true;
   }
 
   increase(id: number) {
     if (this.orders[id].quantity < this.maxQuantity) {
       this.orders[id].quantity += 1;
       this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
-      this.prevValue = this.orders[id].quantity;
     }
 
     this.checkQuantity(this.orders[id], id);
@@ -75,7 +89,6 @@ export class CartOrdersComponent implements OnInit {
     if (this.orders[id].quantity > this.minQuantity) {
       this.orders[id].quantity -= 1;
       this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
-      this.prevValue = this.orders[id].quantity;
     }
 
     this.checkQuantity(this.orders[id], id);
@@ -126,15 +139,19 @@ export class CartOrdersComponent implements OnInit {
     });
   }
 
-  completeOrder(): boolean {
-    return !this.isComplete;
+  completeOrder() {
+    this.isComplete = false;
+    this.advertisement.emit(false);
   }
 
-  backToOrder() {
-    return this.isComplete;
+  backToCart() {
+    this.isComplete = true;
+    this.advertisement.emit(true);
+
+    console.log(this.infoForm.infoForm.valid);
   }
 
   submit() {
-    this.cartService.makeOrder(this.orders);
+    this.cartService.makeOrder('', 2);
   }
 }

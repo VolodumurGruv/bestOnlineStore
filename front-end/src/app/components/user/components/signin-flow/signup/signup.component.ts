@@ -16,9 +16,9 @@ import {
   emailValidator,
   nameValidator,
   passwordValidator,
-} from '../../../utils/validators';
-import { ErrorValidationComponent } from '../../error-validation/error-validation.component';
-import { isValid } from '../../../utils/is-valid';
+} from '@shared/utils/validators';
+import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
+import { isValid } from '@shared/utils/is-valid';
 
 @Component({
   selector: 'app-signup',

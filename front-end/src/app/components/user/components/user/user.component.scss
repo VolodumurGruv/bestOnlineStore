@@ -1,7 +1,7 @@
 @use "fonts";
 @use "colors";
 @use "a-link";
-@forward "../info/info.component.scss";
+@forward "../../../../shared/components/info-form/info-form.component.scss";
 
 .user {
   display: flex;

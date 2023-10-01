@@ -36,7 +36,7 @@ export class OrderService {
 
   getOrderHistory() {
     this.http
-      .get(`${configs.URL}/order-history`)
+      .get(`${configs.URL}/order/order-history`)
       .pipe(
         catchError(
           this.httpError.handleError<Orders[]>('Помилка отримання замовленнь')

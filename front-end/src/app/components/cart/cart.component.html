@@ -22,9 +22,15 @@
         </div>
       </div>
       <div class="cart__orders">
-        <app-cart-orders class="cart__orders"> </app-cart-orders>
+        <app-cart-orders
+          class="cart__orders"
+          (advertisement)="advertisement($event)"
+        >
+        </app-cart-orders>
       </div>
-      <app-cart-ad></app-cart-ad>
+      <ng-container *ngIf="isAdv">
+        <app-cart-ad></app-cart-ad>
+      </ng-container>
     </div>
   </section>
 </div>

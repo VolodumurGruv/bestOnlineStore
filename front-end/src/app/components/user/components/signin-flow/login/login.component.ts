@@ -12,9 +12,9 @@ import {
 import { AuthService } from '../../../services/signin-flow/auth.service';
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
 import { GoogleLoginComponent } from '../google-login/google-login.component';
-import { emailValidator, passwordValidator } from '../../../utils/validators';
-import { ErrorValidationComponent } from '../../error-validation/error-validation.component';
-import { isValid } from '../../../utils/is-valid';
+import { emailValidator, passwordValidator } from '../../../../../shared/utils/validators';
+import { ErrorValidationComponent } from '../../../../../shared/components/error-validation/error-validation.component';
+import { isValid } from '../../../../../shared/utils/is-valid';
 import { RecoverPassComponent } from '../recover-pass/recover-pass.component';
 import { NewPassComponent } from '../new-pass/new-pass.component';
 

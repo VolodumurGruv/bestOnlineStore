@@ -4,9 +4,9 @@ import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { ErrorValidationComponent } from '../../error-validation/error-validation.component';
-import { emailValidator } from '../../../utils/validators';
-import { isValid } from '../../../utils/is-valid';
+import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
+import { emailValidator } from '@shared/utils/validators';
+import { isValid } from '@shared/utils/is-valid';
 import { RecoverPassService } from '../../../services/signin-flow/recover-pass.service';
 
 @Component({

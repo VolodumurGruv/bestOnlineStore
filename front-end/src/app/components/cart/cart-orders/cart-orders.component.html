@@ -106,7 +106,7 @@
       <button class="btn btn__add" type="button" (click)="close()">
         Продовжити покупки
       </button>
-      <button class="btn btn__buy" type="button" (click)="submit()">
+      <button class="btn btn__buy" type="button" (click)="completeOrder()">
         Оформити замовлення
       </button>
     </div>
@@ -124,5 +124,10 @@
 </ng-container>
 
 <ng-template #complete>
-  <app-info></app-info>
+  <app-info-form class="info__form" [isCart]="isCart">
+    <button class="btn btn__buy" type="button" (click)="backToCart()">
+      Назад
+    </button>
+    <button class="btn btn__buy" type="submit">Замовити</button>
+  </app-info-form>
 </ng-template>

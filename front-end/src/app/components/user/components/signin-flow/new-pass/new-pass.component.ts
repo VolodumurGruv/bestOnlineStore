@@ -3,12 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { ErrorValidationComponent } from '../../error-validation/error-validation.component';
-import { isValid } from 'app/components/user/utils/is-valid';
-import {
-  confirmValidator,
-  passwordValidator,
-} from 'app/components/user/utils/validators';
+import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
+import { isValid } from '@shared/utils/is-valid';
+import { confirmValidator, passwordValidator } from '@shared/utils/validators';
 import { RecoverPassService } from 'app/components/user/services/signin-flow/recover-pass.service';
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
 import { AlertService } from '@shared/services/interaction/alert.service';
