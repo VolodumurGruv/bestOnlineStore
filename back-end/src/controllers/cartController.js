@@ -1,11 +1,24 @@
 import Cart from '../models/cartSchema.js';
 import Product from '../models/productSchema.js';
-import logger from '../utils/logger.js';
 import {
   HTTP_STATUS_CODES,
   MESSAGES
 } from '../utils/constants.js';
-import handleResponse from '../utils/handleResponse.js';
+import sendRes from '../utils/handleResponse.js';
+
+const sendCartResponse = async (res, userId, message) => {
+  try {
+    const userCart = await Cart.findOne({ user: userId });
+    if (!userCart) {
+      const newCart = new Cart({ user: userId, items: [] });
+      await newCart.save();
+      return sendRes(res, HTTP_STATUS_CODES.OK, message, newCart);
+    }
+    return sendRes(res, HTTP_STATUS_CODES.OK, message, userCart);
+  } catch (error) {
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
+  }
+};
 
 const addToCart = async (req, res) => {
   try {
@@ -13,20 +26,17 @@ const addToCart = async (req, res) => {
     const { productId, quantity } = req.body;
 
     if (!userId || !productId || !quantity || !Number.isInteger(quantity) || quantity <= 0) {
-      logger.error('Invalid input data.');
-      return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'Invalid input data.');
+      return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.INVALID_INPUT_DATA);
     }
 
     const product = await Product.findById(productId);
 
     if (!product) {
-      logger.error('Product not found.');
-      return handleResponse(res, HTTP_STATUS_CODES.PRODUCT_NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.PRODUCT_NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
     }
 
     if (product.instock && quantity > product.countInStock) {
-      logger.error('Insufficient stock.');
-      return handleResponse(res, HTTP_STATUS_CODES.INSUFFICIENT_STOCK, 'Insufficient stock.');
+      return sendRes(res, HTTP_STATUS_CODES.INSUFFICIENT_STOCK, MESSAGES.INSUFFICIENT_STOCK);
     }
 
     let cart = await Cart.findOne({ user: userId });
@@ -49,53 +59,36 @@ const addToCart = async (req, res) => {
     }
 
     cartItem.quantity = quantity;
-
-    cart.totalPrice = cart.items.reduce((total, item) => {
-      const productPrice = item.price;
-      return total + productPrice * item.quantity;
-    }, 0);
+    cart.totalPrice = cart.items.reduce((total, item) => total + item.price * item.quantity, 0);
 
     await cart.save();
 
     const message = cartItem.quantity > 0
-      ? 'Product was successfully updated in cart.'
-      : 'Product was successfully removed from cart.';
-    logger.info(message);
-    return handleResponse(res, HTTP_STATUS_CODES.OK, message, cart);
+      ? MESSAGES.PRODUCT_UPDATED_IN_CART
+      : MESSAGES.PRODUCT_REMOVED_FROM_CART;
+
+    return sendCartResponse(res, userId, message, cart);
   } catch (error) {
-    logger.error('Internal Server Error: ', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
   }
 };
 
 const getCart = async (req, res) => {
   try {
     const userId = req.user._id;
-
-    const cart = await Cart.findOne({ user: userId });
-
-    if (!cart) {
-      logger.error('Consumer cart is empty.');
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
-    }
-
-    logger.info('Cart successfully fetched.');
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'User cart in payload.', cart);
+    return sendCartResponse(res, userId, MESSAGES.USER_CART_IN_PAYLOAD);
   } catch (error) {
-    logger.error('Internal Server Error.', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
   }
 };
 
 const clearCart = async (req, res) => {
   try {
     const userId = req.user._id;
-
-    const cart = await Cart.findOne({ user: userId });
+    let cart = await Cart.findOne({ user: userId });
 
     if (!cart) {
-      logger.error('Consumer cart is empty.');
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.CONSUMER_CART_EMPTY);
     }
 
     cart.items = [];
@@ -103,11 +96,9 @@ const clearCart = async (req, res) => {
 
     await cart.save();
 
-    logger.info('Cart is successfuly cleared.');
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'Cart is succcessfuly cleared.');
+    return sendCartResponse(res, userId, MESSAGES.CART_CLEARED_SUCCESSFULLY);
   } catch (error) {
-    logger.error('Internal Server Error: ', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
   }
 };
 

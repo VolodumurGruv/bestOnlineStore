@@ -11,16 +11,14 @@ import {
   HTTP_STATUS_CODES,
   MESSAGES
 } from '../utils/constants.js';
-import handleResponse from '../utils/handleResponse.js';
+import sendRes from '../utils/handleResponse.js';
 
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({}, '-password -isAdmin -resetPasswordToken -resetPasswordExpires');
-    logger.info('All users fetched successfully.');
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'All users in payload.', users);
+    return sendRes(res, HTTP_STATUS_CODES.OK, 'All users fetched successfully.', users);
   } catch (error) {
-    logger.error('Error while fetching all users:', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while fetching all users.', error);
   }
 };
 
@@ -31,14 +29,14 @@ const registerUser = async (req, res, next, anonymous = null) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
+      return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
     }
 
     const hashedPassword = bcrypt.hashSync(password, 8);
 
     let user;
 
-    const {authorization} = req.headers;
+    const { authorization } = req.headers;
 
     if (authorization) {
       try {
@@ -85,10 +83,10 @@ const registerUser = async (req, res, next, anonymous = null) => {
 
     anonymous ? void(0) : sendEmail(email);
 
-    return handleResponse(res, HTTP_STATUS_CODES.CREATED, MESSAGES.NEW_USER_CREATED, newUser);
+    return sendRes(res, HTTP_STATUS_CODES.CREATED, MESSAGES.NEW_USER_CREATED, newUser);
 
-  } catch (error) {console.log(3);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error.message);
+  } catch (error) {
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error.message);
   }
 };
 
@@ -114,7 +112,7 @@ const registerUserByGoogle = async (req, res) => {
     });
 
     if (!userInfoResponse.ok) {
-      return handleResponse(res, HTTP_STATUS_CODES, MESSAGES.GOOGLE_FETCH_FAILURE);
+      return sendRes(res, HTTP_STATUS_CODES, MESSAGES.GOOGLE_FETCH_FAILURE);
     }
 
     const userJSON = await userInfoResponse.json();
@@ -134,7 +132,7 @@ const registerUserByGoogle = async (req, res) => {
         token
       };
 
-      return handleResponse(res, HTTP_STATUS_CODES.OK, MESSAGES.GOOGLE_ACCESS_VERIFIED, userPayload);
+      return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.GOOGLE_ACCESS_VERIFIED, userPayload);
     } else {
       const user = new User({
         googleId: userJSON.sub,
@@ -159,10 +157,10 @@ const registerUserByGoogle = async (req, res) => {
 
       sendEmail(createdUser.email);
 
-      return handleResponse(res, HTTP_STATUS_CODES.CREATED, MESSAGES.NEW_USER_CREATED, newUser);
+      return sendRes(res, HTTP_STATUS_CODES.CREATED, MESSAGES.NEW_USER_CREATED, newUser);
     }
   } catch (error) {
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -175,8 +173,7 @@ const signInUser = async (req, res) => {
     if (user && bcrypt.compareSync(password, user.password)) {
       const token = generateToken(user);
 
-      logger.info('User signed in successfully:', user._id);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'Correct credentials.', {
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'User signed in successfully.', {
         _id: user._id,
         name: user.name,
         email: user.email,
@@ -186,12 +183,10 @@ const signInUser = async (req, res) => {
         token,
       });
     } else {
-      logger.error('Invalid credentials for user:', email);
-      return handleResponse(res, HTTP_STATUS_CODES.UNAUTHORIZED, MESSAGES.INVALID_CREDENTIALS);
+      return sendRes(res, HTTP_STATUS_CODES.UNAUTHORIZED, MESSAGES.INVALID_CREDENTIALS);
     }
   } catch (error) {
-    logger.error('Error while signing in user:', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while signing in user.', error);
   }
 };
 
@@ -202,7 +197,7 @@ const initRestorePassword = async (req, res) =>  {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
     }
 
     const token = generateToken(user, '5m');
@@ -216,10 +211,9 @@ const initRestorePassword = async (req, res) =>  {
 
     sendEmail(email, 'Password restore', resetLink);
 
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'Посилання для відновлення паролю надіслано на ваш email.');
+    return sendRes(res, HTTP_STATUS_CODES.OK, 'Посилання для відновлення паролю надіслано на ваш email.');
   } catch (error) {
-    logger.error(error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -227,15 +221,14 @@ const restorePassword = async (req, res) => {
   const { token, newPassword } = req.body;
 
   if (!token || !newPassword) {
-    logger.error('Invalid credentials for user.');
-    return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.INVALID_CREDENTIALS);
+    return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.INVALID_CREDENTIALS);
   }
 
   try {
     const user = await User.findOne({ resetPasswordToken: token });
 
     if (!user || user.resetPasswordExpires < Date.now()) {
-      return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, 'Your token has expired.');
+      return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, 'Your token has expired.');
     }
 
     if (req.body.newPassword) {
@@ -245,11 +238,9 @@ const restorePassword = async (req, res) => {
     const updatedUser = await user.save();
     const newToken = generateToken(updatedUser);
 
-    logger.info('New password created.');
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'New password created.', newToken);
+    return sendRes(res, HTTP_STATUS_CODES.OK, 'New password created.', newToken);
   } catch (error) {
-    logger.error(error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -257,15 +248,12 @@ const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (user) {
-      logger.info('User found by ID:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'User was found.', user);
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'User was found.', user);
     } else {
-      logger.error('User not found by ID:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
     }
   } catch (error) {
-    logger.error('Error while fetching user by ID:', req.params.id, error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while fetching user by ID.', error);
   }
 };
 
@@ -308,16 +296,14 @@ const updateProfile = async (req, res) => {
 
       const updatedAddress = await address.save();
 
-      logger.info('User profile updated:', updatedUser._id);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, MESSAGES.USER_WAS_UPDATED, {
+      return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.USER_WAS_UPDATED, {
         updatedUser,
         token,
         updatedAddress,
       });
     }
   } catch (error) {
-    logger.error('Error while updating user profile:', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while updating user profile.', error);
   }
 };
 
@@ -329,18 +315,18 @@ const deleteUser = async (req, res) => {
 
     if (user) {
       if (isAdmin(user)) {
-        return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.CANNOT_DELETE_ADMIN);
+        return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.CANNOT_DELETE_ADMIN);
       } else {
         const deletedUser = await user.remove();
-        return handleResponse(res, HTTP_STATUS_CODES.OK, 'User deleted.', {
+        return sendRes(res, HTTP_STATUS_CODES.OK, 'User deleted.', {
           user: deletedUser
         });
       }
     } else {
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
     }
   } catch (error) {
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -349,7 +335,7 @@ const updateUser = async (req, res) => {
     const user = await User.findById(req.params.id);
 
     if (!user) {
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
     }
 
     user.name = req.body.name || user.name;
@@ -360,9 +346,9 @@ const updateUser = async (req, res) => {
 
     const updatedUser = await user.save();
 
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'User updated.', updatedUser);
+    return sendRes(res, HTTP_STATUS_CODES.OK, 'User updated.', updatedUser);
   } catch (error) {
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 

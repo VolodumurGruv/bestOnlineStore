@@ -1,12 +1,11 @@
 import Order from '../models/orderSchema.js';
 import Cart from '../models/cartSchema.js';
 import sendEmail from '../utils/email.js';
-import logger from '../utils/logger.js';
 import {
   HTTP_STATUS_CODES,
   MESSAGES
 } from '../utils/constants.js';
-import handleResponse from '../utils/handleResponse.js';
+import sendRes from '../utils/handleResponse.js';
 
 const getAllOrders = async (req, res) => {
   const { status } = req.query;
@@ -15,15 +14,12 @@ const getAllOrders = async (req, res) => {
     const orders = await Order.find(status ? { status } : {}).populate('user', 'name');
 
     if (!orders || orders.length === 0) {
-      logger.error(MESSAGES.ORDER_NOT_FOUND);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
 
-    logger.info('All orders fetched successfully');
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'All orders in payload.', orders);
+    return sendRes(res, HTTP_STATUS_CODES.OK, 'All orders in payload.', orders);
   } catch (error) {
-    logger.error('Error while fetching all orders', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while fetching all orders.', error);
   }
 };
 
@@ -33,11 +29,9 @@ const getOrderHistory = async (req, res) => {
 
     const orders = await Order.find({ user: userId });
 
-    logger.info('Order(s) fetched for user: ', req.user._id);
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'Your order(s) in payload.', orders);
+    return sendRes(res, HTTP_STATUS_CODES.OK, 'Your order(s) in payload.', orders);
   } catch (error) {
-    logger.error('Error while getting order history: ', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while getting order history.', error);
   }
 };
 
@@ -45,15 +39,12 @@ const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (order) {
-      logger.info('Order found by ID:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'Order found.', order);
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'Order found.', order);
     } else {
-      logger.error('Order not found by ID:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
   } catch (error) {
-    logger.error('Error while fetching order by ID:', req.params.id, error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while fetching order by ID.', error);
   }
 };
 
@@ -64,8 +55,7 @@ const createOrder = async (req, res) => {
     const cart = await Cart.findOne({ user: userId });
 
     if (!cart) {
-      logger.error('Consumer cart is empty.');
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
     }
 
     const order = new Order({
@@ -82,11 +72,9 @@ const createOrder = async (req, res) => {
     cart.totalPrice = 0;
     await cart.save();
 
-    logger.info('Order successfully created.');
-    return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'Order created successfully.', createdOrder);
+    return sendRes(res, HTTP_STATUS_CODES.CREATED, 'Order created successfully.', createdOrder);
   } catch (error) {
-    logger.error('Internal Server Error.', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
   }
 };
 
@@ -108,15 +96,13 @@ const updateOrder = async (req, res) => {
       const updatedOrder = await order.save();
 
       sendEmail(req.user.email, 'Changes on your order', `Order ${req.params.id} was paid.`);
-      logger.info('Order paid:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'Order has been paid.', updatedOrder);
+
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'Order has been paid.', updatedOrder);
     } else {
-      logger.error('Order not found for payment:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
   } catch (error) {
-    logger.error('Error while updating order to paid:', req.params.id, error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -134,16 +120,14 @@ const changeStatus = async (req, res) => {
     );
 
     if (!order) {
-      logger.error('Order not found for update:', orderId);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
 
     sendEmail(req.user.email, 'Changes on your order', `Order ${orderId} was updated.`);
-    logger.info('Order updated:', orderId);
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'Order updated.', order);
+
+    return sendRes(res, HTTP_STATUS_CODES.OK, 'Order updated.', order);
   } catch (error) {
-    logger.error(error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_RVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_RVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -152,15 +136,12 @@ const deleteOrder = async (req, res) => {
     const orderId = req.params.id;
     const deletedOrder = await Order.findByIdAndRemove(orderId);
     if (deletedOrder) {
-      logger.info('Order deleted:', orderId);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'Order deleted.', deletedOrder);
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'Order deleted.', deletedOrder);
     } else {
-      logger.error('Order not found for delete:', orderId);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
   } catch (error) {
-    logger.error('Error while deleting order:', req.params.id, error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while deleting order.', error);
   }
 };
 

@@ -1,85 +1,55 @@
-import User from '../models/userSchema.js';
-import logger from '../utils/logger.js';
 import {
   HTTP_STATUS_CODES,
   MESSAGES
 } from '../utils/constants.js';
-import handleResponse from '../utils/handleResponse.js';
+import sendRes from '../utils/handleResponse.js';
+import getUserById from '../utils/getUser.js';
 
 const getWishList = async (req, res) => {
   try {
     const userId = req.user._id;
-
-    const user = await User.findById(userId);
-
-    if (!user) {
-      logger.error(MESSAGES.USER_NOT_FOUND);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
-    }
+    const user = await getUserById(userId);
 
     const wishListProducts = user.wishList;
-
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'Wishlist retrieved successfully.', wishListProducts);
+    return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.WISHLIST_RETRIEVED, wishListProducts);
   } catch (error) {
-    logger.error('Error getting wishlist:', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error getting wishlist.', error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, error.message, error);
   }
 };
 
 const addToWishList = async (req, res) => {
   try {
     const userId = req.user._id;
-
-    const {productId} = req.body;
-
-    const user = await User.findById(userId);
-
-    if (!user) {
-      logger.error(MESSAGES.USER_NOT_FOUND);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
-    }
+    const { productId } = req.body;
+    const user = await getUserById(userId);
 
     if (user.wishList.includes(productId)) {
-      logger.info('Product is already in the wishlist.');
-      return handleResponse(res, HTTP_STATUS_CODES.CONFLICT, 'Product is already in the wishlist.');
+      return sendRes(res, HTTP_STATUS_CODES.CONFLICT, MESSAGES.PRODUCT_ALREADY_IN_WISHLIST);
     }
 
     user.wishList.push(productId);
     await user.save();
-
-    return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'Product was successfully added to the wishlist.');
+    return sendRes(res, HTTP_STATUS_CODES.CREATED, MESSAGES.PRODUCT_ADDED_TO_WISHLIST);
   } catch (error) {
-    logger.error('Error adding to wishlist:', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error adding to wishlist.', error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
 const removeFromWishList = async (req, res) => {
   try {
     const userId = req.user._id;
-
-    const {productId} = req.params;
-
-    const user = await User.findById(userId);
-
-    if (!user) {
-      logger.error(MESSAGES.USER_NOT_FOUND);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
-    }
+    const { productId } = req.params;
+    const user = await getUserById(userId);
 
     if (!user.wishList.includes(productId)) {
-      logger.error(MESSAGES.PRODUCT_NOT_FOUND);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'Product is not in the wishlist.');
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_IN_WISHLIST);
     }
 
     user.wishList = user.wishList.filter(product => product.toString() !== productId);
     await user.save();
-
-    logger.info('Product was successfully removed from the wishlist');
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'Product was successfully removed from the wishlist.');
+    return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.PRODUCT_REMOVED_FROM_WISHLIST);
   } catch (error) {
-    logger.error('Error removing from wishlist:', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error removing from wishlist.', error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, error.message, error);
   }
 };
 
@@ -88,3 +58,4 @@ export {
   addToWishList,
   removeFromWishList
 };
+

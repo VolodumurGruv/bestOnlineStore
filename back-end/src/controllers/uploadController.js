@@ -6,12 +6,13 @@ import {
   HTTP_STATUS_CODES,
   MESSAGES
 } from '../utils/constants.js';
-import handleResponse from '../utils/handleResponse.js';
+import sendRes from '../utils/handleResponse.js';
 
 const storage = new Storage({
   projectId: `${process.env.GCLOUD_PROJECT}`,
   keyFilename: './credentials.json',
 });
+
 const bucket = storage.bucket(`${process.env.GCS_BUCKET}`);
 
 const upload = multer({
@@ -24,13 +25,11 @@ const upload = multer({
 const uploadFile = async (req, res) => {
   try {
     const { file } = req;
-
     const fileName = `${Date.now()}_${file.originalname}`;
     const fileStream = bucket.file(fileName).createWriteStream();
 
     fileStream.on('error', (error) => {
-      logger.error('Error uploading file to GCS:', error);
-      return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+      return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.ERROR_UPLOADING_FILE, error);
     });
 
     fileStream.on('finish', async () => {
@@ -41,23 +40,22 @@ const uploadFile = async (req, res) => {
 
       if (product) {
         product.allImages.push(fileName);
+
         if (product.baseImage === 'no.jpg') {
           product.baseImage = fileName;
         }
 
         await product.save();
 
-        return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'File saved on Google Cloud Storage.', fileName);
+        return sendRes(res, HTTP_STATUS_CODES.CREATED, MESSAGES.FILE_SAVED_ON_GCS, fileName);
       } else {
-        logger.error('Product not found for file upload:', productId);
-        return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
+        return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
       }
     });
 
     fileStream.end(file.buffer);
   } catch (error) {
-    logger.error('Error handling file upload:', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.ERROR_HANDLING_FILE_UPLOAD, error);
   }
 };
 

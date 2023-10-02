@@ -5,7 +5,7 @@ import {
   HTTP_STATUS_CODES,
   MESSAGES
 } from '../utils/constants.js';
-import handleResponse from '../utils/handleResponse.js';
+import sendRes from '../utils/handleResponse.js';
 
 const getAllProducts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -42,10 +42,10 @@ const getAllProducts = async (req, res) => {
 
     const products = await query.exec();
     const totalProducts = await Product.countDocuments(query.getQuery());
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'All products in payload.', { products, totalProducts });
+    return sendRes(res, HTTP_STATUS_CODES.OK, 'All products in payload.', { products, totalProducts });
   } catch (error) {
     logger.error('Error while fetching all products', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -56,7 +56,7 @@ const searchProductsByName = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.VALIDATION_ERROR, errors.array());
+      return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.VALIDATION_ERROR, errors.array());
     }
 
     const products = await Product.find({
@@ -64,15 +64,12 @@ const searchProductsByName = async (req, res) => {
     });
 
     if (products.length > 0) {
-      logger.info('Products found by name:', query);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'Products found.', products);
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'Products found.', products);
     } else {
-      logger.info('No products found by name:', query);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
     }
   } catch (error) {
-    logger.error('Error while searching for products by name:', query, error);
-    return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.EMPTY_QUERY_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.EMPTY_QUERY_ERROR, error);
   }
 };
 
@@ -80,15 +77,12 @@ const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).populate('reviews');
     if (product) {
-      logger.info('Product found by ID:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'Product found.', product);
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'Product found.', product);
     } else {
-      logger.error('Product not found by ID:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
     }
   } catch (error) {
-    logger.error('Error while fetching product by ID:', req.params.id, error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while fetching product by ID.', error);
   }
 };
 
@@ -96,11 +90,10 @@ const createProduct = async (req, res) => {
   try {
     const newProductData = req.body;
     const createdProduct = await Product.create(newProductData);
-    logger.info('Product created:', createdProduct._id);
-    return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'Product created.', createdProduct);
+
+    return sendRes(res, HTTP_STATUS_CODES.CREATED, 'Product created.', createdProduct);
   } catch (error) {
-    logger.error('Error while creating product', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while creating product.', error);
   }
 };
 
@@ -109,15 +102,12 @@ const updateProduct = async (req, res) => {
     const productId = req.params.id;
     const updatedProduct = await Product.findByIdAndUpdate(productId, req.body, { new: true });
     if (updatedProduct) {
-      logger.info('Product updated:', productId);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'Product updated.', updatedProduct);
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'Product updated.', updatedProduct);
     } else {
-      logger.error('Product not found for update:', productId);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
     }
   } catch (error) {
-    logger.error('Error while updating product:', req.params.id, error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while updating product.', error);
   }
 };
 
@@ -126,15 +116,12 @@ const deleteProduct = async (req, res) => {
     const productId = req.params.id;
     const deletedProduct = await Product.findByIdAndRemove(productId);
     if (deletedProduct) {
-      logger.info('Product deleted:', productId);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'Product deleted.', deletedProduct);
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'Product deleted.', deletedProduct);
     } else {
-      logger.error('Product not found for delete:', productId);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
     }
   } catch (error) {
-    logger.error('Error while deleting product:', req.params.id, error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while deleting product.', error);
   }
 };
 

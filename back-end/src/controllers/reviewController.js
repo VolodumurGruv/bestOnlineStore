@@ -1,28 +1,25 @@
 import Review from '../models/reviewSchema.js';
 import User from '../models/userSchema.js';
 import Product from '../models/productSchema.js';
-import logger from '../utils/logger.js';
 import {
   HTTP_STATUS_CODES,
   MESSAGES
 } from '../utils/constants.js';
-import handleResponse from '../utils/handleResponse.js';
+import sendRes from '../utils/handleResponse.js';
 
 const addReview = async (req, res) => {
   try {
     const { user, product, rating, comment } = req.body;
 
     if (!user || !product || !rating || !comment) {
-      logger.error('Missing required fields for review:', req.body);
-      return handleResponse(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.MISSING_REQUIRED_FIELDS);
+      return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.MISSING_REQUIRED_FIELDS);
     }
 
     const existingUser = await User.findById(user);
     const productToUpdate = await Product.findById(product);
 
     if (!productToUpdate || !existingUser) {
-      logger.error('User or product not exist.');
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
     }
 
     const newReview = new Review({
@@ -35,29 +32,25 @@ const addReview = async (req, res) => {
     await newReview.save();
 
     productToUpdate.numReviews += 1;
-    productToUpdate.raiting = ((productToUpdate.raiting * (productToUpdate.numReviews - 1)) + rating) / productToUpdate.numReviews;
+    productToUpdate.rating =
+      ((productToUpdate.rating * (productToUpdate.numReviews - 1)) + rating) / productToUpdate.numReviews;
 
     await productToUpdate.save();
 
-    logger.info('Review added successfully:', newReview._id);
-    return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'Review added successfully', { review: newReview });
+    return sendRes(res, HTTP_STATUS_CODES.CREATED, MESSAGES.REVIEW_ADDED_SUCCESSFULLY, { review: newReview });
   } catch (error) {
-    logger.error('Error while adding review.', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.ERROR_WHILE_ADDING_REVIEW, error);
   }
 };
 
 const getReviewsForProduct = async (req, res) => {
   try {
     const { productId } = req.params;
-
     const reviews = await Review.find({ product: productId });
 
-    logger.info('Reviews retrieved successfully.', reviews);
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'Reviews retrieved successfully.', { reviews });
+    return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.REVIEWS_RETRIEVED_SUCCESSFULLY, { reviews });
   } catch (error) {
-    logger.error('Error while retriving reviews.', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.ERROR_WHILE_RETRIEVING_REVIEWS, error);
   }
 };
 
@@ -69,8 +62,7 @@ const updateReview = async (req, res) => {
     const reviewToUpdate = await Review.findById(reviewId);
 
     if (!reviewToUpdate) {
-      logger.error('Review not found.');
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.REVIEW_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.REVIEW_NOT_FOUND);
     }
 
     if (req.user._id.equals(reviewToUpdate.user)) {
@@ -80,41 +72,33 @@ const updateReview = async (req, res) => {
         { new: true }
       );
 
-      logger.info('Review updated successfully.');
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'Review updated successfully', { review: updatedReview });
+      return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.REVIEW_UPDATED_SUCCESSFULLY, { review: updatedReview });
     } else {
-      logger.error('Unauthorized to update this review.');
-      return handleResponse(res, HTTP_STATUS_CODES.UNAUTHORIZED, 'Unauthorized to update this review');
+      return sendRes(res, HTTP_STATUS_CODES.UNAUTHORIZED, MESSAGES.UNAUTHORIZED_TO_UPDATE_REVIEW);
     }
   } catch (error) {
-    logger.error('Error while updating review.', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.ERROR_WHILE_UPDATING_REVIEW, error);
   }
 };
 
 const deleteReview = async (req, res) => {
   try {
     const { reviewId } = req.params;
-
     const reviewToDelete = await Review.findById(reviewId);
 
     if (!reviewToDelete) {
-      logger.error('Review not found.');
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.REVIEW_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.REVIEW_NOT_FOUND);
     }
 
     if (req.user._id.equals(reviewToDelete.user) || req.user.isAdmin === true) {
       const deletedReview = await Review.findByIdAndDelete(reviewId);
 
-      logger.info('Review deleted successfully.');
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'Review deleted successfully', { review: deletedReview });
+      return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.REVIEW_DELETED_SUCCESSFULLY, { review: deletedReview });
     } else {
-      logger.error('Unauthorized to delete this review.');
-      return handleResponse(res, HTTP_STATUS_CODES.UNAUTHORIZED, 'Unauthorized to delete this review');
+      return sendRes(res, HTTP_STATUS_CODES.UNAUTHORIZED, MESSAGES.UNAUTHORIZED_TO_DELETE_REVIEW);
     }
   } catch (error) {
-    logger.error('Error while deleting review.', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.ERROR_WHILE_DELETING_REVIEW, error);
   }
 };
 
