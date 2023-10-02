@@ -84,7 +84,7 @@
       [control]="infoForm.get('address')"
     ></app-error-validation>
   </div>
-  <ng-container *ngIf="!isCart">
+  <div [ngClass]="{ hidden: isCart }">
     <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'password')">
       <input
         type="password"
@@ -96,7 +96,7 @@
         [control]="infoForm.get('password')"
       ></app-error-validation>
     </div>
-  </ng-container>
+  </div>
 
   <div class="address__list" *ngIf="addresses.length && isChosen">
     <ul class="address__list-items">

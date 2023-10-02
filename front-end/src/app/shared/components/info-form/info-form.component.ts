@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
@@ -27,7 +34,7 @@ import { CartService } from 'app/components/cart/services/cart.service';
   templateUrl: './info-form.component.html',
   styleUrls: ['./info-form.component.scss'],
 })
-export class InfoFormComponent implements OnInit, OnDestroy {
+export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -94,6 +101,12 @@ export class InfoFormComponent implements OnInit, OnDestroy {
         this.path = urlSegment[0].path;
       }
     });
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.infoForm.get('deliveryMethod')?.value === 'novaposhta') {
+      console.log(this.infoForm.get('department'));
+    }
   }
 
   getAddress(city: string): void {
