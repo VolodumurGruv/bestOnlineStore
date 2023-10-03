@@ -297,9 +297,9 @@ const updateProfile = async (req, res) => {
       const updatedAddress = await address.save();
 
       return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.USER_WAS_UPDATED, {
-        updatedUser,
+        user: updatedUser,
         token,
-        updatedAddress,
+        address: updatedAddress,
       });
     }
   } catch (error) {

@@ -6,7 +6,11 @@ import {
 } from '../utils/constants.js';
 import sendRes from '../utils/handleResponse.js';
 
-const sendCartResponse = async (res, userId, message) => {
+const sendCartResponse = async (res, userId, message, cart) => {
+  if (cart) {
+    return sendRes(res, HTTP_STATUS_CODES.OK, message, cart);
+  }
+
   try {
     const userCart = await Cart.findOne({ user: userId });
     if (!userCart) {
