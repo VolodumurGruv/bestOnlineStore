@@ -1,7 +1,13 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  OnDestroy,
+  Output,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscriber, Subscription } from 'rxjs';
 
 import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
 import { isValid } from '@shared/utils/is-valid';
@@ -23,12 +29,13 @@ import { AlertService } from '@shared/services/interaction/alert.service';
   styleUrls: ['./new-pass.component.scss'],
   providers: [RecoverPassService],
 })
-export class NewPassComponent {
+export class NewPassComponent implements OnDestroy {
   @Output() isNewPass = new EventEmitter<boolean>();
 
   private readonly fb = inject(FormBuilder);
   private readonly setNewPassword = inject(RecoverPassService);
   private alertService = inject(AlertService);
+  private unSub = new Subscription();
 
   public recoverPass$!: Observable<string>;
   public isValid = isValid;
@@ -67,7 +74,9 @@ export class NewPassComponent {
     const token = localStorage.getItem('resToken');
 
     if (password && token) {
-      this.setNewPassword.setNewPass(token, password);
+      this.unSub.add(
+        this.setNewPassword.setNewPass(token, password).subscribe()
+      );
       this.recoverPass$ = this.setNewPassword.getRecoverRes();
       this.isRecover = false;
     } else {
@@ -80,5 +89,9 @@ export class NewPassComponent {
   }
   isVisisble(input: { type: string }) {
     input.type = input.type === 'password' ? 'text' : 'password';
+  }
+
+  ngOnDestroy(): void {
+    this.unSub.unsubscribe();
   }
 }

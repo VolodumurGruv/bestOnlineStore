@@ -16,14 +16,14 @@ export const AuthInterceptor: HttpInterceptorFn = (
 ): Observable<HttpEvent<any>> => {
   const auth = inject(AuthService);
   const spinner = inject(SpinnerService);
-  const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user')!);
   const url = req.url.split('/').includes('google');
 
   spinner.enableSpinner();
 
-  if (auth.isAuth() && !url && token) {
+  if (auth.isAuth() && !url && user?.token) {
     const authToken = req.clone({
-      headers: req.headers.set('Authorization', token),
+      headers: req.headers.set('Authorization', user.token),
     });
 
     return next(authToken).pipe(finalize(() => spinner.disableSpinner()));

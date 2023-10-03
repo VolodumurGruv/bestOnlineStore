@@ -1,7 +1,1 @@
-@use "inputs";
 
-.input-wrap {
-  @include inputs.input-wrap;
-  width: 530px;
-  margin: 20px auto;
-}

@@ -1,6 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -8,11 +8,15 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 import { AuthService } from '../../../services/signin-flow/auth.service';
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
 import { GoogleLoginComponent } from '../google-login/google-login.component';
-import { emailValidator, passwordValidator } from '../../../../../shared/utils/validators';
+import {
+  emailValidator,
+  passwordValidator,
+} from '../../../../../shared/utils/validators';
 import { ErrorValidationComponent } from '../../../../../shared/components/error-validation/error-validation.component';
 import { isValid } from '../../../../../shared/utils/is-valid';
 import { RecoverPassComponent } from '../recover-pass/recover-pass.component';
@@ -35,10 +39,11 @@ import { NewPassComponent } from '../new-pass/new-pass.component';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
+  private unSub!: Subscription;
   public readonly isValid = isValid;
   public recover = false;
 
@@ -51,7 +56,7 @@ export class LoginComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe((params: any) => {
+    this.route.queryParamMap.subscribe((params: ParamMap) => {
       const token = params.get('token');
       if (token) {
         this.isNewPass = true;
@@ -61,7 +66,8 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.authService.signIn(this.signinForm.value);
+    const { email, password } = this.signinForm.value;
+    this.unSub = this.authService.signIn({ email, password }).subscribe();
   }
 
   googleLogin() {}
@@ -76,5 +82,11 @@ export class LoginComponent implements OnInit {
 
   newPass(event: boolean) {
     this.isNewPass = event;
+  }
+
+  ngOnDestroy(): void {
+    if (this.unSub) {
+      this.unSub.unsubscribe();
+    }
   }
 }

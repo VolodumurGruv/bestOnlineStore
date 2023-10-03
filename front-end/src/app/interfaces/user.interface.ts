@@ -1,19 +1,19 @@
 export interface User {
-  name: string;
-  password?: string;
-  email: string;
+  name?: string | null | undefined;
+  password?: string | null;
+  email?: string | null | undefined;
   isAdmin?: boolean;
   token?: string;
   _id?: string;
 }
 
 export interface UserInfo extends User {
-  lastName: string;
-  address: string;
-  phone: string;
-  delivery?: string;
-  department?: string;
-  isAnonymous?: boolean;
+  lastName?: string | null;
+  address?: string | null | undefined;
+  phone?: string | null;
+  delivery?: string | null;
+  department?: string | null;
+  isAnonymous?: boolean | null;
   wishList?: string[];
 }
 

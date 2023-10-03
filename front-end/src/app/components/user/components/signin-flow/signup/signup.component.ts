@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -19,6 +19,7 @@ import {
 } from '@shared/utils/validators';
 import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
 import { isValid } from '@shared/utils/is-valid';
+import { Subscription, tap } from 'rxjs';
 
 @Component({
   selector: 'app-signup',
@@ -34,9 +35,11 @@ import { isValid } from '@shared/utils/is-valid';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent {
+export class SignupComponent implements OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private unSub = new Subscription();
   public readonly isValid = isValid;
 
   public signupForm: FormGroup = this.fb.group({
@@ -75,11 +78,26 @@ export class SignupComponent {
   registerUser() {
     const { name, email, password } = this.signupForm.value;
     if (name && email && password) {
-      this.authService.signup({ name, password, email });
+      this.unSub.add(
+        this.authService
+          .signup({ name, password, email })
+          .pipe(
+            tap((res: any) => {
+              if (res.payload) {
+                this.router.navigate(['/user']);
+              }
+            })
+          )
+          .subscribe()
+      );
     }
   }
 
   isVisisble(input: { type: string }) {
     input.type = input.type === 'password' ? 'text' : 'password';
+  }
+
+  ngOnDestroy(): void {
+    this.unSub.unsubscribe();
   }
 }

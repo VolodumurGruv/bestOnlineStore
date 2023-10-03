@@ -1,7 +1,6 @@
-import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { map } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subscription, map, tap } from 'rxjs';
 import { Router, RouterOutlet } from '@angular/router';
 
 import { UserService } from 'app/components/user/services/user.service';
@@ -15,23 +14,31 @@ import { UserInfo } from '@interfaces/user.interface';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
   private readonly userService = inject(UserService);
   private readonly router = inject(Router);
-  private destroyRer = inject(DestroyRef);
   public users!: UserInfo[];
+  private unSub = new Subscription();
 
   ngOnInit(): void {
-    this.userService
-      .getUsers()
-      .pipe(
-        map((res: any) => (this.users = res.payload)),
-        takeUntilDestroyed(this.destroyRer)
-      )
-      .subscribe();
+    this.unSub.add(
+      this.userService
+        .getUsers()
+        .pipe(
+          tap((res: any) => {
+            console.log(res);
+            this.users = res;
+          })
+        )
+        .subscribe()
+    );
   }
 
   userDetail(id: string | undefined) {
     this.router.navigate(['/admin/users/', id]);
+  }
+
+  ngOnDestroy(): void {
+    this.unSub.unsubscribe();
   }
 }

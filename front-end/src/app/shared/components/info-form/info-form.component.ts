@@ -104,8 +104,14 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    if (this.infoForm.get('deliveryMethod')?.value === 'novaposhta') {
-      console.log(this.infoForm.get('department'));
+    if (this.infoForm.get('deliveryMethod')?.value === 'Нова пошта') {
+      this.infoForm.get('department')?.addValidators(Validators.required);
+      this.infoForm.get('department')?.updateValueAndValidity();
+    }
+
+    if (this.infoForm.get('deliveryMethod')?.value !== 'Нова пошта') {
+      this.infoForm.get('department')?.removeValidators(Validators.required);
+      this.infoForm.get('department')?.updateValueAndValidity();
     }
   }
 
@@ -139,7 +145,9 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   updateUser() {
-    this.userService.updateUser(this.infoForm.value);
+    this.userService.updateUser(this.infoForm.value).subscribe(() => {
+      setupInitialValue(this.infoForm, this.infoForm.controls);
+    });
   }
 
   makeOrder() {

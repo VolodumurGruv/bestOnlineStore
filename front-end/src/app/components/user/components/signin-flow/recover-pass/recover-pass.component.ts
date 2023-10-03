@@ -1,8 +1,14 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  Output,
+  inject,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
 import { emailValidator } from '@shared/utils/validators';
@@ -24,11 +30,12 @@ import { RecoverPassService } from '../../../services/signin-flow/recover-pass.s
   styleUrls: ['./recover-pass.component.scss'],
   providers: [{ provide: RecoverPassService, useClass: RecoverPassService }],
 })
-export class RecoverPassComponent {
+export class RecoverPassComponent implements OnDestroy {
   @Output() recover = new EventEmitter<boolean>();
 
   private readonly fb = inject(FormBuilder);
   private readonly recoverPass = inject(RecoverPassService);
+  private unSub = new Subscription();
 
   public readonly isValid = isValid;
   public recoverPass$!: Observable<string>;
@@ -42,7 +49,7 @@ export class RecoverPassComponent {
     const email = this.recoverPassForm.get('email')?.value;
 
     if (email) {
-      this.recoverPass.recoverPass(email);
+      this.unSub.add(this.recoverPass.recoverPass(email).subscribe());
       this.recoverPass$ = this.recoverPass.getRecoverRes();
       this.notSend = false;
       localStorage.setItem('recEmail', email);
@@ -51,5 +58,9 @@ export class RecoverPassComponent {
 
   cancel() {
     this.recover.emit(false);
+  }
+
+  ngOnDestroy(): void {
+    this.unSub.unsubscribe();
   }
 }

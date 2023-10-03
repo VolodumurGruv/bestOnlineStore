@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CarouselComponent } from './components/carousel/carousel.component';
@@ -8,7 +8,7 @@ import { CardComponent } from './components/card/card.component';
 import { ProductsService } from '@shared/services/products.service';
 import { Product } from '@interfaces/product.interfaces';
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
@@ -23,24 +23,31 @@ import { Observable } from 'rxjs';
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private productService: ProductsService
   ) {}
 
+  private unSub = new Subscription();
+
   product$!: Observable<Product>;
-  products$!: Product[];
 
   ngOnInit(): void {
     this.product$ = this.productService.getProductByIdApi(
       '64ed1077cfa17b039820db9d'
     );
-    this.productService.getProductsApi().subscribe((res) => console.log(res));
+    this.unSub.add(
+      this.productService.getProductsApi().subscribe((res) => console.log(res))
+    );
   }
 
   redirect(path: string, dynamicPart?: string): void {
     const fullPath = dynamicPart ? [path, dynamicPart] : [path];
     this.router.navigate(fullPath);
+  }
+
+  ngOnDestroy(): void {
+    this.unSub.unsubscribe();
   }
 }
