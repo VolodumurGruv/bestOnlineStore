@@ -4,7 +4,7 @@
   "engine": {
     "node": ">=14"
   },
-  "description": "Server for online store.",
+  "description": "Server for online store 'Lykke Store'.",
   "main": "dist/api/index.js",
   "type": "module",
   "scripts": {
