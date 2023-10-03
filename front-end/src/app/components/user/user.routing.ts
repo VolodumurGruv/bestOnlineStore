@@ -3,7 +3,7 @@ import { authGuard } from './services/signin-flow/auth.guard';
 
 export const USER_ROUTES: Route[] = [
   {
-    path: 'user',
+    path: '',
     loadComponent: () =>
       import('./components/user/user.component').then((m) => m.UserComponent),
     canActivate: [authGuard],

@@ -81,14 +81,7 @@ export class SignupComponent implements OnDestroy {
       this.unSub.add(
         this.authService
           .signup({ name, password, email })
-          .pipe(
-            tap((res: any) => {
-              if (res.payload) {
-                this.router.navigate(['/user']);
-              }
-            })
-          )
-          .subscribe()
+          .subscribe(() => this.router.navigate(['/user']))
       );
     }
   }

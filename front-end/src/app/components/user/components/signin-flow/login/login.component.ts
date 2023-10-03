@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -8,7 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 
 import { AuthService } from '../../../services/signin-flow/auth.service';
 import { VisibilityIconComponent } from '@shared/components/icons/visibility-icon/visibility-icon.component';
@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private unSub!: Subscription;
   public readonly isValid = isValid;
   public recover = false;
@@ -67,7 +68,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     const { email, password } = this.signinForm.value;
-    this.unSub = this.authService.signIn({ email, password }).subscribe();
+    this.unSub = this.authService
+      .signIn({ email, password })
+      .subscribe(() => this.router.navigate(['/user']));
   }
 
   googleLogin() {}

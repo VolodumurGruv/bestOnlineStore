@@ -22,7 +22,7 @@ export class ProductComponent implements OnInit {
   ngOnInit(): void {
     this.product$ = this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
-        this.productService.getProductByIdApi(params.get('id')!)
+        this.productService.getProductById(params.get('id')!)
       )
     );
   }

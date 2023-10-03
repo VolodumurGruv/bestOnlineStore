@@ -3,7 +3,6 @@ import { Injectable, inject } from '@angular/core';
 import { configs } from '@configs/configs';
 import { UserInfo } from '@interfaces/user.interface';
 import { HttpErrorHandlerService } from '@shared/services/http-error-handler.service';
-import { updateLocalStorage } from '@shared/utils/initial-from-local';
 import { Observable, catchError, map, tap } from 'rxjs';
 
 @Injectable({
@@ -38,7 +37,8 @@ export class UserService {
   updateUser(user: UserInfo): Observable<UserInfo> {
     return this.http.put<UserInfo>(`${configs.URL}/user/profile`, user).pipe(
       tap((res: any) => {
-        updateLocalStorage(res.payload);
+        localStorage.setItem('user', JSON.stringify(res.payload));
+        localStorage.setItem('update', 'user was updated');
       }),
       catchError(
         this.httpErrorHandler.handleError<UserInfo>('Невдалося оновити дані!')

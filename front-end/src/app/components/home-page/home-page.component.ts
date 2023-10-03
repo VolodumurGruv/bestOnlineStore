@@ -34,11 +34,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
   product$!: Observable<Product>;
 
   ngOnInit(): void {
-    this.product$ = this.productService.getProductByIdApi(
-      '64ed1077cfa17b039820db9d'
-    );
     this.unSub.add(
-      this.productService.getProductsApi().subscribe((res) => console.log(res))
+      this.productService.getProducts().subscribe((res) => console.log(res))
     );
   }
 

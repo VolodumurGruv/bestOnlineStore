@@ -17,7 +17,7 @@ export const APP_ROUTING: Routes = [
           ),
       },
       {
-        path: '',
+        path: 'catalog',
         loadChildren: () =>
           import('./components/catalog/catalog.routing').then(
             (m) => m.CATALOG_ROUTING
@@ -46,7 +46,7 @@ export const APP_ROUTING: Routes = [
           ),
       },
       {
-        path: '',
+        path: 'user',
         loadChildren: () =>
           import('./components/user/user.routing').then((m) => m.USER_ROUTES),
       },
@@ -78,7 +78,7 @@ export const APP_ROUTING: Routes = [
   },
 
   {
-    path: '',
+    path: 'admin',
     loadChildren: () =>
       import('./admin/admin.routing').then((m) => m.ADMIN_ROUTING),
   },

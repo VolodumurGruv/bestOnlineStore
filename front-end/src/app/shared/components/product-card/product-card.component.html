@@ -20,17 +20,17 @@
         />
       </svg>
     </span>
-
-    <div class="product-card__picture">
-      <!--      <img-->
-      <!--        class="product-card__image"-->
-      <!--        width="360"-->
-      <!--        height="360"-->
-      <!--        alt="{{ product.name }}"-->
-      <!--        *ngIf="product.baseImage"-->
-      <!--        [src]="'https:/' + product.baseImage"-->
-      <!--      >-->
-      <div class="product-card__placeholder"></div>
+    <div class="product-card__placeholder">
+      <div class="product-card__picture">
+        <img
+          class="product-card__image"
+          width="360"
+          height="360"
+          alt="{{ product.name }}"
+          *ngIf="product.baseImage"
+          [src]="'https:/' + product.baseImage"
+        />
+      </div>
     </div>
     <h3 class="product-card__name">{{ product.name }}</h3>
     <p class="product-card__sale" *ngIf="product.discount">
@@ -44,9 +44,3 @@
     </p>
   </figcaption>
 </figure>
-
-<!--    <picture class="product-card__picture">-->
-<!--      <source [srcset]="product.image" type="image/webp">-->
-<!--      <img *ngIf="product.image" class="product-card__image" [src]="product.image" alt="{{ product.name }}">-->
-<!--      <div class="product-card__placeholder" *ngIf="!product.image"></div>-->
-<!--    </picture>-->

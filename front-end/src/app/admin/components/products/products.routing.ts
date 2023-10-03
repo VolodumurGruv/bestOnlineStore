@@ -15,6 +15,13 @@ export const PRODUCTS_ROUTING: Route[] = [
         loadComponent: () =>
           import('./product/product.component').then((m) => m.ProductComponent),
       },
+      {
+        path: 'edit',
+        loadComponent: () =>
+          import('./add-product/add-product.component').then(
+            (m) => m.AddProductComponent
+          ),
+      },
     ],
   },
 ];

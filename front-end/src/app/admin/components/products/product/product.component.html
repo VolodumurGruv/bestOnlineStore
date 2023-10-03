@@ -3,7 +3,10 @@
     <app-product-card class="product__card" [product]="product">
     </app-product-card>
     <div class="action">
-      <span class="link">Редагувати</span>
+      <span class="link" [routerLink]="['/admin/products/', product._id]"
+        >Редагувати</span
+      >
+      <span class="link" routerLink="['/admin/products/add']">Редагувати</span>
       <span class="link" routerLink="/admin/products">Назад до продукції</span>
     </div>
   </ng-container>
