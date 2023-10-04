@@ -34,8 +34,8 @@ build({
   format: 'esm',
   plugins: [dirnamePlugin],
   bundle: true,
-  minify: false,
-  outfile: './dist/api/index.js',
+  minify: true,
+  outfile: './dist/index.js',
   banner: {
     js:`import { createRequire } from 'module';const require = createRequire(import.meta.url);`
   },

@@ -8,7 +8,7 @@ import { xss } from 'express-xss-sanitizer';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import logger from './utils/logger.js';
-import handleResponse from './utils/handleResponse.js';
+import sendRes from './utils/handleResponse.js';
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import cartRouter from './routers/cartRouter.js';
@@ -91,8 +91,7 @@ app.get('*', (req, res) => {
 });
 
 app.use((error, req, res, next) => {
-  logger.error('err: ' + error.message);
-  handleResponse(res, 'fault', 'Something went wrong!', error);
+  sendRes(res, 'Something went wrong!', error);
 });
 
 const server = app.listen(port, () => {
