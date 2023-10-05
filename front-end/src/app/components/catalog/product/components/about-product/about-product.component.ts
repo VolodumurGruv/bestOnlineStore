@@ -8,6 +8,7 @@ import { AuthService } from 'app/components/user/services/signin-flow/auth.servi
 import { CartService } from 'app/components/cart/services/cart.service';
 import { tap } from 'rxjs';
 import { AlertService } from '@shared/services/interaction/alert.service';
+import { WishlistService } from '@shared/services/wishlist.service';
 
 @Component({
   selector: 'app-about-product',
@@ -26,6 +27,7 @@ export class AboutProductComponent implements OnInit {
   private readonly userService = inject(AuthService);
   private readonly cartService = inject(CartService);
   private readonly alertService = inject(AlertService);
+  private readonly wishService = inject(WishlistService);
 
   ngOnInit(): void {
     this.allImages = this.product.allImages.reverse().splice(0, 3);
@@ -43,5 +45,18 @@ export class AboutProductComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  addToWishList(productId: string | undefined) {
+    if (productId) {
+      this.wishService
+        .addWishList(productId)
+        .pipe(
+          tap((res: any) => {
+            if (res) this.alertService.success('Товар додано до обраного!');
+          })
+        )
+        .subscribe();
+    }
   }
 }
