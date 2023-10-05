@@ -1,4 +1,9 @@
 import jwt from 'jsonwebtoken';
+import sendRes from './handleResponse.js';
+import {
+  HTTP_STATUS_CODES,
+  MESSAGES
+} from './constants.js';
 
 const isAuth = (req, res, next) => {
   const { authorization } = req.headers;
@@ -7,30 +12,18 @@ const isAuth = (req, res, next) => {
 
     jwt.verify(token, `${process.env.JWT_SECRET}`, (error, decode) => {
       if (error) {
-        console.dir(error);
-        res.status(401).json({
-          message: 'fault',
-          text: 'Invalid token.',
-          payload: error.message
-        });
+        return sendRes(res, HTTP_STATUS_CODES.UNAUTHORIZED, MESSAGES.INVALID_TOKEN, error);
       } else {
         const nowInSeconds = Math.floor(Date.now() / 1000);
         if (decode.exp && decode.exp < nowInSeconds) {
-          console.log('Token has expired.');
-          return res.status(401).json({
-            message: 'fault',
-            text: 'Token has expired.'
-          });
+          return sendRes(res, HTTP_STATUS_CODES.UNAUTHORIZED, MESSAGES.TOKEN_HAS_EXPIRED);
         }
         req.user = decode;
         next();
       }
     });
   } else {
-    res.status(401).json({
-      message: 'fault',
-      text: 'No token.'
-    });
+    return sendRes(res, HTTP_STATUS_CODES.UNAUTHORIZED, MESSAGES.NO_TOKEN);
   }
 };
 

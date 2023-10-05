@@ -43,6 +43,7 @@ const uploadFile = async (req, res) => {
       if (product) {
         const imagePath = bucketPath.concat(fileName);
 
+        product.allImages[0] === 'no.jpg' && product.allImages.shift();
         product.allImages.push(imagePath);
 
         if (product.baseImage === 'no.jpg') {
