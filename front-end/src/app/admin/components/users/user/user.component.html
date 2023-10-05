@@ -4,7 +4,7 @@
       <div class="card__info">Адреса: {{ user.address }}</div>
       <div>Адміністратор: {{ user.isAdmin }}</div>
       <div>Анонімний: {{ user.isAnonymous }}</div>
-      <div>Список бажаного: {{ user.wishList }}</div>
+      <div>Список бажаного: {{ user.wishList?.join(" ") }}</div>
       <div class="action">
         <span class="link" (click)="edit()">Редагувати</span>
         <span class="link" routerLink="/admin/users">Назад до списку</span>

@@ -10,20 +10,18 @@ import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
 import { ProductsService } from '@shared/services/products.service';
 import { Product } from '@interfaces/product.interfaces';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router, RouterOutlet } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Subscription, map } from 'rxjs';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, ProductCardComponent],
+  imports: [CommonModule, RouterOutlet, RouterLink, ProductCardComponent],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit, OnDestroy {
   private readonly productService = inject(ProductsService);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   public products!: Product[];
   private unSub!: Subscription;
@@ -31,8 +29,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.unSub = this.productService
       .getProducts()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((res: any) => (this.products = res.products));
+      .subscribe((res) => (this.products = res));
   }
 
   redirectToProduct(id: string) {

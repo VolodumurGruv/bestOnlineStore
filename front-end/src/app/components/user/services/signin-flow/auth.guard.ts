@@ -16,7 +16,7 @@ export const authGuard = () => {
     }
   }
 
-  if (authService.isAuth()) {
+  if (authService.isAuth() && !authService.isAnonym()) {
     return true;
   }
 
@@ -31,6 +31,7 @@ export const loginGuard = () => {
   if (!authService.isAuth()) {
     return true;
   }
+  authService.signOut();
 
   return router.parseUrl('/');
 };

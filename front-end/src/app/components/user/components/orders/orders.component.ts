@@ -13,26 +13,7 @@ import { OrderService } from '@shared/services/order.service';
 })
 export class OrdersComponent implements OnInit {
   private readonly orderService = inject(OrderService);
-  public orders: Orders[] = [
-    {
-      image:
-        'https://img.freepik.com/premium-photo/blue-color-chair-product-image-web-page-scandinavian-design-clean-soft-chair-comfortable-with-copy-space-generatiev-ai_834602-16335.jpg',
-      description: 'Кавовий столик Кавовий столикКавовий столик',
-      price: 5500,
-      discount: 6500,
-      state: 'Комплектується',
-      quantity: 0,
-    },
-    {
-      image:
-        'https://img.freepik.com/premium-photo/blue-color-chair-product-image-web-page-scandinavian-design-clean-soft-chair-comfortable-with-copy-space-generatiev-ai_834602-16335.jpg',
-      description: 'Кавовий столик Кавовий столикКавовий столик',
-      price: 5500,
-      // discount: 6500,
-      state: 'Отримано',
-      quantity: 0,
-    },
-  ];
+  public orders: Orders[] = [];
 
   ngOnInit(): void {
     this.orderService.getOrderHistory();

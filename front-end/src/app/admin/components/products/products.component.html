@@ -3,7 +3,7 @@
     <app-product-card
       class="product__card"
       [product]="product"
-      (click)="redirectToProduct(product._id)"
+      [routerLink]="['/admin/products/product', product._id]"
     ></app-product-card>
   </ng-container>
 </section>

@@ -26,6 +26,7 @@ import {
 } from '@shared/utils/nova-poshta';
 import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
 import { CartService } from 'app/components/cart/services/cart.service';
+import { OrderService } from '@shared/services/order.service';
 
 @Component({
   selector: 'app-info-form',
@@ -39,7 +40,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly userService = inject(UserService);
-  private readonly cartService = inject(CartService);
+  private readonly orderService = inject(OrderService);
   public phoneHolder: string = '+380';
   public addresses: Address[] = [];
   public departments: any;
@@ -151,7 +152,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   makeOrder() {
-    this.cartService.makeOrder('', 3);
+    this.orderService.makeOrder(JSON.parse(localStorage.getItem('user')!)._id);
   }
 
   onSubmit() {}

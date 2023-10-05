@@ -1,9 +1,103 @@
 <section class="add-product">
   <div class="wraper">
     <div class="add-product__content">
-      <form>
-        <input type="text" placeholder="Product name" />
-        <textarea name="description" id="" cols="30" rows="10"></textarea>
+      <form class="form-wrap" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+        <div class="input-wrap">
+          <input
+            class="input"
+            type="text"
+            placeholder="Product name"
+            formControlName="name"
+          />
+        </div>
+        <div class="input-wrap">
+          <input
+            class="input"
+            type="text"
+            placeholder="Product brand"
+            formControlName="brand"
+          />
+        </div>
+        <div class="input-wrap">
+          <input
+            class="input"
+            type="text"
+            placeholder="Product category"
+            formControlName="category"
+          />
+        </div>
+        <div class="input-wrap">
+          <input
+            class="input"
+            type="text"
+            placeholder="Product subcategory"
+            formControlName="subcategory"
+          />
+        </div>
+        <div class="input-wrap">
+          <input
+            class="input"
+            type="number"
+            placeholder="Product price"
+            formControlName="price"
+          />
+        </div>
+        <div class="input-wrap">
+          <input
+            class="input"
+            type="number"
+            placeholder="Product discount"
+            formControlName="discount"
+          />
+        </div>
+        <div class="input-wrap">
+          <select
+            class="input"
+            type="text"
+            placeholder="Product instock"
+            formControlName="instock"
+          >
+            <option value="false">False</option>
+            <option value="true">True</option>
+          </select>
+        </div>
+        <div class="input-wrap">
+          <input
+            class="input"
+            type="number"
+            placeholder="Product countInStock"
+            formControlName="countInStock"
+          />
+        </div>
+        <div class="input-wrap">
+          <input
+            class="input"
+            type="text"
+            placeholder="Product shortDescr"
+            formControlName="shortDescr"
+          />
+        </div>
+        <div class="input-wrap">
+          <input
+            type="file"
+            (change)="uploadImage($event)"
+            #upload
+            [style.display]="'none'"
+          />
+          <button class="btn btn__add" (click)="upload.click()">Upload</button>
+        </div>
+        <textarea
+          name="description"
+          id=""
+          cols="30"
+          rows="10"
+          placeholder="Product description"
+          formControlName="descr"
+        ></textarea>
+        <button class="btn btn__add" type="submit">Додати</button>
+        <button class="btn btn__add" type="button" (click)="cancel()">
+          Відмінити
+        </button>
       </form>
     </div>
   </div>

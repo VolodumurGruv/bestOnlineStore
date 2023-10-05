@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { configs } from '@configs/configs';
 import { UserInfo } from '@interfaces/user.interface';
 import { HttpErrorHandlerService } from '@shared/services/http-error-handler.service';
-import { Observable, catchError, map, tap } from 'rxjs';
+import { Observable, catchError, config, map, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +25,7 @@ export class UserService {
 
   getUserById(userID: string): Observable<UserInfo> {
     return this.http.get<UserInfo>(`${configs.URL}/user/${userID}`).pipe(
-      map((res: any) => res),
+      map((res: any) => res.payload),
       catchError(
         this.httpErrorHandler.handleError<UserInfo>(
           'Невдалося отримати користувача!'

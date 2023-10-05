@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, Type } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable, retry } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, retry, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { Auth, signOut } from '@angular/fire/auth';
@@ -76,15 +76,36 @@ export class AuthService {
       );
   }
 
+  userAnonymous() {
+    return this.http.get(`${configs.URL}/user/reganonymous`).pipe(
+      map((res: any) => {
+        const user: User = res.payload;
+        this.setLocalStorage(user);
+        this.user.next(user);
+        console.log(this.user.value);
+        return user;
+      }),
+      catchError(
+        this.httpErrorHandler.handleError<User>(
+          'Виникла помилка при здійсненні Google login!'
+        )
+      )
+    );
+  }
+
   isAuth(): boolean {
     const user = this.user.value;
-    console.log(JSON.parse(localStorage.getItem('user')!));
+
     let token = '';
     if (JSON.parse(localStorage.getItem('user')!)) {
       token = JSON.parse(localStorage.getItem('user')!)?.token;
     }
 
     return token === user?.token && token ? true : false;
+  }
+
+  isAnonym(): boolean | undefined {
+    return this.user.value?.isAnonymous;
   }
 
   signOut(): void {
@@ -113,7 +134,6 @@ export class AuthService {
     ).toString();
     payload.signin = 'signin';
     payload.expDate = expDate;
-    console.log(payload);
     localStorage.setItem('user', JSON.stringify(payload));
   }
 }

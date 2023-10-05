@@ -12,7 +12,7 @@ export interface ProductCharacteristics {
 
 export interface Product {
   characteristics: ProductCharacteristics;
-  _id: string;
+  _id?: string;
   name: string;
   descr: string;
   shortDescr: string;
@@ -25,12 +25,12 @@ export interface Product {
   subcategory: string;
   instock: boolean;
   countInStock: number;
-  raiting: number;
-  numReviews: number;
-  reviews: Review[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  raiting?: number;
+  numReviews?: number;
+  reviews?: Review[];
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
 }
 
 export interface Review {

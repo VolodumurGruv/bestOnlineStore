@@ -22,6 +22,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
   spinner.enableSpinner();
 
   if (auth.isAuth() && !url && user?.token) {
+    console.log(user.token);
     const authToken = req.clone({
       headers: req.headers.set('Authorization', user.token),
     });

@@ -11,7 +11,6 @@ export const setupInitialValue = (form: FormGroup, controls?: any): void => {
     }
   }
 
-  console.log(user);
   for (const key in user) {
     if (form.get(key) && user[key]) {
       form.get(key)?.setValue(user[key]);

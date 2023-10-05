@@ -55,7 +55,7 @@
         <!-- <span class="product__price" [ngClass]="{'product__crossed-price': product.sale}">{{product.price | transformPrice}}</span> -->
       </div>
       <div class="product__buttons">
-        <button class="product__buy">
+        <button class="product__buy" (click)="addToCart(product._id!, 1)">
           Купити
           <svg
             width="32"

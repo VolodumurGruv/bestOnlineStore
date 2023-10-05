@@ -8,7 +8,7 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 
 import { Orders } from '@interfaces/user.interface';
 import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
@@ -17,6 +17,8 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CartService } from '../services/cart.service';
 import { InfoComponent } from 'app/components/user/components/info/info.component';
 import { InfoFormComponent } from '@shared/components/info-form/info-form.component';
+import { Observable, map } from 'rxjs';
+import { OrderService } from '@shared/services/order.service';
 
 @Component({
   selector: 'app-cart-orders',
@@ -24,6 +26,7 @@ import { InfoFormComponent } from '@shared/components/info-form/info-form.compon
   imports: [
     NgFor,
     NgIf,
+    AsyncPipe,
     TransformPricePipe,
     FormsModule,
     RouterLink,
@@ -40,6 +43,7 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly cartService = inject(CartService);
+  private readonly orderService = inject(OrderService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   public maxQuantity = 100;
@@ -51,31 +55,14 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
   public isCart = true;
   public isValid = false;
 
-  public orders: Orders[] = [
-    {
-      _id: '64e7af152f011665dfd7f194',
-      image:
-        'https://img.freepik.com/premium-photo/blue-color-chair-product-image-web-page-scandinavian-design-clean-soft-chair-comfortable-with-copy-space-generatiev-ai_834602-16335.jpg',
-      description: 'Кавовий столик Кавовий столикКавовий столик',
-      quantity: 1,
-      price: 5500,
-      discount: 6500,
-      summa: 5500,
-    },
-    {
-      _id: '64e7cd1adeff9daacd5a62e2',
-      image:
-        'https://img.freepik.com/premium-photo/blue-color-chair-product-image-web-page-scandinavian-design-clean-soft-chair-comfortable-with-copy-space-generatiev-ai_834602-16335.jpg',
-      description: 'Кавовий столик ',
-      quantity: 1,
-      price: 5500,
-      summa: 5500,
-    },
-  ];
+  public orders$!: Observable<Orders[]>;
 
   ngOnInit(): void {
     this.countTotal();
-    this.cartService.getCart();
+    this.orders$ = this.cartService
+      .getCart()
+      .pipe(map((res: any) => res.payload.items));
+
     this.isCart = true;
   }
 
@@ -88,61 +75,58 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  increase(id: number) {
-    if (this.orders[id].quantity < this.maxQuantity) {
-      this.orders[id].quantity += 1;
-      this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
+  increase(id: string | undefined, quantity: number) {
+    // if (this.orders[id].quantity < this.maxQuantity) {
+    //   this.orders[id].quantity += 1;
+    //   this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
+    // }
+    // this.checkQuantity(this.orders[id], id);
+    console.log(id);
+    if (id && quantity) {
+      this.cartService.makeOrder(id, quantity);
     }
-
-    this.checkQuantity(this.orders[id], id);
   }
 
-  decrease(id: number) {
-    if (this.orders[id].quantity > this.minQuantity) {
-      this.orders[id].quantity -= 1;
-      this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
-    }
-
-    this.checkQuantity(this.orders[id], id);
+  decrease(id: string | undefined) {
+    // if (this.orders[id].quantity > this.minQuantity) {
+    //   this.orders[id].quantity -= 1;
+    //   this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
+    // }
+    // this.checkQuantity(this.orders[id], id);
   }
 
-  onKeyup(order: Orders, id: number) {
-    this.checkQuantity(order, id);
-
-    if (
-      order.quantity <= this.maxQuantity &&
-      order.quantity >= this.minQuantity
-    ) {
-      this.orders[id].quantity = order.quantity;
-      this.orders[id].summa = this.orders[id].price * order.quantity;
-    }
-
-    this.countTotal();
+  onKeyup(id: string | undefined) {
+    // this.checkQuantity(order, id);
+    // if (
+    //   order.quantity <= this.maxQuantity &&
+    //   order.quantity >= this.minQuantity
+    // ) {
+    //   this.orders[id].quantity = order.quantity;
+    //   this.orders[id].summa = this.orders[id].price * order.quantity;
+    // }
+    // this.countTotal();
   }
 
   checkQuantity(order: Orders, id: number) {
-    if (order.quantity >= this.maxQuantity) {
-      order.quantity = this.maxQuantity;
-      this.orders[id].quantity = order.quantity;
-    }
-
-    if (order.quantity <= this.minQuantity) {
-      order.quantity = this.minQuantity;
-      this.orders[id].quantity = order.quantity;
-    }
-
-    this.countTotal();
+    // if (order.quantity >= this.maxQuantity) {
+    //   order.quantity = this.maxQuantity;
+    //   this.orders[id].quantity = order.quantity;
+    // }
+    // if (order.quantity <= this.minQuantity) {
+    //   order.quantity = this.minQuantity;
+    //   this.orders[id].quantity = order.quantity;
+    // }
+    // this.countTotal();
   }
 
   countTotal(): void {
-    let res = 0;
-    this.orders.forEach((order: Orders) => (res += order.summa!));
-    this.total = res;
+    // let res = 0;
+    // this.orders.forEach((order: Orders) => (res += order.summa!));
+    // this.total = res;
   }
 
-  delete(id: string | undefined) {
-    this.orders = this.orders.filter((order: Orders) => order._id !== id);
-    this.countTotal();
+  delete(id: string) {
+    this.cartService.makeOrder(id, 0);
   }
   close() {
     this.router.navigate([{ outlets: { cart: null } }], {
@@ -161,6 +145,6 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
   }
 
   submit() {
-    this.cartService.makeOrder('', 2);
+    this.orderService.makeOrder(JSON.parse(localStorage.getItem('user')!)._id);
   }
 }

@@ -14,6 +14,19 @@
       display: flex;
       justify-content: space-around;
       width: 100%;
+      position: relative;
+
+      &:hover {
+        &:hover {
+          .header__nav-hidden {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 80px;
+            left: 20px;
+          }
+        }
+      }
     }
 
     &-item {
@@ -33,5 +46,8 @@
         border-bottom: 2px solid colors.$black;
       }
     }
+  }
+  &__nav-hidden {
+    display: none;
   }
 }

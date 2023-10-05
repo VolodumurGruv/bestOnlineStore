@@ -1,5 +1,5 @@
 <ng-container *ngIf="isComplete; else complete">
-  <ng-container *ngIf="orders.length; else isOrders">
+  <ng-container *ngIf="orders$ | async as orders; else isOrders">
     <div class="cart__order" *ngFor="let order of orders; index as id">
       <div class="cart__order-img">
         <img [src]="order.image" alt="" />
@@ -7,7 +7,7 @@
       <div class="cart__order-text">
         <div class="cart__order-description">
           <div class="text">{{ order.description }}</div>
-          <div class="btn-delete" (click)="delete(order?._id)">
+          <div class="btn-delete" (click)="delete(order._id)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -48,7 +48,7 @@
         </div>
         <div class="cart__order-data">
           <div class="cart__order-amount">
-            <span class="decrease" (click)="decrease(id)">
+            <span class="decrease" (click)="decrease(order._id)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="26"
@@ -66,14 +66,18 @@
               </svg>
             </span>
             <input
+              #quantity
               type="number"
               [min]="minQuantity"
               [max]="maxQuantity"
-              [(ngModel)]="order.quantity"
+              [(ngModel)]="quantity.value"
               class="cart__input"
-              (keyup)="onKeyup(order, id)"
+              (keyup)="onKeyup(order._id)"
             />
-            <span class="increase" (click)="increase(id)">
+            <span
+              class="increase"
+              (click)="increase(order._id, +quantity.value)"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="26"

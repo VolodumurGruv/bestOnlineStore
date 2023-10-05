@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { configs } from '@configs/configs';
 import { HttpErrorHandlerService } from './http-error-handler.service';
-import { catchError } from 'rxjs';
+import { catchError, tap } from 'rxjs';
 import { Orders } from '@interfaces/user.interface';
 
 @Injectable({
@@ -23,12 +23,15 @@ export class OrderService {
       .subscribe((res) => console.log(res));
   }
 
-  makeOrder(order: Orders[]) {
+  makeOrder(userId: string) {
     this.http
-      .post<Orders[]>(`${configs.URL}/order`, order)
+      .post<Orders[]>(`${configs.URL}/order`, { userId })
       .pipe(
+        tap((res) => console.log(res)),
         catchError(
-          this.httpError.handleError<Orders[]>('Помилка отримання замовленнь')
+          this.httpError.handleError<Orders[]>(
+            'Помилка підтвердження замовлення'
+          )
         )
       )
       .subscribe((res) => console.log(res));
@@ -44,4 +47,6 @@ export class OrderService {
       )
       .subscribe((res) => console.log(res));
   }
+
+  getOrderById(orderId: string) {}
 }

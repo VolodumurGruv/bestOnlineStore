@@ -3,6 +3,7 @@ export interface User {
   password?: string | null;
   email?: string | null | undefined;
   isAdmin?: boolean;
+  isAnonymous?: boolean;
   token?: string;
   _id?: string;
 }
@@ -13,12 +14,11 @@ export interface UserInfo extends User {
   phone?: string | null;
   delivery?: string | null;
   department?: string | null;
-  isAnonymous?: boolean | null;
   wishList?: string[];
 }
 
 export interface Orders {
-  _id?: string;
+  _id: string;
   image: string;
   description: string;
   price: number;

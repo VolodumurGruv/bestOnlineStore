@@ -23,7 +23,7 @@ export class ProductsService {
   }
 
   getProductById(id: string): Observable<Product> {
-    console.log(id)
+    console.log(id);
     return this.http.get<Product>(`${configs.URL}/product/${id}`).pipe(
       map((response: any) => {
         console.log(response);
@@ -34,5 +34,55 @@ export class ProductsService {
         this.errorHandler.handleError<Product>('Не вдалося отримати дані!')
       )
     );
+  }
+
+  getByName() {
+    this.http
+      .get(`${configs.URL}/product/search`)
+      .pipe(
+        catchError(
+          this.errorHandler.handleError<Product>('Не вдалося отримати дані!')
+        )
+      );
+  }
+
+  createProduct(product: any) {
+    return this.http
+      .post(`${configs.URL}`, product)
+      .pipe(
+        catchError(
+          this.errorHandler.handleError<Product>('Не вдалося отримати дані!')
+        )
+      );
+  }
+
+  updateProduct(product: Product, id: string) {
+    this.http
+      .put(`${configs.URL}/${id}`, product)
+      .pipe(
+        catchError(
+          this.errorHandler.handleError<Product>('Не вдалося отримати дані!')
+        )
+      );
+  }
+
+  uploadImageProduct(img: any) {
+    return this.http
+      .post(`${configs.URL}/upload`, img)
+      .pipe(
+        catchError(
+          this.errorHandler.handleError('Помилка заватаження зображення')
+        )
+      );
+  }
+
+  deleteProduct(id: string) {
+    this.http
+      .delete(`${configs.URL}/${id}`)
+      .pipe(
+        catchError(
+          this.errorHandler.handleError<Product>('Не вдалося отримати дані!')
+        )
+      );
   }
 }

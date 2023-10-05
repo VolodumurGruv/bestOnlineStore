@@ -37,7 +37,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log('products');
     this.unSub = this.productService
       .getProducts()
       .pipe(map((res: Product[]) => (this.products = res)))
