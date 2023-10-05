@@ -3,8 +3,6 @@
 .header {
   display: block;
   position: sticky;
-  margin: 0 auto;
-  padding: 0 80px;
   top: 0;
   left: 0;
   background: colors.$white;
@@ -12,9 +10,11 @@
 
   &__box {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     margin: 0 auto;
+    padding: 24px 80px;
+    width: 1920px;
     top: 0;
     left: 0;
   }

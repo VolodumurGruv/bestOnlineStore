@@ -7,6 +7,20 @@
     @include logo-mixin.logo;
   }
 
+  &__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    width: 1555px;
+  }
+
+  &__search {
+    display: flex;
+    width: 418px;
+    padding: 8px 16px;
+  }
+
   &__input {
     display: flex;
     height: 40px;
@@ -27,14 +41,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 110px;
+  flex-shrink: 0;
+  width: 1017px;
 
   &__links {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
-    width: 100%;
+    width: 719px;
   }
 
   &__link {

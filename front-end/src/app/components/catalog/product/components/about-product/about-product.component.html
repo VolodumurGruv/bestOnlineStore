@@ -15,12 +15,12 @@
           "
         />
       </div>
-      <div class="product__sub-image" *ngIf="product.allImages">
+      <div class="product__sub-image" *ngIf="allImages">
         <img
           class="product__image"
           width="273"
           height="241"
-          *ngFor="let image of product.allImages"
+          *ngFor="let image of allImages"
           alt="{{ product.name }}"
           [ngSrc]="'https://storage.googleapis.com/best-online-store/' + image"
         />

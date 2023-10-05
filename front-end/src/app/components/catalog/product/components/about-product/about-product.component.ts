@@ -20,12 +20,16 @@ import { AlertService } from '@shared/services/interaction/alert.service';
 export class AboutProductComponent implements OnInit {
   @Input() product!: Product;
 
+  public allImages!: string[];
+
   private readonly route = inject(ActivatedRoute);
   private readonly userService = inject(AuthService);
   private readonly cartService = inject(CartService);
   private readonly alertService = inject(AlertService);
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.allImages = this.product.allImages.reverse().splice(0, 3);
+  }
 
   addToCart(id: string, quantity: number) {
     if (!this.userService.isAuth()) {

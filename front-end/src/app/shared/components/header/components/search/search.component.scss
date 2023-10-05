@@ -1,9 +1,10 @@
 @use "colors";
+@use "fonts";
 
 .header__input {
   display: flex;
-  height: 40px;
-  // width: 423px;
+  padding: 8px 16px;
+  width: 418px;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
@@ -12,17 +13,14 @@
 }
 
 .input__search {
-  margin: 8px auto 8px 16px;
+  @include fonts.montserrat(20px, 400, normal, 130%);
+
   border: none;
   outline: none;
-  width: 350px;
+  width: 80%;
   flex-shrink: 0;
-
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 130%;
-  color: colors.$black;
+  color: colors.$gray-active-input;
+  background: transparent;
 
   &::placeholder {
     color: colors.$input-text;

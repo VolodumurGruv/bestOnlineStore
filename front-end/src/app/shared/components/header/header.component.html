@@ -3,98 +3,100 @@
     <app-logo></app-logo>
   </a>
 </div>
-<div>
-  <app-search></app-search>
-</div>
-<nav class="nav">
-  <div class="nav__links">
-    <a
-      class="nav__link"
-      routerLink="/"
-      routerLinkActive="active-link"
-      [routerLinkActiveOptions]="{ exact: true }"
-      >Головна</a
-    >
-    <a class="nav__link" routerLink="/catalog" routerLinkActive="active-link"
-      >Каталог</a
-    >
-    <a class="nav__link" routerLink="/sales" routerLinkActive="active-link"
-      >Акції</a
-    >
-    <a class="nav__link" routerLink="/blog" routerLinkActive="active-link"
-      >Блог</a
-    >
-    <a class="nav__link" routerLink="/about" routerLinkActive="active-link"
-      >Про нас</a
-    >
+<div class="header__nav">
+  <div class="header__search">
+    <app-search></app-search>
   </div>
-
-  <div class="nav__icon">
-    <span class="nav__icon_cart">
+  <nav class="nav">
+    <div class="nav__links">
       <a
-        class="nav__icon__link"
-        [routerLink]="[{ outlets: { cart: ['cart'] } }]"
+        class="nav__link"
+        routerLink="/"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Головна</a
       >
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 32 32"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+      <a class="nav__link" routerLink="/catalog" routerLinkActive="active-link"
+        >Каталог</a
+      >
+      <a class="nav__link" routerLink="/sales" routerLinkActive="active-link"
+        >Акції</a
+      >
+      <a class="nav__link" routerLink="/blog" routerLinkActive="active-link"
+        >Блог</a
+      >
+      <a class="nav__link" routerLink="/about" routerLinkActive="active-link"
+        >Про нас</a
+      >
+    </div>
+
+    <div class="nav__icon">
+      <span class="nav__icon_cart">
+        <a
+          class="nav__icon__link"
+          [routerLink]="[{ outlets: { cart: ['cart'] } }]"
         >
-          <path
-            d="M3 10.8125H28L26.6953 25.1578C26.6248 25.9342 26.2665 26.6563 25.6909 27.1821C25.1154 27.708 24.364 27.9997 23.5844 28H7.41563C6.636 27.9997 5.88464 27.708 5.30906 27.1821C4.73348 26.6563 4.37524 25.9342 4.30469 25.1578L3 10.8125Z"
-            stroke="black"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M9.25 13.9375V9.25C9.25 7.5924 9.90848 6.00268 11.0806 4.83058C12.2527 3.65848 13.8424 3 15.5 3C17.1576 3 18.7473 3.65848 19.9194 4.83058C21.0915 6.00268 21.75 7.5924 21.75 9.25V13.9375"
-            stroke="black"
-            stroke-linecap="round"
-          />
-        </svg>
-      </a>
-    </span>
-    <span class="nav__icon_heart">
-      <a class="nav__icon_link" routerLink="/likes">
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 32 32"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M22.25 4.5C19.57 4.5 17.26 5.77375 16 7.88375C14.74 5.77375 12.43 4.5 9.75 4.5C7.82789 4.50232 5.98517 5.2669 4.62603 6.62603C3.2669 7.98517 2.50232 9.82789 2.5 11.75C2.5 15.3237 4.75 19.0587 9.175 22.8487C11.2181 24.5874 13.4242 26.1249 15.7625 27.44C15.8355 27.4794 15.9171 27.5 16 27.5C16.0829 27.5 16.1645 27.4794 16.2375 27.44C18.5758 26.1249 20.7819 24.5874 22.825 22.8487C27.25 19.0587 29.5 15.3237 29.5 11.75C29.4977 9.82789 28.7331 7.98517 27.374 6.62603C26.0148 5.2669 24.1721 4.50232 22.25 4.5ZM16 26.4275C14.25 25.4325 3.5 19.0087 3.5 11.75C3.50198 10.093 4.1611 8.50445 5.33277 7.33277C6.50445 6.1611 8.09301 5.50198 9.75 5.5C12.3888 5.5 14.6063 6.91375 15.5375 9.18875C15.5752 9.28046 15.6393 9.35889 15.7216 9.41409C15.804 9.46929 15.9009 9.49877 16 9.49877C16.0991 9.49877 16.196 9.46929 16.2784 9.41409C16.3607 9.35889 16.4248 9.28046 16.4625 9.18875C17.3937 6.91375 19.6112 5.5 22.25 5.5C23.907 5.50198 25.4956 6.1611 26.6672 7.33277C27.8389 8.50445 28.498 10.093 28.5 11.75C28.5 19 17.75 25.4325 16 26.4275Z"
-            fill="black"
-          />
-        </svg>
-      </a>
-    </span>
-    <!-- when hover drop down menu will be done soon-->
-    <span class="nav__icon_user">
-      <a class="nav__icon__link" routerLink="/user">
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 32 32"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M26.6666 28V25.3333C26.6666 23.9188 26.1047 22.5623 25.1045 21.5621C24.1043 20.5619 22.7477 20 21.3333 20H10.6666C9.2521 20 7.89554 20.5619 6.89535 21.5621C5.89515 22.5623 5.33325 23.9188 5.33325 25.3333V28"
-            stroke="black"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M16.0001 14.6667C18.9456 14.6667 21.3334 12.2789 21.3334 9.33333C21.3334 6.38781 18.9456 4 16.0001 4C13.0546 4 10.6667 6.38781 10.6667 9.33333C10.6667 12.2789 13.0546 14.6667 16.0001 14.6667Z"
-            stroke="black"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      </a>
-    </span>
-  </div>
-</nav>
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3 10.8125H28L26.6953 25.1578C26.6248 25.9342 26.2665 26.6563 25.6909 27.1821C25.1154 27.708 24.364 27.9997 23.5844 28H7.41563C6.636 27.9997 5.88464 27.708 5.30906 27.1821C4.73348 26.6563 4.37524 25.9342 4.30469 25.1578L3 10.8125Z"
+              stroke="black"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M9.25 13.9375V9.25C9.25 7.5924 9.90848 6.00268 11.0806 4.83058C12.2527 3.65848 13.8424 3 15.5 3C17.1576 3 18.7473 3.65848 19.9194 4.83058C21.0915 6.00268 21.75 7.5924 21.75 9.25V13.9375"
+              stroke="black"
+              stroke-linecap="round"
+            />
+          </svg>
+        </a>
+      </span>
+      <span class="nav__icon_heart">
+        <a class="nav__icon_link" routerLink="/likes">
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M22.25 4.5C19.57 4.5 17.26 5.77375 16 7.88375C14.74 5.77375 12.43 4.5 9.75 4.5C7.82789 4.50232 5.98517 5.2669 4.62603 6.62603C3.2669 7.98517 2.50232 9.82789 2.5 11.75C2.5 15.3237 4.75 19.0587 9.175 22.8487C11.2181 24.5874 13.4242 26.1249 15.7625 27.44C15.8355 27.4794 15.9171 27.5 16 27.5C16.0829 27.5 16.1645 27.4794 16.2375 27.44C18.5758 26.1249 20.7819 24.5874 22.825 22.8487C27.25 19.0587 29.5 15.3237 29.5 11.75C29.4977 9.82789 28.7331 7.98517 27.374 6.62603C26.0148 5.2669 24.1721 4.50232 22.25 4.5ZM16 26.4275C14.25 25.4325 3.5 19.0087 3.5 11.75C3.50198 10.093 4.1611 8.50445 5.33277 7.33277C6.50445 6.1611 8.09301 5.50198 9.75 5.5C12.3888 5.5 14.6063 6.91375 15.5375 9.18875C15.5752 9.28046 15.6393 9.35889 15.7216 9.41409C15.804 9.46929 15.9009 9.49877 16 9.49877C16.0991 9.49877 16.196 9.46929 16.2784 9.41409C16.3607 9.35889 16.4248 9.28046 16.4625 9.18875C17.3937 6.91375 19.6112 5.5 22.25 5.5C23.907 5.50198 25.4956 6.1611 26.6672 7.33277C27.8389 8.50445 28.498 10.093 28.5 11.75C28.5 19 17.75 25.4325 16 26.4275Z"
+              fill="black"
+            />
+          </svg>
+        </a>
+      </span>
+      <!-- when hover drop down menu will be done soon-->
+      <span class="nav__icon_user">
+        <a class="nav__icon__link" routerLink="/user">
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M26.6666 28V25.3333C26.6666 23.9188 26.1047 22.5623 25.1045 21.5621C24.1043 20.5619 22.7477 20 21.3333 20H10.6666C9.2521 20 7.89554 20.5619 6.89535 21.5621C5.89515 22.5623 5.33325 23.9188 5.33325 25.3333V28"
+              stroke="black"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M16.0001 14.6667C18.9456 14.6667 21.3334 12.2789 21.3334 9.33333C21.3334 6.38781 18.9456 4 16.0001 4C13.0546 4 10.6667 6.38781 10.6667 9.33333C10.6667 12.2789 13.0546 14.6667 16.0001 14.6667Z"
+              stroke="black"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </a>
+      </span>
+    </div>
+  </nav>
+</div>
