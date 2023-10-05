@@ -8,6 +8,8 @@ import {
 } from '../utils/constants.js';
 import sendRes from '../utils/handleResponse.js';
 
+const bucketPath = `${process.env.BUCKET_PATH}`;
+
 const storage = new Storage({
   projectId: `${process.env.GCLOUD_PROJECT}`,
   keyFilename: './credentials.json',
@@ -25,7 +27,7 @@ const upload = multer({
 const uploadFile = async (req, res) => {
   try {
     const { file } = req;
-    const fileName = `${Date.now()}_${file.originalname}`;
+    const fileName = `${Date.now()}_${file['originalname']}`;
     const fileStream = bucket.file(fileName).createWriteStream();
 
     fileStream.on('error', (error) => {
@@ -39,15 +41,19 @@ const uploadFile = async (req, res) => {
       const product = await Product.findById(productId);
 
       if (product) {
-        product.allImages.push(fileName);
+        const imagePath = bucketPath.concat(fileName);
+
+        product.allImages.push(imagePath);
 
         if (product.baseImage === 'no.jpg') {
-          product.baseImage = fileName;
+          product.baseImage = imagePath;
         }
 
         await product.save();
 
-        return sendRes(res, HTTP_STATUS_CODES.CREATED, MESSAGES.FILE_SAVED_ON_GCS, fileName);
+        logger.info('The image successfully added to product.');
+
+        return sendRes(res, HTTP_STATUS_CODES.CREATED, MESSAGES.FILE_SAVED_ON_GCS, imagePath);
       } else {
         return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
       }

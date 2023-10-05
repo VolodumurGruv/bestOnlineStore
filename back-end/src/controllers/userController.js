@@ -45,7 +45,7 @@ const registerUser = async (req, res, next, anonymous = null) => {
 
         user = await User
           .findById(userId)
-          .select('-password isAdmin -resetPasswordToken -resetPasswordExpires');
+          .select('-password -resetPasswordToken -resetPasswordExpires');
 
         if (user) {
           user.name = name;
