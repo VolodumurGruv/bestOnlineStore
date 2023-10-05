@@ -5,8 +5,10 @@ const generateToken = (user, expire = null) => {
     _id: user._id,
     name: user.name,
     email: user.email,
+    isAdmin: user.isAdmin,
+    isAnonymous: user.isAnonymous
   }, `${process.env.JWT_SECRET}`, {
-    expiresIn: expire || '30d'
+    expiresIn: expire || '365d'
   });
 
   return token;
