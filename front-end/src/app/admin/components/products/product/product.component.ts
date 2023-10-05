@@ -26,4 +26,14 @@ export class ProductComponent implements OnInit {
       )
     );
   }
+
+  uploadImage(event: any, productId: string | undefined) {
+    const file: File = event.target.files[0];
+
+    if (productId && file) {
+      this.productService
+        .uploadImageProduct(file, productId)
+        .subscribe((res) => console.log(res));
+    }
+  }
 }

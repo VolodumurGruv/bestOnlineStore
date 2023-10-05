@@ -31,11 +31,13 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   private unSub = new Subscription();
 
-  product$!: Observable<Product>;
+  products!: Product[];
 
   ngOnInit(): void {
     this.unSub.add(
-      this.productService.getProducts().subscribe((res) => console.log(res))
+      this.productService
+        .getProducts()
+        .subscribe((res) => (this.products = res))
     );
   }
 

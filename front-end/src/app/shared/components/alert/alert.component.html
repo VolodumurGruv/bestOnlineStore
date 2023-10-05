@@ -4,7 +4,7 @@
       <p class="alert__text">{{ text }}</p>
       <p *ngIf="errorText">{{ errorText }}</p>
       <div style="padding: 10px">
-        <button class="btn btn__add" (click)="text = ''">Close</button>
+        <button class="btn btn__add" (click)="close()">Close</button>
       </div>
     </div>
   </div>

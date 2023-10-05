@@ -25,7 +25,7 @@ export class OrderService {
 
   makeOrder(userId: string) {
     this.http
-      .post<Orders[]>(`${configs.URL}/order`, { userId })
+      .post<Orders[]>(`${configs.URL}/order`, { user: userId })
       .pipe(
         tap((res) => console.log(res)),
         catchError(

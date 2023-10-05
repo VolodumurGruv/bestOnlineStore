@@ -72,7 +72,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
       ],
     ],
     email: ['', [Validators.required, Validators.email, emailValidator()]],
-    address: ['', [Validators.required]],
+    shippingAddress: ['', [Validators.required]],
     phone: [
       '',
       [
@@ -93,6 +93,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     ],
     department: [''],
     deliveryMethod: ['', [Validators.required]],
+    paymentMethod: ['cash'],
   });
 
   ngOnInit() {
@@ -135,7 +136,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
       Ref,
     } = address;
     this.infoForm
-      .get('address')
+      .get('shippingAddress')
       ?.setValue(
         `${SettlementTypeDescription} ${Description} ${RegionsDescription} ${AreaDescription}`
       );
@@ -152,6 +153,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   makeOrder() {
+    this.userService.updateUser(this.infoForm.value).subscribe();
     this.orderService.makeOrder(JSON.parse(localStorage.getItem('user')!)._id);
   }
 

@@ -6,7 +6,15 @@
       <span class="link" [routerLink]="['/admin/products/', product._id]"
         >Редагувати</span
       >
-      <span class="link" routerLink="['/admin/products/add']">Редагувати</span>
+      <div class="input-wrap">
+        <input
+          type="file"
+          (change)="uploadImage($event, product._id)"
+          #upload
+          [style.display]="'none'"
+        />
+        <button class="btn btn__add" (click)="upload.click()">Upload</button>
+      </div>
       <span class="link" routerLink="/admin/products">Назад до продукції</span>
     </div>
   </ng-container>

@@ -23,9 +23,9 @@ export class WishlistService {
       );
   }
 
-  addWishList(wish: any) {
+  addWishList(productId: string) {
     return this.http
-      .post(`${configs.URL}/wishlist`, wish)
+      .post(`${configs.URL}/wishlist`, productId)
       .pipe(
         catchError(
           this.errorHandler.handleError<void>(

@@ -17,7 +17,7 @@ export class CartService {
 
   makeOrder(productId: string, quantity: number = 1): Observable<PAYLOAD> {
     return this.http
-      .post<PAYLOAD>(`${configs.URL}/order`, { productId, quantity })
+      .post<PAYLOAD>(`${configs.URL}/cart/add-to-cart`, { productId, quantity })
       .pipe(
         catchError(
           this.handleError.handleError<PAYLOAD>(

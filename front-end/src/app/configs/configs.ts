@@ -20,6 +20,12 @@ export const googleLoginHeaders = {
   }),
 };
 
+export const uploadHeaders = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/x-www-form-urlencoded, application/json',
+  }),
+};
+
 export const routes = {
-  favorite: "Обране",
-}
+  favorite: 'Обране',
+};

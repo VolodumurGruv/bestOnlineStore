@@ -28,16 +28,7 @@ export class AddProductComponent {
     subcategory: [''],
     instock: [''],
     countInStock: [''],
-    baseImage: [''],
   });
-
-  uploadImage(event: any) {
-    const file: File = event.target.files[0];
-
-    this.productService
-      .uploadImageProduct(file)
-      .subscribe((res) => console.log(res));
-  }
 
   onSubmit() {
     this.productService

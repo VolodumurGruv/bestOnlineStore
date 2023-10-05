@@ -1,9 +1,9 @@
-<ng-container *ngIf="product$ | async as product; else loading">
+<ng-container *ngIf="products?.length; else loading">
   <section class="carousel wrapper">
     <app-carousel></app-carousel>
   </section>
   <section class="top wrapper">
-    <app-card class="top__box" [mockData]="[product, product, product]"></app-card>
+    <app-card class="top__box" [product]="products"></app-card>
     <div class="top__btn">
       <button class="btn__card" (click)="redirect('/catalog')">
         ПЕРЕЙТИ В КАТАЛОГ
@@ -11,7 +11,7 @@
     </div>
   </section>
   <section class="new wrapper">
-    <app-card class="new__box" [mockData]="[product, product, product]"></app-card>
+    <app-card class="new__box" [product]="products"></app-card>
     <div class="top__btn">
       <button class="btn__card" (click)="redirect('/catalog')">
         переглянути всі
@@ -19,7 +19,7 @@
     </div>
   </section>
   <section class="actions wrapper">
-    <app-card class="actions__box" [mockData]="[product, product, product]"></app-card>
+    <app-card class="actions__box" [product]="products"></app-card>
     <div class="top__btn">
       <button class="btn__card" (click)="redirect('/catalog')">
         переглянути всі

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { configs } from '@configs/configs';
+import { configs, uploadHeaders } from '@configs/configs';
 import { catchError, map, Observable } from 'rxjs';
 import { Product } from '@interfaces/product.interfaces';
 import { HttpErrorHandlerService } from './http-error-handler.service';
@@ -66,9 +66,13 @@ export class ProductsService {
       );
   }
 
-  uploadImageProduct(img: any) {
+  uploadImageProduct(file: File, productId: string) {
+    const formParams = new FormData();
+    formParams.append('file', file);
+    formParams.append('productId', productId);
+
     return this.http
-      .post(`${configs.URL}/upload`, img)
+      .post(`${configs.URL}/upload`, formParams)
       .pipe(
         catchError(
           this.errorHandler.handleError('Помилка заватаження зображення')

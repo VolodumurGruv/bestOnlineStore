@@ -77,15 +77,7 @@
             formControlName="shortDescr"
           />
         </div>
-        <div class="input-wrap">
-          <input
-            type="file"
-            (change)="uploadImage($event)"
-            #upload
-            [style.display]="'none'"
-          />
-          <button class="btn btn__add" (click)="upload.click()">Upload</button>
-        </div>
+
         <textarea
           name="description"
           id=""

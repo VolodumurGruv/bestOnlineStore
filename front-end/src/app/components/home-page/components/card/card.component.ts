@@ -1,8 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
-import {Product} from "@interfaces/product.interfaces";
+import { Product } from '@interfaces/product.interfaces';
+import { ProductsService } from '@shared/services/products.service';
+import { Subscription, map } from 'rxjs';
 
 @Component({
   selector: 'app-card',
@@ -11,8 +13,21 @@ import {Product} from "@interfaces/product.interfaces";
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
 })
-export class CardComponent {
-  @Input() mockData!: Product[];
+export class CardComponent implements OnInit, OnDestroy {
+  @Input() product!: Product[];
 
-  constructor() {}
+  private readonly productService = inject(ProductsService);
+  private unSub!: Subscription;
+  public products!: Product[];
+
+  ngOnInit(): void {
+    this.unSub = this.productService
+      .getProducts()
+      .pipe(map((res) => (this.products = res)))
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    if (this.unSub) this.unSub.unsubscribe();
+  }
 }

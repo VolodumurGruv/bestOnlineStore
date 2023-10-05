@@ -9,7 +9,10 @@
           height="771"
           *ngIf="product.baseImage"
           alt="{{ product.name }}"
-          [ngSrc]="product.baseImage"
+          [ngSrc]="
+            'https://storage.googleapis.com/best-online-store/' +
+            product.baseImage
+          "
         />
       </div>
       <div class="product__sub-image" *ngIf="product.allImages">
@@ -19,7 +22,7 @@
           height="241"
           *ngFor="let image of product.allImages"
           alt="{{ product.name }}"
-          [ngSrc]="image"
+          [ngSrc]="'https://storage.googleapis.com/best-online-store/' + image"
         />
       </div>
     </div>
@@ -49,10 +52,15 @@
         <span class="product__bold">Опис товару: </span>{{ product.descr }}
       </p>
       <div class="product__prices">
-        <span *ngIf="product.discount" class="product__sale-price">{{
-          product.price * 0.8 | transformPrice
+        <span *ngIf="product.price" class="product__sale-price">{{
+          product.price | transformPrice
         }}</span>
-        <!-- <span class="product__price" [ngClass]="{'product__crossed-price': product.sale}">{{product.price | transformPrice}}</span> -->
+        <span
+          class="product__price"
+          *ngIf="product.discount"
+          [ngClass]="{ 'product__crossed-price': product.discount }"
+          >{{ product.discount | transformPrice }}</span
+        >
       </div>
       <div class="product__buttons">
         <button class="product__buy" (click)="addToCart(product._id!, 1)">
