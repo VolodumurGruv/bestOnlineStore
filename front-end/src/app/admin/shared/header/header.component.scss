@@ -5,49 +5,9 @@
 .header {
   &__nav {
     display: flex;
-    justify-content: center;
     align-items: center;
     width: 100%;
     padding-top: 20px;
-
-    &-items {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-      position: relative;
-
-      &:hover {
-        &:hover {
-          .header__nav-hidden {
-            display: flex;
-            flex-direction: column;
-            position: absolute;
-            top: 80px;
-            left: 20px;
-          }
-        }
-      }
-    }
-
-    &-item {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    &-link {
-      @include a-link.path-link;
-
-      padding: 5px;
-      color: colors.$black;
-
-      &:hover {
-        border-radius: none;
-        border-top: 2px solid colors.$black;
-        border-bottom: 2px solid colors.$black;
-      }
-    }
-  }
-  &__nav-hidden {
-    display: none;
+    z-index: 1;
   }
 }

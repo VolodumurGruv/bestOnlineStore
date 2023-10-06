@@ -30,7 +30,10 @@ export class AboutProductComponent implements OnInit {
   private readonly wishService = inject(WishlistService);
 
   ngOnInit(): void {
-    this.allImages = this.product.allImages.reverse().splice(0, 3);
+    this.allImages = this.product.allImages.reverse().slice(0, 3);
+    // if (!this.product.baseImage) {
+    //   this.product.baseImage = this.product.allImages.slice(0, 1).join('');
+    // }
   }
 
   addToCart(id: string, quantity: number) {

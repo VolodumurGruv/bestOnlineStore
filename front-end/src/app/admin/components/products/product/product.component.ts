@@ -6,6 +6,7 @@ import { Observable, switchMap } from 'rxjs';
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
 import { ProductsService } from '@shared/services/products.service';
 import { Product } from '@interfaces/product.interfaces';
+import { AlertService } from '@shared/services/interaction/alert.service';
 
 @Component({
   selector: 'app-product',
@@ -17,6 +18,7 @@ import { Product } from '@interfaces/product.interfaces';
 export class ProductComponent implements OnInit {
   private readonly productService = inject(ProductsService);
   private readonly route = inject(ActivatedRoute);
+  private readonly alertService = inject(AlertService);
   public product$!: Observable<Product>;
 
   ngOnInit(): void {
@@ -31,9 +33,9 @@ export class ProductComponent implements OnInit {
     const file: File = event.target.files[0];
 
     if (productId && file) {
-      this.productService
-        .uploadImageProduct(file, productId)
-        .subscribe((res) => console.log(res));
+      this.productService.uploadImageProduct(file, productId).subscribe(() => {
+        this.alertService.success('Зображення успішно додане');
+      });
     }
   }
 }

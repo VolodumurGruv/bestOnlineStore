@@ -71,6 +71,7 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
       this.infoForm.infoForm.get('password')?.setErrors(null);
 
       this.isValid = this.infoForm.infoForm.valid;
+      this.isCart = true;
       this.changeDetectorRef.detectChanges();
     }
   }

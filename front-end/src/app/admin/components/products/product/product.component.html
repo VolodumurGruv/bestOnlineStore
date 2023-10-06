@@ -3,9 +3,12 @@
     <app-product-card class="product__card" [product]="product">
     </app-product-card>
     <div class="action">
-      <span class="link" [routerLink]="['/admin/products/', product._id]"
-        >Редагувати</span
+      <div
+        class="btn btn__add"
+        [routerLink]="['/admin/products/', product._id]"
       >
+        Редагувати
+      </div>
       <div class="input-wrap">
         <input
           type="file"
@@ -15,7 +18,9 @@
         />
         <button class="btn btn__add" (click)="upload.click()">Upload</button>
       </div>
-      <span class="link" routerLink="/admin/products">Назад до продукції</span>
+      <div class="btn btn__add" routerLink="/admin/products">
+        Назад до продукції
+      </div>
     </div>
   </ng-container>
 </section>

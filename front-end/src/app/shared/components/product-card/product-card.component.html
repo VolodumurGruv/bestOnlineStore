@@ -32,10 +32,7 @@
             height="360"
             alt="{{ product.name }}"
             *ngIf="product.baseImage"
-            [src]="
-              'https://storage.googleapis.com/best-online-store/' +
-              product.baseImage
-            "
+            [src]="product.baseImage"
           />
         </div>
       </div>

@@ -26,7 +26,7 @@ export class UsersComponent implements OnInit, OnDestroy {
         .getUsers()
         .pipe(
           tap((res: any) => {
-            console.log(res);
+            
             this.users = res;
           })
         )

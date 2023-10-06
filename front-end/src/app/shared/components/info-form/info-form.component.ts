@@ -101,6 +101,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.route.url.subscribe((urlSegment: UrlSegment[]) => {
       if (urlSegment[0]) {
         this.path = urlSegment[0].path;
+        console.log(this.path);
       }
     });
   }

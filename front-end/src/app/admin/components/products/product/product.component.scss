@@ -15,11 +15,10 @@
 }
 
 .action {
+  display: flex;
+  justify-content: space-around;
   padding-top: 2rem;
-
-  span {
-    margin: 2.5rem;
-  }
+  width: 50%;
 }
 
 .product {

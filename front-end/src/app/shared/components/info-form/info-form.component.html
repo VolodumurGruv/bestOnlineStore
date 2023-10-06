@@ -2,7 +2,7 @@
 <form
   class="user__form"
   [formGroup]="infoForm"
-  (ngSubmit)="path == 'cart' ? makeOrder() : updateUser()"
+  (ngSubmit)="isCart ? makeOrder() : updateUser()"
   autocomplete="on"
 >
   <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'name')">

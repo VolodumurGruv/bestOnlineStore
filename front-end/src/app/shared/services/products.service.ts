@@ -48,7 +48,7 @@ export class ProductsService {
 
   createProduct(product: any) {
     return this.http
-      .post(`${configs.URL}`, product)
+      .post(`${configs.URL}/product`, product)
       .pipe(
         catchError(
           this.errorHandler.handleError<Product>('Не вдалося отримати дані!')
@@ -58,7 +58,7 @@ export class ProductsService {
 
   updateProduct(product: Product, id: string) {
     this.http
-      .put(`${configs.URL}/${id}`, product)
+      .put(`${configs.URL}/product/${id}`, product)
       .pipe(
         catchError(
           this.errorHandler.handleError<Product>('Не вдалося отримати дані!')
@@ -82,7 +82,7 @@ export class ProductsService {
 
   deleteProduct(id: string) {
     this.http
-      .delete(`${configs.URL}/${id}`)
+      .delete(`${configs.URL}/product/${id}`)
       .pipe(
         catchError(
           this.errorHandler.handleError<Product>('Не вдалося отримати дані!')

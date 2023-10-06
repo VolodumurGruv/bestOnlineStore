@@ -4,6 +4,7 @@ import { Product } from '@interfaces/product.interfaces';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ProductsService } from '@shared/services/products.service';
 import { Router } from '@angular/router';
+import { AlertService } from '@shared/services/interaction/alert.service';
 
 @Component({
   selector: 'app-add-product',
@@ -16,6 +17,7 @@ export class AddProductComponent {
   private readonly fb = inject(FormBuilder);
   private readonly productService = inject(ProductsService);
   private readonly router = inject(Router);
+  private readonly alertService = inject(AlertService);
 
   public productForm = this.fb.nonNullable.group({
     name: [''],
@@ -31,9 +33,9 @@ export class AddProductComponent {
   });
 
   onSubmit() {
-    this.productService
-      .createProduct(this.productForm.value)
-      .subscribe((res) => console.log(res));
+    this.productService.createProduct(this.productForm.value).subscribe(() => {
+      this.alertService.success('Продукт успішно створено');
+    });
   }
 
   cancel() {

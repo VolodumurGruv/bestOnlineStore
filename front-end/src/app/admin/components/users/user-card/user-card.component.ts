@@ -13,6 +13,5 @@ export class UserCardComponent implements OnInit {
   @Input() user!: UserInfo;
 
   ngOnInit(): void {
-    console.log('user', this.user);
   }
 }

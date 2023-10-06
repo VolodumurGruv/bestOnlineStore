@@ -9,10 +9,7 @@
           height="771"
           *ngIf="product.baseImage"
           alt="{{ product.name }}"
-          [ngSrc]="
-            'https://storage.googleapis.com/best-online-store/' +
-            product.baseImage
-          "
+          [ngSrc]="product.baseImage"
         />
       </div>
       <div class="product__sub-image" *ngIf="allImages">
@@ -22,7 +19,7 @@
           height="241"
           *ngFor="let image of allImages"
           alt="{{ product.name }}"
-          [ngSrc]="'https://storage.googleapis.com/best-online-store/' + image"
+          [ngSrc]="image"
         />
       </div>
     </div>
