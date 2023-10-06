@@ -11,7 +11,7 @@ export interface ProductCharacteristics {
 }
 
 export interface Product {
-  characteristics: ProductCharacteristics;
+  characteristics?: ProductCharacteristics;
   _id?: string;
   name: string;
   descr: string;

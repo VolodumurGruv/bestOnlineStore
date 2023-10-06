@@ -87,7 +87,7 @@
       [control]="infoForm.get('address')"
     ></app-error-validation>
   </div>
-  <div [ngClass]="{ hidden: isCart }">
+  <div [ngClass]="{ hidden: false }">
     <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'password')">
       <input
         type="password"

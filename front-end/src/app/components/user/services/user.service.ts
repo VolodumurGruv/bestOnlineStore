@@ -37,8 +37,9 @@ export class UserService {
   updateUser(user: UserInfo): Observable<UserInfo> {
     return this.http.put<UserInfo>(`${configs.URL}/user/profile`, user).pipe(
       tap((res: any) => {
-        localStorage.setItem('user', JSON.stringify(res.payload));
-        localStorage.setItem('update', 'user was updated');
+        console.log(res);
+        localStorage.setItem('user', JSON.stringify(res.payload.user));
+        localStorage.setItem('address', JSON.stringify(res.payload.address));
       }),
       catchError(
         this.httpErrorHandler.handleError<UserInfo>('Невдалося оновити дані!')

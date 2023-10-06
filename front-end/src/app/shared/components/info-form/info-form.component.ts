@@ -27,6 +27,8 @@ import {
 import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
 import { CartService } from 'app/components/cart/services/cart.service';
 import { OrderService } from '@shared/services/order.service';
+import { forkJoin, tap, zip } from 'rxjs';
+import { UserInfo } from '@interfaces/user.interface';
 
 @Component({
   selector: 'app-info-form',
@@ -51,6 +53,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   public path!: string;
 
   @Input() isCart = false;
+  private user!: UserInfo;
 
   public infoForm = this.fb.group({
     name: [
@@ -97,7 +100,11 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   });
 
   ngOnInit() {
-    setupInitialValue(this.infoForm);
+    this.userService
+      .getUserById(JSON.parse(localStorage.getItem('user')!)._id)
+      .pipe(tap((res) => setupInitialValue(this.infoForm, res)))
+      .subscribe();
+
     this.route.url.subscribe((urlSegment: UrlSegment[]) => {
       if (urlSegment[0]) {
         this.path = urlSegment[0].path;
@@ -154,8 +161,13 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   makeOrder() {
-    this.userService.updateUser(this.infoForm.value).subscribe();
-    this.orderService.makeOrder(JSON.parse(localStorage.getItem('user')!)._id);
+    const updateUser = this.userService
+      .updateUser(this.infoForm.value)
+      .subscribe();
+
+    this.orderService
+      .makeOrder(JSON.parse(localStorage.getItem('user')!)._id)
+      .subscribe();
   }
 
   onSubmit() {}

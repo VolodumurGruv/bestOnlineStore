@@ -26,7 +26,6 @@ export class ProductsService {
     console.log(id);
     return this.http.get<Product>(`${configs.URL}/product/${id}`).pipe(
       map((response: any) => {
-        console.log(response);
         return response.payload;
       }),
 
@@ -56,8 +55,8 @@ export class ProductsService {
       );
   }
 
-  updateProduct(product: Product, id: string) {
-    this.http
+  updateProduct(product: any, id: string) {
+    return this.http
       .put(`${configs.URL}/product/${id}`, product)
       .pipe(
         catchError(

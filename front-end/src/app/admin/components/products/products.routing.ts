@@ -16,10 +16,10 @@ export const PRODUCTS_ROUTING: Route[] = [
           import('./product/product.component').then((m) => m.ProductComponent),
       },
       {
-        path: 'edit',
+        path: 'edit/:id',
         loadComponent: () =>
-          import('./add-product/add-product.component').then(
-            (m) => m.AddProductComponent
+          import('./edit-product/edit-product.component').then(
+            (m) => m.EditProductComponent
           ),
       },
       {

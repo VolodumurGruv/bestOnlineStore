@@ -8,7 +8,7 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 
 import { Orders } from '@interfaces/user.interface';
 import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
@@ -17,7 +17,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CartService } from '../services/cart.service';
 import { InfoComponent } from 'app/components/user/components/info/info.component';
 import { InfoFormComponent } from '@shared/components/info-form/info-form.component';
-import { Observable, map } from 'rxjs';
+import { Observable, Subscription, map } from 'rxjs';
 import { OrderService } from '@shared/services/order.service';
 
 @Component({
@@ -27,6 +27,7 @@ import { OrderService } from '@shared/services/order.service';
     NgFor,
     NgIf,
     AsyncPipe,
+    JsonPipe,
     TransformPricePipe,
     FormsModule,
     RouterLink,
@@ -45,7 +46,7 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
   private readonly cartService = inject(CartService);
   private readonly orderService = inject(OrderService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
+  private unSub = new Subscription();
   public maxQuantity = 100;
   public minQuantity = 1;
   public total = 0;
@@ -58,10 +59,12 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
   public orders$!: Observable<Orders[]>;
 
   ngOnInit(): void {
-    this.countTotal();
-    this.orders$ = this.cartService
-      .getCart()
-      .pipe(map((res: any) => res.payload.items));
+    this.orders$ = this.cartService.getCart().pipe(
+      map((res: any) => {
+        console.log(res.payload.items);
+        return res.payload.items;
+      })
+    );
 
     this.isCart = true;
   }
@@ -77,58 +80,23 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
   }
 
   increase(id: string | undefined, quantity: number) {
-    // if (this.orders[id].quantity < this.maxQuantity) {
-    //   this.orders[id].quantity += 1;
-    //   this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
-    // }
-    // this.checkQuantity(this.orders[id], id);
-    console.log(id);
     if (id && quantity) {
-      this.cartService.makeOrder(id, quantity);
+      this.unSub.add(this.cartService.makeOrder(id, quantity + 1).subscribe());
     }
   }
 
-  decrease(id: string | undefined) {
-    // if (this.orders[id].quantity > this.minQuantity) {
-    //   this.orders[id].quantity -= 1;
-    //   this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
-    // }
-    // this.checkQuantity(this.orders[id], id);
-  }
-
-  onKeyup(id: string | undefined) {
-    // this.checkQuantity(order, id);
-    // if (
-    //   order.quantity <= this.maxQuantity &&
-    //   order.quantity >= this.minQuantity
-    // ) {
-    //   this.orders[id].quantity = order.quantity;
-    //   this.orders[id].summa = this.orders[id].price * order.quantity;
-    // }
-    // this.countTotal();
-  }
-
-  checkQuantity(order: Orders, id: number) {
-    // if (order.quantity >= this.maxQuantity) {
-    //   order.quantity = this.maxQuantity;
-    //   this.orders[id].quantity = order.quantity;
-    // }
-    // if (order.quantity <= this.minQuantity) {
-    //   order.quantity = this.minQuantity;
-    //   this.orders[id].quantity = order.quantity;
-    // }
-    // this.countTotal();
-  }
-
-  countTotal(): void {
-    // let res = 0;
-    // this.orders.forEach((order: Orders) => (res += order.summa!));
-    // this.total = res;
+  decrease(id: string | undefined, quantity: number) {
+    if (id && quantity) {
+      this.unSub.add(this.cartService.makeOrder(id, quantity - 1).subscribe());
+    }
   }
 
   delete(id: string) {
-    this.cartService.makeOrder(id, 0);
+    if (id) {
+      this.unSub.add(this.cartService.makeOrder(id, 0).subscribe());
+    }
   }
+
   close() {
     this.router.navigate([{ outlets: { cart: null } }], {
       relativeTo: this.route.parent,

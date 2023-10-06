@@ -23,6 +23,7 @@ export class InfoComponent implements AfterViewChecked {
 
   private readonly router = inject(Router);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
+
   public infoForm = false;
 
   ngAfterViewChecked(): void {
