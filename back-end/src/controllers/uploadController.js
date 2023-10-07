@@ -66,4 +66,43 @@ const uploadFile = async (req, res) => {
   }
 };
 
-export { upload, uploadFile };
+const deleteFile = async (req, res) => {
+  try {
+    const { productId, imageIndex } = req.body;
+    const product = await Product.findById(productId);
+
+    if (product) {
+      const images = product.allImages;
+
+      if (imageIndex >= 0 && imageIndex < images.length) {
+        const imagePath = images[imageIndex];
+
+        await bucket.file(imagePath).delete();
+
+        product.allImages.splice(imageIndex, 1);
+
+        if (product.baseImage === imagePath) {
+          product.baseImage = 'no.jpg';
+        }
+
+        await product.save();
+
+        logger.info('Image deleted from product and Google Cloud Storage:', imagePath);
+
+        return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.IMAGE_DELETED_SUCCESSFULLY);
+      } else {
+        return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.INVALID_IMAGE_INDEX);
+      }
+    } else {
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
+    }
+  } catch (error) {
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.ERROR_DELETING_IMAGE, error);
+  }
+};
+
+export {
+  upload,
+  uploadFile,
+  deleteFile
+};

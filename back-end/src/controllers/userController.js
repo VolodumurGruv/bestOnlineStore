@@ -15,7 +15,7 @@ import sendRes from '../utils/handleResponse.js';
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({}, '-password -isAdmin -resetPasswordToken -resetPasswordExpires');
+    const users = await User.find({}, '-password -resetPasswordToken -resetPasswordExpires');
     return sendRes(res, HTTP_STATUS_CODES.OK, 'All users fetched successfully.', users);
   } catch (error) {
     return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while fetching all users.', error);
@@ -246,7 +246,9 @@ const restorePassword = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id)
+      .populate('shippingAddress')
+      .select('-password -resetPasswordToken -resetPasswordExpires');
     if (user) {
       return sendRes(res, HTTP_STATUS_CODES.OK, 'User was found.', user);
     } else {
