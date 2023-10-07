@@ -261,7 +261,7 @@ const getUserById = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).populate('shippingAddress');
+    const user = await User.findById(req.user._id);
 
     if (user) {
       user.name = req.body.name || user.name;
@@ -271,11 +271,6 @@ const updateProfile = async (req, res) => {
       if (!bcrypt.compareSync(req.body.password, user.password)) {
         return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.INVALID_CREDENTIALS);
       }
-
-      const updatedUser = await user.save();
-      updatedUser.password = undefined;
-
-      const token = generateToken(updatedUser);
 
       let address = await ShippingAddress.findOne({ user: req.user._id });
 
@@ -300,10 +295,19 @@ const updateProfile = async (req, res) => {
 
       const updatedAddress = await address.save();
 
+      user.shippingAddress = updatedAddress._id;
+
+      const updatedUser = await user.save();
+
+      const token = generateToken(updatedUser);
+
+      const populatedUser = await User.findById(updatedUser._id)
+        .select('-password -isAdmin -resetPasswordToken -resetPasswordExpires')
+        .populate('shippingAddress');
+
       return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.USER_WAS_UPDATED, {
-        user: updatedUser,
+        user: populatedUser,
         token,
-        address: updatedAddress,
       });
     }
   } catch (error) {
