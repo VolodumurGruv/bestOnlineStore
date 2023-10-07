@@ -299,15 +299,12 @@ const updateProfile = async (req, res) => {
 
       const updatedUser = await user.save();
 
-      const token = generateToken(updatedUser);
-
       const populatedUser = await User.findById(updatedUser._id)
         .select('-password -isAdmin -resetPasswordToken -resetPasswordExpires')
         .populate('shippingAddress');
 
       return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.USER_WAS_UPDATED, {
-        user: populatedUser,
-        token,
+        user: populatedUser
       });
     }
   } catch (error) {

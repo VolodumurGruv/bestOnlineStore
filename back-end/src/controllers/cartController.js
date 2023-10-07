@@ -29,7 +29,7 @@ const addToCart = async (req, res) => {
     const userId = req.user._id;
     const { productId, quantity } = req.body;
 
-    if (!userId || !productId || !quantity || !Number.isInteger(quantity) || quantity <= 0) {
+    if (!userId || !productId || !quantity || !Number.isInteger(quantity) || quantity < 0) {
       return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.INVALID_INPUT_DATA);
     }
 
