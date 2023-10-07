@@ -49,7 +49,7 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
   private unSub = new Subscription();
   public maxQuantity = 100;
   public minQuantity = 1;
-  public total = 0;
+  public total!: number;
 
   public isComplete = true;
   public isAdv = true;
@@ -61,8 +61,10 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.orders$ = this.cartService.getCart().pipe(
       map((res: any) => {
-        const { items } = res.payload;
-        return items.push(res.payload.total);
+        const { items, totalPrice } = res.payload;
+        this.total = totalPrice;
+
+        return items;
       })
     );
 

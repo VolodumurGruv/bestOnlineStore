@@ -21,7 +21,6 @@ export class CartAdComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.productService.getProducts().subscribe((res: any) => {
-      console.log(res);
       this.advs = res.products;
     });
   }
