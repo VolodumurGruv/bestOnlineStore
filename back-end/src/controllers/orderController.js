@@ -1,5 +1,6 @@
 import Order from '../models/orderSchema.js';
 import Cart from '../models/cartSchema.js';
+import ShippingAddress from '../models/shippingAddressSchema.js';
 import sendEmail from '../utils/email.js';
 import {
   HTTP_STATUS_CODES,
@@ -58,19 +59,30 @@ const createOrder = async (req, res) => {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
     }
 
+    const existAddress = await ShippingAddress.findOne({ user: userId });
+
+    const { address, city, country, postalCode, deliveryMethod, novaPoshtaAddress } = req.body;
+
+    existAddress.address = address || existAddress.address;
+    existAddress.city = city || existAddress.city;
+    existAddress.country = country || existAddress.country;
+    existAddress.postalCode = postalCode || existAddress.postalCode;
+    existAddress.deliveryMethod = deliveryMethod || existAddress.deliveryMethod;
+    existAddress.novaPoshtaAddress = novaPoshtaAddress || existAddress.novaPoshtaAddress;
+
+    const newAddress = await existAddress.save();
+
     const order = new Order({
       cart: cart._id,
-      shippingAddress: req.user.shippingAddress,
+      shippingAddress: newAddress,
       paymentMethod: req.body.paymentMethod,
       itemsPrice: cart.totalPrice,
       user: userId,
     });
 
-    const createdOrder = await order.save();
+    await order.save();
 
-    cart.items = [];
-    cart.totalPrice = 0;
-    await cart.save();
+    const createdOrder = await Order.findOne({ user: userId }).populate('cart');
 
     return sendRes(res, HTTP_STATUS_CODES.CREATED, 'Order created successfully.', createdOrder);
   } catch (error) {
@@ -78,7 +90,7 @@ const createOrder = async (req, res) => {
   }
 };
 
-const updateOrder = async (req, res) => {
+const makePaymentOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (order) {
@@ -96,6 +108,12 @@ const updateOrder = async (req, res) => {
       const updatedOrder = await order.save();
 
       sendEmail(req.user.email, 'Changes on your order', `Order ${req.params.id} was paid.`);
+
+      const cart = await Cart.findOne({ user: req.user._id });
+
+      cart.items = [];
+      cart.totalPrice = 0;
+      await cart.save();
 
       return sendRes(res, HTTP_STATUS_CODES.OK, 'Order has been paid.', updatedOrder);
     } else {
@@ -150,7 +168,7 @@ export {
   getOrderHistory,
   getOrderById,
   createOrder,
-  updateOrder,
+  makePaymentOrder,
   changeStatus,
   deleteOrder,
 };

@@ -4,7 +4,7 @@ import {
   getOrderHistory,
   createOrder,
   getOrderById,
-  updateOrder,
+  makePaymentOrder,
   changeStatus,
   deleteOrder
 } from '../controllers/orderController.js';
@@ -17,7 +17,7 @@ orderRouter.get('/', isAuth, isAdmin, getAllOrders);
 orderRouter.get('/order-history', isAuth, getOrderHistory);
 orderRouter.post('/', isAuth, createOrder);
 orderRouter.get('/:id', isAuth, getOrderById);
-orderRouter.put('/:id/pay', isAuth, updateOrder);
+orderRouter.put('/:id/pay', isAuth, makePaymentOrder);
 orderRouter.put('/:orderId/status', isAuth, changeStatus);
 orderRouter.delete('/:id', isAuth, isAdmin, deleteOrder);
 
