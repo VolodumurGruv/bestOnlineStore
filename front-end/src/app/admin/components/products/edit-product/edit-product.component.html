@@ -1,3 +1,7 @@
 <ng-container *ngIf="product$ | async as product">
-  <app-edit-product-item [product]="product"> </app-edit-product-item>
+  <app-edit-product-item [product]="product">
+    <button type="button" class="btn btn__add" (click)="delete(product._id)">
+      Видалити
+    </button>
+  </app-edit-product-item>
 </ng-container>

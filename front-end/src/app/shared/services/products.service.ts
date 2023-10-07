@@ -14,7 +14,7 @@ export class ProductsService {
   private readonly errorHandler = inject(HttpErrorHandlerService);
 
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${configs.URL}/product`).pipe(
+    return this.http.get<Product[]>(`${configs.URL}/product?perPage=200`).pipe(
       map((response: any) => response.payload?.products),
       catchError(
         this.errorHandler.handleError<Product[]>('Не вдалося отримати дані!')
@@ -80,7 +80,7 @@ export class ProductsService {
   }
 
   deleteProduct(id: string) {
-    this.http
+    return this.http
       .delete(`${configs.URL}/product/${id}`)
       .pipe(
         catchError(

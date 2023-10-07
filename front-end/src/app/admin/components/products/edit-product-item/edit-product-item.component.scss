@@ -12,3 +12,13 @@
 .input {
   @include inputs.input;
 }
+
+.action {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+app-error-validation {
+  position: absolute;
+}

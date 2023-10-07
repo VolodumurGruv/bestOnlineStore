@@ -1,53 +1,73 @@
 <div class="wraper">
   <div class="add-product__content">
     <form class="form-wrap" [formGroup]="productForm" (ngSubmit)="onSubmit()">
-      <div class="input-wrap">
+      <div class="input-wrap" [ngClass]="isValid(productForm, 'name')">
         <input
           class="input"
           type="text"
           placeholder="Product name"
           formControlName="name"
         />
+        <app-error-validation
+          [control]="productForm.get('name')"
+        ></app-error-validation>
       </div>
-      <div class="input-wrap">
+      <div class="input-wrap" [ngClass]="isValid(productForm, 'brand')">
         <input
           class="input"
           type="text"
           placeholder="Product brand"
           formControlName="brand"
         />
+        <app-error-validation
+          [control]="productForm.get('brand')"
+        ></app-error-validation>
       </div>
-      <div class="input-wrap">
+      <div class="input-wrap" [ngClass]="isValid(productForm, 'category')">
         <input
           class="input"
           type="text"
           placeholder="Product category"
           formControlName="category"
         />
+        <app-error-validation
+          [control]="productForm.get('category')"
+        ></app-error-validation>
       </div>
-      <div class="input-wrap">
+      <div class="input-wrap" [ngClass]="isValid(productForm, 'subcategory')">
         <input
           class="input"
           type="text"
           placeholder="Product subcategory"
           formControlName="subcategory"
         />
+        <app-error-validation
+          [control]="productForm.get('subcategory')"
+        ></app-error-validation>
       </div>
-      <div class="input-wrap">
+      <div class="input-wrap" [ngClass]="isValid(productForm, 'price')">
         <input
           class="input"
           type="number"
           placeholder="Product price"
           formControlName="price"
+          min="0"
         />
+        <app-error-validation
+          [control]="productForm.get('price')"
+        ></app-error-validation>
       </div>
-      <div class="input-wrap">
+      <div class="input-wrap" [ngClass]="isValid(productForm, 'discount')">
         <input
           class="input"
           type="number"
           placeholder="Product discount"
           formControlName="discount"
+          min="0"
         />
+        <app-error-validation
+          [control]="productForm.get('discount')"
+        ></app-error-validation>
       </div>
       <div class="input-wrap">
         <select
@@ -57,24 +77,31 @@
           formControlName="instock"
         >
           <option value="false">False</option>
-          <option value="true">True</option>
+          <option value="true" selected>True</option>
         </select>
       </div>
-      <div class="input-wrap">
+      <div class="input-wrap" [ngClass]="isValid(productForm, 'countInStock')">
         <input
           class="input"
           type="number"
           placeholder="Product countInStock"
           formControlName="countInStock"
+          min="0"
         />
+        <app-error-validation
+          [control]="productForm.get('countInStock')"
+        ></app-error-validation>
       </div>
-      <div class="input-wrap">
+      <div class="input-wrap" [ngClass]="isValid(productForm, 'shortDescr')">
         <input
           class="input"
           type="text"
           placeholder="Product shortDescr"
           formControlName="shortDescr"
         />
+        <app-error-validation
+          [control]="productForm.get('shortDescr')"
+        ></app-error-validation>
       </div>
 
       <textarea
@@ -96,10 +123,19 @@
           <input type="text" class="input" [formControlName]="i" />
         </div>
       </div>
-      <button class="btn btn__add" type="submit">Додати</button>
-      <button class="btn btn__add" type="button" (click)="cancel()">
-        Відмінити
-      </button>
+      <div class="action">
+        <button
+          class="btn btn__add"
+          type="submit"
+          [disabled]="productForm.invalid"
+        >
+          Додати
+        </button>
+        <button class="btn btn__add" type="button" (click)="cancel()">
+          Відмінити
+        </button>
+        <ng-content></ng-content>
+      </div>
     </form>
   </div>
 </div>

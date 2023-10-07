@@ -26,4 +26,10 @@ export class EditProductComponent implements OnInit {
       )
     );
   }
+
+  delete(productId: string | undefined) {
+    if (productId) {
+      this.productsService.deleteProduct(productId).subscribe();
+    }
+  }
 }

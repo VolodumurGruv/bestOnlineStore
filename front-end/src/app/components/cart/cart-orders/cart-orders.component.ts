@@ -61,8 +61,8 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.orders$ = this.cartService.getCart().pipe(
       map((res: any) => {
-        console.log(res.payload.items);
-        return res.payload.items;
+        const { items } = res.payload;
+        return items.push(res.payload.total);
       })
     );
 

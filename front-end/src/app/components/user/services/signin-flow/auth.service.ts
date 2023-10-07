@@ -29,7 +29,7 @@ export class AuthService {
         retry(3),
         map((res: any) => {
           const user = res.payload;
-
+          console.log(res);
           this.setLocalStorage(user);
           this.user.next(user);
           return user;
