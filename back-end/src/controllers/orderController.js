@@ -59,16 +59,28 @@ const createOrder = async (req, res) => {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
     }
 
-    const existAddress = await ShippingAddress.findOne({ user: userId });
+    let existAddress = await ShippingAddress.findOne({ user: userId });
 
-    const { address, city, country, postalCode, deliveryMethod, novaPoshtaAddress } = req.body;
+    if (!existAddress) {
+      existAddress = new ShippingAddress({
+        user: userId,
+        address: req.body.address,
+        city: req.body.city,
+        country: req.body.country,
+        postalCode: req.body.postalCode,
+        deliveryMethod: req.body.deliveryMethod,
+        novaPoshtaAddress: req.body.novaPoshtaAddress,
+      });
+    } else {
+      const { address, city, country, postalCode, deliveryMethod, novaPoshtaAddress } = req.body;
 
-    existAddress.address = address || existAddress.address;
-    existAddress.city = city || existAddress.city;
-    existAddress.country = country || existAddress.country;
-    existAddress.postalCode = postalCode || existAddress.postalCode;
-    existAddress.deliveryMethod = deliveryMethod || existAddress.deliveryMethod;
-    existAddress.novaPoshtaAddress = novaPoshtaAddress || existAddress.novaPoshtaAddress;
+      existAddress.address = address || existAddress.address;
+      existAddress.city = city || existAddress.city;
+      existAddress.country = country || existAddress.country;
+      existAddress.postalCode = postalCode || existAddress.postalCode;
+      existAddress.deliveryMethod = deliveryMethod || existAddress.deliveryMethod;
+      existAddress.novaPoshtaAddress = novaPoshtaAddress || existAddress.novaPoshtaAddress;
+    }
 
     const newAddress = await existAddress.save();
 
