@@ -27,7 +27,7 @@ import {
 import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
 import { CartService } from 'app/components/cart/services/cart.service';
 import { OrderService } from '@shared/services/order.service';
-import { forkJoin, tap, zip } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { UserInfo } from '@interfaces/user.interface';
 
 @Component({
@@ -43,6 +43,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   private readonly route = inject(ActivatedRoute);
   private readonly userService = inject(UserService);
   private readonly orderService = inject(OrderService);
+  private unSub = new Subscription();
   public phoneHolder: string = '+380';
   public addresses: Address[] = [];
   public departments: any;
@@ -75,7 +76,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
       ],
     ],
     email: ['', [Validators.required, Validators.email, emailValidator()]],
-    shippingAddress: ['', [Validators.required]],
+    address: ['', [Validators.required]],
     phone: [
       '',
       [
@@ -100,10 +101,21 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   });
 
   ngOnInit() {
-    this.userService
-      .getUserById(JSON.parse(localStorage.getItem('user')!)._id)
-      .pipe(tap((res) => setupInitialValue(this.infoForm, res)))
-      .subscribe();
+    this.unSub.add(
+      this.userService
+        .getUserById(JSON.parse(localStorage.getItem('user')!)._id)
+        .pipe(
+          tap((res: any) => {
+            this.user = res;
+            setupInitialValue(this.infoForm, this.user);
+            this.infoForm
+              .get('deliveryMethod')
+              ?.setValue(res.shippingAddress.deliveryMethod);
+            this.infoForm.get('address')?.setValue(res.shippingAddress.address);
+          })
+        )
+        .subscribe()
+    );
 
     this.route.url.subscribe((urlSegment: UrlSegment[]) => {
       if (urlSegment[0]) {
@@ -144,7 +156,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
       Ref,
     } = address;
     this.infoForm
-      .get('shippingAddress')
+      .get('address')
       ?.setValue(
         `${SettlementTypeDescription} ${Description} ${RegionsDescription} ${AreaDescription}`
       );
@@ -155,19 +167,45 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   updateUser() {
-    this.userService.updateUser(this.infoForm.value).subscribe(() => {
-      setupInitialValue(this.infoForm, this.infoForm.controls);
-    });
+    this.unSub.add(
+      this.userService.updateUser(this.infoForm.value).subscribe((res: any) => {
+        setupInitialValue(this.infoForm, this.user);
+
+        this.infoForm
+          .get('deliveryMethod')
+          ?.setValue(res.payload.user.shippingAddress.deliveryMethod);
+        this.infoForm
+          .get('address')
+          ?.setValue(res.payload.user.shippingAddress.address);
+      })
+    );
   }
 
   makeOrder() {
-    const updateUser = this.userService
-      .updateUser(this.infoForm.value)
-      .subscribe();
+    console.log(this.infoForm.value);
+    const { address, paymentMethod, deliveryMethod, ...res } =
+      this.infoForm.value;
+    if (address && paymentMethod && deliveryMethod) {
+      this.unSub.add(
+        this.userService
+          .updateUser({
+            shippingAddress: {
+              name: 'null',
+              address,
+              paymentMethod,
+              deliveryMethod,
+            },
+            ...res,
+          })
+          .subscribe()
+      );
+    }
 
-    this.orderService
-      .makeOrder(JSON.parse(localStorage.getItem('user')!)._id)
-      .subscribe();
+    this.unSub.add(
+      this.orderService
+        .makeOrder(JSON.parse(localStorage.getItem('user')!)._id)
+        .subscribe()
+    );
   }
 
   onSubmit() {}
@@ -222,5 +260,6 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   ngOnDestroy(): void {
     clearTimeout(this.clearTimeOut);
+    this.unSub.unsubscribe();
   }
 }

@@ -69,15 +69,12 @@
       [control]="infoForm.get('phone')"
     ></app-error-validation>
   </div>
-  <div
-    class="user__wrap-input"
-    [ngClass]="isValid(infoForm, 'shippingAddress')"
-  >
+  <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'address')">
     <input
       #addr
       type="text"
       class="user__input"
-      formControlName="shippingAddress"
+      formControlName="address"
       placeholder="Адреса *"
       (keyup)="getAddress(addr.value)"
       [value]="infoForm.get('address')?.value"

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
@@ -7,7 +7,8 @@ import { FiltersComponent } from '../filters/filters.component';
 import { CardComponent } from 'app/components/home-page/components/card/card.component';
 import { Product } from '@interfaces/product.interfaces';
 import { ProductsService } from '@shared/services/products.service';
-import { Observable, Subscription, map, tap } from 'rxjs';
+import { PathStringService } from '@shared/services/interaction/path-string.service';
+import { Subscription, map } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -23,15 +24,16 @@ import { Observable, Subscription, map, tap } from 'rxjs';
   styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit, OnDestroy {
+  private readonly route = inject(ActivatedRoute);
+  private readonly productService = inject(ProductsService);
+  public readonly pathString = inject(PathStringService);
   private unSub!: Subscription;
   public isClickFilter: boolean = false;
   isClickSort = false;
   products!: Product[];
+  category!: string;
+  subCategory!: string;
 
-  constructor(
-    private route: ActivatedRoute,
-    private productService: ProductsService
-  ) {}
   onIsClickFilterChange(newValue: boolean) {
     this.isClickFilter = newValue;
   }
@@ -39,7 +41,13 @@ export class ProductsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.unSub = this.productService
       .getProducts()
-      .pipe(map((res: Product[]) => (this.products = res)))
+      .pipe(
+        map((res: Product[]) => {
+          this.products = res;
+          this.category = this.products[0].category;
+          this.subCategory = this.products[0].subcategory;
+        })
+      )
       .subscribe();
   }
 

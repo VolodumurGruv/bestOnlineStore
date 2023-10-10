@@ -10,7 +10,12 @@ export interface User {
 
 export interface UserInfo extends User {
   lastName?: string | null;
-  shippingAddress?: string | null | undefined | string[];
+  shippingAddress?: {
+    name: string;
+    address: string;
+    paymentMethod: string;
+    deliveryMethod: string;
+  };
   phone?: string | null;
   delivery?: string | null;
   department?: string | null;

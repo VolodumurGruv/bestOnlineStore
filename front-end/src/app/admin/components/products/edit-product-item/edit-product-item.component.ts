@@ -30,6 +30,8 @@ export class EditProductItemComponent implements OnInit {
   private readonly alertService = inject(AlertService);
   public isValid = isValid;
 
+  private allImagesFormArray = this.fb.array([this.fb.control('')]);
+
   public productForm = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(4)]],
     descr: ['', [Validators.required, Validators.minLength(4)]],
@@ -42,7 +44,16 @@ export class EditProductItemComponent implements OnInit {
     instock: ['true', [Validators.required]],
     countInStock: ['0', [Validators.required, Validators.min(0)]],
     baseImage: [''],
-    allImages: this.fb.array([this.fb.control('')]),
+    allImages: this.allImagesFormArray,
+    material: [''],
+    filling: [''],
+    sizes: [''],
+    color: [''],
+    ergonomics: [''],
+    load: [''],
+    functions: [''],
+    additional: [''],
+    care: [''],
   });
 
   get allImages() {
@@ -53,20 +64,37 @@ export class EditProductItemComponent implements OnInit {
     if (this.product) {
       setupInitialValue(this.productForm, this.product);
     }
+
+    if (this.product?.allImages.length) {
+      this.product.allImages.splice(0, 1);
+      this.product.allImages.forEach((image: string) => {
+        this.allImagesFormArray.push(this.fb.control(image));
+      });
+    }
   }
 
   onSubmit() {
-    this.productService.createProduct(this.productForm.value).subscribe(() => {
-      this.alertService.success('Продукт успішно створено');
-    });
+    // this.productService.createProduct(this.productForm.value).subscribe(() => {
+    //   this.alertService.success('Продукт успішно створено');
+    // });
 
-    // if (this.product._id) {
-    //   this.productService
-    //     .updateProduct(this.productForm.value!, this.product._id)
-    //     .subscribe(() => {
-    //       this.alertService.success('Продукт успішно створено');
-    //     });
-    // }
+    if (this.product._id) {
+      this.productService
+        .updateProduct(this.productForm.value!, this.product._id)
+        .subscribe(() => {
+          this.alertService.success('Продукт успішно створено');
+        });
+    }
+  }
+
+  addImageField() {
+    this.allImagesFormArray.push(this.fb.control(''));
+  }
+
+  deleteImageField() {
+    if (this.allImagesFormArray.length > 1) {
+      this.allImagesFormArray.removeAt(-1);
+    }
   }
 
   cancel() {

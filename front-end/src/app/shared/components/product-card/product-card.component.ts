@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy, inject } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { Product } from '@interfaces/product.interfaces';
 import { TransformPricePipe } from '../../pipes/transform-price.pipe';
-import { RouterLink } from '@angular/router';
 import { WishlistService } from '@shared/services/wishlist.service';
-import { Subscription } from 'rxjs';
 import { AlertService } from '@shared/services/interaction/alert.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class ProductCardComponent implements OnDestroy {
 
   addToWishList(productId: string | undefined) {
     if (productId) {
-      this.wishlistService
+      this.unSub = this.wishlistService
         .addWishList(productId)
         .subscribe(() => this.alertService.success('Додано до улюблених'));
     }

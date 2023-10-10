@@ -1,5 +1,6 @@
 <div class="wraper">
   <div class="add-product__content">
+    <h1>Редагувати</h1>
     <form class="form-wrap" [formGroup]="productForm" (ngSubmit)="onSubmit()">
       <div class="input-wrap" [ngClass]="isValid(productForm, 'name')">
         <input
@@ -115,7 +116,7 @@
       <div class="input-wrap">
         <input type="text" class="input" formControlName="baseImage" />
       </div>
-      <div formArrayName="allImages">
+      <div class="allimages" formArrayName="allImages">
         <div
           class="input-wrap"
           *ngFor="let item of allImages.controls; let i = index"
@@ -123,6 +124,124 @@
           <input type="text" class="input" [formControlName]="i" />
         </div>
       </div>
+      <div class="allimages__btn">
+        <button class="btn btn__add" type="button" (click)="addImageField()">
+          +
+        </button>
+        <button class="btn btn__add" type="button" (click)="deleteImageField()">
+          -
+        </button>
+      </div>
+      <section>
+        <h2>Характеристики</h2>
+        <div class="form-wrap">
+          <div class="input-wrap" [ngClass]="isValid(productForm, 'material')">
+            <input
+              class="input"
+              type="text"
+              placeholder="Product material"
+              formControlName="material"
+            />
+            <app-error-validation
+              [control]="productForm.get('material')"
+            ></app-error-validation>
+          </div>
+          <div class="input-wrap" [ngClass]="isValid(productForm, 'filling')">
+            <input
+              class="input"
+              type="text"
+              placeholder="Product filling"
+              formControlName="filling"
+            />
+            <app-error-validation
+              [control]="productForm.get('filling')"
+            ></app-error-validation>
+          </div>
+          <div class="input-wrap" [ngClass]="isValid(productForm, 'sizes')">
+            <input
+              class="input"
+              type="text"
+              placeholder="Product sizes"
+              formControlName="sizes"
+            />
+            <app-error-validation
+              [control]="productForm.get('sizes')"
+            ></app-error-validation>
+          </div>
+          <div class="input-wrap" [ngClass]="isValid(productForm, 'color')">
+            <input
+              class="input"
+              type="text"
+              placeholder="Product color"
+              formControlName="color"
+            />
+            <app-error-validation
+              [control]="productForm.get('color')"
+            ></app-error-validation>
+          </div>
+          <div
+            class="input-wrap"
+            [ngClass]="isValid(productForm, 'ergonomics')"
+          >
+            <input
+              class="input"
+              type="text"
+              placeholder="Product ergonomics"
+              formControlName="ergonomics"
+            />
+            <app-error-validation
+              [control]="productForm.get('ergonomics')"
+            ></app-error-validation>
+          </div>
+          <div class="input-wrap" [ngClass]="isValid(productForm, 'load')">
+            <input
+              class="input"
+              type="text"
+              placeholder="Product load"
+              formControlName="load"
+            />
+            <app-error-validation
+              [control]="productForm.get('load')"
+            ></app-error-validation>
+          </div>
+          <div class="input-wrap" [ngClass]="isValid(productForm, 'functions')">
+            <input
+              class="input"
+              type="text"
+              placeholder="Product functions"
+              formControlName="functions"
+            />
+            <app-error-validation
+              [control]="productForm.get('functions')"
+            ></app-error-validation>
+          </div>
+          <div
+            class="input-wrap"
+            [ngClass]="isValid(productForm, 'additional')"
+          >
+            <input
+              class="input"
+              type="text"
+              placeholder="Product additional"
+              formControlName="additional"
+            />
+            <app-error-validation
+              [control]="productForm.get('additional')"
+            ></app-error-validation>
+          </div>
+          <div class="input-wrap" [ngClass]="isValid(productForm, 'care')">
+            <input
+              class="input"
+              type="text"
+              placeholder="Product care"
+              formControlName="care"
+            />
+            <app-error-validation
+              [control]="productForm.get('care')"
+            ></app-error-validation>
+          </div>
+        </div>
+      </section>
       <div class="action">
         <button
           class="btn btn__add"

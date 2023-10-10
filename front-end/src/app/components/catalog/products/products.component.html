@@ -1,6 +1,9 @@
 <section class="products">
-  <!--  <p *ngIf="categoryName" class="products__path path">{{ categoryName }}</p>-->
-  <!--  <h2 class="products__title">{{ subcategory.name }}</h2>-->
+  <div class="path">
+    <span>Каталог/</span>
+    <span *ngIf="category" class="products__path path">{{ category }}</span>
+  </div>
+  <h2 class="products__title">{{ subCategory }}</h2>
   <span class="products__cards-filter" (click)="isClickFilter = !isClickFilter"
     >Фільтри</span
   >

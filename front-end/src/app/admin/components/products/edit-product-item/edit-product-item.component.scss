@@ -2,6 +2,8 @@
 
 .form-wrap {
   @include inputs.form-wrap;
+  flex-direction: row;
+  flex-wrap: wrap;
 
   gap: 2rem;
 }
@@ -21,4 +23,16 @@
 
 app-error-validation {
   position: absolute;
+}
+
+.allimages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+
+  &__btn {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
 }

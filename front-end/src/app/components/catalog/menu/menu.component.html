@@ -7,7 +7,8 @@
         (mouseleave)="hideSubcategories()"
       >
         <a
-          class="categories__menu-title" (mouseenter)="showImg(category.srcImg)"
+          class="categories__menu-title"
+          (mouseenter)="showImg(category.srcImg)"
           [routerLink]="category.subcategories ? null : category.routerLink"
           >{{ category.name }}</a
         >
@@ -17,7 +18,7 @@
               class="categories__menu-subtitle"
               (mouseenter)="showImg(subcategory.srcImg)"
               [routerLink]="subcategory.routerLink"
-              >
+            >
               {{ subcategory.name }}
             </a>
           </li>
@@ -25,5 +26,11 @@
       </li>
     </ul>
   </div>
-  <div class="categories__image" [ngStyle]="{ 'background-image': 'url(' + (currentCategory || categories[0].srcImg) + ')' }"></div>
+  <div
+    class="categories__image"
+    [ngStyle]="{
+      'background-image':
+        'url(' + (currentCategory || categories[0].srcImg) + ')'
+    }"
+  ></div>
 </section>

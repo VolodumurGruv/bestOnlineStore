@@ -8,10 +8,11 @@ import {
   UserCredential,
   signOut,
 } from '@angular/fire/auth';
-import { AlertService } from '@shared/services/interaction/alert.service';
-import { AuthService } from '../../../services/signin-flow/auth.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+
+import { AlertService } from '@shared/services/interaction/alert.service';
+import { AuthService } from '../../../services/signin-flow/auth.service';
 
 @Component({
   selector: 'app-google-login',
@@ -57,6 +58,7 @@ export class GoogleLoginComponent implements OnInit, OnDestroy {
           }
         }
       })
+
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;

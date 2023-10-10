@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { configs } from '@configs/configs';
+import { PAYLOAD } from '@interfaces/request.interface';
 import { UserInfo } from '@interfaces/user.interface';
 import { HttpErrorHandlerService } from '@shared/services/http-error-handler.service';
 import { Observable, catchError, config, map, tap } from 'rxjs';
@@ -34,16 +35,19 @@ export class UserService {
     );
   }
 
-  updateUser(user: UserInfo): Observable<UserInfo> {
-    return this.http.put<UserInfo>(`${configs.URL}/user/profile`, user).pipe(
-      tap((res: any) => {
-        console.log(res);
-        localStorage.setItem('user', JSON.stringify(res.payload.user));
-        localStorage.setItem('address', JSON.stringify(res.payload.address));
-      }),
-      catchError(
-        this.httpErrorHandler.handleError<UserInfo>('Невдалося оновити дані!')
-      )
-    );
+  updateUser(user: UserInfo): Observable<UserInfo | PAYLOAD<UserInfo>> {
+    return this.http
+      .put<PAYLOAD<UserInfo>>(`${configs.URL}/user/profile`, user)
+      .pipe(
+        tap((res: PAYLOAD<UserInfo>) => {
+          const user = res.payload.user;
+          user.token = res.payload.token;
+
+          localStorage.setItem('user', JSON.stringify(user));
+        }),
+        catchError(
+          this.httpErrorHandler.handleError<UserInfo>('Невдалося оновити дані!')
+        )
+      );
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
 import { Product } from '@interfaces/product.interfaces';
@@ -12,7 +12,7 @@ import { Observable, map } from 'rxjs';
   templateUrl: './sales.component.html',
   styleUrls: ['./sales.component.scss'],
 })
-export class SalesComponent implements OnInit, OnDestroy {
+export class SalesComponent implements OnInit {
   private readonly productService = inject(ProductsService);
   public products$!: Observable<Product[]>;
 
@@ -21,6 +21,4 @@ export class SalesComponent implements OnInit, OnDestroy {
       .getProducts()
       .pipe(map((res) => res.filter((item) => item.discount > 0)));
   }
-
-  ngOnDestroy(): void {}
 }
