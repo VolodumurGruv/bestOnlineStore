@@ -15,6 +15,7 @@ const MESSAGES = {
   PRODUCT_NOT_FOUND: 'Product not found.',
   VALIDATION_ERROR: 'Some errors was occured when validate.',
   DATABASE_ERROR: 'Some error occurred on DB.',
+  DATA_RETRIEVED: 'Запитані дані успішно отримано.',
   INVALID_CREDENTIALS: 'Wrong email or password.',
   NEW_USER_CREATED: 'New user created.',
   GOOGLE_FETCH_FAILURE: 'Failed to fetch user information from Google.',

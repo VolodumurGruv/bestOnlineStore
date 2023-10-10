@@ -16,6 +16,7 @@ import orderRouter from './routers/orderRouter.js';
 import uploadRouter from './routers/uploadRouter.js';
 import reviewRouter from './routers/reviewRouter.js';
 import wishListRouter from './routers/wishListRouter.js';
+import dataRouter from './routers/dataRouter.js';
 
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
@@ -76,6 +77,7 @@ app.use('/api/order', orderRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/review', reviewRouter);
 app.use('/api/wishlist', wishListRouter);
+app.use('/api/data', dataRouter);
 
 const staticPath = path.join(__dirName, pathToIndex);
 
