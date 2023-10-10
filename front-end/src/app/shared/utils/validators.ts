@@ -79,7 +79,7 @@ export function phoneValidator(): ValidatorFn {
   const phoneRegExp = /[0-9]{9,9}$/g;
 
   return (control: AbstractControl): ValidationErrors | null => {
-    const res = control.value.match(phoneRegExp);
+    const res = control.value?.match(phoneRegExp);
     let isTrue = false;
 
     if (res) {

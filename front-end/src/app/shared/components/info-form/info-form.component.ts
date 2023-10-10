@@ -11,8 +11,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 
 import { UserService } from 'app/components/user/services/user.service';
-import { Address } from '@interfaces/address';
-import { isValid } from '@shared/utils/is-valid';
 import {
   emailValidator,
   nameValidator,
@@ -20,20 +18,25 @@ import {
   phoneValidator,
 } from '@shared/utils/validators';
 import { setupInitialValue } from '@shared/utils/initial-from-local';
-import {
-  getAddresses,
-  getNovaPoshtaDepartment,
-} from '@shared/utils/nova-poshta';
+
 import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
-import { CartService } from 'app/components/cart/services/cart.service';
 import { OrderService } from '@shared/services/order.service';
 import { Subscription, tap } from 'rxjs';
 import { UserInfo } from '@interfaces/user.interface';
+import { InfoFormItemComponent } from './info-form-item/info-form-item.component';
+import { DeliveryFormItemComponent } from './delivery-form-item/delivery-form-item.component';
+import { getNovaPoshtaDepartment } from '@shared/utils/nova-poshta';
 
 @Component({
   selector: 'app-info-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ErrorValidationComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ErrorValidationComponent,
+    InfoFormItemComponent,
+    DeliveryFormItemComponent,
+  ],
   templateUrl: './info-form.component.html',
   styleUrls: ['./info-form.component.scss'],
 })
@@ -44,17 +47,13 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   private readonly userService = inject(UserService);
   private readonly orderService = inject(OrderService);
   private unSub = new Subscription();
-  public phoneHolder: string = '+380';
-  public addresses: Address[] = [];
-  public departments: any;
-  public isChosen: boolean = false;
-  public isDepartment: boolean = false;
-  public isValid = isValid;
-  private clearTimeOut: any;
+
   public path!: string;
 
   @Input() isCart = false;
   private user!: UserInfo;
+  isDepartment = false;
+  departments: any;
 
   public infoForm = this.fb.group({
     name: [
@@ -101,21 +100,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   });
 
   ngOnInit() {
-    this.unSub.add(
-      this.userService
-        .getUserById(JSON.parse(localStorage.getItem('user')!)._id)
-        .pipe(
-          tap((res: any) => {
-            this.user = res;
-            setupInitialValue(this.infoForm, this.user);
-            this.infoForm
-              .get('deliveryMethod')
-              ?.setValue(res.shippingAddress.deliveryMethod);
-            this.infoForm.get('address')?.setValue(res.shippingAddress.address);
-          })
-        )
-        .subscribe()
-    );
+    this.getUserInfo();
 
     this.route.url.subscribe((urlSegment: UrlSegment[]) => {
       if (urlSegment[0]) {
@@ -135,35 +120,6 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.infoForm.get('department')?.removeValidators(Validators.required);
       this.infoForm.get('department')?.updateValueAndValidity();
     }
-  }
-
-  getAddress(city: string): void {
-    if (city) {
-      getAddresses(city)
-        .then((res) => res.json())
-        .then((res) => (this.addresses = res.data));
-
-      this.isChosen = true;
-    }
-  }
-
-  chosenAddress(address: any) {
-    const {
-      Description,
-      AreaDescription,
-      SettlementTypeDescription,
-      RegionsDescription,
-      Ref,
-    } = address;
-    this.infoForm
-      .get('address')
-      ?.setValue(
-        `${SettlementTypeDescription} ${Description} ${RegionsDescription} ${AreaDescription}`
-      );
-
-    this.getDepartments(Description, Ref);
-    this.isDepartment = false;
-    this.isChosen = false;
   }
 
   updateUser() {
@@ -208,13 +164,8 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     );
   }
 
-  onSubmit() {}
-
-  cancel() {
-    setupInitialValue(this.infoForm, this.infoForm.controls);
-  }
-
-  getDepartments(city: string, ref: string = '') {
+  getDepartments(event: { city: string; ref: string }) {
+    const { city, ref } = event;
     if (city) {
       getNovaPoshtaDepartment(city, ref)
         .then((res: any) => res.json())
@@ -237,29 +188,36 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
-  chosenDepartment(department: { city: string; description: string }) {
-    if (department) {
-      this.infoForm
-        .get('department')
-        ?.setValue(`${department.city} ${department.description}`);
-      this.isDepartment = false;
-    }
+  onSubmit() {}
+
+  cancel() {
+    this.infoForm.reset();
+    this.getUserInfo();
+  }
+
+  getUserInfo() {
+    this.unSub.add(
+      this.userService
+        .getUserById(JSON.parse(localStorage.getItem('user')!)._id)
+        .pipe(
+          tap((res: any) => {
+            this.user = res;
+            setupInitialValue(this.infoForm, this.user);
+            this.infoForm
+              .get('deliveryMethod')
+              ?.setValue(res.shippingAddress.deliveryMethod);
+            this.infoForm.get('address')?.setValue(res.shippingAddress.address);
+          })
+        )
+        .subscribe()
+    );
   }
 
   redirectToContact() {
     this.router.navigate(['/about/contact']);
   }
 
-  onblur() {
-    this.clearTimeOut = setTimeout(() => {
-      clearTimeout(this.clearTimeOut);
-      this.isChosen = false;
-      this.isDepartment = false;
-    }, 100);
-  }
-
   ngOnDestroy(): void {
-    clearTimeout(this.clearTimeOut);
     this.unSub.unsubscribe();
   }
 }

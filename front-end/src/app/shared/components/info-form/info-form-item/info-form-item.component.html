@@ -1,0 +1,107 @@
+<form class="user__form" [formGroup]="infoForm">
+  <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'name')">
+    <input
+      type="text"
+      class="user__input"
+      formControlName="name"
+      placeholder="Ім'я *"
+    />
+    <app-error-validation
+      [control]="infoForm.get('name')"
+    ></app-error-validation>
+  </div>
+  <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'lastName')">
+    <input
+      type="text"
+      class="user__input"
+      formControlName="lastName"
+      placeholder="Прізвище *"
+    />
+    <app-error-validation
+      [control]="infoForm.get('lastName')"
+    ></app-error-validation>
+  </div>
+  <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'email')">
+    <input
+      type="email"
+      class="user__input"
+      formControlName="email"
+      placeholder="Email *"
+    />
+    <app-error-validation
+      [control]="infoForm.get('email')"
+    ></app-error-validation>
+  </div>
+  <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'phone')">
+    <span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="23"
+        height="23"
+        viewBox="0 0 23 23"
+        fill="none"
+      >
+        <g clip-path="url(#clip0_421_659)">
+          <path
+            d="M20.4444 3.19446H2.55556C1.87778 3.19446 1.22776 3.4637 0.748505 3.94296C0.269245 4.42222 0 5.07224 0 5.75001L0 11.5H23V5.75001C23 5.07224 22.7308 4.42222 22.2515 3.94296C21.7722 3.4637 21.1222 3.19446 20.4444 3.19446Z"
+            fill="#005BBB"
+          />
+          <path
+            d="M23 17.25C23 17.9278 22.7308 18.5778 22.2515 19.0571C21.7722 19.5363 21.1222 19.8056 20.4444 19.8056H2.55556C1.87778 19.8056 1.22776 19.5363 0.748505 19.0571C0.269245 18.5778 0 17.9278 0 17.25V11.5H23V17.25Z"
+            fill="#FFD500"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_421_659">
+            <rect width="23" height="23" fill="white" />
+          </clipPath>
+        </defs>
+      </svg> </span
+    ><span class="phone-holder">{{ phoneHolder }}</span>
+    <input type="text" formControlName="phone" class="user__input" />
+    <app-error-validation
+      [control]="infoForm.get('phone')"
+    ></app-error-validation>
+  </div>
+  <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'address')">
+    <input
+      #addr
+      type="text"
+      class="user__input"
+      formControlName="address"
+      placeholder="Адреса *"
+      (keyup)="getAddress(addr.value)"
+      [value]="infoForm.get('address')?.value"
+      (blur)="onblur()"
+    />
+    <app-error-validation
+      [control]="infoForm.get('address')"
+    ></app-error-validation>
+  </div>
+  <div [ngClass]="{ hidden: false }">
+    <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'password')">
+      <input
+        type="password"
+        class="user__input"
+        formControlName="password"
+        placeholder="Пароль *"
+      />
+      <app-error-validation
+        [control]="infoForm.get('password')"
+      ></app-error-validation>
+    </div>
+  </div>
+
+  <div class="address__list" *ngIf="addresses.length && isChosen">
+    <ul class="address__list-items">
+      <li
+        class="address__list-item"
+        *ngFor="let address of addresses"
+        (click)="chosenAddress(address)"
+      >
+        {{ address.SettlementTypeDescription }} {{ address.Description }}
+        {{ address.RegionsDescription }} {{ address.AreaDescription }}
+      </li>
+    </ul>
+  </div>
+</form>
