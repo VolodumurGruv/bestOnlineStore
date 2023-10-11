@@ -1,5 +1,6 @@
 import { Storage } from '@google-cloud/storage';
 import multer from 'multer';
+import { validationResult } from 'express-validator';
 import Product from '../models/productSchema.js';
 import logger from '../utils/logger.js';
 import {
@@ -26,6 +27,12 @@ const upload = multer({
 
 const uploadFile = async (req, res) => {
   try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
+    }
+
     const { file } = req;
     const fileName = `${Date.now()}_${file['originalname']}`;
     const fileStream = bucket.file(fileName).createWriteStream();
@@ -43,7 +50,7 @@ const uploadFile = async (req, res) => {
       if (product) {
         const imagePath = bucketPath.concat(fileName);
 
-        if (product.allImages[0] === 'no.jpg') {
+        if (!product.allImages.length && !product.baseImage) {
           product.allImages[0] = imagePath;
           product.baseImage = imagePath;
         } else {
@@ -82,8 +89,10 @@ const deleteFile = async (req, res) => {
         product.allImages.splice(imageIndex, 1);
 
         if (product.baseImage === imagePath) {
-          product.baseImage = 'no.jpg';
-          product.allImages[0] = 'no.jpg';
+          product.baseImage = '';
+          if (product.allImages.length > 0) {
+            product.baseImage = product.allImages[0];
+          }
         }
 
         await product.save();

@@ -1,4 +1,5 @@
 import express from 'express';
+import uploadValidation from '../validation/uploadValidation.js';
 import isAuth from '../utils/auth.js';
 import {
   upload,
@@ -8,7 +9,7 @@ import {
 
 const uploadRouter = express.Router();
 
-uploadRouter.post('/', isAuth, upload.single('file'), uploadFile);
+uploadRouter.post('/', isAuth, uploadValidation, upload.single('file'), uploadFile);
 uploadRouter.post('/delete-file', isAuth, deleteFile);
 
 export default uploadRouter;
