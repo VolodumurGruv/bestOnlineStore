@@ -1,6 +1,5 @@
 import { Storage } from '@google-cloud/storage';
 import multer from 'multer';
-import { validationResult } from 'express-validator';
 import Product from '../models/productSchema.js';
 import logger from '../utils/logger.js';
 import {
@@ -27,12 +26,6 @@ const upload = multer({
 
 const uploadFile = async (req, res) => {
   try {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
-    }
-
     const { file } = req;
     const fileName = `${Date.now()}_${file['originalname']}`;
     const fileStream = bucket.file(fileName).createWriteStream();
