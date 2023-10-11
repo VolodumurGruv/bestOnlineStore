@@ -43,11 +43,11 @@ const uploadFile = async (req, res) => {
       if (product) {
         const imagePath = bucketPath.concat(fileName);
 
-        product.allImages[0] === 'no.jpg' && product.allImages.shift();
-        product.allImages.push(imagePath);
-
-        if (product.baseImage === 'no.jpg') {
+        if (product.allImages[0] === 'no.jpg') {
+          product.allImages[0] = imagePath;
           product.baseImage = imagePath;
+        } else {
+          product.allImages.push(imagePath);
         }
 
         await product.save();
@@ -83,6 +83,7 @@ const deleteFile = async (req, res) => {
 
         if (product.baseImage === imagePath) {
           product.baseImage = 'no.jpg';
+          product.allImages[0] = 'no.jpg';
         }
 
         await product.save();
