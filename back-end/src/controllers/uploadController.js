@@ -43,7 +43,7 @@ const uploadFile = async (req, res) => {
       if (product) {
         const imagePath = bucketPath.concat(fileName);
 
-        if (!product.allImages.length && !product.baseImage) {
+        if (product.allImages[0] === '' || !product.allImages[0]) {
           product.allImages[0] = imagePath;
           product.baseImage = imagePath;
         } else {
