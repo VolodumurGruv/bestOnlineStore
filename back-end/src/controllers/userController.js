@@ -23,7 +23,7 @@ const getAllUsers = async (req, res) => {
 };
 
 const registerUser = async (req, res, next, anonymous = null) => {
-  const { name, password, email, phone } = anonymous || req.body;
+  const { firstName, lastName, password, email, phone } = anonymous || req.body;
 
   try {
     const errors = validationResult(req);
@@ -48,7 +48,8 @@ const registerUser = async (req, res, next, anonymous = null) => {
           .select('-password -resetPasswordToken -resetPasswordExpires');
 
         if (user) {
-          user.name = name;
+          user.firstName = firstName;
+          user.lastName = lastName;
           user.password = hashedPassword;
           user.email = email;
           user.phone = phone || user.phone;
@@ -59,7 +60,8 @@ const registerUser = async (req, res, next, anonymous = null) => {
       }
     } else {
       user = new User({
-        name,
+        firstName,
+        lastName,
         password: hashedPassword,
         email,
         phone: phone || null,
@@ -73,7 +75,8 @@ const registerUser = async (req, res, next, anonymous = null) => {
 
     const newUser = {
       _id: createdUser._id,
-      name: createdUser.name,
+      firstName: createdUser.firstName,
+      lastName: createdUser.lastName,
       email: createdUser.email,
       phone: createdUser.phone,
       isAdmin: createdUser.isAdmin,
@@ -92,7 +95,8 @@ const registerUser = async (req, res, next, anonymous = null) => {
 
 const registerAnonymous = async (req, res, next) => {
   const anonymousUser = {
-    name: 'Anonymous',
+    firstName: 'Anonymous',
+    lastName: 'Unknown',
     email: `anonymous${Date.now()}@example.com`,
     password: 'qwW5#ertY1$',
     phone: null
@@ -124,7 +128,8 @@ const registerUserByGoogle = async (req, res) => {
 
       const userPayload = {
         _id: existingUser._id,
-        name: existingUser.name,
+        firstName: existingUser.firstName,
+        lastName: existingUser.lastName,
         email: existingUser.email,
         phone: existingUser.phone,
         isAdmin: existingUser.isAdmin,
@@ -134,9 +139,12 @@ const registerUserByGoogle = async (req, res) => {
 
       return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.GOOGLE_ACCESS_VERIFIED, userPayload);
     } else {
+      const [firstName = '', lastName = ''] = userJSON
+        .name.split(' ');
       const user = new User({
         googleId: userJSON.sub,
-        name: userJSON.name,
+        firstName: firstName,
+        lastName: lastName,
         email: userJSON.email,
         isAnonymous: false
       });
@@ -147,7 +155,8 @@ const registerUserByGoogle = async (req, res) => {
 
       const newUser = {
         _id: createdUser._id,
-        name: createdUser.name,
+        firstName: createdUser.firstName,
+        lastName: createdUser.lastName,
         email: createdUser.email,
         phone: createdUser.phone,
         isAdmin: createdUser.isAdmin,
@@ -175,7 +184,8 @@ const signInUser = async (req, res) => {
 
       return sendRes(res, HTTP_STATUS_CODES.OK, 'User signed in successfully.', {
         _id: user._id,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         phone: user.phone,
         isAdmin: user.isAdmin,
@@ -264,7 +274,8 @@ const updateProfile = async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (user) {
-      user.name = req.body.name || user.name;
+      user.firstName = req.body.firstName || user.firstName;
+      user.lastName = req.body.lastName || user.lastName;
       user.email = req.body.email || user.email;
       user.phone = req.body.phone || user.phone;
 
@@ -343,7 +354,8 @@ const updateUser = async (req, res) => {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
     }
 
-    user.name = req.body.name || user.name;
+    user.firstName = req.body.firstName || user.firstName;
+    user.lastName = req.body.lastName || user.lastName;
     user.email = req.body.email || user.email;
     user.phone = req.body.phone || user.phone;
     user.isAdmin = req.body.isAdmin || user.isAdmin;

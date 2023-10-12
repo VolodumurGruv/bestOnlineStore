@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
   googleId: { type: String, required: false },
-  name: { type: String, required: true },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
   password: { type: String, required: false },
   email: { type: String, required: true, unique: true },
   phone: { type: String, required: false },
@@ -20,16 +21,6 @@ const userSchema = new mongoose.Schema({
   }],
 }, { timestamps: true }
 );
-
-userSchema.virtual('firstName').get(function () {
-  const [firstName] = this.name.split(' ');
-  return firstName;
-});
-
-userSchema.virtual('lastName').get(function () {
-  const [, lastName] = this.name.split(' ');
-  return lastName;
-});
 
 const User = mongoose.model('User', userSchema);
 
