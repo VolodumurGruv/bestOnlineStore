@@ -32,7 +32,7 @@ const registerUser = async (req, res, next, anonymous = null) => {
       return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
     }
 
-    const hashedPassword = bcrypt.hashSync(password, 8);
+    const hashedPassword = bcrypt.hashSync(password, 12);
 
     let user;
 
@@ -242,7 +242,7 @@ const restorePassword = async (req, res) => {
     }
 
     if (req.body.newPassword) {
-      user.password = bcrypt.hashSync(req.body.newPassword, 8);
+      user.password = bcrypt.hashSync(req.body.newPassword, 12);
     }
 
     const updatedUser = await user.save();
