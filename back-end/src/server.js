@@ -1,14 +1,10 @@
-import dbConnection from './db.js';
 import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import RateLimit from 'express-rate-limit';
-import mongoSanitize from 'express-mongo-sanitize';
-import { xss } from 'express-xss-sanitizer';
 import { fileURLToPath } from 'url';
-import path from 'path';
 import logger from './utils/logger.js';
+import path from 'path';
 import sendRes from './utils/handleResponse.js';
+import dbConnection from './db.js';
+import configureApp from './serverSetup.js';
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import cartRouter from './routers/cartRouter.js';
@@ -38,37 +34,7 @@ if (mode === 'production') pathToIndex = '../../front-end/dist/front-end/';
 const port = process.env.PORT || 30000;
 const app = express();
 
-const limiter = RateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 10
-});
-
-const corsOptions = {
-  origin: true,
-  methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: ['Origin, X-Requested-With, Content-Type, Accept, Key, Authorization'],
-  credentials: true
-};
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(cors(corsOptions));
-app.set('trust proxy', 1);
-app.get('/ip', (req, res) => {
-  res.send(req.ip);
-});
-app.use(helmet());
-app.use(limiter);
-app.use(xss());
-app.use(
-  mongoSanitize({
-    replaceWith: '_',
-  }),
-);
-app.use('*', (req, res, next) => {
-  logger.info(req.originalUrl);
-  next();
-});
+configureApp(app);
 
 app.use('/api/user', userRouter);
 app.use('/api/product', productRouter);
@@ -78,6 +44,7 @@ app.use('/api/upload', uploadRouter);
 app.use('/api/review', reviewRouter);
 app.use('/api/wishlist', wishListRouter);
 app.use('/api/data', dataRouter);
+app.get('/ip', (req, res) => res.send(req.ip));
 
 const staticPath = path.join(__dirName, pathToIndex);
 
@@ -112,10 +79,6 @@ app.on('error', error => {
   if (error.code === 'EACCES') {
     logger.error(`No access to port: ${port}.`);
   }
-});
-
-app.on('clientServer', (error, socket) => {
-  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
 });
 
 export default app;

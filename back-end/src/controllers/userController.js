@@ -116,7 +116,7 @@ const registerUserByGoogle = async (req, res) => {
     });
 
     if (!userInfoResponse.ok) {
-      return sendRes(res, HTTP_STATUS_CODES, MESSAGES.GOOGLE_FETCH_FAILURE);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.GOOGLE_FETCH_FAILURE);
     }
 
     const userJSON = await userInfoResponse.json();

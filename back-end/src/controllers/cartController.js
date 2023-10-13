@@ -5,6 +5,7 @@ import {
   MESSAGES
 } from '../utils/constants.js';
 import sendRes from '../utils/handleResponse.js';
+import getUserById from '../utils/getUser.js';
 
 const sendCartResponse = async (res, userId, message, cart) => {
   if (cart) {
@@ -33,10 +34,12 @@ const addToCart = async (req, res) => {
       return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.INVALID_INPUT_DATA);
     }
 
+    await getUserById(userId);
+
     const product = await Product.findById(productId);
 
     if (!product) {
-      return sendRes(res, HTTP_STATUS_CODES.PRODUCT_NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
     }
 
     if (product.instock && quantity > product.countInStock) {
@@ -80,8 +83,9 @@ const addToCart = async (req, res) => {
 const getCart = async (req, res) => {
   try {
     const userId = req.user._id;
+    await getUserById(userId);
     return sendCartResponse(res, userId, MESSAGES.USER_CART_IN_PAYLOAD);
-  } catch (error) {
+  } catch (error) {console.error('get: ' + error);
     return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
   }
 };
