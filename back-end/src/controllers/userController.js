@@ -139,12 +139,10 @@ const registerUserByGoogle = async (req, res) => {
 
       return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.GOOGLE_ACCESS_VERIFIED, userPayload);
     } else {
-      const [firstName = '', lastName = ''] = userJSON
-        .name.split(' ');
       const user = new User({
         googleId: userJSON.sub,
-        firstName: firstName,
-        lastName: lastName,
+        firstName: userJSON.given_name || 'Ім\'я',
+        lastName: userJSON.family_name || 'Прізвище',
         email: userJSON.email,
         isAnonymous: false
       });
