@@ -54,18 +54,25 @@ const addToCart = async (req, res) => {
 
     let cartItem = cart.items.find(item => item.product.toString() === productId);
 
-    if (!cartItem) {
-      cartItem = {
-        name: product.name,
-        price: product.price,
-        image: product.baseImage,
-        product: productId,
-        quantity: quantity
-      };
-      cart.items.push(cartItem);
+    if (quantity === 0) {
+      if (cartItem) {
+        cart.items = cart.items.filter(item => item.product.toString() !== productId);
+      }
+    } else {
+      if (!cartItem) {
+        cartItem = {
+          name: product.name,
+          price: product.price,
+          image: product.baseImage,
+          product: productId,
+          quantity: quantity
+        };
+        cart.items.push(cartItem);
+      } else {
+        cartItem.quantity = quantity;
+      }
     }
 
-    cartItem.quantity = quantity;
     cart.totalPrice = cart.items.reduce((total, item) => total + item.price * item.quantity, 0);
 
     await cart.save();
