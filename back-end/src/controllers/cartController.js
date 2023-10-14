@@ -92,7 +92,7 @@ const getCart = async (req, res) => {
     const userId = req.user._id;
     await getUserById(userId);
     return sendCartResponse(res, userId, MESSAGES.USER_CART_IN_PAYLOAD);
-  } catch (error) {console.error('get: ' + error);
+  } catch (error) {
     return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
   }
 };

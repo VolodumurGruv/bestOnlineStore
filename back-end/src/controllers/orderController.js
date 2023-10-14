@@ -1,6 +1,7 @@
 import Order from '../models/orderSchema.js';
 import Cart from '../models/cartSchema.js';
 import ShippingAddress from '../models/shippingAddressSchema.js';
+import Product from '../models/productSchema.js';
 import sendEmail from '../utils/email.js';
 import {
   HTTP_STATUS_CODES,
@@ -28,7 +29,8 @@ const getOrderHistory = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const orders = await Order.find({ user: userId });
+    const orders = await Order.find({ user: userId })
+      .populate('cart');
 
     return sendRes(res, HTTP_STATUS_CODES.OK, 'Your order(s) in payload.', orders);
   } catch (error) {
@@ -122,6 +124,18 @@ const makePaymentOrder = async (req, res) => {
       sendEmail(req.user.email, 'Changes on your order', `Order ${req.params.id} was paid.`);
 
       const cart = await Cart.findOne({ user: req.user._id });
+
+      for (const cartItem of cart.items) {
+        const product = await Product.findById(cartItem.product);
+
+        if (product) {
+          const quantityToReduce = cartItem.quantity;
+          if (product.instock && quantityToReduce <= product.countInStock) {
+            product.countInStock -= quantityToReduce;
+            await product.save();
+          }
+        }
+      }
 
       cart.items = [];
       cart.totalPrice = 0;
