@@ -13,7 +13,7 @@ const orderSchema = new mongoose.Schema({
   },
   paymentResult: { id: String, status: String,
     update_time: String, email_address: String },
-  paymentMethod: { type: String, required: true },
+  paymentMethod: { type: String, required: false },
   itemsPrice: { type: Number, required: true },
   status: {
     type: String,
