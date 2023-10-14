@@ -73,8 +73,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe(() => this.router.navigate(['/user']));
   }
 
-  googleLogin() {}
-
   isVisisble(input: { type: string }) {
     input.type = input.type === 'password' ? 'text' : 'password';
   }

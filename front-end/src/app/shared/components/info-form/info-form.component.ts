@@ -9,6 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
+import { Subscription, concatMap, tap } from 'rxjs';
 
 import { UserService } from 'app/components/user/services/user.service';
 import {
@@ -21,7 +22,6 @@ import { setupInitialValue } from '@shared/utils/initial-from-local';
 
 import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
 import { OrderService } from '@shared/services/order.service';
-import { Subscription, tap } from 'rxjs';
 import { UserInfo } from '@interfaces/user.interface';
 import { InfoFormItemComponent } from './info-form-item/info-form-item.component';
 import { DeliveryFormItemComponent } from './delivery-form-item/delivery-form-item.component';
@@ -56,7 +56,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   departments: any;
 
   public infoForm = this.fb.group({
-    name: [
+    firstName: [
       '',
       [
         Validators.required,
@@ -94,9 +94,9 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
         passwordValidator(),
       ],
     ],
-    department: [''],
+    novaPoshtaAddress: [''],
     deliveryMethod: ['', [Validators.required]],
-    paymentMethod: ['cash'],
+    paymentMethod: ['VISA'],
   });
 
   ngOnInit() {
@@ -112,13 +112,17 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   ngAfterViewChecked(): void {
     if (this.infoForm.get('deliveryMethod')?.value === 'Нова пошта') {
-      this.infoForm.get('department')?.addValidators(Validators.required);
-      this.infoForm.get('department')?.updateValueAndValidity();
+      this.infoForm
+        .get('novaPoshtaAddress')
+        ?.addValidators(Validators.required);
+      this.infoForm.get('novaPoshtaAddress')?.updateValueAndValidity();
     }
 
     if (this.infoForm.get('deliveryMethod')?.value !== 'Нова пошта') {
-      this.infoForm.get('department')?.removeValidators(Validators.required);
-      this.infoForm.get('department')?.updateValueAndValidity();
+      this.infoForm
+        .get('novaPoshtaAddress')
+        ?.removeValidators(Validators.required);
+      this.infoForm.get('novaPoshtaAddress')?.updateValueAndValidity();
     }
   }
 
@@ -141,27 +145,21 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     console.log(this.infoForm.value);
     const { address, paymentMethod, deliveryMethod, ...res } =
       this.infoForm.value;
+
     if (address && paymentMethod && deliveryMethod) {
       this.unSub.add(
         this.userService
-          .updateUser({
-            shippingAddress: {
-              name: 'null',
-              address,
-              paymentMethod,
-              deliveryMethod,
-            },
-            ...res,
-          })
+          .updateUser(this.infoForm.value)
+          .pipe(
+            concatMap(() =>
+              this.orderService.makeOrder(
+                JSON.parse(localStorage.getItem('user')!)._id
+              )
+            )
+          )
           .subscribe()
       );
     }
-
-    this.unSub.add(
-      this.orderService
-        .makeOrder(JSON.parse(localStorage.getItem('user')!)._id)
-        .subscribe()
-    );
   }
 
   getDepartments(event: { city: string; ref: string }) {
@@ -203,6 +201,13 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
           tap((res: any) => {
             this.user = res;
             setupInitialValue(this.infoForm, this.user);
+
+            if (res.shippingAddress?.deliveryMethod === 'Нова пошта') {
+              this.infoForm
+                .get('novaPoshtaAddress')
+                ?.setValue(res.shippingAddress.novaPoshtaAddress);
+            }
+
             this.infoForm
               .get('deliveryMethod')
               ?.setValue(res.shippingAddress.deliveryMethod);

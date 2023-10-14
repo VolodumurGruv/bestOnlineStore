@@ -5,7 +5,7 @@ import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
 import { Product } from '@interfaces/product.interfaces';
 import { ProductsService } from '@shared/services/products.service';
-import { Subscription } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 
 @Component({
   selector: 'app-cart-ad',
@@ -17,12 +17,17 @@ import { Subscription } from 'rxjs';
 export class CartAdComponent implements OnInit, OnDestroy {
   private readonly productService = inject(ProductsService);
   private unSub!: Subscription;
-  public advs!: Product[];
+  public advs: Product[] = [];
 
   ngOnInit(): void {
-    this.productService.getProducts().subscribe((res: any) => {
-      this.advs = res.products;
-    });
+    this.unSub = this.productService
+      .getProducts()
+      .pipe(
+        tap((res: any) => {
+          this.advs = res;
+        })
+      )
+      .subscribe();
   }
   addToFavorite() {}
 

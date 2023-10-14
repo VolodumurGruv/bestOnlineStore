@@ -1,5 +1,6 @@
 export interface User {
-  name?: string | null | undefined;
+  firstName?: string | null | undefined;
+  lastName?: string | null | undefined;
   password?: string | null;
   email?: string | null | undefined;
   isAdmin?: boolean;
@@ -9,12 +10,12 @@ export interface User {
 }
 
 export interface UserInfo extends User {
-  lastName?: string | null;
   shippingAddress?: {
     name: string;
     address: string;
     paymentMethod: string;
-    deliveryMethod: string;
+    deliveryMethod: string | null | undefined;
+    novaPoshtaAddress?: string;
   };
   phone?: string | null;
   delivery?: string | null;
@@ -28,10 +29,13 @@ export interface Orders {
   image: string;
   description: string;
   price: number;
-  state?: string;
+  status?: string;
   discount?: number | undefined;
   quantity: number;
   summa?: number;
+  product: string;
+  isPaid: boolean;
+  itemsPrice?: number;
 }
 
 export interface Review {

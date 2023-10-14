@@ -5,7 +5,7 @@ export function nameValidator(): ValidatorFn {
     let isTrue: boolean = false;
     // it should pass only letters and white spaces
     const nameRegExp =
-      /^[A-Za-zА-Яа-яІіЇїЄєҐґ]{3,30}(?: [A-Za-zА-Яа-яІіЇїЄєҐґ]{3,30}){0,1}$/g;
+      /^[A-Za-zА-Яа-яІіЇїЄєҐґ']{3,30}(?:-[A-Za-zА-Яа-яІіЇїЄєҐґ']{3,30}){0,1}$/g;
     let res!: string[] | null;
 
     if (control.value) {

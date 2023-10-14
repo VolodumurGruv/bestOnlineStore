@@ -23,9 +23,9 @@ export class ProductsService {
   }
 
   getProductById(id: string): Observable<Product> {
-    console.log(id);
     return this.http.get<Product>(`${configs.URL}/product/${id}`).pipe(
       map((response: any) => {
+        console.log(response);
         return response.payload;
       }),
 

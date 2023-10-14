@@ -19,7 +19,7 @@ import {
 } from '@shared/utils/validators';
 import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
 import { isValid } from '@shared/utils/is-valid';
-import { Subscription, tap } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-signup',
@@ -77,10 +77,17 @@ export class SignupComponent implements OnDestroy {
 
   registerUser() {
     const { name, email, password } = this.signupForm.value;
-    if (name && email && password) {
+    const firstName = name.split(' ')[0];
+    let lastName = name.split(' ')[1];
+
+    if (!lastName) {
+      lastName = 'xxxxx';
+    }
+
+    if (firstName && email && password) {
       this.unSub.add(
         this.authService
-          .signup({ name, password, email })
+          .signup({ firstName, lastName, password, email })
           .subscribe(() => this.router.navigate(['/user']))
       );
     }

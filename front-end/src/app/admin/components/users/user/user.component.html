@@ -1,7 +1,7 @@
 <section class="user">
   <ng-container *ngIf="user$ | async as user">
     <app-user-card [user]="user">
-      <div class="card__info">Адреса: {{ user.shippingAddress }}</div>
+      <div class="card__info">Адреса: {{ user.shippingAddress?.address }}</div>
       <div>Адміністратор: {{ user.isAdmin }}</div>
       <div>Анонімний: {{ user.isAnonymous }}</div>
       <div>Список бажаного: {{ user.wishList?.join(" ") }}</div>

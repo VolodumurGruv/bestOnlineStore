@@ -1,13 +1,13 @@
 <form class="user__form" [formGroup]="infoForm">
-  <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'name')">
+  <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'firstName')">
     <input
       type="text"
       class="user__input"
-      formControlName="name"
+      formControlName="firstName"
       placeholder="Ім'я *"
     />
     <app-error-validation
-      [control]="infoForm.get('name')"
+      [control]="infoForm.get('firstName')"
     ></app-error-validation>
   </div>
   <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'lastName')">
@@ -78,7 +78,7 @@
       [control]="infoForm.get('address')"
     ></app-error-validation>
   </div>
-  <div [ngClass]="{ hidden: false }">
+  <div [ngClass]="{ hidden: isCart }">
     <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'password')">
       <input
         type="password"

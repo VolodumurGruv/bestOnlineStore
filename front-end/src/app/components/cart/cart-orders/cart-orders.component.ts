@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -17,7 +18,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CartService } from '../services/cart.service';
 import { InfoComponent } from 'app/components/user/components/info/info.component';
 import { InfoFormComponent } from '@shared/components/info-form/info-form.component';
-import { Observable, Subscription, map } from 'rxjs';
+import { Observable, Subscription, concatMap, map, tap } from 'rxjs';
 import { OrderService } from '@shared/services/order.service';
 
 @Component({
@@ -37,7 +38,9 @@ import { OrderService } from '@shared/services/order.service';
   templateUrl: './cart-orders.component.html',
   styleUrls: ['./cart-orders.component.scss'],
 })
-export class CartOrdersComponent implements OnInit, AfterViewChecked {
+export class CartOrdersComponent
+  implements OnInit, AfterViewChecked, OnDestroy
+{
   @Output() advertisement = new EventEmitter<boolean>();
   @ViewChild(InfoFormComponent) infoForm!: InfoFormComponent;
 
@@ -52,23 +55,34 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
   public total!: number;
 
   public isComplete = true;
-  public isAdv = true;
   public isCart = true;
   public isValid = false;
 
-  public orders$!: Observable<Orders[]>;
+  public orders!: Orders[];
 
   ngOnInit(): void {
-    this.orders$ = this.cartService.getCart().pipe(
-      map((res: any) => {
-        const { items, totalPrice } = res.payload;
-        this.total = totalPrice;
-
-        return items;
-      })
-    );
-
+    this.getCartOrders();
     this.isCart = true;
+  }
+
+  getCartOrders() {
+    this.unSub.add(
+      this.cartService
+        .getCart()
+        .pipe(
+          map((res: any) => {
+            const { items, totalPrice } = res.payload;
+            this.total = totalPrice;
+            this.orders = items;
+            if (!items?.length) {
+              this.advertisement.emit(false);
+            }
+
+            return items;
+          })
+        )
+        .subscribe()
+    );
   }
 
   ngAfterViewChecked(): void {
@@ -83,19 +97,46 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
 
   increase(id: string | undefined, quantity: number) {
     if (id && quantity) {
-      this.unSub.add(this.cartService.makeOrder(id, quantity + 1).subscribe());
+      this.unSub.add(
+        this.cartService
+          .makeOrder(id, quantity + 1)
+          .pipe(
+            tap(() => {
+              this.getCartOrders();
+            })
+          )
+          .subscribe()
+      );
     }
   }
 
   decrease(id: string | undefined, quantity: number) {
     if (id && quantity) {
-      this.unSub.add(this.cartService.makeOrder(id, quantity - 1).subscribe());
+      this.unSub.add(
+        this.cartService
+          .makeOrder(id, quantity - 1)
+          .pipe(
+            tap(() => {
+              this.getCartOrders();
+            })
+          )
+          .subscribe()
+      );
     }
   }
 
   delete(id: string) {
     if (id) {
-      this.unSub.add(this.cartService.makeOrder(id, 0).subscribe());
+      this.unSub.add(
+        this.cartService
+          .makeOrder(id, 0)
+          .pipe(
+            tap(() => {
+              this.getCartOrders();
+            })
+          )
+          .subscribe()
+      );
     }
   }
 
@@ -117,5 +158,9 @@ export class CartOrdersComponent implements OnInit, AfterViewChecked {
 
   submit() {
     this.orderService.makeOrder(JSON.parse(localStorage.getItem('user')!)._id);
+  }
+
+  ngOnDestroy(): void {
+    this.unSub.unsubscribe();
   }
 }

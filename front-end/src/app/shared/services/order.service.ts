@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { configs } from '@configs/configs';
 import { HttpErrorHandlerService } from './http-error-handler.service';
-import { Observable, catchError, tap } from 'rxjs';
+import { Observable, catchError, map, tap } from 'rxjs';
 import { Orders } from '@interfaces/user.interface';
 
 @Injectable({
@@ -36,13 +36,18 @@ export class OrderService {
   }
 
   getOrderHistory(): Observable<Orders[]> {
-    return this.http
-      .get<Orders[]>(`${configs.URL}/order/order-history`)
-      .pipe(
-        catchError(
-          this.httpError.handleError<Orders[]>('Помилка отримання замовленнь')
-        )
-      );
+    return this.http.get<Orders[]>(`${configs.URL}/order/order-history`).pipe(
+      map((res: any) => {
+        return res.payload;
+      }),
+      catchError(
+        this.httpError.handleError<Orders[]>('Помилка отримання замовленнь')
+      )
+    );
+  }
+
+  deleteOrder(id: string): Observable<void> {
+    return this.http.delete<void>(`${configs.URL}/order/${id}`);
   }
 
   getOrderById(orderId: string) {}

@@ -1,5 +1,5 @@
 <ng-container *ngIf="isComplete; else complete">
-  <ng-container *ngIf="orders$ | async as orders; else isOrders">
+  <ng-container *ngIf="orders?.length; else isOrders">
     <div class="cart__order" *ngFor="let order of orders; index as id">
       <div class="cart__order-img">
         <img [src]="order.image" alt="" />
@@ -7,7 +7,7 @@
       <div class="cart__order-text">
         <div class="cart__order-description">
           <div class="text">{{ order.name }}</div>
-          <div class="btn-delete" (click)="delete(order._id)">
+          <div class="btn-delete" (click)="delete(order.product)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -50,7 +50,7 @@
           <div class="cart__order-amount">
             <span
               class="decrease"
-              (click)="decrease(order._id, +quantity.value)"
+              (click)="decrease(order.product, +quantity.value)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +79,7 @@
             />
             <span
               class="increase"
-              (click)="increase(order._id, +quantity.value)"
+              (click)="increase(order.product, +quantity.value)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

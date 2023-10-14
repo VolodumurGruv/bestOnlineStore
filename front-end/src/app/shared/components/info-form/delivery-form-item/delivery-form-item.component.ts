@@ -24,7 +24,7 @@ export class DeliveryFormItemComponent {
   chosenDepartment(department: { city: string; description: string }) {
     if (department) {
       this.infoForm
-        .get('department')
+        .get('novaPoshtaAddress')
         ?.setValue(`${department.city} ${department.description}`);
       this.isDepartment = false;
     }

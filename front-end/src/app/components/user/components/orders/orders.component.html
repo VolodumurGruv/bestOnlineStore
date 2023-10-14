@@ -9,14 +9,14 @@
           {{ order.description }}
         </div>
         <div class="price">
-          <p>{{ order.price | transformPrice }}</p>
+          <p>{{ order.itemsPrice | transformPrice }}</p>
           <p class="discount">{{ order?.discount | transformPrice }}</p>
         </div>
       </div>
       <div class="orders__item-text">
-        <div class="state">Статус: {{ order.state }}</div>
-        <div class="action" (click)="completeAction()">
-          {{ order.state == "Отримано" ? "Повернути" : "Скасувати" }}
+        <div class="state">Статус: {{ order.status }}</div>
+        <div class="action" (click)="completeAction(order._id)">
+          {{ order.isPaid ? "Повернути" : "Скасувати" }}
         </div>
       </div>
     </div>

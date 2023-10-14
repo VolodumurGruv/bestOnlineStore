@@ -2,11 +2,9 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
-import {
-  provideRouter,
-  withComponentInputBinding,
-  withInMemoryScrolling,
-} from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { provideAnimations } from '@angular/platform-browser/animations';
+
 import { AuthInterceptor } from 'app/components/user/services/signin-flow/auth.interceptor';
 import { environment } from 'environments/environment.development';
 
@@ -31,5 +29,6 @@ export const mainProviders = {
       provideAuth(() => getAuth())
     ),
     provideHttpClient(withInterceptors([AuthInterceptor])),
+    provideAnimations(),
   ],
 };

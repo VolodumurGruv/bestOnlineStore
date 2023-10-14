@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Orders } from '@interfaces/user.interface';
 import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
 import { OrderService } from '@shared/services/order.service';
+import { tap } from 'rxjs';
+import { ProductsService } from '@shared/services/products.service';
 
 @Component({
   selector: 'app-orders',
@@ -16,8 +18,18 @@ export class OrdersComponent implements OnInit {
   public orders: Orders[] = [];
 
   ngOnInit(): void {
-    this.orderService.getOrderHistory();
+    this.orderService
+      .getOrderHistory()
+      .pipe(
+        tap((res) => {
+          this.orders = res;
+          console.log(this.orders);
+        })
+      )
+      .subscribe();
   }
 
-  completeAction() {}
+  completeAction(id: string): void {
+    this.orderService.deleteOrder(id).subscribe();
+  }
 }

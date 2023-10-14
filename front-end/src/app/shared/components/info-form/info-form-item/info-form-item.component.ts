@@ -1,10 +1,19 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { isValid } from '@shared/utils/is-valid';
 import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
 import { Address } from '@interfaces/address';
 import { getAddresses } from '@shared/utils/nova-poshta';
+import { passwordValidator } from '@shared/utils/validators';
 
 @Component({
   selector: 'app-info-form-item',
@@ -13,10 +22,12 @@ import { getAddresses } from '@shared/utils/nova-poshta';
   templateUrl: './info-form-item.component.html',
   styleUrls: ['./info-form-item.component.scss'],
 })
-export class InfoFormItemComponent {
+export class InfoFormItemComponent implements AfterViewChecked {
   @Input() infoForm!: FormGroup;
+  @Input() isCart: boolean = false;
   @Output() departments = new EventEmitter<{ city: string; ref: string }>();
 
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
   public readonly isValid = isValid;
   public isChosen: boolean = false;
   public isDepartment: boolean = false;
@@ -24,6 +35,20 @@ export class InfoFormItemComponent {
 
   public readonly phoneHolder = '+380';
   private clearTimeOut: any;
+
+  ngAfterViewChecked(): void {
+    if (this.isCart) {
+      this.infoForm
+        .get('password')
+        ?.removeValidators([
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(16),
+          passwordValidator(),
+        ]);
+    }
+    this.changeDetectorRef.detectChanges();
+  }
 
   getAddress(city: string): void {
     if (city) {

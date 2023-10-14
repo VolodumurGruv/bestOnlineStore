@@ -1,7 +1,12 @@
 <div class="wraper">
   <div class="add-product__content">
     <h1>Редагувати</h1>
-    <form class="form-wrap" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <form
+      class="form-wrap"
+      [formGroup]="productForm"
+      (change)="validFormService.isValid(productForm.valid)"
+      (ngSubmit)="onSubmit()"
+    >
       <div class="input-wrap" [ngClass]="isValid(productForm, 'name')">
         <input
           class="input"
@@ -243,16 +248,6 @@
         </div>
       </section>
       <div class="action">
-        <button
-          class="btn btn__add"
-          type="submit"
-          [disabled]="productForm.invalid"
-        >
-          Додати
-        </button>
-        <button class="btn btn__add" type="button" (click)="cancel()">
-          Відмінити
-        </button>
         <ng-content></ng-content>
       </div>
     </form>

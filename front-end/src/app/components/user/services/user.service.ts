@@ -41,8 +41,8 @@ export class UserService {
       .pipe(
         tap((res: PAYLOAD<UserInfo>) => {
           const user = res.payload.user;
-          user.token = res.payload.token;
-
+          user.token = JSON.parse(localStorage.getItem('user')!).token;
+          console.log(res);
           localStorage.setItem('user', JSON.stringify(user));
         }),
         catchError(

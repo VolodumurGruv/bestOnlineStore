@@ -20,6 +20,10 @@ export const authGuard = () => {
     return true;
   }
 
+  if (localStorage.getItem('user')) {
+    localStorage.clear();
+  }
+
   return router.parseUrl('/login');
 };
 // protect for visiting sign-in and sign-up pages when a user is already

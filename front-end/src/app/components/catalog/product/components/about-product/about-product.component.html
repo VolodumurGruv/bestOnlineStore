@@ -7,17 +7,17 @@
           class="product__image"
           width="719"
           height="771"
-          *ngIf="baseImage"
+          *ngIf="product.baseImage"
           alt="{{ product.name }}"
-          [ngSrc]="baseImage"
+          [ngSrc]="product.baseImage"
         />
       </div>
-      <div class="product__sub-image" *ngIf="allImages">
+      <div class="product__sub-image" *ngIf="product.allImages">
         <img
           class="product__image"
           width="273"
           height="241"
-          *ngFor="let image of allImages"
+          *ngFor="let image of product.allImages"
           alt="{{ product.name }}"
           [ngSrc]="image"
         />

@@ -29,7 +29,7 @@ export class AuthService {
         retry(3),
         map((res: any) => {
           const user = res.payload;
-          console.log(res);
+
           this.setLocalStorage(user);
           this.user.next(user);
           return user;
@@ -46,6 +46,7 @@ export class AuthService {
     return this.http.post<User>(configs.URL + configs.REGISTER_ROOT, user).pipe(
       map((res: any) => {
         const user = res.payload;
+        console.log(user);
         this.setLocalStorage(user);
         this.user.next(user);
         return user;
@@ -82,7 +83,7 @@ export class AuthService {
         const user: User = res.payload;
         this.setLocalStorage(user);
         this.user.next(user);
-        console.log(this.user.value);
+
         return user;
       }),
       catchError(
@@ -132,7 +133,7 @@ export class AuthService {
     const expDate = new Date(
       new Date().getTime() + 24 * 3600 * 1000
     ).toString();
-    payload.signin = 'signin';
+
     payload.expDate = expDate;
     localStorage.setItem('user', JSON.stringify(payload));
   }
