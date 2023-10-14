@@ -141,8 +141,8 @@ const registerUserByGoogle = async (req, res) => {
     } else {
       const user = new User({
         googleId: userJSON.sub,
-        firstName: userJSON.given_name || 'Ім\'я',
-        lastName: userJSON.family_name || 'Прізвище',
+        firstName: userJSON.given_name || '',
+        lastName: userJSON.family_name || '',
         email: userJSON.email,
         isAnonymous: false
       });
@@ -277,7 +277,7 @@ const updateProfile = async (req, res) => {
       user.email = req.body.email || user.email;
       user.phone = req.body.phone || user.phone;
 
-      if (!bcrypt.compareSync(req.body.password, user.password)) {
+      if (!user.googleId && !bcrypt.compareSync(req.body.password, user.password)) {
         return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.INVALID_CREDENTIALS);
       }
 

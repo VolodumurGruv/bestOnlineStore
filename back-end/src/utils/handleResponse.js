@@ -15,13 +15,17 @@ const sendRes = (res, status, text, payload = null) => {
     Response Status: ${status},
     Message: ${message},
     Text: ${text},
-    Payload: ${JSON.stringify(payload)}
+    Payload: ${payload}
   `);
+
+  const answer = logLevel === 'info'
+    ? payload
+    : `${payload}`;
 
   res.status(status).json({
     message,
     text,
-    payload,
+    payload: answer,
   });
 };
 
