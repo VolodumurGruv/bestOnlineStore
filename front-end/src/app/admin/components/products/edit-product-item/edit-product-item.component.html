@@ -122,20 +122,27 @@
         <input type="text" class="input" formControlName="baseImage" />
       </div>
       <div class="allimages" formArrayName="allImages">
-        <div
-          class="input-wrap"
-          *ngFor="let item of allImages.controls; let i = index"
-        >
-          <input type="text" class="input" [formControlName]="i" />
+        <div *ngFor="let item of allImages.controls; let i = index">
+          <div class="input-wrap">
+            <input type="text" class="input" [formControlName]="i" />
+          </div>
+          <div class="allimages__btn">
+            <button
+              class="btn btn__add"
+              type="button"
+              (click)="addImageField()"
+            >
+              +
+            </button>
+            <button
+              class="btn btn__add"
+              type="button"
+              (click)="deleteImageField(i)"
+            >
+              -
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="allimages__btn">
-        <button class="btn btn__add" type="button" (click)="addImageField()">
-          +
-        </button>
-        <button class="btn btn__add" type="button" (click)="deleteImageField()">
-          -
-        </button>
       </div>
       <section>
         <h2>Характеристики</h2>

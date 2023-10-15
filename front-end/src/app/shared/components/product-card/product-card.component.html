@@ -20,7 +20,7 @@
         />
       </svg>
     </span>
-    <a
+    <!-- <a
       class="a-link"
       [routerLink]="[
         '/catalog',
@@ -28,20 +28,25 @@
         product.subcategory,
         product._id
       ]"
+    > -->
+    <div
+      class="product-card__placeholder"
+      (click)="
+        navigateToProduct(product.category, product.subcategory, product._id)
+      "
     >
-      <div class="product-card__placeholder">
-        <div class="product-card__picture">
-          <img
-            class="product-card__image"
-            width="360"
-            height="360"
-            alt="{{ product.name }}"
-            *ngIf="product.baseImage"
-            [ngSrc]="product.baseImage"
-          />
-        </div>
+      <div class="product-card__picture">
+        <img
+          class="product-card__image"
+          width="360"
+          height="360"
+          alt="{{ product.name }}"
+          *ngIf="product.baseImage"
+          [ngSrc]="product.baseImage"
+        />
       </div>
-    </a>
+    </div>
+    <!-- </a> -->
     <h3 class="product-card__name">{{ product.name }}</h3>
     <p class="product-card__sale" *ngIf="product.discount">
       {{ product.price * 0.8 | transformPrice }}

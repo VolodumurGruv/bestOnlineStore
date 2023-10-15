@@ -103,10 +103,8 @@ export class EditProductItemComponent implements OnInit, OnDestroy {
     this.allImagesFormArray.push(this.fb.control(''));
   }
 
-  deleteImageField() {
-    if (this.allImagesFormArray.length > 1) {
-      this.allImagesFormArray.removeAt(-1);
-    }
+  deleteImageField(i: number) {
+    this.allImagesFormArray.removeAt(i);
   }
 
   ngOnDestroy(): void {

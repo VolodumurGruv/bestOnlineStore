@@ -11,22 +11,36 @@ import { map } from 'rxjs';
   styleUrls: ['./path.component.scss'],
 })
 export class PathComponent implements OnInit {
-  @Input() paths: UrlSegment[] = [];
+  // paths: UrlSegment[] = [];
+  paths: { path: string }[] = [];
 
   private readonly route = inject(ActivatedRoute);
+  private catalogs: Category[] = mainCategories;
+  category!: Category[];
+  subcategory!: any;
 
   ngOnInit(): void {
-    console.log(this.paths);
     this.route.url
       .pipe(
         map((url: UrlSegment[]) => {
-          if (url.length === 3) {
-            return (this.paths = url.slice(0, 2));
-          }
+          this.category = this.catalogs.filter(
+            (item) => item.routerLink == url[0].path
+          );
 
-          return (this.paths = url);
+          this.subcategory = this.category[0].subcategories?.filter(
+            (item) => item.routerLink == url[1].path
+          );
+
+          this.paths.push({ path: this.category[0].name });
+          this.paths.push({ path: this.subcategory[0].name });
+          console.log(this.paths);
+          console.log(url);
+
+          return this.paths;
         })
       )
       .subscribe();
   }
 }
+import { mainCategories } from '@interfaces/catalog.data';
+import { Category } from '@interfaces/catalog.interface';
