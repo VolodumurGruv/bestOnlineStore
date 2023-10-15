@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
 import { FiltersComponent } from '../filters/filters.component';
@@ -9,6 +9,7 @@ import { Product } from '@interfaces/product.interfaces';
 import { ProductsService } from '@shared/services/products.service';
 import { PathStringService } from '@shared/services/interaction/path-string.service';
 import { Subscription, map } from 'rxjs';
+import { PathComponent } from '@shared/components/path/path.component';
 
 @Component({
   selector: 'app-products',
@@ -19,12 +20,12 @@ import { Subscription, map } from 'rxjs';
     ProductCardComponent,
     FiltersComponent,
     RouterLink,
+    PathComponent,
   ],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit, OnDestroy {
-  private readonly route = inject(ActivatedRoute);
   private readonly productService = inject(ProductsService);
   public readonly pathString = inject(PathStringService);
   private unSub!: Subscription;
@@ -33,14 +34,19 @@ export class ProductsComponent implements OnInit, OnDestroy {
   products!: Product[];
   category!: string;
   subCategory!: string;
+  currentPage = 1;
 
   onIsClickFilterChange(newValue: boolean) {
     this.isClickFilter = newValue;
   }
 
   ngOnInit(): void {
+    this.getProducts(this.currentPage);
+  }
+
+  private getProducts(page: number): void {
     this.unSub = this.productService
-      .getProducts()
+      .getProducts(page)
       .pipe(
         map((res: Product[]) => {
           this.products = res;
@@ -49,6 +55,21 @@ export class ProductsComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+  }
+
+  nextPage(): void {
+    console.log(this.products.length);
+    if (this.products.length >= 10) {
+      this.currentPage += 1;
+      this.getProducts(this.currentPage);
+    }
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage -= 1;
+      this.getProducts(this.currentPage);
+    }
   }
 
   ngOnDestroy(): void {

@@ -22,7 +22,12 @@
     </span>
     <a
       class="a-link"
-      [routerLink]="['/catalog/menu', product.subcategory, product._id]"
+      [routerLink]="[
+        '/catalog',
+        product.category,
+        product.subcategory,
+        product._id
+      ]"
     >
       <div class="product-card__placeholder">
         <div class="product-card__picture">

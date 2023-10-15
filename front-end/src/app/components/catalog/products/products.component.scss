@@ -1,4 +1,5 @@
-@import "colors";
+@use "colors";
+@use "fonts";
 
 .products {
   max-width: 1688px;
@@ -6,7 +7,7 @@
 
   &__path {
     text-align: center;
-    color: $light-gray;
+    color: colors.$light-gray;
     font-size: 20px;
     font-weight: 400;
     line-height: 130%; /* 26px */
@@ -93,6 +94,28 @@
       &:last-child {
         margin-bottom: 0;
       }
+    }
+  }
+}
+
+.nav {
+  &__page {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 80px;
+    padding-top: 62px;
+    gap: 8px;
+    width: 100%;
+
+    &-number {
+      @include fonts.primary-roboto(24px, 300, normal, 130%);
+
+      color: colors.$black;
+    }
+
+    &-arrow {
+      cursor: pointer;
     }
   }
 }

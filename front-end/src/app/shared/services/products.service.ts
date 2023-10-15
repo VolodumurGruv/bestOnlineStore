@@ -13,13 +13,15 @@ export class ProductsService {
   private readonly http = inject(HttpClient);
   private readonly errorHandler = inject(HttpErrorHandlerService);
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${configs.URL}/product?perPage=200`).pipe(
-      map((response: any) => response.payload?.products),
-      catchError(
-        this.errorHandler.handleError<Product[]>('Не вдалося отримати дані!')
-      )
-    );
+  getProducts(perPage: number = 1): Observable<Product[]> {
+    return this.http
+      .get<Product[]>(`${configs.URL}/product?page=${perPage}`)
+      .pipe(
+        map((response: any) => response.payload?.products),
+        catchError(
+          this.errorHandler.handleError<Product[]>('Не вдалося отримати дані!')
+        )
+      );
   }
 
   getProductById(id: string): Observable<Product> {

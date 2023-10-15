@@ -1,7 +1,8 @@
 <section class="products">
   <div class="path">
-    <span>Каталог/</span>
-    <span *ngIf="category" class="products__path path">{{ category }}</span>
+    <app-path>
+      <span>Каталог/</span>
+    </app-path>
   </div>
   <h2 class="products__title">{{ subCategory }}</h2>
   <span class="products__cards-filter" (click)="isClickFilter = !isClickFilter"
@@ -20,6 +21,24 @@
     <div *ngFor="let product of products">
       <app-product-card [product]="product"></app-product-card>
     </div>
+  </div>
+  <div class="nav__page">
+    <span (click)="previousPage()">prev</span>
+    <span class="nav__page-number">{{ currentPage }}</span>
+    <span class="nav__page-arrow" (click)="nextPage()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="25"
+        viewBox="0 0 24 25"
+        fill="none"
+      >
+        <path
+          d="M20.6475 12.8976L13.8975 19.6476C13.7909 19.747 13.6498 19.8011 13.5041 19.7985C13.3584 19.7959 13.2193 19.7369 13.1163 19.6338C13.0132 19.5308 12.9542 19.3917 12.9516 19.246C12.949 19.1003 13.0031 18.9593 13.1025 18.8526L18.8916 13.0626H3.75C3.60082 13.0626 3.45774 13.0034 3.35225 12.8979C3.24676 12.7924 3.1875 12.6493 3.1875 12.5001C3.1875 12.3509 3.24676 12.2079 3.35225 12.1024C3.45774 11.9969 3.60082 11.9376 3.75 11.9376H18.8916L13.1025 6.14763C13.0031 6.041 12.949 5.89996 12.9516 5.75424C12.9542 5.60851 13.0132 5.46947 13.1163 5.36641C13.2193 5.26335 13.3584 5.20432 13.5041 5.20175C13.6498 5.19918 13.7909 5.25327 13.8975 5.35263L20.6475 12.1026C20.7528 12.2081 20.812 12.3511 20.812 12.5001C20.812 12.6492 20.7528 12.7922 20.6475 12.8976Z"
+          fill="black"
+        />
+      </svg>
+    </span>
   </div>
 </section>
 <app-filters

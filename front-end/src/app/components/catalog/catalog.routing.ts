@@ -18,15 +18,15 @@ export const CATALOG_ROUTING: Route[] = [
         pathMatch: 'full',
       },
       {
-        path: 'menu',
+        path: ':category',
         component: MenuComponent,
       },
       {
-        path: 'menu/:subcategory/:id',
+        path: ':category/:subcategory/:id',
         component: ProductComponent,
       },
       {
-        path: 'menu/:subcategory',
+        path: ':category/:subcategory',
         component: ProductsComponent,
       },
     ],

@@ -1,5 +1,9 @@
 <ng-container *ngIf="product$ | async as product">
-  <p *ngIf="pathProduct" class="path">{{ pathProduct }}</p>
+  <app-path>
+    <span>Каталог/</span>
+    <span last>{{ product.name }}</span>
+  </app-path>
+
   <app-about-product [product]="product" />
   <app-features />
   <app-feedbacks />

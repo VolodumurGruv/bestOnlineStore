@@ -9,7 +9,10 @@
         <a
           class="categories__menu-title"
           (mouseenter)="showImg(category.srcImg)"
-          [routerLink]="category.subcategories ? null : category.routerLink"
+          [routerLink]="[
+            '/catalog/',
+            category.subcategories ? null : category.routerLink
+          ]"
           >{{ category.name }}</a
         >
         <ul class="categories__menu-links" *ngIf="category.showSubcategories">
@@ -17,7 +20,11 @@
             <a
               class="categories__menu-subtitle"
               (mouseenter)="showImg(subcategory.srcImg)"
-              [routerLink]="subcategory.routerLink"
+              [routerLink]="[
+                '/catalog/',
+                category.routerLink,
+                subcategory.routerLink
+              ]"
             >
               {{ subcategory.name }}
             </a>
