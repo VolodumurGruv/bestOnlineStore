@@ -13,9 +13,9 @@ export class ProductsService {
   private readonly http = inject(HttpClient);
   private readonly errorHandler = inject(HttpErrorHandlerService);
 
-  getProducts(perPage: number = 1): Observable<Product[]> {
+  getProducts(perPage: number = 100): Observable<Product[]> {
     return this.http
-      .get<Product[]>(`${configs.URL}/product?page=${perPage}`)
+      .get<Product[]>(`${configs.URL}/product?perPage=${perPage}`)
       .pipe(
         map((response: any) => response.payload?.products),
         catchError(

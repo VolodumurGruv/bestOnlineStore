@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -25,7 +25,7 @@ import { PathComponent } from '@shared/components/path/path.component';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
 })
-export class ProductsComponent implements OnInit, OnDestroy {
+export class ProductsComponent implements OnDestroy {
   private readonly productService = inject(ProductsService);
   public readonly pathString = inject(PathStringService);
   private unSub!: Subscription;
@@ -33,18 +33,16 @@ export class ProductsComponent implements OnInit, OnDestroy {
   isClickSort = false;
   products!: Product[];
   subCategory!: string;
-  currentPage = 1;
+  currentPage = 100;
 
   onIsClickFilterChange(newValue: boolean) {
     this.isClickFilter = newValue;
   }
 
-  ngOnInit(): void {
-    this.getProducts(this.currentPage);
-  }
-
   passSubcategory(event: string) {
     this.subCategory = event;
+
+    this.getProducts(this.currentPage);
   }
 
   private getProducts(page: number): void {
@@ -53,7 +51,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       .pipe(
         map((res: Product[]) => {
           this.products = res.filter(
-            (item) => item.subcategory === this.subCategory
+            (item) => item.subcategory == this.subCategory
           );
         })
       )

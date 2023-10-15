@@ -27,9 +27,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
   private unSub!: Subscription;
 
   ngOnInit(): void {
-    this.unSub = this.productService.getProducts().subscribe((res) =>
-      this.products = res
-    );
+    this.unSub = this.productService
+      .getProducts(2)
+      .subscribe((res) => (this.products = res));
   }
 
   redirectToProduct(id: string) {
