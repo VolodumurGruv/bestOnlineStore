@@ -1,7 +1,7 @@
 <section class="products">
   <div class="path">
-    <app-path>
-      <span>Каталог/</span>
+    <app-path (passSubcategory)="passSubcategory($event)">
+      <span>Каталог</span>
     </app-path>
   </div>
   <h2 class="products__title">{{ subCategory }}</h2>

@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { map } from 'rxjs';
@@ -11,13 +18,14 @@ import { map } from 'rxjs';
   styleUrls: ['./path.component.scss'],
 })
 export class PathComponent implements OnInit {
-  // paths: UrlSegment[] = [];
-  paths: { path: string }[] = [];
+  @Output() passSubcategory = new EventEmitter<string>();
 
   private readonly route = inject(ActivatedRoute);
   private catalogs: Category[] = mainCategories;
-  category!: Category[];
-  subcategory!: any;
+
+  public category!: Category[];
+  public subcategory!: any;
+  public paths: { path: string }[] = [];
 
   ngOnInit(): void {
     this.route.url
@@ -33,8 +41,8 @@ export class PathComponent implements OnInit {
 
           this.paths.push({ path: this.category[0].name });
           this.paths.push({ path: this.subcategory[0].name });
-          console.log(this.paths);
-          console.log(url);
+
+          this.passSubcategory.emit(this.subcategory[0].name);
 
           return this.paths;
         })

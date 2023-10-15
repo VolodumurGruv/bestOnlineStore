@@ -32,7 +32,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   public isClickFilter: boolean = false;
   isClickSort = false;
   products!: Product[];
-  category!: string;
   subCategory!: string;
   currentPage = 1;
 
@@ -44,14 +43,18 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.getProducts(this.currentPage);
   }
 
+  passSubcategory(event: string) {
+    this.subCategory = event;
+  }
+
   private getProducts(page: number): void {
     this.unSub = this.productService
       .getProducts(page)
       .pipe(
         map((res: Product[]) => {
-          this.products = res;
-          this.category = this.products[0].category;
-          this.subCategory = this.products[0].subcategory;
+          this.products = res.filter(
+            (item) => item.subcategory === this.subCategory
+          );
         })
       )
       .subscribe();

@@ -1,5 +1,5 @@
 <section class="path">
   <ng-content></ng-content>
-  <span *ngFor="let path of paths"> {{ path.path }}/ </span>
+  <span *ngFor="let path of paths"> /{{ path.path }} </span>
   <ng-content select="[last]"></ng-content>
 </section>

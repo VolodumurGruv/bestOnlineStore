@@ -20,15 +20,7 @@
         />
       </svg>
     </span>
-    <!-- <a
-      class="a-link"
-      [routerLink]="[
-        '/catalog',
-        product.category,
-        product.subcategory,
-        product._id
-      ]"
-    > -->
+
     <div
       class="product-card__placeholder"
       (click)="
@@ -46,7 +38,7 @@
         />
       </div>
     </div>
-    <!-- </a> -->
+
     <h3 class="product-card__name">{{ product.name }}</h3>
     <p class="product-card__sale" *ngIf="product.discount">
       {{ product.price * 0.8 | transformPrice }}
