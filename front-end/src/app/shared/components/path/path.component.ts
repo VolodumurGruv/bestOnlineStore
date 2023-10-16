@@ -27,6 +27,7 @@ export class PathComponent implements OnInit {
     this.route.url
       .pipe(
         map((url: UrlSegment[]) => {
+          this.paths = [];
           this.category = this.catalogs.filter(
             (item) => item.routerLink == url[0].path
           );

@@ -34,6 +34,7 @@ export class ProductsComponent implements OnDestroy {
   products!: Product[];
   subCategory!: string;
   currentPage = 100;
+  private page = 'perPage';
 
   onIsClickFilterChange(newValue: boolean) {
     this.isClickFilter = newValue;
@@ -42,12 +43,12 @@ export class ProductsComponent implements OnDestroy {
   passSubcategory(event: string) {
     this.subCategory = event;
 
-    this.getProducts(this.currentPage);
+    this.getProducts(this.page);
   }
 
-  private getProducts(page: number): void {
+  private getProducts(page: string): void {
     this.unSub = this.productService
-      .getProducts(page)
+      .getProducts(page, this.currentPage)
       .pipe(
         map((res: Product[]) => {
           this.products = res.filter(
@@ -62,14 +63,14 @@ export class ProductsComponent implements OnDestroy {
     console.log(this.products.length);
     if (this.products.length >= 10) {
       this.currentPage += 1;
-      this.getProducts(this.currentPage);
+      this.getProducts(this.page);
     }
   }
 
   previousPage() {
     if (this.currentPage > 1) {
       this.currentPage -= 1;
-      this.getProducts(this.currentPage);
+      this.getProducts(this.page);
     }
   }
 
