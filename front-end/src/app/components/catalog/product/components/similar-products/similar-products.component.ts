@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Observable, map } from 'rxjs';
 
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
@@ -29,7 +29,7 @@ export class SimilarProductsComponent implements OnInit {
         map((res) =>
           res.filter(
             (item) =>
-              item.subcategory === this.product.subcategory &&
+              item.category === this.product.category &&
               item._id !== this.product._id
           )
         )

@@ -30,6 +30,13 @@ export const USER_ROUTES: Route[] = [
             (m) => m.ReviewsComponent
           ),
       },
+      {
+        path: 'wishlist',
+        loadComponent: () =>
+          import('./components/wishlist/wishlist.component').then(
+            (m) => m.WishlistComponent
+          ),
+      },
     ],
   },
 ];

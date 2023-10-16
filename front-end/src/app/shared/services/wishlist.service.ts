@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { HttpErrorHandlerService } from './http-error-handler.service';
 import { configs } from '@configs/configs';
-import { catchError } from 'rxjs';
+import { Observable, catchError, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,21 +11,23 @@ export class WishlistService {
   private readonly http = inject(HttpClient);
   private readonly errorHandler = inject(HttpErrorHandlerService);
 
-  getWishList() {
-    return this.http
-      .get(`${configs.URL}/wishlist`)
-      .pipe(
-        catchError(
-          this.errorHandler.handleError<void>(
-            'Помилка при отримані списку бажаного'
-          )
+  getWishList(): Observable<any> {
+    return this.http.get(`${configs.URL}/wishlist`).pipe(
+      map((res: any) => {
+        console.log(res.payload);
+        return res.payload;
+      }),
+      catchError(
+        this.errorHandler.handleError<void>(
+          'Помилка при отримані списку бажаного'
         )
-      );
+      )
+    );
   }
 
   addWishList(productId: string) {
     return this.http
-      .post(`${configs.URL}/wishlist`, productId)
+      .post(`${configs.URL}/wishlist`, { productId })
       .pipe(
         catchError(
           this.errorHandler.handleError<void>(

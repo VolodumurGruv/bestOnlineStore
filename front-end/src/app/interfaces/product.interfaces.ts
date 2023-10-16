@@ -12,7 +12,7 @@ export interface ProductCharacteristics {
 
 export interface Product {
   characteristics?: ProductCharacteristics;
-  _id?: string;
+  _id: string;
   name: string;
   descr: string;
   shortDescr: string;

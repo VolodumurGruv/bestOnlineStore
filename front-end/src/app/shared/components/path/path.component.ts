@@ -1,19 +1,15 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  inject,
-} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, UrlSegment } from '@angular/router';
+import { ActivatedRoute, RouterLink, UrlSegment } from '@angular/router';
 import { map } from 'rxjs';
+
+import { mainCategories } from '@interfaces/catalog.data';
+import { Category } from '@interfaces/catalog.interface';
 
 @Component({
   selector: 'app-path',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './path.component.html',
   styleUrls: ['./path.component.scss'],
 })
@@ -49,6 +45,8 @@ export class PathComponent implements OnInit {
       )
       .subscribe();
   }
+
+  followIt(path: string) {
+    console.log(path);
+  }
 }
-import { mainCategories } from '@interfaces/catalog.data';
-import { Category } from '@interfaces/catalog.interface';
