@@ -1,5 +1,6 @@
 import Order from '../models/orderSchema.js';
 import User from '../models/userSchema.js';
+import Product from '../models/productSchema.js';
 import {
   HTTP_STATUS_CODES,
   MESSAGES
@@ -122,4 +123,56 @@ const fetchAndSendData = async (req, res) => {
   }
 };
 
-export { fetchAndSendData };
+const getPopularProducts = async () => {
+  const ordersWithCart = await Order.find({}).populate('cart');
+
+  const productQuantities = ordersWithCart.flatMap((order) =>
+    order.cart.items.map((item) => ({
+      productId: item.product,
+      quantity: item.quantity,
+    }))
+  );
+
+  const totalOrderedByProduct = productQuantities.reduce((acc, curr) => {
+    const { productId, quantity } = curr;
+    acc[productId] = (acc[productId] || 0) + quantity;
+    return acc;
+  }, {});
+
+  const sortedProducts = Object.keys(totalOrderedByProduct)
+    .sort(
+      (a, b) => totalOrderedByProduct[b] - totalOrderedByProduct[a]
+    );
+
+  const popularProductDetails = await Promise.allSettled(
+    sortedProducts.map(async (productId) => {
+      const productDetails = await Product.findById(productId, {
+        name: 1,
+        price: 1,
+        countInStock: 1,
+      });
+
+      if (!productDetails) {
+        return {
+          name: 'Deleted',
+          price: 0,
+          countInStock: 0,
+          totalOrdered: totalOrderedByProduct[productId],
+        };
+      }
+
+      return {
+        name: productDetails.name,
+        price: productDetails.price,
+        countInStock: productDetails.countInStock,
+        totalOrdered: totalOrderedByProduct[productId],
+      };
+    }));
+
+  return popularProductDetails;
+};
+
+export {
+  fetchAndSendData,
+  getPopularProducts
+};
