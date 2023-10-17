@@ -9,9 +9,13 @@ const productSchema = new mongoose.Schema({
   baseImage: { type: String, default: '' },
   allImages: { type: [String], default: [''] },
   brand: { type: String, default: 'Brand' },
-  category: { type: String, default: 'Category' },
-  subcategory: { type: String, default: 'Subcategory' },
-  instock: { type: Boolean, default: false },
+  category: {
+    type: String,
+    enum: ['Меблі', 'Сантехніка', 'Освітлення', 'Аксесуари', 'Інше'],
+    default: 'Меблі'
+  },
+  subcategory: { type: String, default: '' },
+  instock: { type: Boolean, default: true },
   countInStock: { type: Number, default: 0 },
   raiting: { type: Number, default: 3 },
   characteristics: {
