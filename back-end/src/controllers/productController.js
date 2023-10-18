@@ -11,7 +11,7 @@ const getAllProducts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const perPage = parseInt(req.query.perPage) || 10;
   const skip = (page - 1) * perPage;
-  console.dir(req.query);
+
   try {
     let query = Product.find();
 
@@ -49,7 +49,7 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-const searchProductsByName = async (req, res) => {
+const searchProducts = async (req, res) => {
   const query = JSON.parse(JSON.stringify(req.query))['keyword'];
 
   try {
@@ -60,7 +60,13 @@ const searchProductsByName = async (req, res) => {
     }
 
     const products = await Product.find({
-      name: { $regex: new RegExp(`${query}`, 'i') },
+      $or: [
+        { name: { $regex: new RegExp(`${query}`, 'i') } },
+        { descr: { $regex: new RegExp(`${query}`, 'i') } },
+        { brand: { $regex: new RegExp(`${query}`, 'i') } },
+        { category: { $regex: new RegExp(`${query}`, 'i') } },
+        { subcategory: { $regex: new RegExp(`${query}`, 'i') } }
+      ]
     });
 
     if (products.length > 0) {
@@ -127,7 +133,7 @@ const deleteProduct = async (req, res) => {
 
 export {
   getAllProducts,
-  searchProductsByName,
+  searchProducts,
   getProductById,
   createProduct,
   updateProduct,
