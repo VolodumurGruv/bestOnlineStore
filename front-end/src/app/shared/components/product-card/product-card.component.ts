@@ -9,11 +9,18 @@ import { WishlistService } from '@shared/services/wishlist.service';
 import { AlertService } from '@shared/services/interaction/alert.service';
 import { mainCategories } from '@interfaces/catalog.data';
 import { Category } from '@interfaces/catalog.interface';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [CommonModule, RouterLink, NgOptimizedImage, TransformPricePipe],
+  imports: [
+    CommonModule,
+    RouterLink,
+    NgOptimizedImage,
+    TransformPricePipe,
+    IconComponent,
+  ],
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.scss'],
 })

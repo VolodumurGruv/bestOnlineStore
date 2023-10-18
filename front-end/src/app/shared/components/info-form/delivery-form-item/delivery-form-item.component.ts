@@ -3,11 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
 import { isValid } from '@shared/utils/is-valid';
+import { IconComponent } from '@shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-delivery-form-item',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ErrorValidationComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ErrorValidationComponent,
+    IconComponent,
+  ],
   templateUrl: './delivery-form-item.component.html',
   styleUrls: ['./delivery-form-item.component.scss'],
 })

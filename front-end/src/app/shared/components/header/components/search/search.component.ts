@@ -4,11 +4,12 @@ import { ProductsService } from '@shared/services/products.service';
 import { Product } from '@interfaces/product.interfaces';
 import { tap } from 'rxjs';
 import { EnPathDirective } from '@shared/directives/en-path.directive';
+import { IconComponent } from '@shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule, EnPathDirective],
+  imports: [CommonModule, EnPathDirective, IconComponent],
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
@@ -36,6 +37,12 @@ export class SearchComponent implements OnInit {
     );
 
     console.log(this.answer);
+  }
+
+  searchBtn(pr: string) {
+    this.productService
+      .searchProduct(pr)
+      .subscribe((res) => (this.answer = res));
   }
 
   clearOnClick() {

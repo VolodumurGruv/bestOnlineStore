@@ -8,12 +8,20 @@ import { CartService } from 'app/components/cart/services/cart.service';
 import { Subscription, concatMap, tap } from 'rxjs';
 import { AlertService } from '@shared/services/interaction/alert.service';
 import { WishlistService } from '@shared/services/wishlist.service';
+import { IconComponent } from '@shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-about-product',
   standalone: true,
   templateUrl: './about-product.component.html',
-  imports: [NgIf, NgFor, NgOptimizedImage, NgClass, TransformPricePipe],
+  imports: [
+    NgIf,
+    NgFor,
+    NgOptimizedImage,
+    NgClass,
+    TransformPricePipe,
+    IconComponent,
+  ],
   styleUrls: ['./about-product.component.scss'],
   providers: [{ provide: CartService, useClass: CartService }],
 })

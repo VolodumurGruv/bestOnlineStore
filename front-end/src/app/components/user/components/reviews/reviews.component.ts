@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Review } from '@interfaces/user.interface';
+import { IconComponent } from '@shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-reviews',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   templateUrl: './reviews.component.html',
   styleUrls: ['./reviews.component.scss'],
 })

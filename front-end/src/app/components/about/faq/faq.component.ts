@@ -7,6 +7,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { svg } from '@interfaces/pictures-map';
 
 export interface FAQ {
   title: string;
@@ -37,6 +38,8 @@ const expandAnimation = [
   animations: expandAnimation,
 })
 export class FaqComponent {
+  svg = svg;
+
   faq: FAQ[] = [
     {
       title:

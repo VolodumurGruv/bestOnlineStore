@@ -10,6 +10,7 @@ import { ProductsService } from '@shared/services/products.service';
 import { PathStringService } from '@shared/services/interaction/path-string.service';
 import { Subscription, map } from 'rxjs';
 import { PathComponent } from '@shared/components/path/path.component';
+import { svg } from '@interfaces/pictures-map';
 
 @Component({
   selector: 'app-products',
@@ -30,11 +31,12 @@ export class ProductsComponent implements OnDestroy {
   public readonly pathString = inject(PathStringService);
   private unSub!: Subscription;
   public isClickFilter: boolean = false;
+  private page = 'perPage';
+  svg = svg;
   isClickSort = false;
   products!: Product[];
   subCategory!: string;
   currentPage = 100;
-  private page = 'perPage';
 
   onIsClickFilterChange(newValue: boolean) {
     this.isClickFilter = newValue;

@@ -6,11 +6,12 @@ import { ProductCardComponent } from '@shared/components/product-card/product-ca
 import { Product } from '@interfaces/product.interfaces';
 import { ProductsService } from '@shared/services/products.service';
 import { Subscription, tap } from 'rxjs';
+import { IconComponent } from '@shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-cart-ad',
   standalone: true,
-  imports: [NgFor, TransformPricePipe, ProductCardComponent],
+  imports: [NgFor, TransformPricePipe, ProductCardComponent, IconComponent],
   templateUrl: './cart-ad.component.html',
   styleUrls: ['./cart-ad.component.scss'],
 })

@@ -114,5 +114,10 @@
     &-arrow {
       cursor: pointer;
     }
+
+    &-arrow-reverse {
+      cursor: pointer;
+      transform: rotate(180deg);
+    }
   }
 }

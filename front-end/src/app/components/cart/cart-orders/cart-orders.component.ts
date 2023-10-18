@@ -20,6 +20,7 @@ import { InfoComponent } from 'app/components/user/components/info/info.componen
 import { InfoFormComponent } from '@shared/components/info-form/info-form.component';
 import { Observable, Subscription, concatMap, map, tap } from 'rxjs';
 import { OrderService } from '@shared/services/order.service';
+import { IconComponent } from '@shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-cart-orders',
@@ -34,6 +35,7 @@ import { OrderService } from '@shared/services/order.service';
     RouterLink,
     InfoComponent,
     InfoFormComponent,
+    IconComponent,
   ],
   templateUrl: './cart-orders.component.html',
   styleUrls: ['./cart-orders.component.scss'],

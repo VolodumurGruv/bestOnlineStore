@@ -14,11 +14,17 @@ import { ErrorValidationComponent } from '@shared/components/error-validation/er
 import { Address } from '@interfaces/address';
 import { getAddresses } from '@shared/utils/nova-poshta';
 import { passwordValidator } from '@shared/utils/validators';
+import { IconComponent } from '@shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-info-form-item',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ErrorValidationComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ErrorValidationComponent,
+    IconComponent,
+  ],
   templateUrl: './info-form-item.component.html',
   styleUrls: ['./info-form-item.component.scss'],
 })
