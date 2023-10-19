@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken';
 import fetch from 'node-fetch';
 import { validationResult } from 'express-validator';
 import User from '../models/userSchema.js';
+import Order from '../models/orderSchema.js';
+import Review from '../models/reviewSchema.js';
 import ShippingAddress from '../models/shippingAddressSchema.js';
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/token.js';
@@ -254,11 +256,23 @@ const restorePassword = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id)
+    const userId = req.params.id;
+    const user = await User.findById(userId)
       .populate('shippingAddress')
+      .populate('wishList')
       .select('-password -resetPasswordToken -resetPasswordExpires');
+
+    const orders = await Order.find({ user: userId });
+    const reviews = await Review.find({ user: userId });
+
+    const userData = {
+      user: user,
+      orders: orders,
+      reviews: reviews
+    };
+
     if (user) {
-      return sendRes(res, HTTP_STATUS_CODES.OK, 'User was found.', user);
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'User was found.', userData);
     } else {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
     }
