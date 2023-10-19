@@ -3,19 +3,7 @@ import chaiHttp from 'chai-http';
 import app from '../src/server.js';
 
 chai.use(chaiHttp);
-const {expect} = chai;
-
-async function pauseFor10Seconds() {
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 10000);
-  });
-}
-
-before(async function() {
-  await pauseFor10Seconds();
-});
+const { expect } = chai;
 
 describe('User Routes', function() {
   it('should get all users', function(done) {
