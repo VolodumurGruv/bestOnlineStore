@@ -9,11 +9,13 @@
         <div class="reviewer__rate">
           {{ review.rate }}
           <div class="stars">
-            <div class="star" *ngFor="let i of [1, 2, 3, 4, 5]">
+            <div class="star" *ngFor="let i of [1, 2, 3, 4, 5]; index as idx">
               <app-icon
                 [path]="'star'"
                 [size]="{ width: '32px', height: '32px' }"
                 [viewBox]="'0 0 32 32'"
+                [i]="idx"
+                [rating]="review.rate"
               >
               </app-icon>
             </div>

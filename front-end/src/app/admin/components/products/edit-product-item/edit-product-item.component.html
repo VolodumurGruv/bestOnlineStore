@@ -11,7 +11,7 @@
         <input
           class="input"
           type="text"
-          placeholder="Product name"
+          placeholder="Назва товару"
           formControlName="name"
         />
         <app-error-validation
@@ -22,7 +22,7 @@
         <input
           class="input"
           type="text"
-          placeholder="Product brand"
+          placeholder="Торгова марка (Бренд)"
           formControlName="brand"
         />
         <app-error-validation
@@ -30,23 +30,28 @@
         ></app-error-validation>
       </div>
       <div class="input-wrap" [ngClass]="isValid(productForm, 'category')">
-        <input
+        <select
           class="input"
-          type="text"
-          placeholder="Product category"
           formControlName="category"
-        />
+          (change)="setUpSubcategory()"
+        >
+          <option [value]="category" *ngFor="let category of categories">
+            {{ category }}
+          </option>
+        </select>
         <app-error-validation
           [control]="productForm.get('category')"
         ></app-error-validation>
       </div>
       <div class="input-wrap" [ngClass]="isValid(productForm, 'subcategory')">
-        <input
-          class="input"
-          type="text"
-          placeholder="Product subcategory"
-          formControlName="subcategory"
-        />
+        <select class="input" formControlName="subcategory">
+          <option
+            [value]="subcategory"
+            *ngFor="let subcategory of subcategories"
+          >
+            {{ subcategory }}
+          </option>
+        </select>
         <app-error-validation
           [control]="productForm.get('subcategory')"
         ></app-error-validation>
@@ -55,7 +60,7 @@
         <input
           class="input"
           type="number"
-          placeholder="Product price"
+          placeholder="Ціна"
           formControlName="price"
           min="0"
         />
@@ -67,7 +72,7 @@
         <input
           class="input"
           type="number"
-          placeholder="Product discount"
+          placeholder="Знижка"
           formControlName="discount"
           min="0"
         />
@@ -76,12 +81,7 @@
         ></app-error-validation>
       </div>
       <div class="input-wrap">
-        <select
-          class="input"
-          type="text"
-          placeholder="Product instock"
-          formControlName="instock"
-        >
+        <select class="input" formControlName="instock">
           <option value="false">False</option>
           <option value="true" selected>True</option>
         </select>
@@ -90,7 +90,7 @@
         <input
           class="input"
           type="number"
-          placeholder="Product countInStock"
+          placeholder="Кількість на складі"
           formControlName="countInStock"
           min="0"
         />
@@ -102,7 +102,7 @@
         <input
           class="input"
           type="text"
-          placeholder="Product shortDescr"
+          placeholder="Модель"
           formControlName="shortDescr"
         />
         <app-error-validation
@@ -115,16 +115,27 @@
         id=""
         cols="30"
         rows="10"
-        placeholder="Product description"
+        placeholder="Опис товару"
         formControlName="descr"
       ></textarea>
+
       <div class="input-wrap">
-        <input type="text" class="input" formControlName="baseImage" />
+        <input
+          type="text"
+          placeholder="Основне зображення"
+          class="input"
+          formControlName="baseImage"
+        />
       </div>
       <div class="allimages" formArrayName="allImages">
         <div *ngFor="let item of allImages.controls; let i = index">
           <div class="input-wrap">
-            <input type="text" class="input" [formControlName]="i" />
+            <input
+              type="text"
+              placeholder="Додаткові зображення"
+              class="input"
+              [formControlName]="i"
+            />
           </div>
           <div class="allimages__btn">
             <button
@@ -144,116 +155,10 @@
           </div>
         </div>
       </div>
-      <!-- <section>
-        <h2>Характеристики</h2>
-        <div class="form-wrap">
-          <div class="input-wrap" [ngClass]="isValid(productForm, 'material')">
-            <input
-              class="input"
-              type="text"
-              placeholder="Product material"
-              formControlName="material"
-            />
-            <app-error-validation
-              [control]="productForm.get('material')"
-            ></app-error-validation>
-          </div>
-          <div class="input-wrap" [ngClass]="isValid(productForm, 'filling')">
-            <input
-              class="input"
-              type="text"
-              placeholder="Product filling"
-              formControlName="filling"
-            />
-            <app-error-validation
-              [control]="productForm.get('filling')"
-            ></app-error-validation>
-          </div>
-          <div class="input-wrap" [ngClass]="isValid(productForm, 'sizes')">
-            <input
-              class="input"
-              type="text"
-              placeholder="Product sizes"
-              formControlName="sizes"
-            />
-            <app-error-validation
-              [control]="productForm.get('sizes')"
-            ></app-error-validation>
-          </div>
-          <div class="input-wrap" [ngClass]="isValid(productForm, 'color')">
-            <input
-              class="input"
-              type="text"
-              placeholder="Product color"
-              formControlName="color"
-            />
-            <app-error-validation
-              [control]="productForm.get('color')"
-            ></app-error-validation>
-          </div>
-          <div
-            class="input-wrap"
-            [ngClass]="isValid(productForm, 'ergonomics')"
-          >
-            <input
-              class="input"
-              type="text"
-              placeholder="Product ergonomics"
-              formControlName="ergonomics"
-            />
-            <app-error-validation
-              [control]="productForm.get('ergonomics')"
-            ></app-error-validation>
-          </div>
-          <div class="input-wrap" [ngClass]="isValid(productForm, 'load')">
-            <input
-              class="input"
-              type="text"
-              placeholder="Product load"
-              formControlName="load"
-            />
-            <app-error-validation
-              [control]="productForm.get('load')"
-            ></app-error-validation>
-          </div>
-          <div class="input-wrap" [ngClass]="isValid(productForm, 'functions')">
-            <input
-              class="input"
-              type="text"
-              placeholder="Product functions"
-              formControlName="functions"
-            />
-            <app-error-validation
-              [control]="productForm.get('functions')"
-            ></app-error-validation>
-          </div>
-          <div
-            class="input-wrap"
-            [ngClass]="isValid(productForm, 'additional')"
-          >
-            <input
-              class="input"
-              type="text"
-              placeholder="Product additional"
-              formControlName="additional"
-            />
-            <app-error-validation
-              [control]="productForm.get('additional')"
-            ></app-error-validation>
-          </div>
-          <div class="input-wrap" [ngClass]="isValid(productForm, 'care')">
-            <input
-              class="input"
-              type="text"
-              placeholder="Product care"
-              formControlName="care"
-            />
-            <app-error-validation
-              [control]="productForm.get('care')"
-            ></app-error-validation>
-          </div>
-        </div>
-      </section> -->
+      <app-characteristic-product-item
+        [productForm]="productForm"
+        [characteristic]="characteristic"
+      ></app-characteristic-product-item>
       <div class="action">
         <ng-content></ng-content>
       </div>

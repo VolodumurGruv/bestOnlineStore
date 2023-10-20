@@ -36,7 +36,7 @@ export class ProductsComponent implements OnDestroy {
   isClickSort = false;
   products!: Product[];
   subCategory!: string;
-  currentPage = 100;
+  currentPage = 1;
 
   onIsClickFilterChange(newValue: boolean) {
     this.isClickFilter = newValue;
@@ -50,12 +50,11 @@ export class ProductsComponent implements OnDestroy {
 
   private getProducts(page: string): void {
     this.unSub = this.productService
-      .getProducts(page, this.currentPage)
+      .getSubcategoryPerPage(page, this.currentPage, this.subCategory)
       .pipe(
         map((res: Product[]) => {
-          this.products = res.filter(
-            (item) => item.subcategory == this.subCategory
-          );
+          console.log(res);
+          this.products = res;
         })
       )
       .subscribe();

@@ -24,7 +24,7 @@ export class SimilarProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.products$ = this.productService
-      .getProducts()
+      .getAllProducts()
       .pipe(
         map((res) =>
           res.filter(

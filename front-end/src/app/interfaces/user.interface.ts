@@ -14,8 +14,8 @@ export interface UserInfo extends User {
     name: string;
     address: string;
     paymentMethod: string;
-    deliveryMethod: string | null | undefined;
-    novaPoshtaAddress?: string;
+    deliveryMethod: string | null;
+    novaPoshtaAddress?: string | null;
   };
   phone?: string | null;
   delivery?: string | null;

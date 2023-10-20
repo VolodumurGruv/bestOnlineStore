@@ -22,7 +22,7 @@ export class CardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.unSub = this.productService
-      .getProducts()
+      .getAllProducts()
       .pipe(map((res) => (this.products = res.slice(0, 3))))
       .subscribe();
   }

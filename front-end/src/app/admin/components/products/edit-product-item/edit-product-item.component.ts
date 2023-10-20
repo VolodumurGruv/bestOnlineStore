@@ -15,11 +15,19 @@ import { ErrorValidationComponent } from '@shared/components/error-validation/er
 import { isValid } from '@shared/utils/is-valid';
 import { ValidFormService } from '../valid-form.service';
 import { Subscription } from 'rxjs';
+import { CharacteristicProductItemComponent } from '../characteristic-product-item/characteristic-product-item.component';
+import { mainCategories } from '@interfaces/catalog.data';
+import { Category } from '@interfaces/catalog.interface';
 
 @Component({
   selector: 'app-edit-product-item',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ErrorValidationComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ErrorValidationComponent,
+    CharacteristicProductItemComponent,
+  ],
   templateUrl: './edit-product-item.component.html',
   styleUrls: ['./edit-product-item.component.scss'],
 })
@@ -34,31 +42,28 @@ export class EditProductItemComponent implements OnInit, OnDestroy {
   public validFormService = inject(ValidFormService);
   public isValid = isValid;
   private readonly unSub = new Subscription();
+  public categories!: string[];
+  public subcategories!: string[] | undefined;
 
   private allImagesFormArray = this.fb.array([this.fb.control('')]);
+  public characteristic = this.fb.array([
+    this.fb.group({ key: [''], value: [''] }),
+  ]);
 
   public productForm = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(4)]],
     descr: ['', [Validators.required, Validators.minLength(4)]],
     shortDescr: ['', [Validators.required, Validators.minLength(4)]],
-    price: ['0', [Validators.required, Validators.min(0)]],
-    discount: ['0', [Validators.required, Validators.min(0)]],
+    price: ['', [Validators.required, Validators.min(0)]],
+    discount: ['', [Validators.required, Validators.min(0)]],
     brand: ['', [Validators.required, Validators.minLength(4)]],
     category: ['', [Validators.required, Validators.minLength(4)]],
     subcategory: ['', [Validators.required, Validators.minLength(4)]],
     instock: ['true', [Validators.required]],
-    countInStock: ['0', [Validators.required, Validators.min(0)]],
+    countInStock: ['', [Validators.required, Validators.min(0)]],
     baseImage: [''],
     allImages: this.allImagesFormArray,
-    material: [''],
-    filling: [''],
-    sizes: [''],
-    color: [''],
-    ergonomics: [''],
-    load: [''],
-    functions: [''],
-    additional: [''],
-    care: [''],
+    characteristic: this.characteristic,
   });
 
   get allImages() {
@@ -75,6 +80,8 @@ export class EditProductItemComponent implements OnInit, OnDestroy {
         this.allImagesFormArray.push(this.fb.control(image));
       });
     }
+
+    this.categories = mainCategories.map((item) => item.name);
   }
 
   onSubmit() {
@@ -89,6 +96,7 @@ export class EditProductItemComponent implements OnInit, OnDestroy {
     }
 
     if (this.isCreate) {
+      console.log(this.productForm.value);
       this.unSub.add(
         this.productService
           .createProduct(this.productForm.value)
@@ -97,6 +105,15 @@ export class EditProductItemComponent implements OnInit, OnDestroy {
           })
       );
     }
+  }
+
+  setUpSubcategory() {
+    const category = this.productForm.get('category')?.value;
+    this.subcategories = mainCategories
+      .filter((item) => item.name === category)[0]
+      ?.subcategories?.map((item) => item.name);
+
+    console.log(this.subcategories);
   }
 
   addImageField() {

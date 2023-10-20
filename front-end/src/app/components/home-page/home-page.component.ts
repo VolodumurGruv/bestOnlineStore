@@ -36,7 +36,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.unSub.add(
       this.productService
-        .getProducts()
+        .getAllProducts()
         .subscribe((res) => (this.products = res))
     );
   }

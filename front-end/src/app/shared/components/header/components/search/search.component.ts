@@ -21,7 +21,7 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.productService
-      .getProducts('perPage', 1000)
+      .getAllProducts()
       .pipe(tap((res) => (this.products = res)))
       .subscribe();
   }
@@ -40,9 +40,8 @@ export class SearchComponent implements OnInit {
   }
 
   searchBtn(pr: string) {
-    this.productService
-      .searchProduct(pr)
-      .subscribe((res) => (this.answer = res));
+    console.log(pr);
+    this.productService.searchProduct(pr).subscribe((res) => console.log(res));
   }
 
   clearOnClick() {

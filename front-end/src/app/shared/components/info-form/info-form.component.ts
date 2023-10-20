@@ -157,7 +157,11 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
               )
             )
           )
-          .subscribe()
+          .subscribe(() => {
+            this.router.navigate([{ outlets: { cart: null } }], {
+              relativeTo: this.route.parent,
+            });
+          })
       );
     }
   }
@@ -186,8 +190,6 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
-  onSubmit() {}
-
   cancel() {
     this.infoForm.reset();
     this.getUserInfo();
@@ -199,19 +201,21 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
         .getUserById(JSON.parse(localStorage.getItem('user')!)._id)
         .pipe(
           tap((res: any) => {
-            this.user = res;
+            this.user = res.user;
             setupInitialValue(this.infoForm, this.user);
 
-            if (res.shippingAddress?.deliveryMethod === 'Нова пошта') {
+            if (this.user.shippingAddress?.deliveryMethod === 'Нова пошта') {
               this.infoForm
                 .get('novaPoshtaAddress')
-                ?.setValue(res.shippingAddress.novaPoshtaAddress);
+                ?.setValue(res.user.shippingAddress.novaPoshtaAddress);
             }
 
             this.infoForm
               .get('deliveryMethod')
-              ?.setValue(res.shippingAddress.deliveryMethod);
-            this.infoForm.get('address')?.setValue(res.shippingAddress.address);
+              ?.setValue(res.user.shippingAddress.deliveryMethod);
+            this.infoForm
+              .get('address')
+              ?.setValue(res.user.shippingAddress.address);
           })
         )
         .subscribe()

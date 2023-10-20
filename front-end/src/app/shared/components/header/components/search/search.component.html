@@ -7,11 +7,7 @@
       (keyup)="search(input.value)"
       placeholder="Пошук"
     />
-    <p
-      class="btn__input__search"
-      [appEnPath]="answer[0]"
-      (click)="searchBtn(input.value)"
-    >
+    <p class="btn__input__search" (click)="searchBtn(input.value)">
       <app-icon
         [path]="'search'"
         [size]="{ width: '24px', height: '24px' }"

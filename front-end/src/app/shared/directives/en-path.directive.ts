@@ -9,26 +9,28 @@ import { Product } from '@interfaces/product.interfaces';
   standalone: true,
 })
 export class EnPathDirective {
-  @Input() appEnPath!: Product;
+  @Input() appEnPath!: any;
 
   private readonly router = inject(Router);
   private categories: Category[] = mainCategories;
 
   @HostListener('click') onClick() {
-    const categoryEn = this.categories.filter(
-      (item) => item.name == this.appEnPath.category
-    );
-    const subcategoryEn = categoryEn[0].subcategories?.filter(
-      (item) => item.name == this.appEnPath.subcategory
-    );
+    if (this.appEnPath) {
+      const categoryEn = this.categories.filter(
+        (item) => item.name == this.appEnPath.category
+      );
+      const subcategoryEn = categoryEn[0].subcategories?.filter(
+        (item) => item.name == this.appEnPath.subcategory
+      );
 
-    if (subcategoryEn?.length) {
-      this.router.navigate([
-        '/catalog',
-        categoryEn[0].routerLink,
-        subcategoryEn[0].routerLink,
-        this.appEnPath._id,
-      ]);
+      if (subcategoryEn?.length) {
+        this.router.navigate([
+          '/catalog',
+          categoryEn[0].routerLink,
+          subcategoryEn[0].routerLink,
+          this.appEnPath._id,
+        ]);
+      }
     }
   }
 }

@@ -23,7 +23,6 @@ export class AddProductComponent implements OnInit, OnDestroy {
     this.unSub = this.validFormService.productFormValid$
       .pipe(
         tap((res: boolean) => {
-          console.log(res);
           this.valid = res;
         })
       )

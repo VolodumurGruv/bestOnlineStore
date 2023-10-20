@@ -4,7 +4,6 @@ import { Orders } from '@interfaces/user.interface';
 import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
 import { OrderService } from '@shared/services/order.service';
 import { Subscription, tap } from 'rxjs';
-import { ProductsService } from '@shared/services/products.service';
 
 @Component({
   selector: 'app-orders',

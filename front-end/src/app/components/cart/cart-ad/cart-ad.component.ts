@@ -22,7 +22,7 @@ export class CartAdComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.unSub = this.productService
-      .getProducts()
+      .getAllProducts()
       .pipe(
         tap((res: any[]) => {
           this.advs = res.slice(0, 3);

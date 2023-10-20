@@ -13,29 +13,42 @@ export class ProductsService {
   private readonly http = inject(HttpClient);
   private readonly errorHandler = inject(HttpErrorHandlerService);
 
-  getProducts(
-    param?: string,
-    paramKey?: string | number
-  ): Observable<Product[]> {
-    if (param && paramKey) {
-      return this.http
-        .get<Product[]>(`${configs.URL}/product?${param}=${paramKey}`)
-        .pipe(
-          map((response: any) => response.payload?.products),
-          catchError(
-            this.errorHandler.handleError<Product[]>(
-              'Не вдалося отримати дані!'
-            )
-          )
-        );
-    }
-
+  getAllProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${configs.URL}/product`).pipe(
       map((response: any) => response.payload?.products),
       catchError(
         this.errorHandler.handleError<Product[]>('Не вдалося отримати дані!')
       )
     );
+  }
+
+  getProductsPerPage(
+    param: string,
+    paramKey: string | number
+  ): Observable<Product[]> {
+    return this.http
+      .get<Product[]>(`${configs.URL}/product?${param}=${paramKey}`)
+      .pipe(
+        map((response: any) => response.payload?.products),
+        catchError(
+          this.errorHandler.handleError<Product[]>('Не вдалося отримати дані!')
+        )
+      );
+  }
+
+  getSubcategoryPerPage(
+    param: string,
+    paramKey: string | number,
+    subcategory: string
+  ): Observable<Product[]> {
+    return this.http
+      .get<Product[]>(`${configs.URL}/product?${param}=${paramKey}`)
+      .pipe(
+        map((response: any) => response.payload?.products),
+        catchError(
+          this.errorHandler.handleError<Product[]>('Не вдалося отримати дані!')
+        )
+      );
   }
 
   getProductById(id: string): Observable<Product> {
