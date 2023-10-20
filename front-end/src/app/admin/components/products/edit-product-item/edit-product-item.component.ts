@@ -45,9 +45,12 @@ export class EditProductItemComponent implements OnInit, OnDestroy {
   public categories!: string[];
   public subcategories!: string[] | undefined;
 
-  private allImagesFormArray = this.fb.array([this.fb.control('')]);
+  private allImagesFormArray = this.fb.array([]);
   public characteristic = this.fb.array([
-    this.fb.group({ key: [''], value: [''] }),
+    this.fb.group({
+      key: ['', Validators.required],
+      value: ['', Validators.required],
+    }),
   ]);
 
   public productForm = this.fb.nonNullable.group({
@@ -117,11 +120,17 @@ export class EditProductItemComponent implements OnInit, OnDestroy {
   }
 
   addImageField() {
-    this.allImagesFormArray.push(this.fb.control(''));
+    // max 10 img
+    if (this.allImages?.length <= 10) {
+      this.allImagesFormArray.push(this.fb.control(''));
+    }
   }
 
   deleteImageField(i: number) {
-    this.allImagesFormArray.removeAt(i);
+    // it should have at least 1 img field
+    if (this.allImages?.length > 1) {
+      this.allImagesFormArray.removeAt(i);
+    }
   }
 
   ngOnDestroy(): void {

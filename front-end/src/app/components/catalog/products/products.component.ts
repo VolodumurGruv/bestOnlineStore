@@ -1,4 +1,4 @@
-import { Component, OnDestroy, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -11,6 +11,7 @@ import { PathStringService } from '@shared/services/interaction/path-string.serv
 import { Subscription, map } from 'rxjs';
 import { PathComponent } from '@shared/components/path/path.component';
 import { svg } from '@interfaces/pictures-map';
+import { SearchResultService } from '@shared/services/interaction/search-result.service';
 
 @Component({
   selector: 'app-products',
@@ -26,17 +27,33 @@ import { svg } from '@interfaces/pictures-map';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
 })
-export class ProductsComponent implements OnDestroy {
+export class ProductsComponent implements OnInit, OnDestroy {
   private readonly productService = inject(ProductsService);
   public readonly pathString = inject(PathStringService);
-  private unSub!: Subscription;
+  public readonly searchResult = inject(SearchResultService);
+  private unSub = new Subscription();
   public isClickFilter: boolean = false;
-  private page = 'perPage';
+  private page = 'page';
   svg = svg;
   isClickSort = false;
   products!: Product[];
   subCategory!: string;
   currentPage = 1;
+
+  ngOnInit(): void {
+    this.unSub.add(
+      this.searchResult.searchResult$
+        .pipe(
+          map((res) => {
+            if (res?.length) {
+              this.products = res;
+              this.subCategory = 'Знайдено';
+            }
+          })
+        )
+        .subscribe()
+    );
+  }
 
   onIsClickFilterChange(newValue: boolean) {
     this.isClickFilter = newValue;
@@ -49,19 +66,19 @@ export class ProductsComponent implements OnDestroy {
   }
 
   private getProducts(page: string): void {
-    this.unSub = this.productService
-      .getSubcategoryPerPage(page, this.currentPage, this.subCategory)
-      .pipe(
-        map((res: Product[]) => {
-          console.log(res);
-          this.products = res;
-        })
-      )
-      .subscribe();
+    this.unSub.add(
+      this.productService
+        .getSubcategoryPerPage(page, this.currentPage, this.subCategory)
+        .pipe(
+          map((res: Product[]) => {
+            this.products = res;
+          })
+        )
+        .subscribe()
+    );
   }
 
   nextPage(): void {
-    console.log(this.products.length);
     if (this.products.length >= 10) {
       this.currentPage += 1;
       this.getProducts(this.page);
@@ -76,6 +93,6 @@ export class ProductsComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.unSub) this.unSub.unsubscribe();
+    this.unSub.unsubscribe();
   }
 }

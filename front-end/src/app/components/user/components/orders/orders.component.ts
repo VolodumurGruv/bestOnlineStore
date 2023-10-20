@@ -24,7 +24,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
         .pipe(
           tap((res) => {
             this.orders = res;
-            console.log(this.orders);
+            
           })
         )
         .subscribe()

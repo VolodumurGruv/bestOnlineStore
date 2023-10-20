@@ -29,12 +29,14 @@ export class CharacteristicProductItemComponent {
   }
 
   addCharField() {
-    console.log(this.characteristicValue.value);
-    this.characteristic.push(this.fb.group({ key: [''], value: [''] }));
+    if (this.characteristicValue.value?.length <= 20) {
+      this.characteristic.push(this.fb.group({ key: [''], value: [''] }));
+    }
   }
 
   deleteCharField(i: number) {
-    console.log(this.characteristic.controls);
-    this.characteristic.removeAt(i);
+    if (this.characteristicValue.value?.length > 1) {
+      this.characteristic.removeAt(i);
+    }
   }
 }

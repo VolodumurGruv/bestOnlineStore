@@ -14,7 +14,6 @@ export class WishlistService {
   getWishList(): Observable<any> {
     return this.http.get(`${configs.URL}/wishlist`).pipe(
       map((res: any) => {
-        console.log(res.payload);
         return res.payload;
       }),
       catchError(

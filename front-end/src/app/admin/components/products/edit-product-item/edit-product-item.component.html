@@ -119,7 +119,7 @@
         formControlName="descr"
       ></textarea>
 
-      <div class="input-wrap">
+      <div class="input-wrap" *ngIf="!isCreate">
         <input
           type="text"
           placeholder="Основне зображення"
@@ -127,7 +127,8 @@
           formControlName="baseImage"
         />
       </div>
-      <div class="allimages" formArrayName="allImages">
+
+      <div class="allimages" formArrayName="allImages" *ngIf="!isCreate">
         <div *ngFor="let item of allImages.controls; let i = index">
           <div class="input-wrap">
             <input

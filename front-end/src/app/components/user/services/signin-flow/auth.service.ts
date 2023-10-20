@@ -22,7 +22,6 @@ export class AuthService {
   private user$: Observable<User | null> = this.user.asObservable();
 
   signIn(user: User): Observable<User> {
-    console.log(user);
     return this.http
       .post<User>(`${configs.URL}/user/signin`, user, httpConfig)
       .pipe(
@@ -46,7 +45,7 @@ export class AuthService {
     return this.http.post<User>(configs.URL + configs.REGISTER_ROOT, user).pipe(
       map((res: any) => {
         const user = res.payload;
-        console.log(user);
+
         this.setLocalStorage(user);
         this.user.next(user);
         return user;

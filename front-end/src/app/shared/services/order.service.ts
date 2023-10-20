@@ -26,7 +26,6 @@ export class OrderService {
     return this.http
       .post<Orders[]>(`${configs.URL}/order`, { user: userId })
       .pipe(
-        tap((res) => console.log(res)),
         catchError(
           this.httpError.handleError<Orders[]>(
             'Помилка підтвердження замовлення'

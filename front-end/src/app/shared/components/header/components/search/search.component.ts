@@ -1,10 +1,12 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductsService } from '@shared/services/products.service';
 import { Product } from '@interfaces/product.interfaces';
-import { tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { EnPathDirective } from '@shared/directives/en-path.directive';
 import { IconComponent } from '@shared/components/icon/icon.component';
+import { Router } from '@angular/router';
+import { SearchResultService } from '@shared/services/interaction/search-result.service';
 
 @Component({
   selector: 'app-search',
@@ -13,17 +15,22 @@ import { IconComponent } from '@shared/components/icon/icon.component';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   private readonly productService = inject(ProductsService);
+  private readonly router = inject(Router);
+  private readonly searchResult = inject(SearchResultService);
+  private readonly unSub = new Subscription();
   private products!: Product[];
 
   public answer: Product[] = [];
 
   ngOnInit(): void {
-    this.productService
-      .getAllProducts()
-      .pipe(tap((res) => (this.products = res)))
-      .subscribe();
+    this.unSub.add(
+      this.productService
+        .getAllProducts()
+        .pipe(tap((res) => (this.products = res)))
+        .subscribe()
+    );
   }
 
   search(request: string) {
@@ -35,16 +42,22 @@ export class SearchComponent implements OnInit {
         item.subcategory.toLocaleLowerCase().slice(0, req.length) == req ||
         item.name.toLocaleLowerCase().slice(0, req.length) == req
     );
-
-    console.log(this.answer);
   }
 
   searchBtn(pr: string) {
-    console.log(pr);
-    this.productService.searchProduct(pr).subscribe((res) => console.log(res));
+    this.unSub.add(
+      this.productService.searchProduct(pr).subscribe((res) => {
+        this.searchResult.passResult(res);
+        this.router.navigate(['/catalog/search/result']);
+      })
+    );
   }
 
   clearOnClick() {
     this.answer = [];
+  }
+
+  ngOnDestroy(): void {
+    this.unSub.unsubscribe();
   }
 }

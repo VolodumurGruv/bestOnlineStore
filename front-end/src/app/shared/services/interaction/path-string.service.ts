@@ -13,7 +13,6 @@ export class PathStringService {
   public pathSubCategory$ = this.pathSubCategory.asObservable();
 
   makePathCategory(product: Product) {
-    console.log(product.category);
     if (product.category) {
       this.pathCategory.next(product.category);
     }

@@ -27,7 +27,6 @@ export class UserService {
   getUserById(userID: string): Observable<UserInfo> {
     return this.http.get<UserInfo>(`${configs.URL}/user/${userID}`).pipe(
       map((res: any) => {
-        console.log(res.payload);
         return res.payload;
       }),
       catchError(
@@ -45,7 +44,7 @@ export class UserService {
         tap((res: PAYLOAD<UserInfo>) => {
           const user = res.payload.user;
           user.token = JSON.parse(localStorage.getItem('user')!).token;
-          console.log(res);
+
           localStorage.setItem('user', JSON.stringify(user));
         }),
         catchError(

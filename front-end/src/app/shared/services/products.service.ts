@@ -42,7 +42,9 @@ export class ProductsService {
     subcategory: string
   ): Observable<Product[]> {
     return this.http
-      .get<Product[]>(`${configs.URL}/product?${param}=${paramKey}`)
+      .get<Product[]>(
+        `${configs.URL}/product?${param}=${paramKey}&subcategory=${subcategory}`
+      )
       .pipe(
         map((response: any) => response.payload?.products),
         catchError(
