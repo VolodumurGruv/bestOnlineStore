@@ -19,10 +19,10 @@ const productSchema = new mongoose.Schema({
   instock: { type: Boolean, default: true },
   countInStock: { type: Number, default: 0 },
   raiting: { type: Number, default: 3 },
-  characteristics: {
-    type: Map,
-    of: String
-  },
+  characteristics: [{
+    key: String,
+    value: String
+  }],
   numReviews: { type: Number, default: 0 },
   reviews: [{
     type: mongoose.Schema.Types.ObjectId,
