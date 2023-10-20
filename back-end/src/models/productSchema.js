@@ -20,15 +20,8 @@ const productSchema = new mongoose.Schema({
   countInStock: { type: Number, default: 0 },
   raiting: { type: Number, default: 3 },
   characteristics: {
-    material: { type: String },
-    filling: { type: String },
-    sizes: [{ type: String }],
-    color: [{ type: String }],
-    ergonomics: { type: String },
-    load: { type: String },
-    functions: { type: String },
-    additional: { type: String },
-    care: { type: String }
+    type: Map,
+    of: String
   },
   numReviews: { type: Number, default: 0 },
   reviews: [{
