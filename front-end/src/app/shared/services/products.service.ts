@@ -46,7 +46,10 @@ export class ProductsService {
         `${configs.URL}/product?${param}=${paramKey}&subcategory=${subcategory}`
       )
       .pipe(
-        map((response: any) => response.payload?.products),
+        map((response: any) => {
+          console.log(response);
+          return response.payload?.products;
+        }),
         catchError(
           this.errorHandler.handleError<Product[]>('Не вдалося отримати дані!')
         )

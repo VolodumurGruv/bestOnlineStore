@@ -71,6 +71,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
         .getSubcategoryPerPage(page, this.currentPage, this.subCategory)
         .pipe(
           map((res: Product[]) => {
+            console.log(res)
             this.products = res;
           })
         )

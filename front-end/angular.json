@@ -72,8 +72,7 @@
             },
             "development": {
               "browserTarget": "front-end:build:development",
-              "port": 3031,
-              "proxyConfig": "proxy.config.mjs"
+              "port": 3031
             }
           },
           "defaultConfiguration": "development"
