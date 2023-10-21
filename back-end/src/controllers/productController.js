@@ -99,7 +99,10 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
   try {
     const newProductData = req.body;
-    const createdProduct = await Product.create(newProductData);
+    const newProduct = await Product.create(newProductData);
+
+    newProduct.markModified('characteristics');
+    const createdProduct = await newProduct.save();
 
     return sendRes(res, HTTP_STATUS_CODES.CREATED, 'Product created.', createdProduct);
   } catch (error) {
@@ -110,8 +113,12 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const productId = req.params.id;
-    const updatedProduct = await Product.findByIdAndUpdate(productId, req.body, { new: true });
-    if (updatedProduct) {
+    const refreshedProduct = await Product.findByIdAndUpdate(productId, req.body, { new: true });
+
+    if (refreshedProduct) {
+      refreshedProduct.markModified('characteristics');
+      const updatedProduct = await refreshedProduct.save();
+
       return sendRes(res, HTTP_STATUS_CODES.OK, 'Product updated.', updatedProduct);
     } else {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);

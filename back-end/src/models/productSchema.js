@@ -1,5 +1,11 @@
 import mongoose from 'mongoose';
 
+const characteristicsSchema = new mongoose.Schema({
+  _id: false,
+  key: String,
+  value: String
+});
+
 const productSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: false },
   descr: { type: String, required: true },
@@ -19,10 +25,7 @@ const productSchema = new mongoose.Schema({
   instock: { type: Boolean, default: true },
   countInStock: { type: Number, default: 0 },
   raiting: { type: Number, default: 3 },
-  characteristics: [{
-    key: String,
-    value: String
-  }],
+  characteristics: [characteristicsSchema],
   numReviews: { type: Number, default: 0 },
   reviews: [{
     type: mongoose.Schema.Types.ObjectId,
