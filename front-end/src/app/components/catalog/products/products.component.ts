@@ -69,12 +69,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.unSub.add(
       this.productService
         .getSubcategoryPerPage(page, this.currentPage, this.subCategory)
-        .pipe(
-          map((res: Product[]) => {
-            console.log(res)
-            this.products = res;
-          })
-        )
+        .pipe(map((res: Product[]) => (this.products = res)))
         .subscribe()
     );
   }

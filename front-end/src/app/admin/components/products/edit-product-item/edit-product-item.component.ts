@@ -123,7 +123,6 @@ export class EditProductItemComponent
     }
 
     if (this.isCreate) {
-      console.log(this.productForm.value);
       this.unSub.add(
         this.productService
           .createProduct(this.productForm.value)
@@ -139,8 +138,6 @@ export class EditProductItemComponent
     this.subcategories = mainCategories
       .filter((item) => item.name === category)[0]
       ?.subcategories?.map((item) => item.name);
-
-    console.log(this.subcategories);
   }
 
   addImageField() {

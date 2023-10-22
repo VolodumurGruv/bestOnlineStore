@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EditProductItemComponent } from '../edit-product-item/edit-product-item.component';
-import { Observable, Subscription, tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { ValidFormService } from '../valid-form.service';
 
 @Component({
