@@ -18,25 +18,25 @@ import { ErrorValidationComponent } from '@shared/components/error-validation/er
 })
 export class CharacteristicProductItemComponent {
   @Input() productForm!: FormGroup;
-  @Input() characteristic!: FormArray;
+  @Input() characteristics!: FormArray;
 
   private readonly fb = inject(FormBuilder);
 
   public readonly isValid = isValid;
 
   get characteristicValue() {
-    return this.productForm.get('characteristic') as FormArray;
+    return this.productForm.get('characteristics') as FormArray;
   }
 
   addCharField() {
     if (this.characteristicValue.value?.length <= 20) {
-      this.characteristic.push(this.fb.group({ key: [''], value: [''] }));
+      this.characteristics.push(this.fb.group({ key: [''], value: [''] }));
     }
   }
 
   deleteCharField(i: number) {
     if (this.characteristicValue.value?.length > 1) {
-      this.characteristic.removeAt(i);
+      this.characteristics.removeAt(i);
     }
   }
 }

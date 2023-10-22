@@ -1,4 +1,12 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormArray,
@@ -31,7 +39,9 @@ import { Category } from '@interfaces/catalog.interface';
   templateUrl: './edit-product-item.component.html',
   styleUrls: ['./edit-product-item.component.scss'],
 })
-export class EditProductItemComponent implements OnInit, OnDestroy {
+export class EditProductItemComponent
+  implements OnInit, OnDestroy, AfterViewInit
+{
   @Input() product!: Product;
   @Input() isUpdate: boolean = false;
   @Input() isCreate: boolean = false;
@@ -39,6 +49,7 @@ export class EditProductItemComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly productService = inject(ProductsService);
   private readonly alertService = inject(AlertService);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
   public validFormService = inject(ValidFormService);
   public isValid = isValid;
   private readonly unSub = new Subscription();
@@ -46,7 +57,7 @@ export class EditProductItemComponent implements OnInit, OnDestroy {
   public subcategories!: string[] | undefined;
 
   private allImagesFormArray = this.fb.array([]);
-  public characteristic = this.fb.array([
+  public characteristics = this.fb.array([
     this.fb.group({
       key: ['', Validators.required],
       value: ['', Validators.required],
@@ -66,7 +77,7 @@ export class EditProductItemComponent implements OnInit, OnDestroy {
     countInStock: ['', [Validators.required, Validators.min(0)]],
     baseImage: [''],
     allImages: this.allImagesFormArray,
-    characteristic: this.characteristic,
+    characteristics: this.characteristics,
   });
 
   get allImages() {
@@ -74,8 +85,18 @@ export class EditProductItemComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.categories = mainCategories.map((item) => item.name);
+
     if (this.product) {
       setupInitialValue(this.productForm, this.product);
+      this.product.characteristics?.slice(1).forEach((item) =>
+        this.characteristics.push(
+          this.fb.group({
+            key: [item.key, Validators.required],
+            value: [item.value, Validators.required],
+          })
+        )
+      );
     }
 
     if (this.product?.allImages.length) {
@@ -83,8 +104,11 @@ export class EditProductItemComponent implements OnInit, OnDestroy {
         this.allImagesFormArray.push(this.fb.control(image));
       });
     }
+  }
 
-    this.categories = mainCategories.map((item) => item.name);
+  ngAfterViewInit(): void {
+    this.setUpSubcategory();
+    this.changeDetectorRef.detectChanges();
   }
 
   onSubmit() {

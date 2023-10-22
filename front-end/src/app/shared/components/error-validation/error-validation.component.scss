@@ -4,10 +4,12 @@
 .errorMessage {
   @include fonts.inter(14px, 400, normal, normal);
 
-  position: relative;
-  top: 40px;
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  width: 500px;
   color: colors.$sale-color;
 }
 app-error-validation {
-  position: absolute;
+  position: relative;
 }

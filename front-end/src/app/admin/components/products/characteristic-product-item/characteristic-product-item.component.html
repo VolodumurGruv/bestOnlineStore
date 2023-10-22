@@ -1,10 +1,10 @@
 <h2>Характеристики</h2>
 
 <form [formGroup]="productForm">
-  <div class="form__array" formArrayName="characteristic">
+  <div class="form__array" formArrayName="characteristics">
     <div
       class="form__array-group"
-      *ngFor="let item of characteristic.controls; let i = index"
+      *ngFor="let item of characteristics.controls; let i = index"
       [formGroupName]="i"
     >
       <div class="input-wrap" [ngClass]="isValid(productForm, 'key')">

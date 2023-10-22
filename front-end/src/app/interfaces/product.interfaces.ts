@@ -1,17 +1,10 @@
 export interface ProductCharacteristics {
-  material: string;
-  filling: string;
-  sizes: string;
-  color: string;
-  ergonomics: string;
-  load: string;
-  functions: string;
-  additional: string;
-  care: string;
+  key: string;
+  value: string;
 }
 
 export interface Product {
-  characteristics?: ProductCharacteristics;
+  characteristics?: ProductCharacteristics[];
   _id: string;
   name: string;
   descr: string;

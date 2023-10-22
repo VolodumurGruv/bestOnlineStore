@@ -23,8 +23,9 @@ export class OrdersComponent implements OnInit, OnDestroy {
         .getOrderHistory()
         .pipe(
           tap((res) => {
+            console.log(res)
             this.orders = res;
-            
+
           })
         )
         .subscribe()
