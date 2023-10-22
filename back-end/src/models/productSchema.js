@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 
 const characteristicsSchema = new mongoose.Schema({
   _id: false,
-  type: mongoose.Schema.Types.Mixed
+  key: String,
+  value: String
 });
 
 const productSchema = new mongoose.Schema({
