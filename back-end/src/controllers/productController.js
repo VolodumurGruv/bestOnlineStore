@@ -100,7 +100,7 @@ const createProduct = async (req, res) => {
   try {
     const newProductData = req.body;
     const newProduct = await Product.create(newProductData);
-
+    console.log(req.body);console.log(JSON.stringify(req.body));
     newProduct.markModified('characteristics');
     const createdProduct = await newProduct.save();
 
