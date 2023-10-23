@@ -40,9 +40,13 @@ const getOrderHistory = async (req, res) => {
 
 const getOrderById = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id)
+      .populate('cart')
+      .populate('shippingAddress');
+
     if (order) {
-      return sendRes(res, HTTP_STATUS_CODES.OK, 'Order found.', order);
+      const {image} = order.cart.items[0];
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'Order found.', { order, image });
     } else {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
