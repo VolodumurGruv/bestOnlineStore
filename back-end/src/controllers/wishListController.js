@@ -28,7 +28,12 @@ const addToWishList = async (req, res) => {
       return sendRes(res, HTTP_STATUS_CODES.CONFLICT, MESSAGES.PRODUCT_ALREADY_IN_WISHLIST);
     }
 
-    await getProductById(productId);
+    const product = await getProductById(productId);
+
+    if (!product) {
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
+    }
+
 
     user.wishList.push(productId);
 
