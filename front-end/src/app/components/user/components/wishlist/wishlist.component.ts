@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable, Subscription, forkJoin, switchMap } from 'rxjs';
+import { Observable, Subscription, forkJoin, switchMap, map } from 'rxjs';
 
 import { WishlistService } from '@shared/services/wishlist.service';
 import { ProductsService } from '@shared/services/products.service';
@@ -20,19 +20,10 @@ export class WishlistComponent implements OnInit, OnDestroy {
   private readonly wishlistService = inject(WishlistService);
   private readonly productService = inject(ProductsService);
   private unSub = new Subscription();
-  wishlist: Product[] = [];
+  wishlists: Product[] = [];
   wishlist$!: Observable<Product[]>;
 
   ngOnInit(): void {
-    this.wishlist$ = this.wishlistService.getWishList().pipe(
-      switchMap((id: string[]) => {
-        const observables = id.map((id) => {
-          return this.productService.getProductById(id);
-        });
-        return forkJoin(observables);
-      })
-    );
-
     this.unSub.add(
       this.wishlistService
         .getWishList()
@@ -44,12 +35,28 @@ export class WishlistComponent implements OnInit, OnDestroy {
             return forkJoin(observables);
           })
         )
-        .subscribe((products) => (this.wishlist = products.splice(1)))
+        .subscribe((res) => (this.wishlists = res))
     );
   }
 
   delete(id: string) {
-    this.unSub.add(this.wishlistService.removeFromWishList(id).subscribe());
+    this.unSub.add(
+      this.wishlistService
+        .removeFromWishList(id)
+        .pipe(
+          switchMap(() =>
+            this.wishlistService.getWishList().pipe(
+              switchMap((id: string[]) => {
+                const observables = id.map((id) => {
+                  return this.productService.getProductById(id);
+                });
+                return forkJoin(observables);
+              })
+            )
+          )
+        )
+        .subscribe((res) => (this.wishlists = res))
+    );
   }
 
   ngOnDestroy() {

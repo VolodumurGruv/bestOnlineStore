@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Orders } from '@interfaces/user.interface';
 import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
 import { OrderService } from '@shared/services/order.service';
-import { Subscription, tap } from 'rxjs';
+import { Subscription, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-orders',
@@ -23,17 +23,26 @@ export class OrdersComponent implements OnInit, OnDestroy {
         .getOrderHistory()
         .pipe(
           tap((res) => {
-            console.log(res)
             this.orders = res;
-
           })
         )
         .subscribe()
     );
   }
 
-  completeAction(id: string): void {
-    this.unSub.add(this.orderService.deleteOrder(id).subscribe());
+  completeAction(id: string) {
+    this.unSub.add(
+      this.orderService
+        .deleteOrder(id)
+        .pipe(
+          switchMap(() =>
+            this.orderService
+              .getOrderHistory()
+              .pipe(tap((res) => (this.orders = res)))
+          )
+        )
+        .subscribe()
+    );
   }
 
   ngOnDestroy(): void {
