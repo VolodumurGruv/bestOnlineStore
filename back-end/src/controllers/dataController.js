@@ -123,53 +123,60 @@ const fetchAndSendData = async (req, res) => {
   }
 };
 
-const getPopularProducts = async () => {
-  const ordersWithCart = await Order.find({}).populate('cart');
+const getPopularProducts = async (req, res) => {
+  try {
+    const ordersWithCart = await Order.find({}).populate('cart');
 
-  const productQuantities = ordersWithCart.flatMap((order) =>
-    order.cart.items.map((item) => ({
-      productId: item.product,
-      quantity: item.quantity,
-    }))
-  );
-
-  const totalOrderedByProduct = productQuantities.reduce((acc, curr) => {
-    const { productId, quantity } = curr;
-    acc[productId] = (acc[productId] || 0) + quantity;
-    return acc;
-  }, {});
-
-  const sortedProducts = Object.keys(totalOrderedByProduct)
-    .sort(
-      (a, b) => totalOrderedByProduct[b] - totalOrderedByProduct[a]
+    const productQuantities = ordersWithCart.flatMap((order) =>
+      order.cart.items.map((item) => ({
+        productId: item.product,
+        quantity: item.quantity,
+      }))
     );
 
-  const popularProductDetails = await Promise.allSettled(
-    sortedProducts.map(async (productId) => {
-      const productDetails = await Product.findById(productId, {
-        name: 1,
-        price: 1,
-        countInStock: 1,
-      });
+    const totalOrderedByProduct = productQuantities.reduce((acc, curr) => {
+      const { productId, quantity } = curr;
+      acc[productId] = (acc[productId] || 0) + quantity;
+      return acc;
+    }, {});
 
-      if (!productDetails) {
+    const sortedProducts = Object.entries(totalOrderedByProduct)
+      .sort(
+        (a, b) => totalOrderedByProduct[b[1]] - totalOrderedByProduct[a[1]]
+      );
+
+    const popularProductDetails = await Promise.all(
+      sortedProducts.map(async ([productId, ]) => {
+        const productDetails = await Product.findById(productId, {
+          name: 1,
+          price: 1,
+          countInStock: 1,
+          baseImage: 1,
+        });
+
+        if (!productDetails) {
+          return {
+            name: 'Deleted',
+            price: 0,
+            countInStock: 0,
+            baseImage: '',
+            totalOrdered: totalOrderedByProduct[productId],
+          };
+        }
+
         return {
-          name: 'Deleted',
-          price: 0,
-          countInStock: 0,
+          name: productDetails.name,
+          price: productDetails.price,
+          countInStock: productDetails.countInStock,
+          baseImage: productDetails.baseImage,
           totalOrdered: totalOrderedByProduct[productId],
         };
-      }
+      }));
 
-      return {
-        name: productDetails.name,
-        price: productDetails.price,
-        countInStock: productDetails.countInStock,
-        totalOrdered: totalOrderedByProduct[productId],
-      };
-    }));
-
-  return popularProductDetails;
+    return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.DATA_RETRIEVED, popularProductDetails);
+  } catch (error) {
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
+  }
 };
 
 export {
