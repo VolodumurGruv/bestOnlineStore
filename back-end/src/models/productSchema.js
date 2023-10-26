@@ -30,7 +30,8 @@ const productSchema = new mongoose.Schema({
   reviews: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Review'
-  }]
+  }],
+  new: { type: Boolean, default: true }
 }, { timestamps: true }
 );
 

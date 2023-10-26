@@ -127,6 +127,29 @@ const makePaymentOrder = async (req, res) => {
 
       sendEmail(req.user.email, 'Changes on your order', `Order ${req.params.id} was paid.`);
 
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'Order has been paid.', updatedOrder);
+    } else {
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
+    }
+  } catch (error) {
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+  }
+};
+
+const changeOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const updateFields = { ...req.body };
+
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
+    }
+
+    if (updateFields.status === 'Відправлено' &&
+      order.status === 'Комплектується') {
+
       const cart = await Cart.findOne({ user: req.user._id });
 
       for (const cartItem of cart.items) {
@@ -144,22 +167,9 @@ const makePaymentOrder = async (req, res) => {
       cart.items = [];
       cart.totalPrice = 0;
       await cart.save();
-
-      return sendRes(res, HTTP_STATUS_CODES.OK, 'Order has been paid.', updatedOrder);
-    } else {
-      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
-  }
-};
 
-const changeStatus = async (req, res) => {
-  const { orderId } = req.params;
-  const updateFields = { ...req.body };
-
-  try {
-    const order = await Order.findByIdAndUpdate(
+    const updatedOrder = await Order.findByIdAndUpdate(
       orderId,
       {
         updateFields
@@ -167,13 +177,9 @@ const changeStatus = async (req, res) => {
       { new: true }
     );
 
-    if (!order) {
-      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
-    }
-
     sendEmail(req.user.email, 'Changes on your order', `Order ${orderId} was updated.`);
 
-    return sendRes(res, HTTP_STATUS_CODES.OK, 'Order updated.', order);
+    return sendRes(res, HTTP_STATUS_CODES.OK, 'Order updated.', updatedOrder);
   } catch (error) {
     return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_RVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
@@ -199,6 +205,6 @@ export {
   getOrderById,
   createOrder,
   makePaymentOrder,
-  changeStatus,
+  changeOrder,
   deleteOrder,
 };

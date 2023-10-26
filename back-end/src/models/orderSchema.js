@@ -17,7 +17,7 @@ const orderSchema = new mongoose.Schema({
   itemsPrice: { type: Number, required: true },
   status: {
     type: String,
-    enum: ['Комплектується', 'Отримано'],
+    enum: ['Комплектується', 'Відправлено', 'Отримано'],
     default: 'Комплектується'
   },
   user: { type: mongoose.Schema.Types.ObjectId,
