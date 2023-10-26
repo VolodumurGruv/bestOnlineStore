@@ -14,7 +14,8 @@ const shoppingCartSchema = new mongoose.Schema({
     ref: 'User', required: true },
   items: [cartItemSchema],
   totalPrice: { type: Number, default: 0 }
-});
+}, { timestamps: true }
+);
 
 const Cart = mongoose.model('Cart', shoppingCartSchema);
 

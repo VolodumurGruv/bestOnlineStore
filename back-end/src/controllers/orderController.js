@@ -45,7 +45,7 @@ const getOrderById = async (req, res) => {
       .populate('shippingAddress');
 
     if (order) {
-      const {image} = order.cart.items[0];
+      const { image } = order.cart?.items[0] || '';
       return sendRes(res, HTTP_STATUS_CODES.OK, 'Order found.', { order, image });
     } else {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
@@ -59,7 +59,10 @@ const createOrder = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const cart = await Cart.findOne({ user: userId });
+    const cart = await Cart.find({ user: userId })
+      .sort({ createdAt: -1 })
+      .limit(1)
+      .exec();
 
     if (!cart) {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
@@ -91,10 +94,10 @@ const createOrder = async (req, res) => {
     const newAddress = await existAddress.save();
 
     const order = new Order({
-      cart: cart._id,
+      cart: cart[0]._id,
       shippingAddress: newAddress,
       paymentMethod: req.body.paymentMethod,
-      itemsPrice: cart.totalPrice,
+      itemsPrice: cart[0].totalPrice,
       user: userId,
     });
 
@@ -147,12 +150,17 @@ const changeOrder = async (req, res) => {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
 
+    let updatedOrder = null;
+
     if (updateFields.status === 'Відправлено' &&
       order.status === 'Комплектується') {
 
-      const cart = await Cart.findOne({ user: req.user._id });
+      const cart = await Cart.find({ user: req.user._id })
+        .sort({ createdAt: -1 })
+        .limit(1)
+        .exec();
 
-      for (const cartItem of cart.items) {
+      for (const cartItem of cart[0].items) {
         const product = await Product.findById(cartItem.product);
 
         if (product) {
@@ -164,24 +172,26 @@ const changeOrder = async (req, res) => {
         }
       }
 
-      cart.items = [];
-      cart.totalPrice = 0;
-      await cart.save();
-    }
+      const newCart = new Cart({ user: req.user._id, items: [] });
+      await newCart.save();
 
-    const updatedOrder = await Order.findByIdAndUpdate(
-      orderId,
-      {
-        updateFields
-      },
-      { new: true }
-    );
+      order.status = 'Відправлено';
+      updatedOrder = await order.save();
+    } else {
+      updatedOrder = await Order.findByIdAndUpdate(
+        orderId,
+        {
+          updateFields
+        },
+        { new: true }
+      );
+    }
 
     sendEmail(req.user.email, 'Changes on your order', `Order ${orderId} was updated.`);
 
     return sendRes(res, HTTP_STATUS_CODES.OK, 'Order updated.', updatedOrder);
   } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_RVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
