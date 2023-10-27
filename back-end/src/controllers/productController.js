@@ -63,15 +63,18 @@ const searchProducts = async (req, res) => {
       return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.VALIDATION_ERROR, errors.array());
     }
 
-    const products = await Product.find({
+    const regexOptions = { $regex: new RegExp(`${query}`, 'i') };
+    const searchCriteria = {
       $or: [
-        { name: { $regex: new RegExp(`${query}`, 'i') } },
-        { descr: { $regex: new RegExp(`${query}`, 'i') } },
-        { brand: { $regex: new RegExp(`${query}`, 'i') } },
-        { category: { $regex: new RegExp(`${query}`, 'i') } },
-        { subcategory: { $regex: new RegExp(`${query}`, 'i') } }
+        { name: regexOptions },
+        { description: regexOptions },
+        { brand: regexOptions },
+        { category: regexOptions },
+        { subcategory: regexOptions }
       ]
-    });
+    };
+
+    const products = await Product.find(searchCriteria);
 
     if (products.length > 0) {
       return sendRes(res, HTTP_STATUS_CODES.OK, 'Products found.', products);

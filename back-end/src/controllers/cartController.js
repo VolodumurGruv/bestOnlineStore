@@ -13,10 +13,12 @@ const sendCartResponse = async (res, userId, message, cart) => {
   }
 
   try {
-    const userCart = await Cart.find({ user: userId })
+    const carts = await Cart.find({ user: userId })
       .sort({ createdAt: -1 })
       .limit(1)
       .exec();
+
+    let userCart = carts[0];
 
     if (!userCart) {
       const newCart = new Cart({ user: userId, items: [] });
@@ -50,10 +52,12 @@ const addToCart = async (req, res) => {
       return sendRes(res, HTTP_STATUS_CODES.INSUFFICIENT_STOCK, MESSAGES.INSUFFICIENT_STOCK);
     }
 
-    let cart = await Cart.find({ user: userId })
+    let carts = await Cart.find({ user: userId })
       .sort({ createdAt: -1 })
       .limit(1)
-      .exec()[0];
+      .exec();
+
+    let cart = carts[0];
 
     if (!cart) {
       cart = new Cart({ user: userId, items: [] });
@@ -107,10 +111,12 @@ const getCart = async (req, res) => {
 const clearCart = async (req, res) => {
   try {
     const userId = req.user._id;
-    let cart = await Cart.find({ user: userId })
+    let carts = await Cart.find({ user: userId })
       .sort({ createdAt: -1 })
       .limit(1)
-      .exec()[0];
+      .exec();
+
+    let cart = carts[0];
 
     if (!cart) {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.CONSUMER_CART_EMPTY);

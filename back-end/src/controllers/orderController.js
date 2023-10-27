@@ -64,7 +64,7 @@ const createOrder = async (req, res) => {
       .limit(1)
       .exec();
 
-    if (!cart) {
+    if (!cart[0]) {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
     }
 
