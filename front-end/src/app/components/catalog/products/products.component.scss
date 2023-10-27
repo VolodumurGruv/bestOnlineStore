@@ -68,31 +68,6 @@
     flex-wrap: wrap;
     gap: 80px;
   }
-  &__cards-sort {
-    position: relative;
-  }
-
-  &__list-sort {
-    width: 240px;
-    list-style: none;
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #f5f5f5;
-    padding: 20px 24px;
-    font-size: 18px;
-    z-index: 2;
-
-    li {
-      margin-bottom: 8px;
-      cursor: pointer;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
 }
 
 .nav {

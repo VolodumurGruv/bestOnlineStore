@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Event, RouterLink } from '@angular/router';
+import { Subscription, map } from 'rxjs';
 
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
 import { FiltersComponent } from '../filters/filters.component';
@@ -8,10 +9,10 @@ import { CardComponent } from 'app/components/home-page/components/card/card.com
 import { Product } from '@interfaces/product.interfaces';
 import { ProductsService } from '@shared/services/products.service';
 import { PathStringService } from '@shared/services/interaction/path-string.service';
-import { Subscription, map } from 'rxjs';
 import { PathComponent } from '@shared/components/path/path.component';
 import { svg } from '@interfaces/pictures-map';
 import { SearchResultService } from '@shared/services/interaction/search-result.service';
+import { SortingComponent } from '../sorting/sorting.component';
 
 @Component({
   selector: 'app-products',
@@ -21,6 +22,7 @@ import { SearchResultService } from '@shared/services/interaction/search-result.
     CardComponent,
     ProductCardComponent,
     FiltersComponent,
+    SortingComponent,
     RouterLink,
     PathComponent,
   ],
@@ -35,7 +37,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   public isClickFilter: boolean = false;
   private page = 'page';
   svg = svg;
-  isClickSort = false;
   products!: Product[];
   subCategory!: string;
   currentPage = 1;
@@ -63,6 +64,10 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.subCategory = event;
 
     this.getProducts(this.page);
+  }
+
+  sortedProducts(event: any) {
+    this.products = event;
   }
 
   private getProducts(page: string): void {

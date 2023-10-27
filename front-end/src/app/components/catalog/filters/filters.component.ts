@@ -1,12 +1,13 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { filters } from '@interfaces/filters-data';
 
 @Component({
   selector: 'app-filters',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './filters.component.html',
-  styleUrls: ['./filters.component.scss']
+  styleUrls: ['./filters.component.scss'],
 })
 export class FiltersComponent {
   @Input() isClickFilter!: boolean;
@@ -14,25 +15,26 @@ export class FiltersComponent {
 
   public filters = [
     {
-      nameFilter: "Матеріал",
-      subFilters: ["Дерево", "Метал", "ДСП", "Пластик"],
-      isChecked: false
-    }, {
-      nameFilter: "Матеріал оббивки",
-      subFilters: ["Ткань", "Кожа", "Синтетика"],
-      isChecked: false
+      nameFilter: 'Матеріал',
+      subFilters: ['Дерево', 'Метал', 'ДСП', 'Пластик'],
+      isChecked: false,
     },
     {
-      nameFilter: "Вид деревини",
-      subFilters: ["Дуб", "Сосна", "Бук"],
-      isChecked: false
+      nameFilter: 'Матеріал оббивки',
+      subFilters: ['Ткань', 'Кожа', 'Синтетика'],
+      isChecked: false,
     },
     {
-      nameFilter: "Конструктивні особливості",
-      subFilters: ["Складне виконання", "Легке виконання", "Модульна"],
-      isChecked: false
-    }
-  ]
+      nameFilter: 'Вид деревини',
+      subFilters: ['Дуб', 'Сосна', 'Бук'],
+      isChecked: false,
+    },
+    {
+      nameFilter: 'Конструктивні особливості',
+      subFilters: ['Складне виконання', 'Легке виконання', 'Модульна'],
+      isChecked: false,
+    },
+  ];
 
   updateIsClickFilter() {
     this.isClickFilter = !this.isClickFilter;

@@ -23,6 +23,7 @@ export interface Product {
   reviews?: Review[];
   createdAt?: string;
   updatedAt?: string;
+  new?: boolean;
   __v?: number;
 }
 

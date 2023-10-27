@@ -73,14 +73,12 @@ export class CartOrdersComponent
         .getCart()
         .pipe(
           map((res: any) => {
-            const { items, totalPrice } = res.payload;
-            this.total = totalPrice;
-            this.orders = items;
-            if (!items?.length) {
+            this.total = res.payload.totalPrice;
+            this.orders = res.payload.items;
+
+            if (!this.orders?.length) {
               this.advertisement.emit(false);
             }
-
-            return items;
           })
         )
         .subscribe()
