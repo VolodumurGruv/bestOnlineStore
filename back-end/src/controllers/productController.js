@@ -12,40 +12,41 @@ const getAllProducts = async (req, res) => {
   const perPage = parseInt(req.query.perPage) || 10;
   const skip = (page - 1) * perPage;
 
+  function buildProductQuery(queryParams) {
+    const query = Product.find();
+    if (queryParams.minPrice) {
+      query.where('price').gte(parseInt(queryParams.minPrice, 10));
+    }
+    if (queryParams.maxPrice) {
+      query.where('price').lte(parseInt(queryParams.maxPrice, 10));
+    }
+    if (queryParams.category) {
+      query.where('category').equals(queryParams.category);
+    }
+    if (queryParams.subcategory) {
+      query.where('subcategory').equals(queryParams.subcategory);
+    }
+    if (queryParams.sortByPrice) {
+      const sortOrder = queryParams.sortByPrice === 'asc' ? 1 : -1;
+      query.sort({ price: sortOrder });
+    }
+    if (queryParams.sortByRating) {
+      const sortOrder = queryParams.sortByRating === 'asc' ? 1 : -1;
+      query.sort({ rating: sortOrder });
+    }
+    return query;
+  }
+
   try {
-    let query = Product.find();
+    const query = buildProductQuery(req.query);
 
-    if (req.query.minPrice) {
-      query = query.where('price').gte(parseInt(req.query.minPrice, 10));
-    }
-    if (req.query.maxPrice) {
-      query = query.where('price').lte(parseInt(req.query.maxPrice, 10));
-    }
+    query.skip(skip).limit(perPage);
 
-    if (req.query.category) {
-      query = query.where('category').equals(req.query.category);
-    }
+    const [products, totalProducts] = await Promise.all([
+      query.exec(),
+      Product.countDocuments(query.getQuery()),
+    ]);
 
-    if (req.query.subcategory) {
-      query = query.where('subcategory').equals(req.query.subcategory);
-    }
-
-    if (req.query.sortByPrice === 'asc') {
-      query = query.sort({ price: 1 });
-    } else if (req.query.sortByPrice === 'desc') {
-      query = query.sort({ price: -1 });
-    }
-
-    if (req.query.sortByRating === 'asc') {
-      query = query.sort({ raiting: 1 });
-    } else if (req.query.sortByRating === 'desc') {
-      query = query.sort({ raiting: -1 });
-    }
-
-    query = query.skip(skip).limit(perPage);
-
-    const products = await query.exec();
-    const totalProducts = await Product.countDocuments(query.getQuery());
     return sendRes(res, HTTP_STATUS_CODES.OK, 'All products in payload.', { products, totalProducts });
   } catch (error) {
     logger.error('Error while fetching all products', error);
@@ -67,7 +68,7 @@ const searchProducts = async (req, res) => {
     const searchCriteria = {
       $or: [
         { name: regexOptions },
-        { description: regexOptions },
+        { descr: regexOptions },
         { brand: regexOptions },
         { category: regexOptions },
         { subcategory: regexOptions }
