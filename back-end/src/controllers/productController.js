@@ -6,36 +6,12 @@ import {
   MESSAGES
 } from '../utils/constants.js';
 import sendRes from '../utils/handleResponse.js';
+import buildProductQuery from '../utils/buildProductQuery.js';
 
 const getAllProducts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const perPage = parseInt(req.query.perPage) || 10;
   const skip = (page - 1) * perPage;
-
-  function buildProductQuery(queryParams) {
-    const query = Product.find();
-    if (queryParams.minPrice) {
-      query.where('price').gte(parseInt(queryParams.minPrice, 10));
-    }
-    if (queryParams.maxPrice) {
-      query.where('price').lte(parseInt(queryParams.maxPrice, 10));
-    }
-    if (queryParams.category) {
-      query.where('category').equals(queryParams.category);
-    }
-    if (queryParams.subcategory) {
-      query.where('subcategory').equals(queryParams.subcategory);
-    }
-    if (queryParams.sortByPrice) {
-      const sortOrder = queryParams.sortByPrice === 'asc' ? 1 : -1;
-      query.sort({ price: sortOrder });
-    }
-    if (queryParams.sortByRating) {
-      const sortOrder = queryParams.sortByRating === 'asc' ? 1 : -1;
-      query.sort({ rating: sortOrder });
-    }
-    return query;
-  }
 
   try {
     const query = buildProductQuery(req.query);

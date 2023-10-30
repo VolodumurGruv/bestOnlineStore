@@ -8,6 +8,7 @@ import {
   MESSAGES
 } from '../utils/constants.js';
 import sendRes from '../utils/handleResponse.js';
+import findLatestCart from '../utils/findLatestCart.js';
 
 const getAllOrders = async (req, res) => {
   const { status } = req.query;
@@ -53,10 +54,6 @@ const getOrderById = async (req, res) => {
   } catch (error) {
     return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while fetching order by ID.', error);
   }
-};
-
-const findLatestCart = async (userId) => {
-  return Cart.findOne({ user: userId }).sort({ createdAt: -1 }).limit(1).exec();
 };
 
 const createOrder = async (req, res) => {

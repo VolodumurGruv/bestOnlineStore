@@ -291,7 +291,9 @@ const updateProfile = async (req, res) => {
       user.email = req.body.email || user.email;
       user.phone = req.body.phone || user.phone;
 
-      if (!user.googleId && !bcrypt.compareSync(req.body.password, user.password)) {
+      if (!user.isAnonymous === true &&
+          !user.googleId &&
+          !bcrypt.compareSync(req.body.password, user.password)) {
         return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.INVALID_CREDENTIALS);
       }
 

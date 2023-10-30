@@ -6,10 +6,7 @@ import {
 } from '../utils/constants.js';
 import sendRes from '../utils/handleResponse.js';
 import getUserById from '../utils/getUser.js';
-
-const findLatestCart = async (userId) => {
-  return Cart.findOne({ user: userId }).sort({ createdAt: -1 }).limit(1).exec();
-};
+import findLatestCart from '../utils/findLatestCart.js';
 
 const sendCartResponse = async (res, userId, message, cart) => {
   if (cart) {
