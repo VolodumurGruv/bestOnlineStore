@@ -7,18 +7,17 @@ import {
 import sendRes from '../utils/handleResponse.js';
 import getUserById from '../utils/getUser.js';
 
+const findLatestCart = async (userId) => {
+  return Cart.findOne({ user: userId }).sort({ createdAt: -1 }).limit(1).exec();
+};
+
 const sendCartResponse = async (res, userId, message, cart) => {
   if (cart) {
     return sendRes(res, HTTP_STATUS_CODES.OK, message, cart);
   }
 
   try {
-    const carts = await Cart.find({ user: userId })
-      .sort({ createdAt: -1 })
-      .limit(1)
-      .exec();
-
-    let userCart = carts[0];
+    const userCart = await findLatestCart(userId);
 
     if (!userCart) {
       const newCart = new Cart({ user: userId, items: [] });
@@ -52,12 +51,7 @@ const addToCart = async (req, res) => {
       return sendRes(res, HTTP_STATUS_CODES.INSUFFICIENT_STOCK, MESSAGES.INSUFFICIENT_STOCK);
     }
 
-    let carts = await Cart.find({ user: userId })
-      .sort({ createdAt: -1 })
-      .limit(1)
-      .exec();
-
-    let cart = carts[0];
+    let cart = await findLatestCart(userId);
 
     if (!cart) {
       cart = new Cart({ user: userId, items: [] });
@@ -111,12 +105,8 @@ const getCart = async (req, res) => {
 const clearCart = async (req, res) => {
   try {
     const userId = req.user._id;
-    let carts = await Cart.find({ user: userId })
-      .sort({ createdAt: -1 })
-      .limit(1)
-      .exec();
 
-    let cart = carts[0];
+    const cart = await findLatestCart(userId);
 
     if (!cart) {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.CONSUMER_CART_EMPTY);

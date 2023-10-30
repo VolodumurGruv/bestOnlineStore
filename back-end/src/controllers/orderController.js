@@ -55,16 +55,17 @@ const getOrderById = async (req, res) => {
   }
 };
 
+const findLatestCart = async (userId) => {
+  return Cart.findOne({ user: userId }).sort({ createdAt: -1 }).limit(1).exec();
+};
+
 const createOrder = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const cart = await Cart.find({ user: userId })
-      .sort({ createdAt: -1 })
-      .limit(1)
-      .exec();
+    const cart = await findLatestCart(userId);
 
-    if (!cart[0]) {
+    if (!cart) {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
     }
 
@@ -94,16 +95,16 @@ const createOrder = async (req, res) => {
     const newAddress = await existAddress.save();
 
     const order = new Order({
-      cart: cart[0]._id,
+      cart: cart._id,
       shippingAddress: newAddress,
       paymentMethod: req.body.paymentMethod,
-      itemsPrice: cart[0].totalPrice,
+      itemsPrice: cart.totalPrice,
       user: userId,
     });
 
-    await order.save();
+    const savedOrder = await order.save();
 
-    const createdOrder = await Order.findOne({ user: userId }).populate('cart');
+    const createdOrder = await Order.findById(savedOrder._id).populate('cart');
 
     return sendRes(res, HTTP_STATUS_CODES.CREATED, 'Order created successfully.', createdOrder);
   } catch (error) {
@@ -141,6 +142,7 @@ const makePaymentOrder = async (req, res) => {
 
 const changeOrder = async (req, res) => {
   try {
+    const userId = req.user._id;
     const { orderId } = req.params;
     const updateFields = { ...req.body };
 
@@ -155,12 +157,9 @@ const changeOrder = async (req, res) => {
     if (updateFields.status === 'Відправлено' &&
       order.status === 'Комплектується') {
 
-      const cart = await Cart.find({ user: req.user._id })
-        .sort({ createdAt: -1 })
-        .limit(1)
-        .exec();
+      const cart = await findLatestCart(userId);
 
-      for (const cartItem of cart[0].items) {
+      for (const cartItem of cart.items) {
         const product = await Product.findById(cartItem.product);
 
         if (product) {
@@ -172,7 +171,7 @@ const changeOrder = async (req, res) => {
         }
       }
 
-      const newCart = new Cart({ user: req.user._id, items: [] });
+      const newCart = new Cart({ user: userId, items: [] });
       await newCart.save();
 
       order.status = 'Відправлено';
