@@ -8,7 +8,7 @@ import {
   MESSAGES
 } from '../utils/constants.js';
 import sendRes from '../utils/handleResponse.js';
-import findLatestCart from '../utils/findLatestCart.js';
+import CartService from '../services/cartService.js';
 
 const getAllOrders = async (req, res) => {
   const { status } = req.query;
@@ -60,7 +60,7 @@ const createOrder = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const cart = await findLatestCart(userId);
+    const cart = await CartService.findLatestCart(userId);
 
     if (!cart) {
       return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
@@ -154,7 +154,7 @@ const changeOrder = async (req, res) => {
     if (updateFields.status === 'Відправлено' &&
       order.status === 'Комплектується') {
 
-      const cart = await findLatestCart(userId);
+      const cart = await CartService.findLatestCart(userId);
 
       for (const cartItem of cart.items) {
         const product = await Product.findById(cartItem.product);
