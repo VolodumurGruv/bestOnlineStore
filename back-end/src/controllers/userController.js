@@ -14,6 +14,7 @@ import {
   MESSAGES
 } from '../utils/constants.js';
 import sendRes from '../utils/handleResponse.js';
+import UserService from '../services/userService.js';
 
 const getAllUsers = async (req, res) => {
   try {
@@ -337,52 +338,15 @@ const updateProfile = async (req, res) => {
   }
 };
 
-const isAdmin = (user) => user.isAdmin === true;
-
 const deleteUser = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-
-    if (user) {
-      if (isAdmin(user)) {
-        return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.CANNOT_DELETE_ADMIN);
-      } else {
-        const deletedUser = await user.remove();
-        return sendRes(res, HTTP_STATUS_CODES.OK, 'User deleted.', {
-          user: deletedUser
-        });
-      }
-    } else {
-      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
-    }
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
-  }
+  const result = await UserService.deleteUser(req.params.id);
+  return sendRes(res, result.status, result.message, result.data);
 };
 
 const updateUser = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-
-    if (!user) {
-      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
-    }
-
-    user.firstName = req.body.firstName || user.firstName;
-    user.lastName = req.body.lastName || user.lastName;
-    user.email = req.body.email || user.email;
-    user.phone = req.body.phone || user.phone;
-    user.isAdmin = req.body.isAdmin || user.isAdmin;
-    user.isAnonymous = req.body.isAnonymous || user.isAnonymous;
-
-    const updatedUser = await user.save();
-
-    return sendRes(res, HTTP_STATUS_CODES.OK, 'User updated.', updatedUser);
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
-  }
+  const result = await UserService.updateUser(req.params.id, req.body);
+  return sendRes(res, result.status, result.message, result.data);
 };
-
 export {
   getAllUsers,
   registerUser,
