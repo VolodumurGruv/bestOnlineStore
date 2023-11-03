@@ -64,7 +64,13 @@ const MESSAGES = {
   INTERNAL_SERVER_ERROR: 'Internal Server Error.',
 };
 
+const TOKEN_DURATIONS = {
+  USER: '3d',
+  ANONYMOUS: '365d',
+};
+
 export {
   HTTP_STATUS_CODES,
-  MESSAGES
+  MESSAGES,
+  TOKEN_DURATIONS
 };

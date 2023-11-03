@@ -11,7 +11,8 @@ import sendEmail from '../utils/email.js';
 import logger from '../utils/logger.js';
 import {
   HTTP_STATUS_CODES,
-  MESSAGES
+  MESSAGES,
+  TOKEN_DURATIONS
 } from '../utils/constants.js';
 import sendRes from '../utils/handleResponse.js';
 import UserService from '../services/userService.js';
@@ -74,7 +75,7 @@ const registerUser = async (req, res, next, anonymous = null) => {
 
     const createdUser = await user.save();
 
-    const token = generateToken(createdUser);
+    const token = generateToken(createdUser, TOKEN_DURATIONS.USER);
 
     const newUser = {
       _id: createdUser._id,
@@ -131,7 +132,7 @@ const registerUserByGoogle = async (req, res) => {
     const existingAnonUser = await User.findById(userId);
 
     if (existingUser) {
-      const token = generateToken(existingUser);
+      const token = generateToken(existingUser, TOKEN_DURATIONS.USER);
 
       const userPayload = {
         _id: existingUser._id,
@@ -154,7 +155,7 @@ const registerUserByGoogle = async (req, res) => {
 
       const createdUser = await existingAnonUser.save();
 
-      const token = generateToken(createdUser);
+      const token = generateToken(createdUser, TOKEN_DURATIONS.USER);
 
       return sendRes(res, HTTP_STATUS_CODES.CREATED, MESSAGES.NEW_USER_CREATED, { createdUser, token });
     } else {
@@ -168,7 +169,7 @@ const registerUserByGoogle = async (req, res) => {
 
       const createdUser = await user.save();
 
-      const token = generateToken(createdUser);
+      const token = generateToken(createdUser, TOKEN_DURATIONS.USER);
 
       const newUser = {
         _id: createdUser._id,
@@ -197,7 +198,7 @@ const signInUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && bcrypt.compareSync(password, user.password)) {
-      const token = generateToken(user);
+      const token = generateToken(user, TOKEN_DURATIONS.USER);
 
       return sendRes(res, HTTP_STATUS_CODES.OK, 'User signed in successfully.', {
         _id: user._id,
@@ -263,7 +264,7 @@ const restorePassword = async (req, res) => {
     }
 
     const updatedUser = await user.save();
-    const newToken = generateToken(updatedUser);
+    const newToken = generateToken(updatedUser, TOKEN_DURATIONS.USER);
 
     return sendRes(res, HTTP_STATUS_CODES.OK, 'New password created.', newToken);
   } catch (error) {
