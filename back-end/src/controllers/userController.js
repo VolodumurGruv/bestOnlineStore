@@ -126,11 +126,11 @@ const registerUserByGoogle = async (req, res) => {
     const userJSON = await userInfoResponse.json();
 
     const existingUser = await User.findOne({ email: userJSON.email });
-    const { authorization = '@#$' } = req.headers;
+    /*    const { authorization = '@#$' } = req.headers;
     const decodedToken = jwt.verify(authorization, `${process.env.JWT_SECRET}`);
     const userId = decodedToken._id;
     const existingAnonUser = await User.findById(userId);
-
+*/
     if (existingUser) {
       const token = generateToken(existingUser, TOKEN_DURATIONS.USER);
 
@@ -146,7 +146,7 @@ const registerUserByGoogle = async (req, res) => {
       };
 
       return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.GOOGLE_ACCESS_VERIFIED, userPayload);
-    } else if (existingAnonUser) {
+      /*    } else if (existingAnonUser) {
       existingAnonUser.googleId = userJSON.sub;
       existingAnonUser.firstName = userJSON.given_name || '';
       existingAnonUser.lastName = userJSON.family_name || '';
@@ -158,7 +158,7 @@ const registerUserByGoogle = async (req, res) => {
       const token = generateToken(createdUser, TOKEN_DURATIONS.USER);
 
       return sendRes(res, HTTP_STATUS_CODES.CREATED, MESSAGES.NEW_USER_CREATED, { createdUser, token });
-    } else {
+*/    } else {
       const user = new User({
         googleId: userJSON.sub,
         firstName: userJSON.given_name || '',
