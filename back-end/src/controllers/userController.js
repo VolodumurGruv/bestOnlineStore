@@ -126,7 +126,7 @@ const registerUserByGoogle = async (req, res) => {
     const userJSON = await userInfoResponse.json();
 
     const existingUser = await User.findOne({ email: userJSON.email });
-    const { authorization } = req.headers;
+    const { authorization = '@#$' } = req.headers;
     const decodedToken = jwt.verify(authorization, `${process.env.JWT_SECRET}`);
     const userId = decodedToken._id;
     const existingAnonUser = await User.findById(userId);
