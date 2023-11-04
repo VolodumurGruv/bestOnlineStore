@@ -36,7 +36,7 @@ export class SortingComponent {
   }
 
   sortByNew(): Product[] {
-    return this.products.filter((item) => item.new);
+    return this.products.sort((a, b) => Number(b.new) - Number(a.new));
   }
 
   sortByLowerPrice(): Product[] {

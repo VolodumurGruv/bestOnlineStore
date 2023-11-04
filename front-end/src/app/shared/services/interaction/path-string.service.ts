@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Product } from '@interfaces/product.interfaces';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -12,15 +11,15 @@ export class PathStringService {
   public pathCategory$ = this.pathCategory.asObservable();
   public pathSubCategory$ = this.pathSubCategory.asObservable();
 
-  makePathCategory(product: Product) {
-    if (product.category) {
-      this.pathCategory.next(product.category);
+  makePathCategory(category: string) {
+    if (category) {
+      this.pathCategory.next(category);
     }
   }
 
-  makePathSubCategory(product: Product) {
-    if (product.subcategory) {
-      this.pathSubCategory.next(product.subcategory);
+  makePathSubCategory(subcategory: string) {
+    if (subcategory) {
+      this.pathSubCategory.next(subcategory);
     }
   }
 }

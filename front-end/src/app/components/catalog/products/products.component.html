@@ -32,5 +32,6 @@
 <app-filters
   *ngIf="isClickFilter"
   [isClickFilter]="isClickFilter"
+  [subCategory]="subCategory"
   (isClickFilterChange)="onIsClickFilterChange($event)"
 ></app-filters>

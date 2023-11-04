@@ -4,6 +4,7 @@
       #input
       class="input__search"
       type="text"
+      (keyup.enter)="searchBtn(input.value)"
       (keyup)="search(input.value)"
       placeholder="Пошук"
     />
@@ -21,7 +22,7 @@
         *ngFor="let item of answer"
         class="search__item"
         [appEnPath]="item"
-        (click)="clearOnClick()"
+        (click)="clearBox()"
       >
         {{ item.name }}
       </li>

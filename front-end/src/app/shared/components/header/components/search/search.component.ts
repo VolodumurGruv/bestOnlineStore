@@ -28,7 +28,11 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.unSub.add(
       this.productService
         .getAllProducts()
-        .pipe(tap((res) => (this.products = res)))
+        .pipe(
+          tap((res) => {
+            this.products = res;
+          })
+        )
         .subscribe()
     );
   }
@@ -53,7 +57,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     );
   }
 
-  clearOnClick() {
+  clearBox() {
     this.answer = [];
   }
 
