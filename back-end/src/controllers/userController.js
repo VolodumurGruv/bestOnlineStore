@@ -4,7 +4,6 @@ import { validationResult } from 'express-validator';
 import User from '../models/userSchema.js';
 import Order from '../models/orderSchema.js';
 import Review from '../models/reviewSchema.js';
-import ShippingAddress from '../models/shippingAddressSchema.js';
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/token.js';
 import sendEmail from '../utils/email.js';
@@ -282,61 +281,9 @@ const getUserById = async (req, res) => {
     return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while fetching user by ID.', error);
   }
 };
-
 const updateProfile = async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id);
-
-    if (user) {
-      user.firstName = req.body.firstName || user.firstName;
-      user.lastName = req.body.lastName || user.lastName;
-      user.email = req.body.email || user.email;
-      user.phone = req.body.phone || user.phone;
-
-      if (!user.isAnonymous === true &&
-          !user.googleId &&
-          !bcrypt.compareSync(req.body.password, user.password)) {
-        return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.INVALID_CREDENTIALS);
-      }
-
-      let address = await ShippingAddress.findOne({ user: req.user._id });
-
-      if (address) {
-        address.deliveryMethod = req.body.deliveryMethod || address.deliveryMethod;
-        address.address = req.body.address || address.address;
-        address.city = req.body.city || address.city;
-        address.country = req.body.country || address.country;
-        address.postalCode = req.body.postalCode || address.postalCode;
-        address.novaPoshtaAddress = req.body.novaPoshtaAddress || address.novaPoshtaAddress;
-      } else {
-        address = new ShippingAddress({
-          user: req.user._id,
-          deliveryMethod: req.body?.deliveryMethod,
-          address: req?.body.address,
-          city: req.body?.city,
-          country: req.body?.country,
-          postalCode: req.body?.postalCode,
-          novaPoshtaAddress: req.body?.novaPoshtaAddress
-        });
-      }
-
-      const updatedAddress = await address.save();
-
-      user.shippingAddress = updatedAddress._id;
-
-      const updatedUser = await user.save();
-
-      const populatedUser = await User.findById(updatedUser._id)
-        .select('-password -isAdmin -resetPasswordToken -resetPasswordExpires')
-        .populate('shippingAddress');
-
-      return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.USER_WAS_UPDATED, {
-        user: populatedUser
-      });
-    }
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while updating user profile.', error);
-  }
+  const result = await UserService.updateProfile(req.user._id, req.body);
+  return sendRes(res, result.status, result.message, result.data);
 };
 
 const deleteUser = async (req, res) => {

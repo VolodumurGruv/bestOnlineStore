@@ -1,10 +1,81 @@
 import User from '../models/userSchema.js';
+import ShippingAddress from '../models/shippingAddressSchema.js';
+import bcrypt from 'bcryptjs';
 import {
   HTTP_STATUS_CODES,
   MESSAGES
 } from '../utils/constants.js';
 
 class UserService {
+  static async updateProfile(userId, requestBody) {
+    try {
+      const user = await User.findById(userId);
+
+      if (user) {
+        user.firstName = requestBody.firstName || user.firstName;
+        user.lastName = requestBody.lastName || user.lastName;
+        user.email = requestBody.email || user.email;
+        user.phone = requestBody.phone || user.phone;
+
+        if (
+          !user.isAnonymous === true &&
+          !user.googleId &&
+          !bcrypt.compareSync(requestBody.password, user.password)
+        ) {
+          return {
+            status: HTTP_STATUS_CODES.BAD_REQUEST,
+            message: MESSAGES.INVALID_CREDENTIALS,
+            data: null,
+          };
+        }
+
+        let address = await ShippingAddress.findOne({ user: userId });
+
+        if (address) {
+          address.deliveryMethod = requestBody.deliveryMethod || address.deliveryMethod;
+          address.address = requestBody.address || address.address;
+          address.city = requestBody.city || address.city;
+          address.country = requestBody.country || address.country;
+          address.postalCode = requestBody.postalCode || address.postalCode;
+          address.novaPoshtaAddress = requestBody.novaPoshtaAddress || address.novaPoshtaAddress;
+        } else {
+          address = new ShippingAddress({
+            user: userId,
+            deliveryMethod: requestBody.deliveryMethod,
+            address: requestBody.address,
+            city: requestBody.city,
+            country: requestBody.country,
+            postalCode: requestBody.postalCode,
+            novaPoshtaAddress: requestBody.novaPoshtaAddress,
+          });
+        }
+
+        const updatedAddress = await address.save();
+        user.shippingAddress = updatedAddress._id;
+
+        const updatedUser = await user.save();
+
+        const populatedUser = await User.findById(updatedUser._id)
+          .select('-password -isAdmin -resetPasswordToken -resetPasswordExpires')
+          .populate('shippingAddress');
+
+        return {
+          status: HTTP_STATUS_CODES.OK,
+          message: MESSAGES.USER_WAS_UPDATED,
+          data: {
+            user: populatedUser,
+          },
+        };
+      }
+    } catch (error) {
+      return {
+        status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: 'Error while updating user profile.',
+        data: error,
+      };
+    }
+  }
+
   static async deleteUser(userId) {
     try {
       const user = await User.findById(userId);
