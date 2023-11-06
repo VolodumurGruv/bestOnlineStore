@@ -1,4 +1,6 @@
 import User from '../models/userSchema.js';
+import Order from '../models/orderSchema.js';
+import Review from '../models/reviewSchema.js';
 import ShippingAddress from '../models/shippingAddressSchema.js';
 import bcrypt from 'bcryptjs';
 import {
@@ -7,6 +9,44 @@ import {
 } from '../utils/constants.js';
 
 class UserService {
+  static async getUserById(userId) {
+    try {
+      const user = await User.findById(userId)
+        .populate('shippingAddress')
+        .populate('wishList')
+        .select('-password -resetPasswordToken -resetPasswordExpires');
+
+      const orders = await Order.find({ user: userId });
+      const reviews = await Review.find({ user: userId });
+
+      const userData = {
+        user: user,
+        orders: orders,
+        reviews: reviews
+      };
+
+      if (user) {
+        return {
+          status: HTTP_STATUS_CODES.OK,
+          message: 'User was found.',
+          data: userData,
+        };
+      } else {
+        return {
+          status: HTTP_STATUS_CODES.NOT_FOUND,
+          message: MESSAGES.USER_NOT_FOUND,
+          data: null,
+        };
+      }
+    } catch (error) {
+      return {
+        status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: 'Error while fetching user by ID.',
+        data: error,
+      };
+    }
+  }
+
   static async updateProfile(userId, requestBody) {
     try {
       const user = await User.findById(userId);

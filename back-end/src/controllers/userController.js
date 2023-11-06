@@ -2,8 +2,6 @@ import jwt from 'jsonwebtoken';
 import fetch from 'node-fetch';
 import { validationResult } from 'express-validator';
 import User from '../models/userSchema.js';
-import Order from '../models/orderSchema.js';
-import Review from '../models/reviewSchema.js';
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/token.js';
 import sendEmail from '../utils/email.js';
@@ -256,31 +254,11 @@ const restorePassword = async (req, res) => {
 };
 
 const getUserById = async (req, res) => {
-  try {
-    const userId = req.params.id;
-    const user = await User.findById(userId)
-      .populate('shippingAddress')
-      .populate('wishList')
-      .select('-password -resetPasswordToken -resetPasswordExpires');
-
-    const orders = await Order.find({ user: userId });
-    const reviews = await Review.find({ user: userId });
-
-    const userData = {
-      user: user,
-      orders: orders,
-      reviews: reviews
-    };
-
-    if (user) {
-      return sendRes(res, HTTP_STATUS_CODES.OK, 'User was found.', userData);
-    } else {
-      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
-    }
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while fetching user by ID.', error);
-  }
+  const userId = req.params.id;
+  const result = await UserService.getUserById(userId);
+  return sendRes(res, result.status, result.message, result.data);
 };
+
 const updateProfile = async (req, res) => {
   const result = await UserService.updateProfile(req.user._id, req.body);
   return sendRes(res, result.status, result.message, result.data);
