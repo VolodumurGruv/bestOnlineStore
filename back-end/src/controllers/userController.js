@@ -13,6 +13,7 @@ import {
 } from '../utils/constants.js';
 import sendRes from '../utils/handleResponse.js';
 import UserService from '../services/userService.js';
+import AuthService from '../services/authService.js';
 
 const getAllUsers = async (req, res) => {
   try {
@@ -174,29 +175,8 @@ const registerUserByGoogle = async (req, res) => {
 
 const signInUser = async (req, res) => {
   const { email, password } = req.body;
-
-  try {
-    const user = await User.findOne({ email });
-
-    if (user && bcrypt.compareSync(password, user.password)) {
-      const token = generateToken(user, TOKEN_DURATIONS.USER);
-
-      return sendRes(res, HTTP_STATUS_CODES.OK, 'User signed in successfully.', {
-        _id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        phone: user.phone,
-        isAdmin: user.isAdmin,
-        isAnonymous: user.isAnonymous,
-        token,
-      });
-    } else {
-      return sendRes(res, HTTP_STATUS_CODES.UNAUTHORIZED, MESSAGES.INVALID_CREDENTIALS);
-    }
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while signing in user.', error);
-  }
+  const result = await AuthService.signInUser(email, password);
+  return sendRes(res, result.status, result.message, result.data);
 };
 
 const initRestorePassword = async (req, res) =>  {
