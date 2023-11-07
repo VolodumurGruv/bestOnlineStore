@@ -179,58 +179,16 @@ const signInUser = async (req, res) => {
   return sendRes(res, result.status, result.message, result.data);
 };
 
-const initRestorePassword = async (req, res) =>  {
+const initRestorePassword = async (req, res) => {
   const { email } = req.body;
-
-  try {
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
-    }
-
-    const token = generateToken(user, '5m');
-
-    //    const resetLink = `https://online-store-api-714z.onrender.com/reset-password?token=${token}`;
-    const resetLink = `https://volodumurgruv.github.io/bestOnlineStore/login?token=${token}`;
-
-    user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 3600000/12;
-    await user.save();
-
-    sendEmail(email, 'Password restore', resetLink);
-
-    return sendRes(res, HTTP_STATUS_CODES.OK, 'Посилання для відновлення паролю надіслано на ваш email.');
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
-  }
+  const result = await AuthService.initRestorePassword(email);
+  return sendRes(res, result.status, result.message, result.data);
 };
 
 const restorePassword = async (req, res) => {
   const { token, newPassword } = req.body;
-
-  if (!token || !newPassword) {
-    return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.INVALID_CREDENTIALS);
-  }
-
-  try {
-    const user = await User.findOne({ resetPasswordToken: token });
-
-    if (!user || user.resetPasswordExpires < Date.now()) {
-      return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, 'Your token has expired.');
-    }
-
-    if (req.body.newPassword) {
-      user.password = bcrypt.hashSync(req.body.newPassword, 12);
-    }
-
-    const updatedUser = await user.save();
-    const newToken = generateToken(updatedUser, TOKEN_DURATIONS.USER);
-
-    return sendRes(res, HTTP_STATUS_CODES.OK, 'New password created.', newToken);
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
-  }
+  const result = await AuthService.restorePassword(token, newPassword);
+  return sendRes(res, result.status, result.message, result.data);
 };
 
 const getUserById = async (req, res) => {

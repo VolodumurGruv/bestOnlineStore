@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/userSchema.js';
 import generateToken from '../utils/token.js';
+import sendEmail from '../utils/email.js';
 import {
   HTTP_STATUS_CODES,
   MESSAGES,
@@ -45,6 +46,82 @@ class AuthService {
     }
   }
 
+  static async initRestorePassword(email) {
+    try {
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        return {
+          status: HTTP_STATUS_CODES.NOT_FOUND,
+          message: MESSAGES.USER_NOT_FOUND,
+          data: null,
+        };
+      }
+
+      const token = generateToken(user, TOKEN_DURATIONS.RESET);
+
+      const resetLink = `https://volodumurgruv.github.io/bestOnlineStore/login?token=${token}`;
+
+      user.resetPasswordToken = token;
+      user.resetPasswordExpires = Date.now() + 3600000/12;
+      await user.save();
+
+      sendEmail(email, 'Password restore', resetLink);
+
+      return {
+        status: HTTP_STATUS_CODES.OK,
+        message: 'Посилання для відновлення паролю надіслано на ваш email.',
+        data: null,
+      };
+    } catch (error) {
+      return {
+        status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: MESSAGES.INTERNAL_SERVER_ERROR,
+        data: error,
+      };
+    }
+  }
+
+  static async restorePassword(token, newPassword) {
+    if (!token || !newPassword) {
+      return {
+        status: HTTP_STATUS_CODES.BAD_REQUEST,
+        message: MESSAGES.INVALID_CREDENTIALS,
+        data: null,
+      };
+    }
+
+    try {
+      const user = await User.findOne({ resetPasswordToken: token });
+
+      if (!user || user.resetPasswordExpires < Date.now()) {
+        return {
+          status: HTTP_STATUS_CODES.BAD_REQUEST,
+          message: 'Your token has expired.',
+          data: null,
+        };
+      }
+
+      if (newPassword) {
+        user.password = bcrypt.hashSync(newPassword, 12);
+      }
+
+      const updatedUser = await user.save();
+      const newToken = generateToken(updatedUser, TOKEN_DURATIONS.USER);
+
+      return {
+        status: HTTP_STATUS_CODES.OK,
+        message: 'New password created.',
+        data: newToken,
+      };
+    } catch (error) {
+      return {
+        status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: MESSAGES.INTERNAL_SERVER_ERROR,
+        data: error,
+      };
+    }
+  }
 }
 
 export default AuthService;

@@ -67,6 +67,7 @@ const MESSAGES = {
 const TOKEN_DURATIONS = {
   USER: '3d',
   ANONYMOUS: '365d',
+  RESET: '5m',
 };
 
 export {
