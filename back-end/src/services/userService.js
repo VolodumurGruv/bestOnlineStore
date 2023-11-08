@@ -3,12 +3,109 @@ import Order from '../models/orderSchema.js';
 import Review from '../models/reviewSchema.js';
 import ShippingAddress from '../models/shippingAddressSchema.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import generateToken from '../utils/token.js';
+import sendEmail from '../utils/email.js';
 import {
   HTTP_STATUS_CODES,
-  MESSAGES
+  MESSAGES,
+  TOKEN_DURATIONS
 } from '../utils/constants.js';
 
 class UserService {
+  static async getAllUsers() {
+    try {
+      const users = await User.find({}, '-password -resetPasswordToken -resetPasswordExpires');
+      return {
+        status: HTTP_STATUS_CODES.OK,
+        message: MESSAGES.ALL_USERS_FETCHED,
+        data: users,
+      };
+    } catch (error) {
+      return {
+        status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: MESSAGES.ERROR_FETCHING_USERS,
+        data: error,
+      };
+    }
+  }
+
+  static async registerUser(firstName, lastName, password, email, phone, anonymous, authorization) {
+    try {
+      const isExist = await User.findOne({ email: email });
+      console.log(isExist);
+      if (isExist) throw new Error('User with this email is existing!.');
+
+      const hashedPassword = bcrypt.hashSync(password, 12);
+
+      let user;
+
+      if (authorization) {
+        try {
+          const decodedToken = jwt.verify(authorization, `${process.env.JWT_SECRET}`);
+          const userId = decodedToken._id;
+
+          user = await User
+            .findById(userId)
+            .select('-password -resetPasswordToken -resetPasswordExpires');
+
+          if (user) {
+            user.firstName = firstName;
+            user.lastName = lastName;
+            user.password = hashedPassword;
+            user.email = email;
+            user.phone = phone || user.phone;
+            user.isAnonymous = false;
+          }
+        } catch (error) {
+          return {
+            status: HTTP_STATUS_CODES.NOT_FOUND,
+            message: MESSAGES.USER_NOT_FOUND,
+            data: error,
+          };
+        }
+      } else {
+        user = new User({
+          firstName,
+          lastName,
+          password: hashedPassword,
+          email,
+          phone: phone || null,
+          isAnonymous: !!anonymous,
+        });
+      }
+
+      const createdUser = await user.save();
+
+      const token = generateToken(createdUser, TOKEN_DURATIONS.USER);
+
+      const newUser = {
+        _id: createdUser._id,
+        firstName: createdUser.firstName,
+        lastName: createdUser.lastName,
+        email: createdUser.email,
+        phone: createdUser.phone,
+        isAdmin: createdUser.isAdmin,
+        isAnonymous: createdUser.isAnonymous,
+        token
+      };
+
+      anonymous ? void(0) : sendEmail(email);
+
+      return {
+        status: HTTP_STATUS_CODES.CREATED,
+        message: MESSAGES.NEW_USER_CREATED,
+        data: newUser,
+      };
+    } catch (error) {
+      return {
+        status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: MESSAGES.INTERNAL_SERVER_ERROR,
+        data: error.message,
+      };
+    }
+  }
+
   static async getUserById(userId) {
     try {
       const user = await User.findById(userId)
@@ -28,7 +125,7 @@ class UserService {
       if (user) {
         return {
           status: HTTP_STATUS_CODES.OK,
-          message: 'User was found.',
+          message: MESSAGES.USER_WAS_FOUND,
           data: userData,
         };
       } else {
@@ -41,7 +138,7 @@ class UserService {
     } catch (error) {
       return {
         status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-        message: 'Error while fetching user by ID.',
+        message: MESSAGES.ERROR_FETCHING_USER,
         data: error,
       };
     }
@@ -110,7 +207,7 @@ class UserService {
     } catch (error) {
       return {
         status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-        message: 'Error while updating user profile.',
+        message: MESSAGES.ERROR_USER_PROFILE,
         data: error,
       };
     }
@@ -131,7 +228,7 @@ class UserService {
           const deletedUser = await user.remove();
           return {
             status: HTTP_STATUS_CODES.OK,
-            message: 'User deleted.',
+            message: MESSAGES.USER_WAS_UPDATED,
             data: {
               user: deletedUser
             },
@@ -176,7 +273,7 @@ class UserService {
 
       return {
         status: HTTP_STATUS_CODES.OK,
-        message: 'User updated.',
+        message: MESSAGES.USER_WAS_UPDATED,
         data: updatedUser,
       };
     } catch (error) {

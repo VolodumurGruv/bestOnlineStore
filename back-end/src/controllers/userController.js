@@ -1,11 +1,8 @@
-import jwt from 'jsonwebtoken';
 import fetch from 'node-fetch';
 import { validationResult } from 'express-validator';
 import User from '../models/userSchema.js';
-import bcrypt from 'bcryptjs';
 import generateToken from '../utils/token.js';
 import sendEmail from '../utils/email.js';
-import logger from '../utils/logger.js';
 import {
   HTTP_STATUS_CODES,
   MESSAGES,
@@ -16,83 +13,20 @@ import UserService from '../services/userService.js';
 import AuthService from '../services/authService.js';
 
 const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find({}, '-password -resetPasswordToken -resetPasswordExpires');
-    return sendRes(res, HTTP_STATUS_CODES.OK, 'All users fetched successfully.', users);
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while fetching all users.', error);
-  }
+  const result = await UserService.getAllUsers();
+  return sendRes(res, result.status, result.message, result.data);
 };
 
 const registerUser = async (req, res, next, anonymous = null) => {
-  const { firstName, lastName, password, email, phone } = anonymous || req.body;
+  const errors = validationResult(req);
 
-  try {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
-    }
-
-    const hashedPassword = bcrypt.hashSync(password, 12);
-
-    let user;
-
-    const { authorization } = req.headers;
-
-    if (authorization) {
-      try {
-        const decodedToken = jwt.verify(authorization, `${process.env.JWT_SECRET}`);
-        const userId = decodedToken._id;
-
-        user = await User
-          .findById(userId)
-          .select('-password -resetPasswordToken -resetPasswordExpires');
-
-        if (user) {
-          user.firstName = firstName;
-          user.lastName = lastName;
-          user.password = hashedPassword;
-          user.email = email;
-          user.phone = phone || user.phone;
-          !!anonymous;
-        }
-      } catch (error) {
-        logger.error(error);
-      }
-    } else {
-      user = new User({
-        firstName,
-        lastName,
-        password: hashedPassword,
-        email,
-        phone: phone || null,
-        isAnonymous: !!anonymous
-      });
-    }
-
-    const createdUser = await user.save();
-
-    const token = generateToken(createdUser, TOKEN_DURATIONS.USER);
-
-    const newUser = {
-      _id: createdUser._id,
-      firstName: createdUser.firstName,
-      lastName: createdUser.lastName,
-      email: createdUser.email,
-      phone: createdUser.phone,
-      isAdmin: createdUser.isAdmin,
-      isAnonymous: createdUser.isAnonymous,
-      token
-    };
-
-    anonymous ? void(0) : sendEmail(email);
-
-    return sendRes(res, HTTP_STATUS_CODES.CREATED, MESSAGES.NEW_USER_CREATED, newUser);
-
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error.message);
+  if (!errors.isEmpty()) {
+    return sendRes(res, HTTP_STATUS_CODES.BAD_REQUEST, MESSAGES.MISSING_REQUIRED_FIELDS, errors.array());
   }
+
+  const { firstName, lastName, password, email, phone } = anonymous || req.body;
+  const result = await UserService.registerUser(firstName, lastName, password, email, phone, anonymous, req.headers.authorization);
+  return sendRes(res, result.status, result.message, result.data);
 };
 
 const registerAnonymous = async (req, res, next) => {

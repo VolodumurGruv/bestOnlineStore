@@ -9,7 +9,7 @@ import logger from './utils/logger.js';
 const configureApp = (app) => {
   const limiter = RateLimit({
     windowMs: 1 * 60 * 1000,
-    max: 10
+    max: 50
   });
 
   const corsOptions = {

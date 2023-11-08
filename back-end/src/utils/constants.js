@@ -12,6 +12,11 @@ const HTTP_STATUS_CODES = {
 
 const MESSAGES = {
   MISSING_REQUIRED_FIELDS: 'Missing required fields.',
+  ALL_USERS_FETCHED: 'All users fetched successfully.',
+  ERROR_FETCHING_USERS: 'Error while fetching all users.',
+  ERROR_FETCHING_USER:'Error while fetching user by ID.',
+  ERROR_USER_PROFILE: 'Error while updating user profile.',
+  USER_DELETED: 'User deleted.',
   EMPTY_QUERY_ERROR: 'Your query have a nullable length.',
   ORDER_NOT_FOUND: 'Order was not found.',
   PRODUCT_NOT_FOUND: 'Product not found.',
@@ -23,6 +28,7 @@ const MESSAGES = {
   GOOGLE_FETCH_FAILURE: 'Failed to fetch user information from Google.',
   GOOGLE_ACCESS_VERIFIED: 'Successfully verify Google access token.',
   USER_NOT_FOUND: 'User not found.',
+  USER_WAS_FOUND: 'User was found.',
   USER_WAS_UPDATED: 'User was updated.',
   USER_CART_IN_PAYLOAD: 'User cart in payload.',
   CONSUMER_CART_EMPTY: 'Consumer cart is empty.',
