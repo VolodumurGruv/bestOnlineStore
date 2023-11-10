@@ -33,7 +33,7 @@ class UserService {
   static async registerUser(firstName, lastName, password, email, phone, anonymous, authorization) {
     try {
       const isExist = await User.findOne({ email: email });
-      console.log(isExist);
+
       if (isExist) throw new Error('User with this email is existing!.');
 
       const hashedPassword = bcrypt.hashSync(password, 12);
@@ -225,10 +225,10 @@ class UserService {
             data: null,
           };
         } else {
-          const deletedUser = await user.remove();
+          const deletedUser = await user.deleteOne();
           return {
             status: HTTP_STATUS_CODES.OK,
-            message: MESSAGES.USER_WAS_UPDATED,
+            message: MESSAGES.USER_DELETED,
             data: {
               user: deletedUser
             },
