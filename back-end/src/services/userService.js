@@ -106,6 +106,88 @@ class UserService {
     }
   }
 
+  static async registerUserByGoogle(body) {
+    const { gtoken } = body;
+
+    try {
+      const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: {
+          'Authorization': `Bearer ${gtoken}`
+        }
+      });
+
+      if (!userInfoResponse.ok) {
+        return {
+          status: HTTP_STATUS_CODES.NOT_FOUND,
+          message: MESSAGES.GOOGLE_FETCH_FAILURE,
+          data: null
+        };
+      }
+
+      const userJSON = await userInfoResponse.json();
+
+      const existingUser = await User.findOne({ email: userJSON.email });
+
+      if (existingUser) {
+        const token = generateToken(existingUser, TOKEN_DURATIONS.USER);
+
+        const userPayload = {
+          _id: existingUser._id,
+          firstName: existingUser.firstName,
+          lastName: existingUser.lastName,
+          email: existingUser.email,
+          phone: existingUser.phone,
+          isAdmin: existingUser.isAdmin,
+          isAnonymous: existingUser.isAnonymous,
+          token
+        };
+
+        return {
+          status: HTTP_STATUS_CODES.OK,
+          message: MESSAGES.GOOGLE_ACCESS_VERIFIED,
+          data: userPayload
+        };
+      } else {
+        const user = new User({
+          googleId: userJSON.sub,
+          firstName: userJSON.given_name || '',
+          lastName: userJSON.family_name || '',
+          email: userJSON.email,
+          isAnonymous: false
+        });
+
+        const createdUser = await user.save();
+
+        const token = generateToken(createdUser, TOKEN_DURATIONS.USER);
+
+        const newUser = {
+          _id: createdUser._id,
+          firstName: createdUser.firstName,
+          lastName: createdUser.lastName,
+          email: createdUser.email,
+          phone: createdUser.phone,
+          isAdmin: createdUser.isAdmin,
+          isAnonymous: createdUser.isAnonymous,
+          token
+        };
+
+        sendEmail(createdUser.email);
+
+        return {
+          status: HTTP_STATUS_CODES.CREATED,
+          message: MESSAGES.NEW_USER_CREATED,
+          data: newUser
+        };
+      }
+    } catch (error) {
+      return {
+        status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
+        message: MESSAGES.INTERNAL_SERVER_ERROR,
+        data: error
+      };
+    }
+  }
+
   static async getUserById(userId) {
     try {
       const user = await User.findById(userId)

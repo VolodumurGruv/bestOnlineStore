@@ -1,12 +1,7 @@
-import fetch from 'node-fetch';
 import { validationResult } from 'express-validator';
-import User from '../models/userSchema.js';
-import generateToken from '../utils/token.js';
-import sendEmail from '../utils/email.js';
 import {
   HTTP_STATUS_CODES,
-  MESSAGES,
-  TOKEN_DURATIONS
+  MESSAGES
 } from '../utils/constants.js';
 import sendRes from '../utils/handleResponse.js';
 import UserService from '../services/userService.js';
@@ -42,69 +37,8 @@ const registerAnonymous = async (req, res, next) => {
 };
 
 const registerUserByGoogle = async (req, res) => {
-  const { gtoken } = req.body;
-
-  try {
-    const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-      headers: {
-        'Authorization': `Bearer ${gtoken}`
-      }
-    });
-
-    if (!userInfoResponse.ok) {
-      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.GOOGLE_FETCH_FAILURE);
-    }
-
-    const userJSON = await userInfoResponse.json();
-
-    const existingUser = await User.findOne({ email: userJSON.email });
-
-    if (existingUser) {
-      const token = generateToken(existingUser, TOKEN_DURATIONS.USER);
-
-      const userPayload = {
-        _id: existingUser._id,
-        firstName: existingUser.firstName,
-        lastName: existingUser.lastName,
-        email: existingUser.email,
-        phone: existingUser.phone,
-        isAdmin: existingUser.isAdmin,
-        isAnonymous: existingUser.isAnonymous,
-        token
-      };
-
-      return sendRes(res, HTTP_STATUS_CODES.OK, MESSAGES.GOOGLE_ACCESS_VERIFIED, userPayload);
-    } else {
-      const user = new User({
-        googleId: userJSON.sub,
-        firstName: userJSON.given_name || '',
-        lastName: userJSON.family_name || '',
-        email: userJSON.email,
-        isAnonymous: false
-      });
-
-      const createdUser = await user.save();
-
-      const token = generateToken(createdUser, TOKEN_DURATIONS.USER);
-
-      const newUser = {
-        _id: createdUser._id,
-        firstName: createdUser.firstName,
-        lastName: createdUser.lastName,
-        email: createdUser.email,
-        phone: createdUser.phone,
-        isAdmin: createdUser.isAdmin,
-        isAnonymous: createdUser.isAnonymous,
-        token
-      };
-
-      sendEmail(createdUser.email);
-
-      return sendRes(res, HTTP_STATUS_CODES.CREATED, MESSAGES.NEW_USER_CREATED, newUser);
-    }
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
-  }
+  const result = await UserService.registerUserByGoogle(req.body);
+  return sendRes(res, result.status, result.message, result.data);
 };
 
 const signInUser = async (req, res) => {
