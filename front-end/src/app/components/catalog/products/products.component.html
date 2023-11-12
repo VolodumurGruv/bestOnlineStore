@@ -30,8 +30,10 @@
   </div>
 </section>
 <app-filters
+  [products]="products"
   *ngIf="isClickFilter"
   [isClickFilter]="isClickFilter"
   [subCategory]="subCategory"
   (isClickFilterChange)="onIsClickFilterChange($event)"
+  (filteredProducts)="filteredProducts($event)"
 ></app-filters>

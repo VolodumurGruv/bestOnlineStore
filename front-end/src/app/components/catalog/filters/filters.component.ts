@@ -10,10 +10,13 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { map } from 'rxjs';
 
-import { Filter, FilterCategory } from '@interfaces/filters-data';
-import { PathStringService } from '@shared/services/interaction/path-string.service';
+import { FilterCategory } from '@interfaces/filters-data';
 import { filters } from '@interfaces/filters-data';
 import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import {
+  Product,
+  ProductCharacteristics,
+} from '@interfaces/product.interfaces';
 
 @Component({
   selector: 'app-filters',
@@ -25,7 +28,9 @@ import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 export class FiltersComponent implements OnInit {
   @Input() isClickFilter!: boolean;
   @Input() subCategory!: string;
+  @Input() products: Product[] = [];
   @Output() isClickFilterChange = new EventEmitter<boolean>();
+  @Output() filteredProducts = new EventEmitter<Product[]>();
 
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
@@ -33,7 +38,7 @@ export class FiltersComponent implements OnInit {
   public filter!: FilterCategory;
 
   public filterNames = this.fb.group({
-    name: this.fb.array([this.fb.group({ value: [''], checked: false })]),
+    name: this.fb.array([this.fb.control('')]),
   });
 
   ngOnInit(): void {
@@ -57,21 +62,32 @@ export class FiltersComponent implements OnInit {
     return this.filterNames.get('name') as FormArray;
   }
 
-  setValue(item: string, checked: any) {
-    console.log(checked.value);
-    this.name.value.forEach((val: any, i: number) => {
-      if (val === item) {
-        this.name.removeAt(i);
-      }
-    });
-
-    if (!this.name.value.includes(item)) {
+  setValue(item: string, checked: string) {
+    if (checked === 'off') {
+      const id = this.name.value.indexOf(item);
+      this.name.removeAt(id);
+    } else if (!this.name.value.includes(item)) {
       this.name.push(this.fb.control(item));
     }
   }
 
   filterBy() {
-    console.log(this.name.value);
+    let filteredProducts: Product[] | undefined = [];
+    this.name.value.forEach((filter: string) => {
+      console.log(filter);
+      filteredProducts = this.products.filter((product) =>
+        product.characteristics?.some(
+          (characteristic) =>
+            characteristic.value.toLowerCase() == filter.toLowerCase()
+        )
+      );
+    });
+
+    if (filteredProducts.length) {
+      this.filteredProducts.emit(filteredProducts);
+    } else {
+      this.filteredProducts.emit([]);
+    }
   }
 
   isOpen(i: number) {

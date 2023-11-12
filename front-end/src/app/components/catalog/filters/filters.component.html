@@ -26,7 +26,7 @@
                 #checkbox
                 type="checkbox"
                 class="hidden-checkbox"
-                (click)="setValue(subFilter, checkbox)"
+                (click)="setValue(subFilter, checkbox.value)"
                 (click)="checkbox.value = checkbox.value == 'on' ? 'off' : 'on'"
               />
               {{ subFilter }}

@@ -1,4 +1,11 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductsService } from '@shared/services/products.service';
 import { Product } from '@interfaces/product.interfaces';
@@ -19,15 +26,23 @@ export class SearchComponent implements OnInit, OnDestroy {
   private readonly productService = inject(ProductsService);
   private readonly router = inject(Router);
   private readonly searchResult = inject(SearchResultService);
+  private readonly elementRef = inject(ElementRef);
   private readonly unSub = new Subscription();
   private products!: Product[];
 
   public answer: Product[] = [];
 
+  @HostListener('document:click', ['$event']) onClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!this.elementRef.nativeElement.contains(target)) {
+      this.answer = [];
+    }
+  }
+
   ngOnInit(): void {
     this.unSub.add(
       this.productService
-        .getAllProducts()
+        .getProductsPerPage('perPage', 1000)
         .pipe(
           tap((res) => {
             this.products = res;
