@@ -37,7 +37,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   private readonly alertService = inject(AlertService);
   private unSub = new Subscription();
   public isClickFilter: boolean = false;
-  private page = 'page';
+  public page = 'page';
   svg = svg;
   products!: Product[];
   subCategory!: string;

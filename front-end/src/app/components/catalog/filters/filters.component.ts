@@ -8,15 +8,13 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
-import { map } from 'rxjs';
+import { Observable, forkJoin, map, of, switchMap, tap } from 'rxjs';
 
 import { FilterCategory } from '@interfaces/filters-data';
 import { filters } from '@interfaces/filters-data';
 import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import {
-  Product,
-  ProductCharacteristics,
-} from '@interfaces/product.interfaces';
+import { Product } from '@interfaces/product.interfaces';
+import { ProductsService } from '@shared/services/products.service';
 
 @Component({
   selector: 'app-filters',
@@ -28,12 +26,15 @@ import {
 export class FiltersComponent implements OnInit {
   @Input() isClickFilter!: boolean;
   @Input() subCategory!: string;
+  @Input() page!: string;
+  @Input() currentPage!: number;
   @Input() products: Product[] = [];
   @Output() isClickFilterChange = new EventEmitter<boolean>();
   @Output() filteredProducts = new EventEmitter<Product[]>();
 
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
+  private readonly productService = inject(ProductsService);
 
   public filter!: FilterCategory;
 
@@ -46,7 +47,6 @@ export class FiltersComponent implements OnInit {
       .pipe(
         map((res: UrlSegment[]): FilterCategory => {
           const key = res[1].path;
-          console.log(key);
 
           if (key in filters) {
             this.filter = (filters as any)[key] as FilterCategory;
@@ -72,22 +72,42 @@ export class FiltersComponent implements OnInit {
   }
 
   filterBy() {
-    let filteredProducts: Product[] | undefined = [];
-    this.name.value.forEach((filter: string) => {
-      console.log(filter);
-      filteredProducts = this.products.filter((product) =>
+    this.productService
+      .getSubcategoryPerPage(this.page, this.currentPage, this.subCategory)
+      .pipe(
+        switchMap((res: Product[]): Observable<Product[][]> => {
+          const filterObservables: Observable<Product[]> = this.name.value.map(
+            (filter: string) => this.filterProducts(res, filter)
+          );
+          return forkJoin(filterObservables);
+        })
+      )
+      .subscribe((res: Product[][]) => {
+        const filteredProducts = res.reduce(
+          (acc, curr) => acc.concat(curr),
+          []
+        );
+
+        if (filteredProducts.length > 0) {
+          this.filteredProducts.emit(filteredProducts);
+        } else {
+          this.filteredProducts.emit([]);
+        }
+      });
+  }
+
+  private filterProducts(
+    products: Product[],
+    filter: string
+  ): Observable<Product[]> {
+    return of(
+      products.filter((product) =>
         product.characteristics?.some(
           (characteristic) =>
             characteristic.value.toLowerCase() == filter.toLowerCase()
         )
-      );
-    });
-
-    if (filteredProducts.length) {
-      this.filteredProducts.emit(filteredProducts);
-    } else {
-      this.filteredProducts.emit([]);
-    }
+      )
+    );
   }
 
   isOpen(i: number) {
