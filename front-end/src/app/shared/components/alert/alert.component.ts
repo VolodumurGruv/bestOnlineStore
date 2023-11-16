@@ -12,7 +12,7 @@ import { AlertService } from '@shared/services/interaction/alert.service';
 })
 export class AlertComponent implements OnInit, OnDestroy {
   private unSub!: Subscription;
-  private delay: number = 15000;
+  private delay: number = 2500;
   public text!: string;
   public errorText!: string;
   public alertClass = {

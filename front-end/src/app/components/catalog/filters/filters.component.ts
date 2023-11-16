@@ -88,11 +88,7 @@ export class FiltersComponent implements OnInit {
           []
         );
 
-        if (filteredProducts.length > 0) {
-          this.filteredProducts.emit(filteredProducts);
-        } else {
-          this.filteredProducts.emit([]);
-        }
+        this.filteredProducts.emit(filteredProducts);
       });
   }
 

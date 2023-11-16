@@ -86,9 +86,7 @@ export class ProductsService {
   searchProduct(pr: string) {
     return this.http.get(`${configs.URL}/product/search?keyword=${pr}`).pipe(
       map((res: any) => res.payload),
-      catchError(
-        this.errorHandler.handleError<Product>('Не вдалося отримати дані!')
-      )
+      catchError(this.errorHandler.handleError<Product>('Товар не знайдено!'))
     );
   }
 
