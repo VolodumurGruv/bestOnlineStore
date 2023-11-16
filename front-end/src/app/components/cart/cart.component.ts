@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
 
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,8 +15,16 @@ import { CartAdComponent } from './cart-ad/cart-ad.component';
   providers: [{ provide: CartService }],
 })
 export class CartComponent {
+  @HostListener('document:click', ['$event']) onClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (target.className === 'shadow') {
+      this.close();
+    }
+  }
+
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly elementRef = inject(ElementRef);
   isAdv = true;
 
   close() {
