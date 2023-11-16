@@ -11,9 +11,9 @@ export class HttpErrorHandlerService {
   handleError<T>(operation: string, result?: T) {
     return (error: any): Observable<T> => {
       this.alertService.danger(
-        operation,
+        operation
         // error.message.split(' ').splice(0, 3).join(' ')
-        error?.error.text
+        // error?.error.text
       );
 
       return of(result as T);

@@ -74,7 +74,9 @@ export class CartOrdersComponent
         .pipe(
           map((res: any) => {
             this.total = res.payload.totalPrice;
-            this.orders = res.payload.items;
+            this.orders = res.payload.items.filter(
+              (item: Orders) => item.quantity
+            );
 
             if (!this.orders?.length) {
               this.advertisement.emit(false);
