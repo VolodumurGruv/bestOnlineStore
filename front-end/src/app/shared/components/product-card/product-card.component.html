@@ -22,16 +22,16 @@
         navigateToProduct(product.category, product.subcategory, product._id)
       "
     >
-      <div class="product-card__picture">
-        <img
-          class="product-card__image"
-          width="360"
-          height="360"
-          alt="{{ product.name }}"
-          *ngIf="product.baseImage"
-          [ngSrc]="product.baseImage"
-        />
-      </div>
+      <!-- <div class="product-card__picture"> -->
+      <img
+        class="product-card__image"
+        width="360"
+        height="360"
+        alt="{{ product.name }}"
+        *ngIf="product.baseImage"
+        [ngSrc]="product.baseImage"
+      />
+      <!-- </div> -->
     </div>
 
     <h3 class="product-card__name">{{ product.name }}</h3>

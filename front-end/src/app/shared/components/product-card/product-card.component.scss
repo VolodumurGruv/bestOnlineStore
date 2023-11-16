@@ -12,6 +12,8 @@
     padding: 8px 12px;
     background-color: $sale-color;
     position: absolute;
+    left: 0;
+    top: 16px;
   }
 
   &__like {
@@ -39,12 +41,11 @@
     }
   }
 
-  &__image,
-  &__placeholder {
-    width: 360px;
-    height: 360px;
-    object-fit: contain;
-    background-color: $main-color;
+  &__image {
+    // width: 360px;
+    // height: 360px;
+    // object-fit: contain;
+    // background-color: $main-color;
     margin-bottom: 32px;
   }
 
