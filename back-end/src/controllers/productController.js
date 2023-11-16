@@ -1,10 +1,9 @@
 import { validationResult } from 'express-validator';
-import Product from '../models/productSchema.js';
+import sendRes from '../utils/handleResponse.js';
 import {
   HTTP_STATUS_CODES,
   MESSAGES
 } from '../utils/constants.js';
-import sendRes from '../utils/handleResponse.js';
 import ProductService from '../services/productService.js';
 
 const getAllProducts = async (req, res) => {
@@ -30,62 +29,26 @@ const searchProducts = async (req, res) => {
 };
 
 const getProductById = async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id).populate('reviews');
-    if (product) {
-      return sendRes(res, HTTP_STATUS_CODES.OK, 'Product found.', product);
-    } else {
-      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
-    }
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while fetching product by ID.', error);
-  }
+  const result = await ProductService.getProductById(req.params.id);
+  return sendRes(res, result.status, result.message, result.data);
 };
 
 const createProduct = async (req, res) => {
-  try {
-    const newProductData = req.body;
-    const newProduct = await Product.create(newProductData);
-
-    newProduct.markModified('characteristics');
-    const createdProduct = await newProduct.save();
-
-    return sendRes(res, HTTP_STATUS_CODES.CREATED, 'Product created.', createdProduct);
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while creating product.', error);
-  }
+  const newProductData = req.body;
+  const result = await ProductService.createProduct(newProductData);
+  return sendRes(res, result.status, result.message, result.data);
 };
 
 const updateProduct = async (req, res) => {
-  try {
-    const productId = req.params.id;
-    const refreshedProduct = await Product.findByIdAndUpdate(productId, req.body, { new: true });
-
-    if (refreshedProduct) {
-      refreshedProduct.markModified('characteristics');
-      const updatedProduct = await refreshedProduct.save();
-
-      return sendRes(res, HTTP_STATUS_CODES.OK, 'Product updated.', updatedProduct);
-    } else {
-      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
-    }
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while updating product.', error);
-  }
+  const productId = req.params.id;
+  const result = await ProductService.updateProduct(productId, req.body);
+  return sendRes(res, result.status, result.message, result.data);
 };
 
 const deleteProduct = async (req, res) => {
-  try {
-    const productId = req.params.id;
-    const deletedProduct = await Product.findByIdAndRemove(productId);
-    if (deletedProduct) {
-      return sendRes(res, HTTP_STATUS_CODES.OK, 'Product deleted.', deletedProduct);
-    } else {
-      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.PRODUCT_NOT_FOUND);
-    }
-  } catch (error) {
-    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while deleting product.', error);
-  }
+  const productId = req.params.id;
+  const result = await ProductService.deleteProduct(productId);
+  return sendRes(res, result.status, result.message, result.data);
 };
 
 export {
