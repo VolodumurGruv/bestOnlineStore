@@ -11,6 +11,7 @@ import {
   MESSAGES,
   TOKEN_DURATIONS
 } from '../utils/constants.js';
+import userNameRegex from '../utils/userNameRegex.js';
 
 class UserService {
   static async getAllUsers() {
@@ -228,10 +229,8 @@ class UserService {
 
   static async updateProfile(userId, requestBody) {
     try {
-      const regex = /^[A-Za-zА-Яа-яІіЇїЄєҐґ']{3,30}(?:-[A-Za-zА-Яа-яІіЇїЄєҐґ']{3,30}){0,1}$/;
-
-      if (requestBody.firstName && !regex.test(requestBody.firstName) ||
-        requestBody.lastName && !regex.test(requestBody.lastName)) {
+      if (requestBody.firstName && !userNameRegex.test(requestBody.firstName) ||
+        requestBody.lastName && !userNameRegex.test(requestBody.lastName)) {
         return {
           status: HTTP_STATUS_CODES.BAD_REQUEST,
           message: 'User name should be string.',
