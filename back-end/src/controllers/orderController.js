@@ -1,11 +1,14 @@
 import Order from '../models/orderSchema.js';
+import Cart from '../models/cartSchema.js';
+import ShippingAddress from '../models/shippingAddressSchema.js';
+import Product from '../models/productSchema.js';
 import sendEmail from '../utils/email.js';
-import logger from '../utils/logger.js';
 import {
   HTTP_STATUS_CODES,
   MESSAGES
 } from '../utils/constants.js';
-import handleResponse from '../utils/handleResponse.js';
+import sendRes from '../utils/handleResponse.js';
+import CartService from '../services/cartService.js';
 
 const getAllOrders = async (req, res) => {
   const { status } = req.query;
@@ -14,15 +17,12 @@ const getAllOrders = async (req, res) => {
     const orders = await Order.find(status ? { status } : {}).populate('user', 'name');
 
     if (!orders || orders.length === 0) {
-      logger.error(MESSAGES.ORDER_NOT_FOUND);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
 
-    logger.info('All orders fetched successfully');
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'All orders in payload.', orders);
+    return sendRes(res, HTTP_STATUS_CODES.OK, 'All orders in payload.', orders);
   } catch (error) {
-    logger.error('Error while fetching all orders', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while fetching all orders.', error);
   }
 };
 
@@ -30,73 +30,86 @@ const getOrderHistory = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const orders = await Order.find({ user: userId });
+    const orders = await Order.find({ user: userId })
+      .populate('cart');
 
-    logger.info('Order(s) fetched for user: ', req.user._id);
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Your order(s) in payload.', orders);
+    return sendRes(res, HTTP_STATUS_CODES.OK, 'Your order(s) in payload.', orders);
   } catch (error) {
-    logger.error('Error while getting order history: ', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while getting order history.', error);
   }
 };
 
 const getOrderById = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id)
+      .populate('cart')
+      .populate('shippingAddress');
+
     if (order) {
-      logger.info('Order found by ID:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order found.', order);
+      const { image } = order.cart?.items[0] || '';
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'Order found.', { order, image });
     } else {
-      logger.error('Order not found by ID:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
   } catch (error) {
-    logger.error('Error while fetching order by ID:', req.params.id, error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while fetching order by ID.', error);
   }
 };
 
 const createOrder = async (req, res) => {
-  if (!req.user || !req.user._id) {
-    return handleResponse(res, HTTP_STATUS_CODES.UNAUTHORIZED, 'Unauthorized');
-  }
   try {
-    const {
-      orderItems,
-      shippingAddress,
-      paymentMethod,
-      itemsPrice,
-      totalPrice,
-      isPaid
-    } = req.body;
+    const userId = req.user._id;
 
-    const newOrderData = {
-      orderItems,
-      shippingAddress,
-      paymentMethod,
-      itemsPrice,
-      totalPrice,
-      user: req.user._id,
-      isPaid,
-      paidAt: Date.now(),
-      paymentResult: {
-        id: 'real_payment_id',
-        status: 'success',
-        update_time: Date.now(),
-        email_address: req.user.email,
-      },
-    };
+    const cart = await CartService.findLatestCart(userId);
 
-    const createdOrder = await Order.create(newOrderData);
-    logger.info('Order created:', createdOrder._id);
-    return handleResponse(res, HTTP_STATUS_CODES.CREATED, 'success', 'Order created.', createdOrder);
+    if (!cart) {
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, 'Consumer cart is empty.');
+    }
+
+    let existAddress = await ShippingAddress.findOne({ user: userId });
+
+    if (!existAddress) {
+      existAddress = new ShippingAddress({
+        user: userId,
+        address: req.body.address,
+        city: req.body.city,
+        country: req.body.country,
+        postalCode: req.body.postalCode,
+        deliveryMethod: req.body.deliveryMethod,
+        novaPoshtaAddress: req.body.novaPoshtaAddress,
+      });
+    } else {
+      const { address, city, country, postalCode, deliveryMethod, novaPoshtaAddress } = req.body;
+
+      existAddress.address = address || existAddress.address;
+      existAddress.city = city || existAddress.city;
+      existAddress.country = country || existAddress.country;
+      existAddress.postalCode = postalCode || existAddress.postalCode;
+      existAddress.deliveryMethod = deliveryMethod || existAddress.deliveryMethod;
+      existAddress.novaPoshtaAddress = novaPoshtaAddress || existAddress.novaPoshtaAddress;
+    }
+
+    const newAddress = await existAddress.save();
+
+    const order = new Order({
+      cart: cart._id,
+      shippingAddress: newAddress,
+      paymentMethod: req.body.paymentMethod,
+      itemsPrice: cart.totalPrice,
+      user: userId,
+    });
+
+    const savedOrder = await order.save();
+
+    const createdOrder = await Order.findById(savedOrder._id).populate('cart');
+
+    return sendRes(res, HTTP_STATUS_CODES.CREATED, 'Order created successfully.', createdOrder);
   } catch (error) {
-    logger.error('Error while creating order', error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.DATABASE_ERROR, error);
   }
 };
 
-const updateOrder = async (req, res) => {
+const makePaymentOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (order) {
@@ -114,42 +127,67 @@ const updateOrder = async (req, res) => {
       const updatedOrder = await order.save();
 
       sendEmail(req.user.email, 'Changes on your order', `Order ${req.params.id} was paid.`);
-      logger.info('Order paid:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order has been paid.', updatedOrder);
+
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'Order has been paid.', updatedOrder);
     } else {
-      logger.error('Order not found for payment:', req.params.id);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
   } catch (error) {
-    logger.error('Error while updating order to paid:', req.params.id, error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
-const changeStatus = async (req, res) => {
-  const { orderId } = req.params;
-  const updateFields = { ...req.body };
-
+const changeOrder = async (req, res) => {
   try {
-    const order = await Order.findByIdAndUpdate(
-      orderId,
-      {
-        updateFields
-      },
-      { new: true }
-    );
+    const userId = req.user._id;
+    const { orderId } = req.params;
+    const updateFields = { ...req.body };
+
+    const order = await Order.findById(orderId);
 
     if (!order) {
-      logger.error('Order not found for update:', orderId);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
+    }
+
+    let updatedOrder = null;
+
+    if (updateFields.status === 'Відправлено' &&
+      order.status === 'Комплектується') {
+
+      const cart = await CartService.findLatestCart(userId);
+
+      for (const cartItem of cart.items) {
+        const product = await Product.findById(cartItem.product);
+
+        if (product) {
+          const quantityToReduce = cartItem.quantity;
+          if (product.instock && quantityToReduce <= product.countInStock) {
+            product.countInStock -= quantityToReduce;
+            await product.save();
+          }
+        }
+      }
+
+      const newCart = new Cart({ user: userId, items: [] });
+      await newCart.save();
+
+      order.status = 'Відправлено';
+      updatedOrder = await order.save();
+    } else {
+      updatedOrder = await Order.findByIdAndUpdate(
+        orderId,
+        {
+          updateFields
+        },
+        { new: true }
+      );
     }
 
     sendEmail(req.user.email, 'Changes on your order', `Order ${orderId} was updated.`);
-    logger.info('Order updated:', orderId);
-    return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order updated.', order);
+
+    return sendRes(res, HTTP_STATUS_CODES.OK, 'Order updated.', updatedOrder);
   } catch (error) {
-    logger.error(error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_RVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, MESSAGES.INTERNAL_SERVER_ERROR, error);
   }
 };
 
@@ -158,15 +196,12 @@ const deleteOrder = async (req, res) => {
     const orderId = req.params.id;
     const deletedOrder = await Order.findByIdAndRemove(orderId);
     if (deletedOrder) {
-      logger.info('Order deleted:', orderId);
-      return handleResponse(res, HTTP_STATUS_CODES.OK, 'success', 'Order deleted.', deletedOrder);
+      return sendRes(res, HTTP_STATUS_CODES.OK, 'Order deleted.', deletedOrder);
     } else {
-      logger.error('Order not found for delete:', orderId);
-      return handleResponse(res, HTTP_STATUS_CODES.NOT_FOUND, 'fault', MESSAGES.ORDER_NOT_FOUND);
+      return sendRes(res, HTTP_STATUS_CODES.NOT_FOUND, MESSAGES.ORDER_NOT_FOUND);
     }
   } catch (error) {
-    logger.error('Error while deleting order:', req.params.id, error);
-    return handleResponse(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'fault', MESSAGES.INTERNAL_SERVER_ERROR, error);
+    return sendRes(res, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, 'Error while deleting order.', error);
   }
 };
 
@@ -175,7 +210,7 @@ export {
   getOrderHistory,
   getOrderById,
   createOrder,
-  updateOrder,
-  changeStatus,
+  makePaymentOrder,
+  changeOrder,
   deleteOrder,
 };

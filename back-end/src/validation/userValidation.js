@@ -1,13 +1,21 @@
 import { body } from 'express-validator';
+import userNameRegex from '../utils/userNameRegex.js';
 
 const validateUserData = [
-  body('name')
+  body('firstName')
     .exists({ checkFalsy: true })
-    .withMessage('User name is required')
+    .withMessage('User firstname is required')
     .isString()
-    .withMessage('User name should be string')
-    .matches(/^[A-Za-zА-Яа-яІіЇїЄєҐґ]{3,30}(?: [A-Za-zА-Яа-яІіЇїЄєҐґ]{3,30}){0,1}$/)
-    .withMessage('Name must be between 3 and 30 characters.'),
+    .withMessage('User firstname should be string')
+    .matches(userNameRegex)
+    .withMessage('Firstname must be between 3 and 30 characters.'),
+  body('lastName')
+    .exists({ checkFalsy: true })
+    .withMessage('User lastname is required')
+    .isString()
+    .withMessage('User lastname should be string')
+    .matches(userNameRegex)
+    .withMessage('Lastname must be between 3 and 30 characters.'),
   body('password')
     .exists()
     .withMessage('Password is required')

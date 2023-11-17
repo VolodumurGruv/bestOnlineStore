@@ -1,13 +1,17 @@
+import logger from './logger.js';
+import sendRes from './handleResponse.js';
+import {
+  HTTP_STATUS_CODES,
+  MESSAGES
+} from './constants.js';
+
 const isAdmin = (req, res, next) => {
   if (req.user && req.user.isAdmin) {
-    console.log('yes. you are admin');
+    logger.info('yes. you are admin');
     next();
   } else {
-    console.log('no. you are not admin');
-    res.status(401).json({
-      message: 'fault',
-      text: 'Wrong admin token!'
-    });
+    logger.info('no. you are not admin');
+    sendRes(res, HTTP_STATUS_CODES.UNAUTHORIZED, MESSAGES.WRONG_ADMIN_TOKEN);
   }
 };
 
