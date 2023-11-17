@@ -1,35 +1,51 @@
-@import "colors";
+@use "colors";
+@use "fonts";
 
 .header__input {
   display: flex;
-  height: 40px;
-  // width: 423px;
+  padding: 8px 16px;
+  width: 418px;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
   border-radius: 8px;
-  border: 1px solid $border-input;
+  border: 1px solid colors.$gray;
 }
 
 .input__search {
-  margin: 8px auto 8px 16px;
+  @include fonts.montserrat(20px, 400, normal, 130%);
+
   border: none;
   outline: none;
-  width: 350px;
+  width: 80%;
   flex-shrink: 0;
-
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 130%;
-  color: #000;
+  color: colors.$gray-active-input;
+  background: transparent;
 
   &::placeholder {
-    color: $input-text;
+    color: colors.$input-text;
   }
 }
 
 .btn__input__search {
   margin-right: 16px;
   cursor: pointer;
+}
+
+.search {
+  position: absolute;
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 15px;
+    position: relative;
+    background: colors.$white;
+  }
+
+  &__item {
+    cursor: pointer;
+  }
 }

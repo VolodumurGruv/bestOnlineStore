@@ -1,29 +1,41 @@
 export interface User {
-  name: string;
-  password?: string;
-  email: string;
+  firstName?: string | null | undefined;
+  lastName?: string | null | undefined;
+  password?: string | null;
+  email?: string | null | undefined;
   isAdmin?: boolean;
+  isAnonymous?: boolean;
   token?: string;
   _id?: string;
 }
 
 export interface UserInfo extends User {
-  lastName: string;
-  address: string;
-  phone: string;
-  delivery?: string;
-  department?: string;
+  shippingAddress?: {
+    name: string;
+    address: string;
+    paymentMethod: string;
+    deliveryMethod: string | null;
+    novaPoshtaAddress?: string | null;
+  };
+  phone?: string | null;
+  delivery?: string | null;
+  department?: string | null;
+  wishList?: string[];
 }
 
 export interface Orders {
-  id?: number;
+  _id: string;
+  name: string;
   image: string;
   description: string;
   price: number;
-  state?: string;
+  status?: string;
   discount?: number | undefined;
   quantity: number;
   summa?: number;
+  product: string;
+  isPaid: boolean;
+  itemsPrice?: number;
 }
 
 export interface Review {

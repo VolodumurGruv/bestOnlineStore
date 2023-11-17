@@ -1,13 +1,24 @@
 @use "logo-mixin";
-@import "colors";
+@use "colors";
+@use "fonts";
 
 .header {
-  &__box {
-    width: 1920px;
-  }
-
   &__logo {
     @include logo-mixin.logo;
+  }
+
+  &__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    width: 1555px;
+  }
+
+  &__search {
+    display: flex;
+    width: 418px;
+    padding: 8px 16px;
   }
 
   &__input {
@@ -17,7 +28,7 @@
     align-items: center;
     flex-shrink: 0;
     border-radius: 8px;
-    border: 1px solid $border-input;
+    border: 1px solid colors.$gray;
   }
 }
 
@@ -30,25 +41,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 210px;
+  flex-shrink: 0;
+  width: 1017px;
 
   &__links {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 80px;
+    flex-shrink: 0;
+    width: 719px;
   }
 
   &__link {
+    @include fonts.montserrat(20px, 400, normal, 130%);
+
     position: relative;
     padding: 5px;
     text-decoration: none;
-
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 130%;
-    color: #000;
+    color: colors.$black;
 
     &:before,
     &:after {
@@ -58,7 +68,7 @@
       right: 0;
       width: 0;
       height: 1px;
-      background-color: #000;
+      background-color: colors.$black;
       transition: width 0.4s ease-in-out;
     }
 

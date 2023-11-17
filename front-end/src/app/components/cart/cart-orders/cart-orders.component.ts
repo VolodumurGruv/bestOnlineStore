@@ -1,94 +1,166 @@
-import { Component, OnInit } from '@angular/core';
-import { NgFor } from '@angular/common';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  inject,
+} from '@angular/core';
+import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 
 import { Orders } from '@interfaces/user.interface';
 import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { CartService } from '../services/cart.service';
+import { InfoComponent } from 'app/components/user/components/info/info.component';
+import { InfoFormComponent } from '@shared/components/info-form/info-form.component';
+import { Observable, Subscription, concatMap, map, tap } from 'rxjs';
+import { OrderService } from '@shared/services/order.service';
+import { IconComponent } from '@shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-cart-orders',
   standalone: true,
-  imports: [NgFor, TransformPricePipe, FormsModule],
+  imports: [
+    NgFor,
+    NgIf,
+    AsyncPipe,
+    JsonPipe,
+    TransformPricePipe,
+    FormsModule,
+    RouterLink,
+    InfoComponent,
+    InfoFormComponent,
+    IconComponent,
+  ],
   templateUrl: './cart-orders.component.html',
   styleUrls: ['./cart-orders.component.scss'],
 })
-export class CartOrdersComponent implements OnInit {
+export class CartOrdersComponent
+  implements OnInit, AfterViewChecked, OnDestroy
+{
+  @Output() advertisement = new EventEmitter<boolean>();
+  @ViewChild(InfoFormComponent) infoForm!: InfoFormComponent;
+
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly cartService = inject(CartService);
+  private readonly orderService = inject(OrderService);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private unSub = new Subscription();
   public maxQuantity = 100;
   public minQuantity = 1;
-  public total = 0;
+  public total!: number;
 
-  public orders: Orders[] = [
-    {
-      id: 1,
-      image:
-        'https://img.freepik.com/premium-photo/blue-color-chair-product-image-web-page-scandinavian-design-clean-soft-chair-comfortable-with-copy-space-generatiev-ai_834602-16335.jpg',
-      description: 'Кавовий столик Кавовий столикКавовий столик',
-      quantity: 1,
-      price: 5500,
-      discount: 6500,
-      summa: 5500,
-    },
-    {
-      id: 2,
-      image:
-        'https://img.freepik.com/premium-photo/blue-color-chair-product-image-web-page-scandinavian-design-clean-soft-chair-comfortable-with-copy-space-generatiev-ai_834602-16335.jpg',
-      description: 'Кавовий столик ',
-      quantity: 1,
-      price: 5500,
-      summa: 5500,
-    },
-  ];
+  public isComplete = true;
+  public isCart = true;
+  public isValid = false;
+
+  public orders!: Orders[];
 
   ngOnInit(): void {
-    this.countTotal();
+    this.getCartOrders();
+    this.isCart = true;
   }
 
-  increase(id: number) {
-    if (this.orders[id].quantity < this.maxQuantity) {
-      this.orders[id].quantity += 1;
-      this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
+  getCartOrders() {
+    this.unSub.add(
+      this.cartService
+        .getCart()
+        .pipe(
+          map((res: any) => {
+            this.total = res.payload.totalPrice;
+            this.orders = res.payload.items;
+
+            if (!this.orders?.length) {
+              this.advertisement.emit(false);
+            }
+          })
+        )
+        .subscribe()
+    );
+  }
+
+  ngAfterViewChecked(): void {
+    if (!this.isComplete) {
+      this.infoForm.infoForm.get('password')?.setErrors(null);
+
+      this.isValid = this.infoForm.infoForm.valid;
+      this.isCart = true;
+      this.changeDetectorRef.detectChanges();
     }
-
-    this.checkQuantity(this.orders[id], id);
   }
 
-  decrease(id: number) {
-    if (this.orders[id].quantity > this.minQuantity) {
-      this.orders[id].quantity -= 1;
-      this.orders[id].summa = this.orders[id].price * this.orders[id].quantity;
+  increase(id: string | undefined, quantity: number) {
+    if (id && quantity) {
+      this.unSub.add(
+        this.cartService
+          .makeOrder(id, quantity + 1)
+          .pipe(
+            tap(() => {
+              this.getCartOrders();
+            })
+          )
+          .subscribe()
+      );
     }
-
-    this.checkQuantity(this.orders[id], id);
   }
 
-  checkQuantity(order: Orders, id: number) {
-    if (
-      order.quantity >= this.maxQuantity ||
-      order.quantity > this.orders[id].quantity
-    ) {
-      order.quantity = this.maxQuantity;
-      this.orders[id].quantity = order.quantity;
+  decrease(id: string | undefined, quantity: number) {
+    if (id && quantity) {
+      this.unSub.add(
+        this.cartService
+          .makeOrder(id, quantity - 1)
+          .pipe(
+            tap(() => {
+              this.getCartOrders();
+            })
+          )
+          .subscribe()
+      );
     }
+  }
 
-    if (
-      order.quantity <= this.minQuantity ||
-      order.quantity < this.orders[id].quantity
-    ) {
-      order.quantity = this.minQuantity;
-      this.orders[id].quantity = order.quantity;
+  delete(id: string) {
+    if (id) {
+      this.unSub.add(
+        this.cartService
+          .makeOrder(id, 0)
+          .pipe(
+            tap(() => {
+              this.getCartOrders();
+            })
+          )
+          .subscribe()
+      );
     }
-    this.countTotal();
   }
 
-  countTotal(): void {
-    let res = 0;
-    this.orders.forEach((order: Orders) => (res += order.summa!));
-    this.total = res;
-    console.log(this.total);
+  close() {
+    this.router.navigate([{ outlets: { cart: null } }], {
+      relativeTo: this.route.parent,
+    });
   }
 
-  delete(id: number | undefined) {
-    this.orders = this.orders.filter((order: Orders) => order.id !== id);
-    this.countTotal();
+  completeOrder() {
+    this.isComplete = false;
+    this.advertisement.emit(false);
+  }
+
+  backToCart() {
+    this.isComplete = true;
+    this.advertisement.emit(true);
+  }
+
+  submit() {
+    this.orderService.makeOrder(JSON.parse(localStorage.getItem('user')!)._id);
+  }
+
+  ngOnDestroy(): void {
+    this.unSub.unsubscribe();
   }
 }

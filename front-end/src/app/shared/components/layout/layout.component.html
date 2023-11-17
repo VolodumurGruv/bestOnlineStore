@@ -2,9 +2,8 @@
   <app-header class="header__box"></app-header>
 </header>
 <app-alert></app-alert>
-<ng-container *ngIf="spinner$ | async">
-  <app-spinner></app-spinner>
-</ng-container>
+
+<app-spinner></app-spinner>
 
 <main class="main">
   <router-outlet> </router-outlet>

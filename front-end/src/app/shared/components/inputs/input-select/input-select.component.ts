@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
+import { IconComponent } from '../../icon/icon.component';
 
 @Component({
   selector: 'app-input-select',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   templateUrl: './input-select.component.html',
   styleUrls: ['./input-select.component.scss'],
   providers: [
@@ -21,15 +23,16 @@ export class InputSelectComponent implements ControlValueAccessor {
   onTouched = () => {};
   touched = false;
   disabled = false;
-  value!: string;
-  items: string[] = [];
+  value: string = '';
+  isList = false;
+  @Input() items: string[] = [];
 
   writeValue(obj: any): void {
+    this.isList = true;
     this.value = obj;
+
     if (this.value) {
-      this.items.push(this.value);
       this.onChange(this.value);
-      console.log(this.items.length);
     }
   }
 
@@ -50,5 +53,14 @@ export class InputSelectComponent implements ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
+  }
+
+  rollUp() {
+    this.isList = !this.isList;
+  }
+
+  pickUp(item: string) {
+    this.writeValue(item);
+    this.isList = false;
   }
 }

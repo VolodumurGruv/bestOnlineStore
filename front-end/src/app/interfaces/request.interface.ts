@@ -1,19 +1,10 @@
-export interface REQUEST {
-  body: PAYLOAD;
+export interface REQUEST<T> {
+  body: PAYLOAD<T>;
 }
 
-export interface PAYLOAD {
+export interface PAYLOAD<T> {
   message: string;
-  payload: {
-    name?: string;
-    email: string;
-    _id: string;
-    token: string;
-    expDate?: string;
-    phone?: string;
-    isAdmin?: boolean;
-    isAnonymous?: boolean;
-  };
+  payload: { user: T; token: string };
   isAdmin: boolean;
   text: string;
 }

@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Orders } from '@interfaces/user.interface';
 import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
+import { OrderService } from '@shared/services/order.service';
+import { Subscription, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-orders',
@@ -10,28 +12,40 @@ import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.scss'],
 })
-export class OrdersComponent {
-  public action: string = 'Повернути';
-  public orders: Orders[] = [
-    {
-      image:
-        'https://img.freepik.com/premium-photo/blue-color-chair-product-image-web-page-scandinavian-design-clean-soft-chair-comfortable-with-copy-space-generatiev-ai_834602-16335.jpg',
-      description: 'Кавовий столик Кавовий столикКавовий столик',
-      price: 5500,
-      discount: 6500,
-      state: 'Комплектується',
-      quantity: 0,
-    },
-    {
-      image:
-        'https://img.freepik.com/premium-photo/blue-color-chair-product-image-web-page-scandinavian-design-clean-soft-chair-comfortable-with-copy-space-generatiev-ai_834602-16335.jpg',
-      description: 'Кавовий столик Кавовий столикКавовий столик',
-      price: 5500,
-      // discount: 6500,
-      state: 'Отримано',
-      quantity: 0,
-    },
-  ];
+export class OrdersComponent implements OnInit, OnDestroy {
+  private readonly orderService = inject(OrderService);
+  public orders: Orders[] = [];
+  private unSub = new Subscription();
 
-  completeAction() {}
+  ngOnInit(): void {
+    this.unSub.add(
+      this.orderService
+        .getOrderHistory()
+        .pipe(
+          tap((res) => {
+            this.orders = res;
+          })
+        )
+        .subscribe()
+    );
+  }
+
+  completeAction(id: string) {
+    this.unSub.add(
+      this.orderService
+        .deleteOrder(id)
+        .pipe(
+          switchMap(() =>
+            this.orderService
+              .getOrderHistory()
+              .pipe(tap((res) => (this.orders = res)))
+          )
+        )
+        .subscribe()
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.unSub.unsubscribe();
+  }
 }

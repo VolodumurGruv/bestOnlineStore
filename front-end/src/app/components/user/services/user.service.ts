@@ -1,56 +1,55 @@
 import { HttpClient } from '@angular/common/http';
-import { DestroyRef, Injectable, inject } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Injectable, inject } from '@angular/core';
 import { configs } from '@configs/configs';
-import { User, UserInfo } from '@interfaces/user.interface';
+import { PAYLOAD } from '@interfaces/request.interface';
+import { UserInfo } from '@interfaces/user.interface';
 import { HttpErrorHandlerService } from '@shared/services/http-error-handler.service';
-import { Observable, catchError, tap } from 'rxjs';
+import { Observable, catchError, config, map, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private readonly http = inject(HttpClient);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly httpErrorHeandler = inject(HttpErrorHandlerService);
+  private readonly httpErrorHandler = inject(HttpErrorHandlerService);
 
-  getUsers() {
-    this.http
-      .get(`${configs.URL}/user/all`)
-      .pipe(
-        catchError(
-          this.httpErrorHeandler.handleError<User>(
-            'Невдалося отримати користувачів!'
-          )
-        ),
-        takeUntilDestroyed(this.destroyRef)
+  getUsers(): Observable<UserInfo> {
+    return this.http.get<UserInfo>(`${configs.URL}/user/all`).pipe(
+      map((res: any) => res.payload),
+      catchError(
+        this.httpErrorHandler.handleError<UserInfo>(
+          'Невдалося отримати користувачів!'
+        )
       )
-      .subscribe();
+    );
   }
 
-  getUserById(userID: string): Observable<User> {
+  getUserById(userID: string): Observable<UserInfo> {
+    return this.http.get<UserInfo>(`${configs.URL}/user/${userID}`).pipe(
+      map((res: any) => {
+        return res.payload;
+      }),
+      catchError(
+        this.httpErrorHandler.handleError<UserInfo>(
+          'Невдалося отримати користувача!'
+        )
+      )
+    );
+  }
+
+  updateUser(user: UserInfo): Observable<UserInfo | PAYLOAD<UserInfo>> {
     return this.http
-      .get<User>(`${configs.URL}/user/${userID}`)
+      .put<PAYLOAD<UserInfo>>(`${configs.URL}/user/profile`, user)
       .pipe(
+        tap((res: PAYLOAD<UserInfo>) => {
+          const user = res.payload.user;
+          user.token = JSON.parse(localStorage.getItem('user')!).token;
+
+          localStorage.setItem('user', JSON.stringify(user));
+        }),
         catchError(
-          this.httpErrorHeandler.handleError<User>(
-            'Невдалося отримати користувача!'
-          )
+          this.httpErrorHandler.handleError<UserInfo>('Невдалося оновити дані!')
         )
       );
   }
-
-  updateUser(user: any) {
-    this.http
-      .put(`${configs.URL}/user/profile`, user)
-      .pipe(
-        catchError(
-          this.httpErrorHeandler.handleError<User>('Невдалося оновити дані!')
-        ),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe((res) => console.log(res));
-  }
-
-
 }

@@ -21,6 +21,8 @@ export class AlertComponent implements OnInit, OnDestroy {
     alert__warning: false,
   };
 
+  private timeout!: any;
+
   constructor(public alertService: AlertService) {}
   ngOnInit(): void {
     this.unSub = this.alertService.alert$.subscribe((alert) => {
@@ -33,17 +35,22 @@ export class AlertComponent implements OnInit, OnDestroy {
         this.errorText = alert.errorText;
       }
 
-      const timeout = setTimeout(() => {
-        clearTimeout(timeout);
-        this.text = '';
-        this.errorText = '';
+      this.timeout = setTimeout(() => {
+        clearTimeout(this.timeout);
+        this.close();
       }, this.delay);
     });
+  }
+
+  close() {
+    this.text = '';
+    this.errorText = '';
   }
 
   ngOnDestroy(): void {
     if (this.unSub) {
       this.unSub.unsubscribe();
     }
+    clearTimeout(this.timeout);
   }
 }

@@ -6,7 +6,7 @@ import { MenuComponent } from './menu/menu.component';
 
 export const CATALOG_ROUTING: Route[] = [
   {
-    path: 'catalog',
+    path: '',
     loadComponent: () =>
       import('./categories/categories.component').then(
         (m) => m.CategoriesComponent
@@ -18,15 +18,15 @@ export const CATALOG_ROUTING: Route[] = [
         pathMatch: 'full',
       },
       {
-        path: 'menu',
+        path: ':category',
         component: MenuComponent,
       },
       {
-        path: ':subcategory',
+        path: ':category/:subcategory/:id',
         component: ProductComponent,
       },
       {
-        path: ':subcategory/:id',
+        path: ':category/:subcategory',
         component: ProductsComponent,
       },
     ],

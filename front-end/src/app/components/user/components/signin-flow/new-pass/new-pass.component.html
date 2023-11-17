@@ -46,12 +46,16 @@
 
       <div class="action">
         <div>
-          <button class="btn" type="submit" [disabled]="!newPassForm.valid">
+          <button
+            class="btn btn__add"
+            type="submit"
+            [disabled]="!newPassForm.valid"
+          >
             Відновити
           </button>
         </div>
         <div>
-          <button class="btn" type="button" (click)="cancel()">
+          <button class="btn btn__add" type="button" (click)="cancel()">
             Скасувати
           </button>
         </div>

@@ -1,3 +1,5 @@
+@use "a-link";
+
 .similar-products {
   padding: 80px 0;
   text-align: center;
@@ -17,8 +19,8 @@
   }
 
   &__btn {
-    font-size: 20px;
-    font-weight: 300;
+    @include a-link.path-link;
+
     width: 274px;
     padding: 16px 32px;
     border-radius: 8px;
@@ -26,5 +28,4 @@
     background-color: transparent;
     text-transform: uppercase;
   }
-
 }

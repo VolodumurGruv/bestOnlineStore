@@ -23,12 +23,16 @@
 
       <div class="action">
         <div>
-          <button class="btn" type="submit" [disabled]="!recoverPassForm.valid">
+          <button
+            class="btn btn__buy"
+            type="submit"
+            [disabled]="!recoverPassForm.valid"
+          >
             Відновити
           </button>
         </div>
         <div>
-          <button class="btn" type="button" (click)="cancel()">
+          <button class="btn btn__add" type="button" (click)="cancel()">
             Скасувати
           </button>
         </div>

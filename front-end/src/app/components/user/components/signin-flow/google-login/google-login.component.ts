@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   Auth,
@@ -8,6 +8,9 @@ import {
   UserCredential,
   signOut,
 } from '@angular/fire/auth';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+
 import { AlertService } from '@shared/services/interaction/alert.service';
 import { AuthService } from '../../../services/signin-flow/auth.service';
 
@@ -18,11 +21,13 @@ import { AuthService } from '../../../services/signin-flow/auth.service';
   templateUrl: './google-login.component.html',
   styleUrls: ['./google-login.component.scss'],
 })
-export class GoogleLoginComponent implements OnInit {
+export class GoogleLoginComponent implements OnInit, OnDestroy {
   private readonly provider = new GoogleAuthProvider();
   private readonly auth: Auth = inject(Auth);
   private readonly alert = inject(AlertService);
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private unSub!: Subscription;
 
   ngOnInit(): void {
     if (!this.authService.isAuth()) {
@@ -47,19 +52,19 @@ export class GoogleLoginComponent implements OnInit {
           const gtoken = credential?.accessToken;
 
           if (gtoken) {
-            this.authService.googleLogin(gtoken);
+            this.unSub = this.authService.googleLogin(gtoken).subscribe(() => {
+              this.router.navigate(['/user']);
+            });
           }
         }
       })
+
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.error(errorCode, errorMessage, email, credential);
+
+        console.error(errorCode, errorMessage);
         this.alert.danger('Login with Google', errorMessage);
       });
   }
@@ -74,5 +79,10 @@ export class GoogleLoginComponent implements OnInit {
         console.error(error.message);
         this.alert.danger('Google sign out', error.message);
       });
+  }
+  ngOnDestroy(): void {
+    if (this.unSub) {
+      this.unSub.unsubscribe();
+    }
   }
 }

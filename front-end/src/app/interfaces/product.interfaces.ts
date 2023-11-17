@@ -1,17 +1,10 @@
 export interface ProductCharacteristics {
-  material: string;
-  filling: string;
-  sizes: string;
-  color: string;
-  ergonomics: string;
-  load: string;
-  functions: string;
-  additional: string;
-  care: string;
+  key: string;
+  value: string;
 }
 
 export interface Product {
-  characteristics: ProductCharacteristics;
+  characteristics?: ProductCharacteristics[];
   _id: string;
   name: string;
   descr: string;
@@ -25,12 +18,13 @@ export interface Product {
   subcategory: string;
   instock: boolean;
   countInStock: number;
-  raiting: number;
-  numReviews: number;
-  reviews: Review[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  raiting?: number;
+  numReviews?: number;
+  reviews?: Review[];
+  createdAt?: string;
+  updatedAt?: string;
+  new?: boolean;
+  __v?: number;
 }
 
 export interface Review {

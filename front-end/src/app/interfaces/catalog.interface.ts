@@ -1,11 +1,9 @@
-import {Product} from "@interfaces/product.interfaces";
 export interface SubCategory {
-  name: string,
-  routerLink: string
+  name: string;
+  routerLink: string;
+  srcImg: string;
 }
-export interface Category {
-  name: string,
-  routerLink: string,
-  showSubcategories: boolean,
+export interface Category extends SubCategory {
+  showSubcategories: boolean;
   subcategories?: SubCategory[];
 }

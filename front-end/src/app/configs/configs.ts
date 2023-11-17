@@ -19,3 +19,13 @@ export const googleLoginHeaders = {
     'A-Type': 'application/json',
   }),
 };
+
+export const uploadHeaders = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/x-www-form-urlencoded, application/json',
+  }),
+};
+
+export const routes = {
+  favorite: 'Обране',
+};

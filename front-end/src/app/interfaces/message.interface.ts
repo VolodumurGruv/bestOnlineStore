@@ -5,3 +5,7 @@ export interface Message {
 }
 
 export type Type = 'success' | 'danger' | 'warning';
+
+export interface ResMessage extends Message {
+  payload: {};
+}

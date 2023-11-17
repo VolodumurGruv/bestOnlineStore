@@ -1,14 +1,15 @@
-@use "signin";
+@use "inputs";
 @use "fonts";
 @use "flex";
-@forward "../../error-validation/error-validation.component.scss";
+@forward "../../../../../shared/components/error-validation/error-validation.component.scss";
+@forward "btn";
 
 .recover__input {
-  @include signin.input;
+  @include inputs.input;
 }
 
 .input__wrap {
-  @include signin.input-wrap;
+  @include inputs.input-wrap;
   max-width: 570px;
 }
 

@@ -1,4 +1,5 @@
-@import "colors";
+@use "colors";
+@use "fonts";
 
 .products {
   max-width: 1688px;
@@ -6,7 +7,7 @@
 
   &__path {
     text-align: center;
-    color: $light-gray;
+    color: colors.$light-gray;
     font-size: 20px;
     font-weight: 400;
     line-height: 130%; /* 26px */
@@ -20,9 +21,6 @@
     font-style: normal;
     font-weight: 500;
     line-height: 130%; /* 52px */
-  }
-
-  &__cards {
   }
 
   &__cards-sort,
@@ -70,29 +68,31 @@
     flex-wrap: wrap;
     gap: 80px;
   }
-  &__cards-sort {
-    position: relative;
-  }
+}
 
-  &__list-sort {
-    width: 240px;
-    list-style: none;
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #f5f5f5;
-    padding: 20px 24px;
-    font-size: 18px;
-    z-index: 2;
+.nav {
+  &__page {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 80px;
+    padding-top: 62px;
+    gap: 8px;
+    width: 100%;
 
-    li {
-      margin-bottom: 8px;
+    &-number {
+      @include fonts.primary-roboto(24px, 300, normal, 130%);
+
+      color: colors.$black;
+    }
+
+    &-arrow {
       cursor: pointer;
+    }
 
-      &:last-child {
-        margin-bottom: 0;
-      }
+    &-arrow-reverse {
+      cursor: pointer;
+      transform: rotate(180deg);
     }
   }
 }

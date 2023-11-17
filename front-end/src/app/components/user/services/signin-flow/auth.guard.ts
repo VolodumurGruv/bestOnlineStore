@@ -16,8 +16,12 @@ export const authGuard = () => {
     }
   }
 
-  if (authService.isAuth()) {
+  if (authService.isAuth() && !authService.isAnonym()) {
     return true;
+  }
+
+  if (localStorage.getItem('user')) {
+    localStorage.clear();
   }
 
   return router.parseUrl('/login');
@@ -27,13 +31,11 @@ export const authGuard = () => {
 export const loginGuard = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  const alert = inject(AlertService);
 
   if (!authService.isAuth()) {
     return true;
   }
-
-  alert.warning('Вхід вже здійснено!');
+  authService.signOut();
 
   return router.parseUrl('/');
 };
