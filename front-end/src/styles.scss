@@ -2,3 +2,7 @@
 @use "btn";
 @use "alerts";
 @use "colors";
+
+html {
+  background: colors.$white;
+}

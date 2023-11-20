@@ -29,14 +29,14 @@ export class CartService {
       })
       .pipe(
         tap((res: any) => {
-          if (res) this.alertService.success('Товар додано до кошика успішно!');
+          if (quantity === 0) {
+            this.alertService.warning('Товар було видалено');
+          } else if (res) {
+            this.alertService.success('Товар додано до кошика успішно!');
+          }
         }),
 
-        catchError(
-          this.handleError.handleError<PAYLOAD<Orders>>(
-            'Помилка додавання товару до кошику'
-          )
-        )
+        catchError(this.handleError.handleError<PAYLOAD<Orders>>(''))
       );
   }
 }
