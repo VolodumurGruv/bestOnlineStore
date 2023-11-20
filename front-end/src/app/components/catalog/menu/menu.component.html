@@ -3,8 +3,7 @@
     <ul class="categories__menu-side">
       <li
         *ngFor="let category of categories"
-        (mouseenter)="showSubcategories(category)"
-        (mouseleave)="hideSubcategories()"
+        (click)="showSubcategories(category)"
       >
         <a
           class="categories__menu-title"

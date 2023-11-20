@@ -15,6 +15,7 @@ import { mainCategories } from '@interfaces/catalog.data';
 export class MenuComponent {
   categories: Category[] = mainCategories;
   currentCategory!: string;
+  isOpen = false;
 
   showImg(src: string) {
     if (src !== this.currentCategory) {
@@ -23,7 +24,13 @@ export class MenuComponent {
   }
 
   showSubcategories(category: Category) {
-    category.showSubcategories = true;
+    if (!this.isOpen) {
+      category.showSubcategories = true;
+      this.isOpen = true;
+    } else {
+      this.hideSubcategories();
+      this.isOpen = false;
+    }
   }
 
   hideSubcategories() {
