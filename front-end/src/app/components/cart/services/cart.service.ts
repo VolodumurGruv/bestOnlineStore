@@ -36,7 +36,9 @@ export class CartService {
           }
         }),
 
-        catchError(this.handleError.handleError<PAYLOAD<Orders>>(''))
+        catchError(
+          this.handleError.handleError<PAYLOAD<Orders>>('Виникла помилка')
+        )
       );
   }
 }

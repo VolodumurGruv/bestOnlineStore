@@ -48,6 +48,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       this.searchResult.searchResult$
         .pipe(
           map((res) => {
+            console.log(res);
             if (res?.length) {
               this.products = res;
               this.subCategory = 'Знайдено';

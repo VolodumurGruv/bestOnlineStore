@@ -42,8 +42,9 @@ export class AboutProductComponent implements OnDestroy {
           .pipe(concatMap(() => this.cartService.makeOrder(id, quantity)))
           .subscribe()
       );
+    } else {
+      this.unSub.add(this.cartService.makeOrder(id, quantity).subscribe());
     }
-    this.unSub.add(this.cartService.makeOrder(id, quantity).subscribe());
   }
 
   addToWishList(productId: string | undefined) {
