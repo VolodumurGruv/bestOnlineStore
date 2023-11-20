@@ -39,13 +39,27 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 20px;
-    gap: 15px;
+    padding: 16px 0;
+    gap: 8px;
     position: relative;
+    width: 422px;
+    border-radius: 0px 0px 8px 8px;
     background: colors.$white;
   }
 
   &__item {
+    @include fonts.montserrat(20px, 400, normal, 130%);
+
+    display: flex;
+    padding: 8px 16px;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    color: colors.$color-text;
     cursor: pointer;
+
+    &:hover {
+      background: #e5e1e1;
+    }
   }
 }

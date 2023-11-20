@@ -52,15 +52,22 @@ export class SearchComponent implements OnInit, OnDestroy {
     );
   }
 
-  search(request: string) {
-    const req = request.toLocaleLowerCase();
-
-    this.answer = this.products.filter(
-      (item) =>
-        item.category.toLocaleLowerCase().slice(0, req.length) == req ||
-        item.subcategory.toLocaleLowerCase().slice(0, req.length) == req ||
-        item.name.toLocaleLowerCase().slice(0, req.length) == req
-    );
+  search(event: KeyboardEvent, request: string) {
+    const req = request.toLowerCase();
+    if (
+      event.key !== 'Backspace' &&
+      event.key !== 'ArrowLeft' &&
+      event.key !== 'ArrowRight' &&
+      event.key !== 'ArrowUp' &&
+      event.key !== 'ArrowDown'
+    ) {
+      this.answer = this.products.filter(
+        (item) =>
+          item.category.toLowerCase().includes(req) ||
+          item.subcategory.toLowerCase().includes(req) ||
+          item.name.toLowerCase().includes(req)
+      );
+    }
   }
 
   searchBtn(pr: string) {

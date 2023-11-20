@@ -78,7 +78,7 @@ export class ProductsService {
       .post(`${configs.URL}/product`, product)
       .pipe(
         catchError(
-          this.errorHandler.handleError<Product>('Не вдалося отримати дані!')
+          this.errorHandler.handleError<Product>('Не вдалося створити!')
         )
       );
   }
@@ -95,7 +95,7 @@ export class ProductsService {
       .put(`${configs.URL}/product/${id}`, product)
       .pipe(
         catchError(
-          this.errorHandler.handleError<Product>('Не вдалося отримати дані!')
+          this.errorHandler.handleError<Product>('Не вдалося оновити!')
         )
       );
   }
@@ -119,7 +119,7 @@ export class ProductsService {
       .delete(`${configs.URL}/product/${id}`)
       .pipe(
         catchError(
-          this.errorHandler.handleError<Product>('Не вдалося отримати дані!')
+          this.errorHandler.handleError<Product>('Не вдалося видалити дані!')
         )
       );
   }

@@ -10,9 +10,15 @@
         class="feedbacks__input-text"
         type="text"
         placeholder="Написати відгук"
+        [(ngModel)]="feedback"
       />
       <div class="feedbacks__input-file">
-        <input type="file" id="fileInput" class="feedbacks__file-input" />
+        <input
+          type="file"
+          id="fileInput"
+          [(ngModel)]="file"
+          class="feedbacks__file-input"
+        />
         <label for="fileInput" class="feedbacks__file-icon">
           <app-icon
             [path]="'attach'"
@@ -74,7 +80,7 @@
             [viewBox]="'0 0 20 21'"
           ></app-icon>
         </button>
-        <a href="">Пожалітися</a>
+        <a href="">Поскаржитись</a>
       </div>
       <div class="feedbacks__likes">
         <div class="feedbacks__like">

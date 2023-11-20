@@ -6,14 +6,13 @@ import {
   inject,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { ContactUsComponent } from '@shared/components/icons/contact-us/contact-us.component';
 import { InfoFormComponent } from '@shared/components/info-form/info-form.component';
 import { CartService } from 'app/components/cart/services/cart.service';
 
 @Component({
   selector: 'app-info',
   standalone: true,
-  imports: [ContactUsComponent, InfoFormComponent],
+  imports: [InfoFormComponent],
   templateUrl: './info.component.html',
   styleUrls: ['./info.component.scss'],
   providers: [{ provide: CartService, useClass: CartService, multi: true }],

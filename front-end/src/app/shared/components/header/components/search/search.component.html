@@ -5,7 +5,7 @@
       class="input__search"
       type="text"
       (keyup.enter)="searchBtn(input.value)"
-      (keyup)="search(input.value)"
+      (keyup)="search($event, input.value)"
       placeholder="Пошук"
     />
     <p class="btn__input__search" (click)="searchBtn(input.value)">

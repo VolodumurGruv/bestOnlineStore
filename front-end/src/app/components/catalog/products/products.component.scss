@@ -88,11 +88,13 @@
 
     &-arrow {
       cursor: pointer;
+      margin-top: 4px;
     }
 
     &-arrow-reverse {
       cursor: pointer;
       transform: rotate(180deg);
+      margin-bottom: 4px;
     }
   }
 }
