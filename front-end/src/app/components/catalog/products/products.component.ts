@@ -44,6 +44,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
   currentPage = 1;
 
   ngOnInit(): void {
+    console.log('init');
+
     this.unSub.add(
       this.searchResult.searchResult$
         .pipe(

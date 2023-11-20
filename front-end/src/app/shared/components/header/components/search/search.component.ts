@@ -73,6 +73,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   searchBtn(pr: string) {
     this.unSub.add(
       this.productService.searchProduct(pr).subscribe((res) => {
+        
         this.searchResult.passResult(res);
         this.router.navigate(['/catalog/search/result']);
       })
