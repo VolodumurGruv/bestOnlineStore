@@ -46,7 +46,7 @@
       [control]="infoForm.get('phone')"
     ></app-error-validation>
   </div>
-  <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'address')">
+  <!-- <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'address')">
     <input
       #addr
       type="text"
@@ -60,7 +60,7 @@
     <app-error-validation
       [control]="infoForm.get('address')"
     ></app-error-validation>
-  </div>
+  </div> -->
   <div [ngClass]="{ hidden: isCart }">
     <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'password')">
       <input

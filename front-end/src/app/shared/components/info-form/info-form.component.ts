@@ -75,14 +75,14 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
       ],
     ],
     email: ['', [Validators.required, Validators.email, emailValidator()]],
-    address: ['', [Validators.required]],
+    // address: ['', [Validators.required]],
     phone: [
       '',
       [
-        Validators.required,
-        Validators.minLength(9),
-        Validators.maxLength(9),
-        phoneValidator(),
+        // Validators.required,
+        // Validators.minLength(9),
+        // Validators.maxLength(9),
+        // phoneValidator(),
       ],
     ],
     password: [
@@ -94,9 +94,9 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
         passwordValidator(),
       ],
     ],
-    novaPoshtaAddress: [''],
-    deliveryMethod: ['', [Validators.required]],
-    paymentMethod: ['VISA'],
+    // novaPoshtaAddress: [''],
+    // deliveryMethod: ['', [Validators.required]],
+    // paymentMethod: ['VISA'],
   });
 
   ngOnInit() {
@@ -131,22 +131,22 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.userService.updateUser(this.infoForm.value).subscribe((res: any) => {
         setupInitialValue(this.infoForm, this.user);
 
-        this.infoForm
-          .get('deliveryMethod')
-          ?.setValue(res.payload.user.shippingAddress.deliveryMethod);
-        this.infoForm
-          .get('address')
-          ?.setValue(res.payload.user.shippingAddress.address);
+        // this.infoForm
+        //   .get('deliveryMethod')
+        //   ?.setValue(res.payload.user.shippingAddress.deliveryMethod);
+        // this.infoForm
+        //   .get('address')
+        //   ?.setValue(res.payload.user.shippingAddress.address);
       })
     );
   }
 
   makeOrder() {
-    console.log(this.infoForm.value);
-    const { address, paymentMethod, deliveryMethod, ...res } =
-      this.infoForm.value;
+    // console.log(this.infoForm.value);
+    // const { address, paymentMethod, deliveryMethod, ...res } =
+    //   this.infoForm.value;
 
-    if (address && paymentMethod && deliveryMethod) {
+    if (this.infoForm.value) {
       this.unSub.add(
         this.userService
           .updateUser(this.infoForm.value)
@@ -204,18 +204,18 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
             this.user = res.user;
             setupInitialValue(this.infoForm, this.user);
 
-            if (this.user.shippingAddress?.deliveryMethod === 'Нова пошта') {
-              this.infoForm
-                .get('novaPoshtaAddress')
-                ?.setValue(res.user.shippingAddress.novaPoshtaAddress);
-            }
+            // if (this.user.shippingAddress?.deliveryMethod === 'Нова пошта') {
+            //   this.infoForm
+            //     .get('novaPoshtaAddress')
+            //     ?.setValue(res.user.shippingAddress.novaPoshtaAddress);
+            // }
 
-            this.infoForm
-              .get('deliveryMethod')
-              ?.setValue(res.user.shippingAddress.deliveryMethod);
-            this.infoForm
-              .get('address')
-              ?.setValue(res.user.shippingAddress.address);
+            // this.infoForm
+            //   .get('deliveryMethod')
+            //   ?.setValue(res.user.shippingAddress.deliveryMethod);
+            // this.infoForm
+            //   .get('address')
+            //   ?.setValue(res.user.shippingAddress.address);
           })
         )
         .subscribe()

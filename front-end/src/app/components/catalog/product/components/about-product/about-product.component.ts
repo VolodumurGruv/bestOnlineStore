@@ -1,14 +1,15 @@
-import { Component, Input, OnDestroy, inject } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { NgClass, NgFor, NgIf, NgOptimizedImage } from '@angular/common';
 
 import { Product } from '@interfaces/product.interfaces';
 import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
 import { AuthService } from 'app/components/user/services/signin-flow/auth.service';
 import { CartService } from 'app/components/cart/services/cart.service';
-import { Subscription, concatMap, tap } from 'rxjs';
+import { Subscription, concatMap, switchMap, tap } from 'rxjs';
 import { AlertService } from '@shared/services/interaction/alert.service';
 import { WishlistService } from '@shared/services/wishlist.service';
 import { IconComponent } from '@shared/components/icon/icon.component';
+import { ActivatedRoute, ParamMap, UrlSegment } from '@angular/router';
 
 @Component({
   selector: 'app-about-product',
@@ -25,16 +26,24 @@ import { IconComponent } from '@shared/components/icon/icon.component';
   styleUrls: ['./about-product.component.scss'],
   providers: [{ provide: CartService, useClass: CartService }],
 })
-export class AboutProductComponent implements OnDestroy {
+export class AboutProductComponent implements OnInit, OnDestroy {
   @Input() product!: Product;
 
   private readonly userService = inject(AuthService);
   private readonly cartService = inject(CartService);
   private readonly alertService = inject(AlertService);
   private readonly wishService = inject(WishlistService);
+  private readonly route = inject(ActivatedRoute);
+
   private unSub = new Subscription();
 
+  ngOnInit(): void {
+    this.product.viewed = 0;
+    this.product.viewed += 1;
+  }
+
   addToCart(id: string, quantity: number) {
+    console.log(this.product?.viewed);
     if (!this.userService.isAuth()) {
       this.unSub.add(
         this.userService
