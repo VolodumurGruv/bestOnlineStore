@@ -76,15 +76,15 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     ],
     email: ['', [Validators.required, Validators.email, emailValidator()]],
     // address: ['', [Validators.required]],
-    phone: [
-      '',
-      [
-        // Validators.required,
-        // Validators.minLength(9),
-        // Validators.maxLength(9),
-        // phoneValidator(),
-      ],
-    ],
+    // phone: [
+    //   '',
+    //   [
+    //     // Validators.required,
+    //     // Validators.minLength(9),
+    //     // Validators.maxLength(9),
+    //     // phoneValidator(),
+    //   ],
+    // ],
     password: [
       '',
       [

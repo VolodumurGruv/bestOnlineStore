@@ -32,7 +32,10 @@
       [control]="infoForm.get('email')"
     ></app-error-validation>
   </div>
-  <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'phone')">
+  <!-- <div
+    class="user__wrap-input"
+    [ngClass]="isValid(infoForm, 'phone')"
+  >
     <span>
       <app-icon
         [path]="'flag'"
@@ -45,7 +48,7 @@
     <app-error-validation
       [control]="infoForm.get('phone')"
     ></app-error-validation>
-  </div>
+  </div> -->
   <!-- <div class="user__wrap-input" [ngClass]="isValid(infoForm, 'address')">
     <input
       #addr
