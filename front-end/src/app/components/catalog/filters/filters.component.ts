@@ -36,6 +36,8 @@ export class FiltersComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly productService = inject(ProductsService);
 
+  private filtered: Product[] = [];
+
   public filter!: FilterCategory;
 
   public filterNames = this.fb.group({
@@ -72,24 +74,33 @@ export class FiltersComponent implements OnInit {
   }
 
   filterBy() {
-    this.productService
-      .getSubcategoryPerPage(this.page, this.currentPage, this.subCategory)
-      .pipe(
-        switchMap((res: Product[]): Observable<Product[][]> => {
-          const filterObservables: Observable<Product[]> = this.name.value.map(
-            (filter: string) => this.filterProducts(res, filter)
-          );
-          return forkJoin(filterObservables);
-        })
-      )
-      .subscribe((res: Product[][]) => {
-        const filteredProducts = res.reduce(
-          (acc, curr) => acc.concat(curr),
-          []
-        );
+    console.log(this.filterNames.value);
+    const filters = this.filterNames.value as string[];
 
-        this.filteredProducts.emit(filteredProducts);
+    if (filters) {
+      filters.forEach((filter) => {
+        console.log(filter);
       });
+    }
+
+    // this.productService
+    //   .getSubcategoryPerPage(this.page, this.currentPage, this.subCategory)
+    //   .pipe(
+    //     switchMap((res: Product[]): Observable<Product[][]> => {
+    //       const filterObservables: Observable<Product[]> = this.name.value.map(
+    //         (filter: string) => this.filterProducts(res, filter)
+    //       );
+    //       return forkJoin(filterObservables);
+    //     })
+    //   )
+    //   .subscribe((res: Product[][]) => {
+    //     const filteredProducts = res.reduce(
+    //       (acc, curr) => acc.concat(curr),
+    //       []
+    //     );
+
+    //     this.filteredProducts.emit(filteredProducts);
+    //   });
   }
 
   private filterProducts(

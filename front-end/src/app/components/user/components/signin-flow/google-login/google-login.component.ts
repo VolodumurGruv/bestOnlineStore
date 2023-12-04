@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 
 import { AlertService } from '@shared/services/interaction/alert.service';
 import { AuthService } from '../../../services/signin-flow/auth.service';
+import { SpinnerService } from '@shared/services/interaction/spinner.service';
 
 @Component({
   selector: 'app-google-login',
@@ -27,6 +28,7 @@ export class GoogleLoginComponent implements OnInit, OnDestroy {
   private readonly alert = inject(AlertService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly spinner = inject(SpinnerService);
   private unSub!: Subscription;
 
   ngOnInit(): void {

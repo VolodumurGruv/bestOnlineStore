@@ -18,7 +18,7 @@ export interface Product {
   subcategory: string;
   instock: boolean;
   countInStock: number;
-  raiting?: number;
+  rating?: number;
   numReviews?: number;
   reviews?: Review[];
   createdAt?: string;

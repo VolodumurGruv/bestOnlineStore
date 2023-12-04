@@ -14,7 +14,7 @@ export class UserService {
   private readonly httpErrorHandler = inject(HttpErrorHandlerService);
 
   getUsers(): Observable<UserInfo> {
-    return this.http.get<UserInfo>(`${configs.URL}/user/all`).pipe(
+    return this.http.get<UserInfo>(`${configs.URL}/user`).pipe(
       map((res: any) => res.payload),
       catchError(
         this.httpErrorHandler.handleError<UserInfo>(

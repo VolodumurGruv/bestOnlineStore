@@ -1,0 +1,11 @@
+<section class="products">
+  <div class="path">
+    <span>Каталог / Новинки</span>
+  </div>
+  <div class="products__title">Новинки</div>
+  <div class="products__cards">
+    <div *ngFor="let product of products">
+      <app-product-card [product]="product"></app-product-card>
+    </div>
+  </div>
+</section>

@@ -15,7 +15,10 @@
     <div class="top__title">Новинки</div>
     <app-card class="new__box" [product]="products"></app-card>
     <div class="top__btn">
-      <button class="btn btn__add btn__card" (click)="redirect('/catalog')">
+      <button
+        class="btn btn__add btn__card"
+        (click)="redirect('/catalog/newest')"
+      >
         переглянути всі
       </button>
     </div>

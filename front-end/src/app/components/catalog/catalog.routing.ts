@@ -3,6 +3,7 @@ import { Route } from '@angular/router';
 import { ProductsComponent } from './products/products.component';
 import { ProductComponent } from './product/product.component';
 import { MenuComponent } from './menu/menu.component';
+import { NewestComponent } from './newest/newest.component';
 
 export const CATALOG_ROUTING: Route[] = [
   {
@@ -12,6 +13,7 @@ export const CATALOG_ROUTING: Route[] = [
         (m) => m.CategoriesComponent
       ),
     children: [
+      { path: 'newest', component: NewestComponent },
       {
         path: '',
         redirectTo: '/catalog/menu',
