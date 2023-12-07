@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { HttpErrorHandlerService } from './http-error-handler.service';
 import { configs } from '@configs/configs';
-import { catchError, config } from 'rxjs';
+import { Observable, catchError, config } from 'rxjs';
 import { Review } from '@interfaces/user.interface';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class ReviewService {
   private readonly http = inject(HttpClient);
   private readonly errorHandler = inject(HttpErrorHandlerService);
 
-  addReview(review: any) {
+  addReview(review: Review) {
     return this.http
       .post(`${configs.URL}/review/add`, review)
       .pipe(
@@ -23,6 +23,7 @@ export class ReviewService {
   }
 
   getReview(productId: string) {
+    console.log(productId);
     return this.http
       .get(`${configs.URL}/review/product/${productId}`)
       .pipe(

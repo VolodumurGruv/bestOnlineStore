@@ -129,7 +129,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   updateUser() {
     this.unSub.add(
       this.userService.updateUser(this.infoForm.value).subscribe((res: any) => {
-        setupInitialValue(this.infoForm, this.user);
+        setupInitialValue(this.infoForm, res.payload.user);
 
         // this.infoForm
         //   .get('deliveryMethod')

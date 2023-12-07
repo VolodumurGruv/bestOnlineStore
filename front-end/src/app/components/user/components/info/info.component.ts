@@ -29,6 +29,7 @@ export class InfoComponent implements AfterViewChecked {
     this.infoForm = this.infoFormComp.infoForm.valid;
     this.changeDetectorRef.detectChanges();
   }
+
   cancel() {
     this.infoFormComp.cancel();
   }

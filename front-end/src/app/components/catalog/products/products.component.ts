@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Event, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { Subscription, map } from 'rxjs';
 
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';

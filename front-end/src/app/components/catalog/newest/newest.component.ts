@@ -24,7 +24,10 @@ export class NewestComponent implements OnInit, OnDestroy {
       .getAllProducts()
       .pipe(
         tap((products) => {
-          this.products = products.filter((product) => product.new);
+          products.forEach((item) => {
+            console.log(item?.new);
+          });
+          this.products = products.filter((product) => product?.new);
         })
       )
       .subscribe();

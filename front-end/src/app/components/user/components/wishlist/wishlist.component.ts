@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable, Subscription, forkJoin, switchMap, map } from 'rxjs';
+import { Observable, Subscription, forkJoin, switchMap, map, of } from 'rxjs';
 
 import { WishlistService } from '@shared/services/wishlist.service';
 import { ProductsService } from '@shared/services/products.service';
@@ -47,15 +47,21 @@ export class WishlistComponent implements OnInit, OnDestroy {
           switchMap(() =>
             this.wishlistService.getWishList().pipe(
               switchMap((id: string[]) => {
-                const observables = id.map((id) => {
-                  return this.productService.getProductById(id);
-                });
-                return forkJoin(observables);
+                if (id.length) {
+                  const observables = id.map((id) => {
+                    return this.productService.getProductById(id);
+                  });
+                  return forkJoin(observables);
+                } else {
+                  return of([]);
+                }
               })
             )
           )
         )
-        .subscribe((res) => (this.wishlists = res))
+        .subscribe((res) => {
+          this.wishlists = res;
+        })
     );
   }
 

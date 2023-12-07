@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Review } from '@interfaces/user.interface';
 import { IconComponent } from '@shared/components/icon/icon.component';
+import { ReviewService } from '@shared/services/review.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-reviews',
@@ -10,7 +13,7 @@ import { IconComponent } from '@shared/components/icon/icon.component';
   templateUrl: './reviews.component.html',
   styleUrls: ['./reviews.component.scss'],
 })
-export class ReviewsComponent {
+export class ReviewsComponent implements OnInit {
   public reviews: Review[] = [
     {
       title: 'Наталі Портман',
@@ -30,4 +33,17 @@ export class ReviewsComponent {
       dislikes: 0,
     },
   ];
+
+  private readonly reviewService = inject(ReviewService);
+  private readonly route = inject(ActivatedRoute);
+
+  ngOnInit(): void {
+    this.route.paramMap
+      .pipe(
+        switchMap((params: ParamMap) => {
+          return this.reviewService.getReview(params.get('id')!);
+        })
+      )
+      .subscribe((res) => console.log(res));
+  }
 }
