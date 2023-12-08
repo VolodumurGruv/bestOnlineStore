@@ -8,13 +8,14 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
-import { Observable, forkJoin, map, of, switchMap, tap } from 'rxjs';
+import { map } from 'rxjs';
 
 import { FilterCategory } from '@interfaces/filters-data';
 import { filters } from '@interfaces/filters-data';
 import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Product } from '@interfaces/product.interfaces';
 import { ProductsService } from '@shared/services/products.service';
+import { AlertService } from '@shared/services/interaction/alert.service';
 
 @Component({
   selector: 'app-filters',
@@ -35,7 +36,9 @@ export class FiltersComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
   private readonly productService = inject(ProductsService);
+  private readonly alertService = inject(AlertService);
 
+  private filteredSet: Set<Product> = new Set();
   private filtered: Product[] = [];
 
   public filter!: FilterCategory;
@@ -74,47 +77,32 @@ export class FiltersComponent implements OnInit {
   }
 
   filterBy() {
-    console.log(this.filterNames.value);
-    const filters = this.filterNames.value as string[];
+    const filters = this.filterNames.value.name;
+    this.filteredSet.clear();
 
     if (filters) {
       filters.forEach((filter) => {
-        console.log(filter);
+        this.products.forEach((product) => {
+          product.characteristics?.forEach((item) => {
+            if (item.value.toLowerCase() === filter?.toLowerCase()) {
+              this.filteredSet.add(product);
+            }
+          });
+        });
       });
+
+      for (const item of this.filteredSet) {
+        this.filtered.push(item);
+      }
+
+      if (this.filtered.length) {
+        this.filteredProducts.emit(this.filtered);
+
+        this.updateIsClickFilter();
+      } else {
+        this.alertService.warning('Співпадінь не має!');
+      }
     }
-
-    // this.productService
-    //   .getSubcategoryPerPage(this.page, this.currentPage, this.subCategory)
-    //   .pipe(
-    //     switchMap((res: Product[]): Observable<Product[][]> => {
-    //       const filterObservables: Observable<Product[]> = this.name.value.map(
-    //         (filter: string) => this.filterProducts(res, filter)
-    //       );
-    //       return forkJoin(filterObservables);
-    //     })
-    //   )
-    //   .subscribe((res: Product[][]) => {
-    //     const filteredProducts = res.reduce(
-    //       (acc, curr) => acc.concat(curr),
-    //       []
-    //     );
-
-    //     this.filteredProducts.emit(filteredProducts);
-    //   });
-  }
-
-  private filterProducts(
-    products: Product[],
-    filter: string
-  ): Observable<Product[]> {
-    return of(
-      products.filter((product) =>
-        product.characteristics?.some(
-          (characteristic) =>
-            characteristic.value.toLowerCase() == filter.toLowerCase()
-        )
-      )
-    );
   }
 
   isOpen(i: number) {

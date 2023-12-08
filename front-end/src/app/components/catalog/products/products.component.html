@@ -15,9 +15,17 @@
   ></app-sorting>
 
   <div class="products__cards">
-    <div *ngFor="let product of products">
-      <app-product-card [product]="product"></app-product-card>
-    </div>
+    <ng-container *ngIf="filtered.length; else noFilter">
+      <div *ngFor="let product of filtered">
+        <app-product-card [product]="product"></app-product-card>
+      </div>
+    </ng-container>
+
+    <ng-template #noFilter>
+      <div *ngFor="let product of products">
+        <app-product-card [product]="product"></app-product-card>
+      </div>
+    </ng-template>
   </div>
   <div class="nav__page">
     <span class="nav__page-arrow-reverse" (click)="previousPage()">

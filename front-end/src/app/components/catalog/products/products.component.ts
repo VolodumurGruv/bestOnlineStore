@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Subscription, map } from 'rxjs';
@@ -13,7 +13,6 @@ import { PathComponent } from '@shared/components/path/path.component';
 import { svg } from '@interfaces/pictures-map';
 import { SearchResultService } from '@shared/services/interaction/search-result.service';
 import { SortingComponent } from '../sorting/sorting.component';
-import { AlertService } from '@shared/services/interaction/alert.service';
 
 @Component({
   selector: 'app-products',
@@ -34,10 +33,11 @@ export class ProductsComponent implements OnInit, OnDestroy {
   private readonly productService = inject(ProductsService);
   public readonly pathString = inject(PathStringService);
   public readonly searchResult = inject(SearchResultService);
-  private readonly alertService = inject(AlertService);
+
   private unSub = new Subscription();
   public isClickFilter: boolean = false;
   public page = 'page';
+  public filtered: Product[] = [];
   svg = svg;
   products!: Product[];
   subCategory!: string;
@@ -69,10 +69,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   filteredProducts(filtered: Product[]) {
+    console.log(filtered);
     if (filtered.length) {
-      this.products = filtered;
-    } else {
-      this.alertService.warning('співпадінь не знайдено');
+      this.filtered = filtered;
     }
   }
 
