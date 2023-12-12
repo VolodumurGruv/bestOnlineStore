@@ -69,7 +69,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   filteredProducts(filtered: Product[]) {
-    console.log(filtered);
     if (filtered.length) {
       this.filtered = filtered;
     }

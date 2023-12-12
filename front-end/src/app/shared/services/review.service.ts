@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { HttpErrorHandlerService } from './http-error-handler.service';
 import { configs } from '@configs/configs';
-import { Observable, catchError, config } from 'rxjs';
-import { Review } from '@interfaces/user.interface';
+import { catchError } from 'rxjs';
+import { Review } from '@interfaces/review.interface';
 
 @Injectable({
   providedIn: 'root',

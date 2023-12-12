@@ -1,10 +1,6 @@
 @use "colors";
 
 .feedbacks {
-  padding: 80px 0;
-  text-align: center;
-  font-size: 22px;
-
   &__title {
     margin-bottom: 45px;
     font-size: 32px;
@@ -167,14 +163,4 @@
     text-transform: uppercase;
     background-color: transparent;
   }
-}
-
-p {
-  margin-bottom: 16px;
-  font-size: 21px;
-  line-height: 136%;
-}
-
-input[type="file"] {
-  display: none;
 }

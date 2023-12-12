@@ -1,7 +1,7 @@
 .filters {
-  position: fixed;
-  right: 0;
-  top: 0;
+  position: absolute;
+  left: -240px;
+  top: 40px;
   width: 640px;
   height: 100%;
   z-index: 9999;
@@ -10,6 +10,7 @@
   &__title {
     padding: 8px 24px;
     font-size: 36px;
+    background-color: #f9f9f9;
 
     h2 {
       padding-left: 63px;
@@ -64,6 +65,7 @@
   &__items {
     padding: 0;
     list-style: none;
+    background-color: #f9f9f9;
   }
 
   &__item {

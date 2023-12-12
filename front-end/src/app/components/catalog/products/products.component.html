@@ -8,6 +8,17 @@
   <span class="products__cards-filter" (click)="isClickFilter = !isClickFilter"
     >Фільтри</span
   >
+  <app-filters
+    style="position: relative"
+    [products]="products"
+    *ngIf="isClickFilter"
+    [isClickFilter]="isClickFilter"
+    [subCategory]="subCategory"
+    [page]="page"
+    [currentPage]="currentPage"
+    (isClickFilterChange)="onIsClickFilterChange($event)"
+    (filteredProducts)="filteredProducts($event)"
+  ></app-filters>
 
   <app-sorting
     [products]="products"
@@ -37,13 +48,3 @@
     </span>
   </div>
 </section>
-<app-filters
-  [products]="products"
-  *ngIf="isClickFilter"
-  [isClickFilter]="isClickFilter"
-  [subCategory]="subCategory"
-  [page]="page"
-  [currentPage]="currentPage"
-  (isClickFilterChange)="onIsClickFilterChange($event)"
-  (filteredProducts)="filteredProducts($event)"
-></app-filters>
