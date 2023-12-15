@@ -1,0 +1,81 @@
+@use "fonts";
+@use "colors";
+
+.price_filter {
+  margin: 12px 0 72px 24px;
+
+  &__container {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 25px;
+  }
+
+  &__title {
+    @include fonts.primary-roboto(26px, 400, normal, 30.47px);
+    margin-bottom: 8px;
+  }
+
+  &__range {
+    position: relative;
+    width: 328px;
+    height: 16px;
+  }
+
+  &__items {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  &__item-input {
+    display: flex;
+    width: 142px;
+    padding: 8px 12px;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid colors.$gray;
+    color: colors.$color-text;
+  }
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: all;
+  width: 16px;
+  height: 16px;
+  background-color: colors.$favorite;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+input[type="range"]::-moz-range-thumb {
+  -webkit-appearance: none;
+  pointer-events: all;
+  width: 24px;
+  height: 24px;
+  background-color: colors.$favorite;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+// input[type="range"]::-webkit-slider-thumb:hover {
+//   background: #f7f7f7;
+// }
+
+// input[type="range"]::-webkit-slider-thumb:active {
+//   box-shadow: inset 0 0 3px colors.$favorite, 0 0 9px colors.$favorite;
+//   -webkit-box-shadow: inset 0 0 3px colors.$favorite, 0 0 9px colors.$favorite;
+// }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  width: 100%;
+  position: absolute;
+  background-color: colors.$favorite;
+  pointer-events: none;
+}

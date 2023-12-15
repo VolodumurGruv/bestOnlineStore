@@ -16,11 +16,12 @@ import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Product } from '@interfaces/product.interfaces';
 import { ProductsService } from '@shared/services/products.service';
 import { AlertService } from '@shared/services/interaction/alert.service';
+import { PriceFilterComponent } from './price-filter/price-filter.component';
 
 @Component({
   selector: 'app-filters',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, PriceFilterComponent],
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.scss'],
 })
