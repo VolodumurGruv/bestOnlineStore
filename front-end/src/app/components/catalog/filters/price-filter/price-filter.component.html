@@ -4,16 +4,20 @@
     <div class="price_filter__items">
       <div class="price_filter__item">
         <input
+          #minRange
           class="price_filter__item-input"
           [value]="fromRange"
           type="number"
+          (change)="onChangeMin(minRange.value)"
         />
       </div>
       <div class="price_filter__item">
         <input
+          #maxRange
           class="price_filter__item-input"
           [value]="toRange"
           type="number"
+          (change)="onChangeMax(maxRange.value)"
         />
       </div>
     </div>
@@ -24,7 +28,9 @@
         [min]="min"
         [max]="max"
         [step]="step"
+        [ngStyle]="{ 'z-index': index }"
         [(ngModel)]="fromRange"
+        (ngModelChange)="onChangeMin(fromRange)"
       />
       <input
         class="price_filter__range-input"
@@ -33,6 +39,7 @@
         [max]="max"
         [step]="step"
         [(ngModel)]="toRange"
+        (ngModelChange)="onChangeMax(toRange)"
       />
     </div>
   </div>

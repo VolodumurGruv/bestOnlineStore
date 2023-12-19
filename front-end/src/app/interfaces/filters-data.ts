@@ -1,3 +1,23 @@
+export interface FilterCategory {
+  categories: string[];
+  subcategory: Material[];
+}
+
+export interface Filter {
+  chairs: FilterCategory;
+  tables: FilterCategory;
+  beds: FilterCategory;
+  bathtubs: FilterCategory;
+  shelves: FilterCategory;
+}
+
+export type FilterPrice = {
+  min: number;
+  max: number;
+  fromRange: number;
+  toRange: number;
+};
+
 type Material = { title: string; names: string[]; isChecked: boolean };
 
 const material: Material = {
@@ -45,19 +65,6 @@ const sizeShelves: Material = {
   names: ['60см', '80см'],
   isChecked: false,
 };
-
-export interface FilterCategory {
-  categories: string[];
-  subcategory: Material[];
-}
-
-export interface Filter {
-  chairs: FilterCategory;
-  tables: FilterCategory;
-  beds: FilterCategory;
-  bathtubs: FilterCategory;
-  shelves: FilterCategory;
-}
 
 export const filters: Filter = {
   chairs: {

@@ -9,12 +9,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { map } from 'rxjs';
-
-import { FilterCategory } from '@interfaces/filters-data';
-import { filters } from '@interfaces/filters-data';
 import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+
+import { FilterCategory, FilterPrice } from '@interfaces/filters-data';
+import { filters } from '@interfaces/filters-data';
 import { Product } from '@interfaces/product.interfaces';
-import { ProductsService } from '@shared/services/products.service';
 import { AlertService } from '@shared/services/interaction/alert.service';
 import { PriceFilterComponent } from './price-filter/price-filter.component';
 
@@ -36,11 +35,11 @@ export class FiltersComponent implements OnInit {
 
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
-  private readonly productService = inject(ProductsService);
   private readonly alertService = inject(AlertService);
 
   private filteredSet: Set<Product> = new Set();
   private filtered: Product[] = [];
+  private filteredByPrice: Product[] = [];
 
   public filter!: FilterCategory;
 
@@ -78,12 +77,17 @@ export class FiltersComponent implements OnInit {
   }
 
   filterBy() {
+    this.filterNames.controls.name.removeAt(0);
     const filters = this.filterNames.value.name;
+    const filteredPriceProducts: Product[] = this.filteredByPrice.length
+      ? this.filteredByPrice
+      : this.products;
+
     this.filteredSet.clear();
 
-    if (filters) {
+    if (filters?.length) {
       filters.forEach((filter) => {
-        this.products.forEach((product) => {
+        filteredPriceProducts.forEach((product) => {
           product.characteristics?.forEach((item) => {
             if (item.value.toLowerCase() === filter?.toLowerCase()) {
               this.filteredSet.add(product);
@@ -103,7 +107,13 @@ export class FiltersComponent implements OnInit {
       } else {
         this.alertService.warning('Співпадінь не має!');
       }
+    } else {
+      this.filteredProducts.emit(filteredPriceProducts);
     }
+  }
+
+  filterPrice(event: Product[]): void {
+    this.filteredByPrice = event;
   }
 
   isOpen(i: number) {
