@@ -35,14 +35,15 @@
     </div>
 
     <h3 class="product-card__name">{{ product.name }}</h3>
-    <p class="product-card__sale" *ngIf="product.discount">
-      {{ product.price * 0.8 | transformPrice }}
+    <p class="product-card__sale">
+      {{ product.price | transformPrice }}
     </p>
     <p
+      *ngIf="product.discount"
       class="product-card__price"
       [ngClass]="{ 'product-card__crossed-price': product.discount }"
     >
-      {{ product.price | transformPrice }}
+      {{ product.discount | transformPrice }}
     </p>
   </figcaption>
 </figure>
