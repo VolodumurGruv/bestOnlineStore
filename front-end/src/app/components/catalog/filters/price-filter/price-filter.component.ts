@@ -20,7 +20,6 @@ export class PriceFilterComponent {
   public step: number = 100;
   public fromRange: number = 100;
   public toRange: number = 1000000;
-  index = 2;
 
   onChangeMax(value: string | number) {
     let maxValue = typeof value === 'string' ? parseInt(value, 10) : value;
@@ -40,8 +39,7 @@ export class PriceFilterComponent {
     if (this.toRange > minValue) {
       this.fromRange = minValue;
     } else {
-      this.fromRange = 400000;
-      this.index = 0;
+      this.fromRange = this.toRange - this.step;
       // this.fromRange = this.toRange - this.step;
       // this.toRange = minValue;
     }

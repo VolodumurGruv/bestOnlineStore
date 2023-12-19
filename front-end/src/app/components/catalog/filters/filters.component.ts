@@ -104,11 +104,10 @@ export class FiltersComponent implements OnInit {
         this.filteredProducts.emit(this.filtered);
 
         this.updateIsClickFilter();
-      } else {
-        this.alertService.warning('Співпадінь не має!');
       }
     } else {
       this.filteredProducts.emit(filteredPriceProducts);
+      this.updateIsClickFilter();
     }
   }
 
