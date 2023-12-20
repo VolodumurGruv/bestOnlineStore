@@ -1,6 +1,14 @@
 import { NgStyle } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
 import { FilterPrice } from '@interfaces/filters-data';
 import { Product } from '@interfaces/product.interfaces';
 
@@ -21,6 +29,9 @@ export class PriceFilterComponent {
   public fromRange: number = 100;
   public toRange: number = 1000000;
 
+  @ViewChild('minInput', { read: ElementRef }) minInput!: ElementRef;
+  @ViewChild('maxInput', { read: ElementRef }) maxInput!: ElementRef;
+
   onChangeMax(value: string | number) {
     let maxValue = typeof value === 'string' ? parseInt(value, 10) : value;
 
@@ -28,7 +39,7 @@ export class PriceFilterComponent {
       this.toRange = maxValue;
     } else {
       this.toRange = this.fromRange + this.step;
-      // this.fromRange = maxValue;
+      this.maxInput.nativeElement.value = this.toRange.toString();
     }
     this.filterByPrice();
   }
@@ -40,8 +51,7 @@ export class PriceFilterComponent {
       this.fromRange = minValue;
     } else {
       this.fromRange = this.toRange - this.step;
-      // this.fromRange = this.toRange - this.step;
-      // this.toRange = minValue;
+      this.minInput.nativeElement.value = this.fromRange.toString();
     }
 
     this.filterByPrice();

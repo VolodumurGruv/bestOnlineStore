@@ -79,11 +79,11 @@ export class FiltersComponent implements OnInit {
   filterBy() {
     this.filterNames.controls.name.removeAt(0);
     const filters = this.filterNames.value.name;
-    const filteredPriceProducts: Product[] = this.filteredByPrice.length
-      ? this.filteredByPrice
-      : this.products;
+    const filteredPriceProducts: Product[] = this.filteredByPrice;
 
     this.filteredSet.clear();
+
+    console.log(this.filteredByPrice);
 
     if (filters?.length) {
       filters.forEach((filter) => {

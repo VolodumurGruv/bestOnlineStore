@@ -23,6 +23,7 @@
     </div>
     <div class="price_filter__range">
       <input
+        #minInput
         class="price_filter__range-input"
         type="range"
         [min]="min"
@@ -32,6 +33,7 @@
         (ngModelChange)="onChangeMin(fromRange)"
       />
       <input
+        #maxInput
         class="price_filter__range-input"
         type="range"
         [min]="min"
