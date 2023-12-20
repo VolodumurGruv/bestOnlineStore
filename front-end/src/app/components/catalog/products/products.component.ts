@@ -13,6 +13,7 @@ import { PathComponent } from '@shared/components/path/path.component';
 import { svg } from '@interfaces/pictures-map';
 import { SearchResultService } from '@shared/services/interaction/search-result.service';
 import { SortingComponent } from '../sorting/sorting.component';
+import { AlertService } from '@shared/services/interaction/alert.service';
 
 @Component({
   selector: 'app-products',
@@ -33,6 +34,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   private readonly productService = inject(ProductsService);
   public readonly pathString = inject(PathStringService);
   public readonly searchResult = inject(SearchResultService);
+  public readonly alert = inject(AlertService);
 
   private unSub = new Subscription();
   public isClickFilter: boolean = false;
@@ -71,6 +73,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
   filteredProducts(filtered: Product[]) {
     if (filtered.length) {
       this.filtered = filtered;
+    } else {
+      this.alert.warning('Співпадінь не знайдено!');
     }
   }
 
