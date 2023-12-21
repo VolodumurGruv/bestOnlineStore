@@ -11,7 +11,7 @@ import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { map } from 'rxjs';
 import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
-import { FilterCategory, FilterPrice } from '@interfaces/filters-data';
+import { FilterCategory } from '@interfaces/filters-data';
 import { filters } from '@interfaces/filters-data';
 import { Product } from '@interfaces/product.interfaces';
 import { AlertService } from '@shared/services/interaction/alert.service';
@@ -101,11 +101,9 @@ export class FiltersComponent implements OnInit {
         this.filtered.push(item);
       }
 
-      if (this.filtered.length) {
-        this.filteredProducts.emit(this.filtered);
+      this.filteredProducts.emit(this.filtered);
 
-        this.updateIsClickFilter();
-      }
+      this.updateIsClickFilter();
     } else {
       this.filteredProducts.emit(filteredPriceProducts);
       this.updateIsClickFilter();
