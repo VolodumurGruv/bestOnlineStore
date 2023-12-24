@@ -18,9 +18,10 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CartService } from '../services/cart.service';
 import { InfoComponent } from 'app/components/user/components/info/info.component';
 import { InfoFormComponent } from '@shared/components/info-form/info-form.component';
-import { Observable, Subscription, concatMap, map, tap } from 'rxjs';
+import { Subscription, map, tap } from 'rxjs';
 import { OrderService } from '@shared/services/order.service';
 import { IconComponent } from '@shared/components/icon/icon.component';
+import { AuthService } from 'app/components/user/services/signin-flow/auth.service';
 
 @Component({
   selector: 'app-cart-orders',
@@ -50,6 +51,7 @@ export class CartOrdersComponent
   private readonly route = inject(ActivatedRoute);
   private readonly cartService = inject(CartService);
   private readonly orderService = inject(OrderService);
+  private readonly authService = inject(AuthService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private unSub = new Subscription();
   public maxQuantity = 100;
@@ -149,8 +151,14 @@ export class CartOrdersComponent
   }
 
   completeOrder() {
-    this.isComplete = false;
-    this.advertisement.emit(false);
+    if (this.authService.isAuth() && !this.authService.isAnonym()) {
+      console.log(this.authService.isAuth());
+      this.router.navigate(['/order']);
+      this.close();
+    } else {
+      this.isComplete = false;
+      this.advertisement.emit(false);
+    }
   }
 
   backToCart() {

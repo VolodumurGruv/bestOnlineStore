@@ -7,6 +7,7 @@ export const setupInitialValue = (form: FormGroup, controls?: any): void => {
     for (const control in controls) {
       if (control !== 'allImages') {
         form.get(control)?.patchValue(controls[control]);
+
         isValid(form, control);
       }
     }

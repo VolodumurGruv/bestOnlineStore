@@ -1,0 +1,16 @@
+@use "fonts";
+@use "colors";
+
+.courier {
+  display: flex;
+  width: 1316px;
+  align-items: flex-start;
+  gap: 411px;
+
+  &__price {
+    @include fonts.montserrat(28px, 500, normal, normal);
+
+    display: flex;
+    color: colors.$color-text;
+  }
+}

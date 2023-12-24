@@ -76,15 +76,15 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     ],
     email: ['', [Validators.required, Validators.email, emailValidator()]],
     // address: ['', [Validators.required]],
-    // phone: [
-    //   '',
-    //   [
-    //     // Validators.required,
-    //     // Validators.minLength(9),
-    //     // Validators.maxLength(9),
-    //     // phoneValidator(),
-    //   ],
-    // ],
+    phone: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(9),
+        Validators.maxLength(9),
+        phoneValidator(),
+      ],
+    ],
     password: [
       '',
       [
@@ -105,7 +105,6 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.route.url.subscribe((urlSegment: UrlSegment[]) => {
       if (urlSegment[0]) {
         this.path = urlSegment[0].path;
-        console.log(this.path);
       }
     });
   }
@@ -150,19 +149,20 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.unSub.add(
         this.userService
           .updateUser(this.infoForm.value)
-          .pipe(
-            concatMap(() =>
-              this.orderService.makeOrder(
-                JSON.parse(localStorage.getItem('user')!)._id
-              )
-            )
-          )
+          // .pipe(
+          //   concatMap(() =>
+          //     this.orderService.makeOrder(
+          //       JSON.parse(localStorage.getItem('user')!)._id
+          //     )
+          //   )
+          // )
           .subscribe(() => {
             this.router.navigate([{ outlets: { cart: null } }], {
               relativeTo: this.route.parent,
             });
           })
       );
+      this.router.navigate(['/order']);
     }
   }
 

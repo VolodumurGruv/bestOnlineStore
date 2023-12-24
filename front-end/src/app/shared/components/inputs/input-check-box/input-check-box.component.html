@@ -1,0 +1,7 @@
+<label class="label" [ngClass]="{ label__disabled: disabled }">
+  <input type="checkbox" (click)="onClick()" [disabled]="disabled" />
+
+  <ng-content #title></ng-content>
+
+  <ng-content #logo></ng-content>
+</label>

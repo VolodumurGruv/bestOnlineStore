@@ -72,8 +72,6 @@
     }
   }
 
-
-
   &__btn {
     @include fonts.primary-roboto(18px, 300, normal, 130%);
 
@@ -94,11 +92,6 @@
 
 .text-company {
   @include fonts.primary-roboto(20px, 400, normal, 130%);
-
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 130%;
 }
 
 .input-select {

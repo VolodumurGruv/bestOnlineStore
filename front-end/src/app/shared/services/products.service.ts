@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { configs } from '@configs/configs';
 import { catchError, map, Observable } from 'rxjs';
@@ -112,6 +112,10 @@ export class ProductsService {
           this.errorHandler.handleError('Помилка заватаження зображення')
         )
       );
+  }
+
+  viewedProduct(id: string, body: { viewed: number }): Observable<any> {
+    return this.http.patch(`${configs.URL}/product/${id}`, body);
   }
 
   deleteProduct(id: string) {

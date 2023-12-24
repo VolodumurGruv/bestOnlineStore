@@ -8,7 +8,7 @@ import { HttpErrorHandlerService } from '@shared/services/http-error-handler.ser
 import { AlertService } from '@shared/services/interaction/alert.service';
 import { Observable, catchError, tap } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CartService {
   private readonly http = inject(HttpClient);
   private readonly handleError = inject(HttpErrorHandlerService);

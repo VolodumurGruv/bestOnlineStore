@@ -1,0 +1,109 @@
+<section class="order">
+  <h1 class="order__title">Оформлення замовлення</h1>
+  <h2 class="order__subtitle">Особиста інформація</h2>
+  <div class="order__user-info">
+    <div class="order__user-info__items" *ngIf="user.firstName">
+      <div class="order__user-info__name">
+        <span class="order__user-info__item">Ім’я: </span>
+        <span class="order__user-info__data">{{ user.firstName }}</span>
+      </div>
+
+      <div class="order__user-info__name">
+        <span class="order__user-info__item">Телефон: </span>
+        <span class="order__user-info__data">{{ user.phone }}</span>
+      </div>
+    </div>
+    <div class="order__user-info__items">
+      <div class="order__user-info__name" *ngIf="user.lastName">
+        <span class="order__user-info__item">Прізвище: </span>
+        <span class="order__user-info__data">{{ user.lastName }}</span>
+      </div>
+      <div class="order__user-info__name" *ngIf="user.email">
+        <span class="order__user-info__item">E-mail: </span>
+        <span class="order__user-info__data">{{ user.email }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="order__order">
+    <h2 class="order__subtitle">Замовлення</h2>
+    <div class="order__order__items" *ngFor="let order of orders">
+      <div class="order__order__image">
+        <img [src]="order.image" [alt]="order.name" />
+      </div>
+      <div class="items__elem">
+        <div class="group__count">
+          <p class="order__order__name">{{ order.name }}</p>
+          <div class="order__order__count">
+            <span
+              class="decrease"
+              (click)="decrease(order.product, +quantity.value)"
+            >
+              <app-icon
+                [path]="'minus'"
+                [size]="{ width: '26px', height: '27px' }"
+                [viewBox]="'0 0 26 27'"
+                [fill]="'none'"
+              ></app-icon>
+            </span>
+            <input
+              #quantity
+              type="number"
+              [min]="minQuantity"
+              [max]="maxQuantity"
+              [(ngModel)]="order.quantity"
+              class="order__input"
+              disabled
+            />
+            <span
+              class="increase"
+              (click)="increase(order.product, +quantity.value)"
+            >
+              <app-icon
+                [path]="'increase'"
+                [size]="{ width: '26px', height: '27px' }"
+                [viewBox]="'0 0 26 27'"
+                [fill]="'none'"
+              ></app-icon>
+            </span>
+          </div>
+        </div>
+        <div class="group__price">
+          <p class="order__order__price">
+            {{ order.price * order.quantity | transformPrice }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="delivery">
+    <h2 class="order__subtitle">Доставка</h2>
+    <div
+      class="delivery__items"
+      *ngFor="let delivery of deliveryData; index as id"
+    >
+      <div>
+        <input-checkbox
+          [disabled]="delivery.isChecked"
+          (checkbox)="onCheckBox($event, id)"
+        >
+          <span title> {{ delivery.name }} </span>
+          <span logo *ngIf="delivery.logoUrl"> {{ delivery.name }} </span>
+        </input-checkbox>
+        <span *ngIf="delivery.price">{{ delivery.price }}</span>
+      </div>
+      <!-- <div class="nova-poshta">
+        <app-nova-poshta></app-nova-poshta>
+      </div>
+      <div class="ukr-poshta">
+        <app-ukr-poshta></app-ukr-poshta>
+      </div>
+      <div class="courier">
+        <app-courier></app-courier>
+      </div>
+      <div class="self-pickup">
+        <app-self-pickup></app-self-pickup>
+      </div> -->
+    </div>
+  </div>
+</section>

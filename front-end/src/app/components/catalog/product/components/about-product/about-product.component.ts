@@ -1,15 +1,15 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { NgClass, NgFor, NgIf, NgOptimizedImage } from '@angular/common';
+import { Subscription, concatMap, tap } from 'rxjs';
 
 import { Product } from '@interfaces/product.interfaces';
 import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
 import { AuthService } from 'app/components/user/services/signin-flow/auth.service';
 import { CartService } from 'app/components/cart/services/cart.service';
-import { Subscription, concatMap, switchMap, tap } from 'rxjs';
 import { AlertService } from '@shared/services/interaction/alert.service';
 import { WishlistService } from '@shared/services/wishlist.service';
 import { IconComponent } from '@shared/components/icon/icon.component';
-import { ActivatedRoute, ParamMap, UrlSegment } from '@angular/router';
+import { ProductsService } from '@shared/services/products.service';
 
 @Component({
   selector: 'app-about-product',
@@ -33,13 +33,16 @@ export class AboutProductComponent implements OnInit, OnDestroy {
   private readonly cartService = inject(CartService);
   private readonly alertService = inject(AlertService);
   private readonly wishService = inject(WishlistService);
-  private readonly route = inject(ActivatedRoute);
+  private readonly productService = inject(ProductsService);
 
   private unSub = new Subscription();
 
   ngOnInit(): void {
-    this.product.viewed = 0;
-    this.product.viewed += 1;
+    this.unSub.add(
+      this.productService
+        .viewedProduct(this.product._id, { viewed: 1 })
+        .subscribe((res) => console.log(res))
+    );
   }
 
   addToCart(id: string, quantity: number) {

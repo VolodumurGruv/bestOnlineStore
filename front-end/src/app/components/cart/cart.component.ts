@@ -12,7 +12,6 @@ import { CartAdComponent } from './cart-ad/cart-ad.component';
   imports: [NgIf, CartOrdersComponent, CartAdComponent],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
-  providers: [{ provide: CartService }],
 })
 export class CartComponent {
   @HostListener('document:click', ['$event']) onClick(event: Event): void {
