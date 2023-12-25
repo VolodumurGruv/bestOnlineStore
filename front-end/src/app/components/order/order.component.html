@@ -4,28 +4,28 @@
   <div class="order__user-info">
     <div class="order__user-info__items" *ngIf="user.firstName">
       <div class="order__user-info__name">
-        <span class="order__user-info__item">Ім’я: </span>
-        <span class="order__user-info__data">{{ user.firstName }}</span>
+        <div class="order__user-info__item">Ім’я:</div>
+        <div class="order__user-info__data">{{ user.firstName }}</div>
       </div>
 
       <div class="order__user-info__name">
-        <span class="order__user-info__item">Телефон: </span>
-        <span class="order__user-info__data">{{ user.phone }}</span>
+        <div class="order__user-info__item">Телефон:</div>
+        <div class="order__user-info__data">{{ user.phone }}</div>
       </div>
     </div>
     <div class="order__user-info__items">
       <div class="order__user-info__name" *ngIf="user.lastName">
-        <span class="order__user-info__item">Прізвище: </span>
-        <span class="order__user-info__data">{{ user.lastName }}</span>
+        <div class="order__user-info__item">Прізвище:</div>
+        <div class="order__user-info__data">{{ user.lastName }}</div>
       </div>
       <div class="order__user-info__name" *ngIf="user.email">
-        <span class="order__user-info__item">E-mail: </span>
-        <span class="order__user-info__data">{{ user.email }}</span>
+        <div class="order__user-info__item">E-mail:</div>
+        <div class="order__user-info__data">{{ user.email }}</div>
       </div>
     </div>
   </div>
 
-  <div class="order__order">
+  <div class="order__order container">
     <h2 class="order__subtitle">Замовлення</h2>
     <div class="order__order__items" *ngFor="let order of orders">
       <div class="order__order__image">
@@ -76,34 +76,44 @@
       </div>
     </div>
   </div>
-  <div class="delivery">
+  <div class="delivery container">
     <h2 class="order__subtitle">Доставка</h2>
-    <div
-      class="delivery__items"
-      *ngFor="let delivery of deliveryData; index as id"
-    >
-      <div>
-        <input-checkbox
-          [disabled]="delivery.isChecked"
-          (checkbox)="onCheckBox($event, id)"
-        >
-          <span title> {{ delivery.name }} </span>
-          <span logo *ngIf="delivery.logoUrl"> {{ delivery.name }} </span>
-        </input-checkbox>
-        <span *ngIf="delivery.price">{{ delivery.price }}</span>
-      </div>
-      <!-- <div class="nova-poshta">
-        <app-nova-poshta></app-nova-poshta>
-      </div>
-      <div class="ukr-poshta">
-        <app-ukr-poshta></app-ukr-poshta>
-      </div>
+    <div class="delivery__items">
+      <ng-container *ngFor="let delivery of deliveryData; index as id">
+        <div class="delivery__item">
+          <input-checkbox
+            [disabled]="delivery.isChecked"
+            (checkbox)="onCheckBox($event, id)"
+          >
+            <span title> {{ delivery.name }} </span>
+            <span logo *ngIf="delivery.logoUrl">
+              <img [src]="delivery.logoUrl" [alt]="delivery.name" />
+            </span>
+          </input-checkbox>
+          <div
+            class="delivery__price"
+            *ngIf="delivery.price"
+            [ngClass]="{ delivery__price__disabled: delivery.isChecked }"
+          >
+            {{ delivery.price | transformPrice }}
+          </div>
+        </div>
+        <!-- <div class="nova-poshta">
+          <app-nova-poshta></app-nova-poshta>
+        </div>
+        <div class="ukr-poshta">
+          <app-ukr-poshta></app-ukr-poshta>
+        </div>
       <div class="courier">
         <app-courier></app-courier>
       </div>
       <div class="self-pickup">
         <app-self-pickup></app-self-pickup>
       </div> -->
+      </ng-container>
     </div>
+  </div>
+  <div class="payment container">
+    <app-payment></app-payment>
   </div>
 </section>

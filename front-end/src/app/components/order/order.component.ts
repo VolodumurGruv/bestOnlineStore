@@ -14,6 +14,7 @@ import { CourierComponent } from './courier/courier.component';
 import { SelfPickupComponent } from './self-pickup/self-pickup.component';
 import { InputCheckBoxComponent } from '@shared/components/inputs/input-check-box/input-check-box.component';
 import { deliveryData } from '@configs/delivery-data';
+import { PaymentComponent } from './payment/payment.component';
 
 @Component({
   selector: 'app-order',
@@ -28,6 +29,7 @@ import { deliveryData } from '@configs/delivery-data';
     CourierComponent,
     SelfPickupComponent,
     InputCheckBoxComponent,
+    PaymentComponent,
   ],
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
