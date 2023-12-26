@@ -14,6 +14,6 @@ export class TransformPricePipe implements PipeTransform {
       }).format(price);
       return formattedPrice + ' ₴';
     }
-    return '';
+    return '0,00 ₴';
   }
 }

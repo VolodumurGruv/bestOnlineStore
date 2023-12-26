@@ -74,7 +74,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     if (filtered.length) {
       this.filtered = filtered;
     } else {
-      this.alert.warning('Співпадінь не знайдено!');
+      this.alert.warning('Збіги відсутні!');
     }
   }
 

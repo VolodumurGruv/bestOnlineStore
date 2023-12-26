@@ -98,22 +98,13 @@
             {{ delivery.price | transformPrice }}
           </div>
         </div>
-        <!-- <div class="nova-poshta">
-          <app-nova-poshta></app-nova-poshta>
-        </div>
-        <div class="ukr-poshta">
-          <app-ukr-poshta></app-ukr-poshta>
-        </div>
-      <div class="courier">
-        <app-courier></app-courier>
-      </div>
-      <div class="self-pickup">
-        <app-self-pickup></app-self-pickup>
-      </div> -->
       </ng-container>
     </div>
   </div>
   <div class="payment container">
     <app-payment></app-payment>
+  </div>
+  <div class="make-payment container">
+    <app-make-payment [total]="total"></app-make-payment>
   </div>
 </section>
