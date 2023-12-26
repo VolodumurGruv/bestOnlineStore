@@ -24,7 +24,7 @@ export interface Product {
   createdAt?: string;
   updatedAt?: string;
   new?: boolean;
-  viewed?: number;
+  viewed: number;
   __v?: number;
 }
 

@@ -33,6 +33,10 @@ export class SortingComponent {
     if (value === 'Новинки') {
       this.sortedProducts.emit(this.sortByNew());
     }
+
+    if (value === 'За популярністю') {
+      this.sortedProducts.emit(this.sortByView());
+    }
   }
 
   sortByNew(): Product[] {
@@ -45,5 +49,9 @@ export class SortingComponent {
 
   sortByHigherPrice(): Product[] {
     return this.products.sort((a, b) => b.price - a.price);
+  }
+
+  sortByView(): Product[] {
+    return this.products.sort((a, b) => b.viewed - a.viewed);
   }
 }
