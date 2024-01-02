@@ -79,7 +79,7 @@
   <div class="delivery container">
     <h2 class="order__subtitle">Доставка</h2>
     <div class="delivery__items">
-      <ng-container *ngFor="let delivery of deliveryData; index as id">
+      <div *ngFor="let delivery of deliveryData; index as id">
         <div class="delivery__item">
           <input-checkbox
             [disabled]="delivery.isChecked"
@@ -98,7 +98,11 @@
             {{ delivery.price | transformPrice }}
           </div>
         </div>
-      </ng-container>
+
+        <div *ngIf="!delivery.isClosed">
+          <div *appDepartment="department"></div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="payment container">

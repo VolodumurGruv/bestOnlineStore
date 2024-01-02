@@ -95,10 +95,11 @@ export class AuthService {
 
   isAuth(): boolean {
     const user = this.user.value;
-
     let token = '';
-    if (JSON.parse(localStorage.getItem('user')!)) {
-      token = JSON.parse(localStorage.getItem('user')!)?.token;
+    let userLocal = JSON.parse(localStorage.getItem('user')!);
+
+    if (userLocal) {
+      token = userLocal?.token;
     }
 
     return token === user?.token && token ? true : false;

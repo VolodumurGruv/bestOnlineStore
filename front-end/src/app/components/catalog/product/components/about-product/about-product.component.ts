@@ -10,6 +10,7 @@ import { AlertService } from '@shared/services/interaction/alert.service';
 import { WishlistService } from '@shared/services/wishlist.service';
 import { IconComponent } from '@shared/components/icon/icon.component';
 import { ProductsService } from '@shared/services/products.service';
+import { User } from '@interfaces/user.interface';
 
 @Component({
   selector: 'app-about-product',
@@ -46,7 +47,14 @@ export class AboutProductComponent implements OnInit, OnDestroy {
   }
 
   addToCart(id: string, quantity: number) {
-    console.log(this.product?.viewed);
+    const user: User = JSON.parse(localStorage.getItem('user')!);
+
+    if (user?.expDate) {
+      if (new Date(user?.expDate).getTime() < new Date().getTime()) {
+        localStorage.clear();
+      }
+    }
+
     if (!this.userService.isAuth()) {
       this.unSub.add(
         this.userService

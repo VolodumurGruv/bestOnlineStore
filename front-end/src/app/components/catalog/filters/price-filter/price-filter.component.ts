@@ -4,12 +4,12 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { FilterPrice } from '@interfaces/filters-data';
 import { Product } from '@interfaces/product.interfaces';
 
 @Component({
@@ -19,7 +19,7 @@ import { Product } from '@interfaces/product.interfaces';
   styleUrls: ['./price-filter.component.scss'],
   imports: [FormsModule, NgStyle],
 })
-export class PriceFilterComponent {
+export class PriceFilterComponent implements OnInit {
   @Output() filterPrice = new EventEmitter<Product[]>();
   @Input() products!: Product[];
 
@@ -31,6 +31,10 @@ export class PriceFilterComponent {
 
   @ViewChild('minInput', { read: ElementRef }) minInput!: ElementRef;
   @ViewChild('maxInput', { read: ElementRef }) maxInput!: ElementRef;
+
+  ngOnInit(): void {
+    this.filterByPrice();
+  }
 
   onChangeMax(value: string | number) {
     let maxValue = typeof value === 'string' ? parseInt(value, 10) : value;

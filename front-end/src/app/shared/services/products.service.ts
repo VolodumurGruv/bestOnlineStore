@@ -103,10 +103,10 @@ export class ProductsService {
   uploadImageProduct(file: File, productId: string) {
     const formParams = new FormData();
     formParams.append('file', file);
-    formParams.append('productId', productId);
+    formParams.append('entityId', productId);
 
     return this.http
-      .post(`${configs.URL}/upload`, formParams)
+      .post(`${configs.URL}/upload/product`, formParams)
       .pipe(
         catchError(
           this.errorHandler.handleError('Помилка заватаження зображення')

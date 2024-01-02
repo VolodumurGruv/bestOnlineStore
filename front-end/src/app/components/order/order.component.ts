@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription, map, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { Orders, UserInfo } from '@interfaces/user.interface';
 import { UserService } from '../user/services/user.service';
@@ -16,6 +17,7 @@ import { InputCheckBoxComponent } from '@shared/components/inputs/input-check-bo
 import { deliveryData } from '@configs/delivery-data';
 import { PaymentComponent } from './payment/payment.component';
 import { MakePaymentComponent } from './make-payment/make-payment.component';
+import { DepartmentDirective } from './department.directive';
 
 @Component({
   selector: 'app-order',
@@ -32,6 +34,7 @@ import { MakePaymentComponent } from './make-payment/make-payment.component';
     InputCheckBoxComponent,
     PaymentComponent,
     MakePaymentComponent,
+    DepartmentDirective,
   ],
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
@@ -39,6 +42,7 @@ import { MakePaymentComponent } from './make-payment/make-payment.component';
 export class OrderComponent implements OnInit {
   private readonly userService = inject(UserService);
   private readonly cartService = inject(CartService);
+  private readonly router = inject(Router);
   private readonly unSub = new Subscription();
 
   public user!: UserInfo;
@@ -47,8 +51,10 @@ export class OrderComponent implements OnInit {
   public minQuantity: number = 1;
   public maxQuantity: number = 100;
   public readonly deliveryData = deliveryData;
+  public department: string = '';
 
   ngOnInit(): void {
+    this.router.navigate([{ outlets: { cart: null } }]);
     const user = JSON.parse(localStorage.getItem('user')!);
     this.user = user;
 
@@ -117,6 +123,10 @@ export class OrderComponent implements OnInit {
   }
 
   onCheckBox(event: boolean, id: number) {
+    this.department = this.deliveryData[id].department;
+    console.log(this.department);
+
+    this.deliveryData[id].isClosed = !event;
     this.deliveryData.forEach((item, i) => {
       if (id !== i) {
         this.deliveryData[i].isChecked = event;

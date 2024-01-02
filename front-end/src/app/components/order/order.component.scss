@@ -66,8 +66,6 @@
   }
 
   &__order {
-    height: 327px;
-
     &__items {
       display: flex;
       width: 1316px;
@@ -181,7 +179,7 @@ input[type="number"] {
   &__item {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    width: 1316px;
   }
 
   &__price {
@@ -193,6 +191,13 @@ input[type="number"] {
       color: colors.$gray;
     }
   }
+
+  // &__department {
+  //   display: flex;
+  //   flex-direction: column;
+  //   align-items: flex-start;
+  //   gap: 2rem;
+  // }
 }
 
 .payment {
@@ -202,4 +207,8 @@ input[type="number"] {
 
 .make-payment {
   margin-bottom: 194px;
+}
+
+.closed {
+  display: none;
 }

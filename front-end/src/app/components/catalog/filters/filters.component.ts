@@ -85,11 +85,13 @@ export class FiltersComponent implements OnInit {
     const filteredPriceProducts: Product[] = this.filteredByPrice;
 
     this.filteredSet.clear();
+    console.log(filters);
 
     if (filters?.length && this.filteredByPrice.length) {
       filters.forEach((filter) => {
         filteredPriceProducts.forEach((product) => {
           product.characteristics?.forEach((item) => {
+            console.log(item);
             if (item.value.toLowerCase() === filter?.toLowerCase()) {
               this.filteredSet.add(product);
             }
@@ -100,7 +102,7 @@ export class FiltersComponent implements OnInit {
       for (const item of this.filteredSet) {
         this.filtered.push(item);
       }
-
+      console.log(this.filtered);
       this.filteredProducts.emit(this.filtered);
 
       this.updateIsClickFilter();
@@ -111,6 +113,7 @@ export class FiltersComponent implements OnInit {
   }
 
   filterPrice(event: Product[]): void {
+    console.log(event);
     this.filteredByPrice = event;
   }
 

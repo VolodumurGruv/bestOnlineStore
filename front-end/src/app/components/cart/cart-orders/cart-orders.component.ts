@@ -54,6 +54,8 @@ export class CartOrdersComponent
   private readonly authService = inject(AuthService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private unSub = new Subscription();
+
+  private timeoutID!: any;
   public maxQuantity = 100;
   public minQuantity = 1;
   public total!: number;
@@ -154,7 +156,9 @@ export class CartOrdersComponent
     if (this.authService.isAuth() && !this.authService.isAnonym()) {
       console.log(this.authService.isAuth());
       this.router.navigate(['/order']);
-      this.close();
+      this.timeoutID = setTimeout(() => {
+        this.close();
+      }, 0);
     } else {
       this.isComplete = false;
       this.advertisement.emit(false);
@@ -172,5 +176,8 @@ export class CartOrdersComponent
 
   ngOnDestroy(): void {
     this.unSub.unsubscribe();
+    if (this.timeoutID) {
+      clearTimeout(this.timeoutID);
+    }
   }
 }

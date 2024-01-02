@@ -6,6 +6,7 @@ export interface User {
   isAdmin?: boolean;
   isAnonymous?: boolean;
   token?: string;
+  expDate?: Date;
   _id?: string;
 }
 

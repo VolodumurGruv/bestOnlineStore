@@ -6,6 +6,7 @@ import {
   inject,
 } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { InfoFormComponent } from '@shared/components/info-form/info-form.component';
 import { CartService } from 'app/components/cart/services/cart.service';
 
