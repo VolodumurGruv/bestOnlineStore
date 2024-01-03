@@ -1,1 +1,32 @@
-<p>department works!</p>
+<section class="delivery container">
+  <h2 class="order__subtitle">Доставка</h2>
+  <div class="delivery__items">
+    <div
+      class="delivery__items__container"
+      *ngFor="let delivery of deliveryData; index as id"
+    >
+      <div class="delivery__item">
+        <input-checkbox
+          [disabled]="delivery.isChecked"
+          (checkbox)="onCheckBox($event, id)"
+        >
+          <span title> {{ delivery.name }} </span>
+          <span logo *ngIf="delivery.logoUrl">
+            <img [src]="delivery.logoUrl" [alt]="delivery.name" />
+          </span>
+        </input-checkbox>
+        <div
+          class="delivery__price"
+          *ngIf="delivery.price"
+          [ngClass]="{ delivery__price__disabled: delivery.isChecked }"
+        >
+          {{ delivery.price | transformPrice }}
+        </div>
+      </div>
+
+      <div class="department__items" *ngIf="!delivery.isClosed">
+        <div class="department__item" *appDepartment="department"></div>
+      </div>
+    </div>
+  </div>
+</section>

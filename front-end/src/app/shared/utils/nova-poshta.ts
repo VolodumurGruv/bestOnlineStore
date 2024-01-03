@@ -21,6 +21,18 @@ export const getAddresses = (city: string) => {
   return fetchPostReq(URL, reqCityAddresses);
 };
 
+export const getCities = (city: string) => {
+  const reqCityAddresses = {
+    apiKey: environment.novaPoshta,
+    modelName: 'Address',
+    calledMethod: 'getCities',
+    methodProperties: {
+      FindByString: city,
+    },
+  };
+  return fetchPostReq(URL, reqCityAddresses);
+};
+
 export const getNovaPoshtaDepartment = (cityName: string, ref: string) => {
   const reqDepartments = {
     apiKey: environment.novaPoshta,
@@ -28,7 +40,6 @@ export const getNovaPoshtaDepartment = (cityName: string, ref: string) => {
     calledMethod: 'getWarehouses',
     methodProperties: {
       CityName: cityName,
-      SettlementRef: ref,
       // Area: area,
       // RegionDescription: region,
     },

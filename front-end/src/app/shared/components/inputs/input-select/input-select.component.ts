@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -19,20 +19,32 @@ import { IconComponent } from '../../icon/icon.component';
   ],
 })
 export class InputSelectComponent implements ControlValueAccessor {
+  @Input() value: string = '';
+  @Input() items: string[] = [];
+  @Input() label: string = '';
+  @Output() inputValue = new EventEmitter<string>();
+
+  filteredItems: string[] = this.items;
+
   onChange = (value: string) => {};
-  onTouched = () => {};
+  onTouched = () => {
+    this.writeValue('');
+  };
   touched = false;
   disabled = false;
-  value: string = '';
   isList = false;
-  @Input() items: string[] = [];
 
-  writeValue(obj: any): void {
+  writeValue(value: string): void {
     this.isList = true;
-    this.value = obj;
+    this.value = value;
+
+    this.filteredItems = this.items.filter(
+      (item) => item.slice(0, value.length) === value
+    );
 
     if (this.value) {
       this.onChange(this.value);
+      this.inputValue.emit(this.value);
     }
   }
 
@@ -60,6 +72,7 @@ export class InputSelectComponent implements ControlValueAccessor {
   }
 
   pickUp(item: string) {
+    this.inputValue.emit(this.value);
     this.writeValue(item);
     this.isList = false;
   }

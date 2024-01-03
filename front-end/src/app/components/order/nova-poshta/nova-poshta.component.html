@@ -1,10 +1,18 @@
 <div class="items">
   <div class="item">
     <p>Місто</p>
-    <app-input-select [items]="items"></app-input-select>
+    <app-input-select
+      [items]="items.cities"
+      [value]="items.cities[0]"
+      (inputValue)="getCity($event)"
+    ></app-input-select>
   </div>
   <div class="item">
     <p>Відділення</p>
-    <app-input-select [items]="items"></app-input-select>
+    <app-input-select
+      [items]="items.departments"
+      [value]="items.departments[1]"
+      (inputValue)="getDepartments($event)"
+    ></app-input-select>
   </div>
 </div>

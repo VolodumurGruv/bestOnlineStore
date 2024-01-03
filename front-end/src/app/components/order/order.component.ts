@@ -13,11 +13,10 @@ import { NovaPoshtaComponent } from './nova-poshta/nova-poshta.component';
 import { UkrPoshtaComponent } from './ukr-poshta/ukr-poshta.component';
 import { CourierComponent } from './courier/courier.component';
 import { SelfPickupComponent } from './self-pickup/self-pickup.component';
-import { InputCheckBoxComponent } from '@shared/components/inputs/input-check-box/input-check-box.component';
-import { deliveryData } from '@configs/delivery-data';
 import { PaymentComponent } from './payment/payment.component';
 import { MakePaymentComponent } from './make-payment/make-payment.component';
 import { DepartmentDirective } from './department.directive';
+import { DepartmentComponent } from './department/department.component';
 
 @Component({
   selector: 'app-order',
@@ -31,10 +30,10 @@ import { DepartmentDirective } from './department.directive';
     UkrPoshtaComponent,
     CourierComponent,
     SelfPickupComponent,
-    InputCheckBoxComponent,
     PaymentComponent,
     MakePaymentComponent,
     DepartmentDirective,
+    DepartmentComponent,
   ],
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
@@ -50,8 +49,6 @@ export class OrderComponent implements OnInit {
   public total!: number;
   public minQuantity: number = 1;
   public maxQuantity: number = 100;
-  public readonly deliveryData = deliveryData;
-  public department: string = '';
 
   ngOnInit(): void {
     this.router.navigate([{ outlets: { cart: null } }]);
@@ -120,17 +117,5 @@ export class OrderComponent implements OnInit {
         )
         .subscribe()
     );
-  }
-
-  onCheckBox(event: boolean, id: number) {
-    this.department = this.deliveryData[id].department;
-    console.log(this.department);
-
-    this.deliveryData[id].isClosed = !event;
-    this.deliveryData.forEach((item, i) => {
-      if (id !== i) {
-        this.deliveryData[i].isChecked = event;
-      }
-    });
   }
 }

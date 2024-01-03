@@ -76,35 +76,7 @@
       </div>
     </div>
   </div>
-  <div class="delivery container">
-    <h2 class="order__subtitle">Доставка</h2>
-    <div class="delivery__items">
-      <div *ngFor="let delivery of deliveryData; index as id">
-        <div class="delivery__item">
-          <input-checkbox
-            [disabled]="delivery.isChecked"
-            (checkbox)="onCheckBox($event, id)"
-          >
-            <span title> {{ delivery.name }} </span>
-            <span logo *ngIf="delivery.logoUrl">
-              <img [src]="delivery.logoUrl" [alt]="delivery.name" />
-            </span>
-          </input-checkbox>
-          <div
-            class="delivery__price"
-            *ngIf="delivery.price"
-            [ngClass]="{ delivery__price__disabled: delivery.isChecked }"
-          >
-            {{ delivery.price | transformPrice }}
-          </div>
-        </div>
-
-        <div *ngIf="!delivery.isClosed">
-          <div *appDepartment="department"></div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-department></app-department>
   <div class="payment container">
     <app-payment></app-payment>
   </div>

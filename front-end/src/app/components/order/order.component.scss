@@ -165,41 +165,6 @@ input[type="number"] {
   }
 }
 
-.delivery {
-  margin-top: 80px;
-
-  &__items {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 36px;
-    width: 100%;
-  }
-
-  &__item {
-    display: flex;
-    justify-content: space-between;
-    width: 1316px;
-  }
-
-  &__price {
-    @include fonts.montserrat(28px, 500, normal, normal);
-
-    color: colors.$color-text;
-
-    &__disabled {
-      color: colors.$gray;
-    }
-  }
-
-  // &__department {
-  //   display: flex;
-  //   flex-direction: column;
-  //   align-items: flex-start;
-  //   gap: 2rem;
-  // }
-}
-
 .payment {
   margin-top: 80px;
   margin-bottom: 80px;
@@ -209,6 +174,9 @@ input[type="number"] {
   margin-bottom: 194px;
 }
 
-.closed {
-  display: none;
+.app-department {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3.5rem;
 }

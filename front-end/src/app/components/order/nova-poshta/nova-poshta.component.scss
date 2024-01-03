@@ -12,4 +12,10 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 0.75rem;
+  p {
+    @include fonts.montserrat(1.75rem, 500, normal, normal);
+
+    color: colors.$color-text;
+  }
 }

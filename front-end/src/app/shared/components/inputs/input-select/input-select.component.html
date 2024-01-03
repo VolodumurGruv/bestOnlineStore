@@ -1,26 +1,30 @@
-<div class="wrap">
-  <div class="select">
-    <input
-      #input
-      class="input"
-      type="text"
-      (keyup)="writeValue(input.value)"
-      (focus)="onTouched()"
-      [disabled]="disabled"
-      [value]="value"
-    />
-    <app-icon
-      [path]="'delivery-icon'"
-      [size]="{ width: '11px', height: '7px' }"
-      [viewBox]="'0 0 11 7'"
-      (click)="rollUp()"
-    />
-  </div>
-  <div class="list" *ngIf="isList">
-    <ul class="list-items" *ngIf="items?.length">
-      <li class="list-item" *ngFor="let item of items" (click)="pickUp(item)">
-        {{ item }}
-      </li>
-    </ul>
-  </div>
+<div class="select">
+  <label [for]="label">{{ label }}</label>
+  <input
+    #input
+    class="input"
+    type="text"
+    (keyup)="writeValue(input.value)"
+    (focus)="onTouched()"
+    [disabled]="disabled"
+    [value]="value"
+    [id]="label"
+  />
+  <app-icon
+    [path]="'delivery-icon'"
+    [size]="{ width: '11px', height: '7px' }"
+    [viewBox]="'0 0 11 7'"
+    (click)="rollUp()"
+  />
+</div>
+<div class="list" *ngIf="isList">
+  <ul class="list-items" *ngIf="items?.length">
+    <li
+      class="list-item"
+      *ngFor="let item of filteredItems"
+      (click)="pickUp(item)"
+    >
+      {{ item }}
+    </li>
+  </ul>
 </div>

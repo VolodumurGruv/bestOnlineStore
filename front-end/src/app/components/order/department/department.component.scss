@@ -1,0 +1,48 @@
+@use "fonts";
+@use "colors";
+
+.delivery {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3.5rem;
+  margin-top: 80px;
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.25rem;
+    width: 100%;
+
+    &__container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    width: 1316px;
+  }
+
+  &__price {
+    @include fonts.montserrat(28px, 500, normal, normal);
+
+    color: colors.$color-text;
+
+    &__disabled {
+      color: colors.$gray;
+    }
+  }
+}
+
+.order__subtitle {
+  @include fonts.montserrat(32px, 500, normal, normal);
+
+  margin-bottom: 56px;
+  color: colors.$color-text;
+}
