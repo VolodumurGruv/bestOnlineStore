@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { Observable, catchError, tap } from 'rxjs';
+
 import { configs } from '@configs/configs';
 import { Product } from '@interfaces/product.interfaces';
 import { PAYLOAD } from '@interfaces/request.interface';
 import { Orders } from '@interfaces/user.interface';
 import { HttpErrorHandlerService } from '@shared/services/http-error-handler.service';
 import { AlertService } from '@shared/services/interaction/alert.service';
-import { Observable, catchError, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {

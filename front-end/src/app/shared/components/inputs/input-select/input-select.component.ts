@@ -39,7 +39,8 @@ export class InputSelectComponent implements ControlValueAccessor {
     this.value = value;
 
     this.filteredItems = this.items.filter(
-      (item) => item.slice(0, value.length) === value
+      (item) =>
+        item.slice(0, value.length).toLowerCase() === value.toLowerCase()
     );
 
     if (this.value) {
@@ -72,7 +73,7 @@ export class InputSelectComponent implements ControlValueAccessor {
   }
 
   pickUp(item: string) {
-    this.inputValue.emit(this.value);
+    this.inputValue.emit(item);
     this.writeValue(item);
     this.isList = false;
   }

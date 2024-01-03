@@ -12,9 +12,14 @@ import { getCities, getNovaPoshtaDepartment } from '@shared/utils/nova-poshta';
   styleUrls: ['./nova-poshta.component.scss'],
 })
 export class NovaPoshtaComponent implements OnInit {
-  items = {
-    cities: ['Виберіть місто'],
-    departments: ['Виберіть відділення або адресу'],
+  items: { cities: string[]; departments: string[] } = {
+    cities: [],
+    departments: [],
+  };
+
+  placeholder = {
+    city: 'Виберіть місто',
+    department: 'Виберіть відділення або адресу',
   };
 
   city = '';
@@ -23,26 +28,35 @@ export class NovaPoshtaComponent implements OnInit {
   ngOnInit(): void {}
 
   getCity(event: string) {
-    this.items.cities = ['Виберіть місто'];
     this.city = event;
     getCities(this.city)
       .then((d) => d.json())
       .then((d) => {
+        this.items.cities = [];
         d.data.map((item: any) => this.items.cities.push(item.Description));
+        if (this.items.cities.length >= 1) {
+          this.getDepartments(this.city);
+        }
       });
   }
 
   getDepartments(event: string) {
     this.departmentName = event;
-    this.items.departments = ['Виберіть відділення або адресу'];
+    console.log(this.city);
     if (this.city) {
       getNovaPoshtaDepartment(this.city, this.departmentName)
         .then((d) => d.json())
-        .then((d) =>
+        .then((d) => {
+          this.items.departments = [];
           d.data.forEach((item: any) => {
             this.items.departments.push(item.Description);
-          })
-        );
+          });
+          if (this.departmentName) {
+            //
+          }
+        });
     }
+
+    console.log(this.items);
   }
 }

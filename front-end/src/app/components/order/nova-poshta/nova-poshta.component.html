@@ -3,7 +3,7 @@
     <p>Місто</p>
     <app-input-select
       [items]="items.cities"
-      [value]="items.cities[0]"
+      [label]="placeholder.city"
       (inputValue)="getCity($event)"
     ></app-input-select>
   </div>
@@ -11,7 +11,7 @@
     <p>Відділення</p>
     <app-input-select
       [items]="items.departments"
-      [value]="items.departments[1]"
+      [label]="placeholder.department"
       (inputValue)="getDepartments($event)"
     ></app-input-select>
   </div>

@@ -23,7 +23,7 @@
   border-bottom-right-radius: 8px;
   border-top-right-radius: none;
   border-top-left-radius: none;
-  background: #fff;
+  background: colors.$white100;
 
   &-items {
     @include fonts.primary-roboto(18px, 400, normal, 130%);
@@ -33,6 +33,8 @@
   }
 
   &-item {
+    @include fonts.primary-roboto(18px, 500, normal, 130%);
+
     padding: 4px 4px;
     cursor: pointer;
 
@@ -40,6 +42,7 @@
       border-radius: 8px;
       box-shadow: 2px 2px 2px 2px #6a6a6a;
       background: #aaa;
+      color: colors.$white;
     }
   }
 }

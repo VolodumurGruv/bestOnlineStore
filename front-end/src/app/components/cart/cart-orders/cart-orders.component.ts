@@ -154,7 +154,6 @@ export class CartOrdersComponent
 
   completeOrder() {
     if (this.authService.isAuth() && !this.authService.isAnonym()) {
-      console.log(this.authService.isAuth());
       this.router.navigate(['/order']);
       this.timeoutID = setTimeout(() => {
         this.close();

@@ -1,5 +1,4 @@
 <div class="select">
-  <label [for]="label">{{ label }}</label>
   <input
     #input
     class="input"
@@ -8,7 +7,8 @@
     (focus)="onTouched()"
     [disabled]="disabled"
     [value]="value"
-    [id]="label"
+    [placeholder]="label"
+    (change)="onChange(input.value)"
   />
   <app-icon
     [path]="'delivery-icon'"
