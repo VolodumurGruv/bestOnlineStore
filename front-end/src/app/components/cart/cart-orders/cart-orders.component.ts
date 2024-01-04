@@ -169,9 +169,7 @@ export class CartOrdersComponent
     this.advertisement.emit(true);
   }
 
-  submit() {
-    this.orderService.makeOrder(JSON.parse(localStorage.getItem('user')!)._id);
-  }
+  submit() {}
 
   ngOnDestroy(): void {
     this.unSub.unsubscribe();

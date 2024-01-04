@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { configs } from '@configs/configs';
 import { HttpErrorHandlerService } from './http-error-handler.service';
-import { Observable, catchError, map, tap } from 'rxjs';
+import { Observable, catchError, map } from 'rxjs';
 import { Orders } from '@interfaces/user.interface';
+import { DepData } from '@interfaces/department';
 
 @Injectable({
   providedIn: 'root',
@@ -22,9 +23,9 @@ export class OrderService {
       );
   }
 
-  makeOrder(userId: string): Observable<Orders[]> {
+  makeOrder(order: DepData): Observable<Orders[]> {
     return this.http
-      .post<Orders[]>(`${configs.URL}/order`, { user: userId })
+      .post<Orders[]>(`${configs.URL}/order`, order)
       .pipe(
         catchError(
           this.httpError.handleError<Orders[]>(

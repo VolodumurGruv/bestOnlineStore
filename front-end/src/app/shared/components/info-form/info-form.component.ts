@@ -9,7 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
-import { Subscription, concatMap, tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 
 import { UserService } from 'app/components/user/services/user.service';
 import {
@@ -75,7 +75,7 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
       ],
     ],
     email: ['', [Validators.required, Validators.email, emailValidator()]],
-    // address: ['', [Validators.required]],
+
     phone: [
       '',
       [
@@ -94,9 +94,6 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
         passwordValidator(),
       ],
     ],
-    // novaPoshtaAddress: [''],
-    // deliveryMethod: ['', [Validators.required]],
-    // paymentMethod: ['VISA'],
   });
 
   ngOnInit() {
@@ -129,38 +126,18 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.unSub.add(
       this.userService.updateUser(this.infoForm.value).subscribe((res: any) => {
         setupInitialValue(this.infoForm, res.payload.user);
-
-        // this.infoForm
-        //   .get('deliveryMethod')
-        //   ?.setValue(res.payload.user.shippingAddress.deliveryMethod);
-        // this.infoForm
-        //   .get('address')
-        //   ?.setValue(res.payload.user.shippingAddress.address);
       })
     );
   }
 
   makeOrder() {
-    // console.log(this.infoForm.value);
-    // const { address, paymentMethod, deliveryMethod, ...res } =
-    //   this.infoForm.value;
-
     if (this.infoForm.value) {
       this.unSub.add(
-        this.userService
-          .updateUser(this.infoForm.value)
-          // .pipe(
-          //   concatMap(() =>
-          //     this.orderService.makeOrder(
-          //       JSON.parse(localStorage.getItem('user')!)._id
-          //     )
-          //   )
-          // )
-          .subscribe(() => {
-            this.router.navigate([{ outlets: { cart: null } }], {
-              relativeTo: this.route.parent,
-            });
-          })
+        this.userService.updateUser(this.infoForm.value).subscribe(() => {
+          this.router.navigate([{ outlets: { cart: null } }], {
+            relativeTo: this.route.parent,
+          });
+        })
       );
       this.router.navigate(['/order']);
     }
@@ -203,19 +180,6 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
           tap((res: any) => {
             this.user = res.user;
             setupInitialValue(this.infoForm, this.user);
-
-            // if (this.user.shippingAddress?.deliveryMethod === 'Нова пошта') {
-            //   this.infoForm
-            //     .get('novaPoshtaAddress')
-            //     ?.setValue(res.user.shippingAddress.novaPoshtaAddress);
-            // }
-
-            // this.infoForm
-            //   .get('deliveryMethod')
-            //   ?.setValue(res.user.shippingAddress.deliveryMethod);
-            // this.infoForm
-            //   .get('address')
-            //   ?.setValue(res.user.shippingAddress.address);
           })
         )
         .subscribe()

@@ -24,7 +24,6 @@ export class DepartmentComponent {
 
   onCheckBox(event: boolean, id: number) {
     this.department = this.deliveryData[id].department;
-    console.log(this.department);
 
     this.deliveryData[id].isClosed = !event;
     this.deliveryData.forEach((item, i) => {

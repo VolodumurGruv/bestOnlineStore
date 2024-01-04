@@ -19,7 +19,7 @@ export class AuthService {
   private user = new BehaviorSubject<User | null>(
     JSON.parse(localStorage.getItem('user')!)
   );
-  private user$: Observable<User | null> = this.user.asObservable();
+  public user$: Observable<User | null> = this.user.asObservable();
 
   signIn(user: User): Observable<User> {
     return this.http

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputCheckBoxComponent } from '@shared/components/inputs/input-check-box/input-check-box.component';
 import { InputSelectComponent } from '@shared/components/inputs/input-select/input-select.component';
 import { getCities, getNovaPoshtaDepartment } from '@shared/utils/nova-poshta';
+import { DepartmentService } from '@shared/services/interaction/department.service';
 
 @Component({
   selector: 'app-nova-poshta',
@@ -11,21 +12,27 @@ import { getCities, getNovaPoshtaDepartment } from '@shared/utils/nova-poshta';
   templateUrl: './nova-poshta.component.html',
   styleUrls: ['./nova-poshta.component.scss'],
 })
-export class NovaPoshtaComponent implements OnInit {
-  items: { cities: string[]; departments: string[] } = {
+export class NovaPoshtaComponent {
+  private readonly departmentService = inject(DepartmentService);
+
+  public items: { cities: string[]; departments: string[] } = {
     cities: [],
     departments: [],
   };
 
-  placeholder = {
+  public data = {
+    city: '',
+    deliveryMethod: 'Нова пошта',
+    novaPoshtaAddress: '',
+  };
+
+  public placeholder = {
     city: 'Виберіть місто',
     department: 'Виберіть відділення або адресу',
   };
 
-  city = '';
-  departmentName = '';
-
-  ngOnInit(): void {}
+  private city = '';
+  private departmentName = '';
 
   getCity(event: string) {
     this.city = event;
@@ -42,7 +49,7 @@ export class NovaPoshtaComponent implements OnInit {
 
   getDepartments(event: string) {
     this.departmentName = event;
-    console.log(this.city);
+
     if (this.city) {
       getNovaPoshtaDepartment(this.city, this.departmentName)
         .then((d) => d.json())
@@ -51,12 +58,11 @@ export class NovaPoshtaComponent implements OnInit {
           d.data.forEach((item: any) => {
             this.items.departments.push(item.Description);
           });
-          if (this.departmentName) {
-            //
-          }
         });
     }
 
-    console.log(this.items);
+    this.data.city = this.city;
+    this.data.novaPoshtaAddress = this.departmentName;
+    this.departmentService.cities(this.data);
   }
 }
