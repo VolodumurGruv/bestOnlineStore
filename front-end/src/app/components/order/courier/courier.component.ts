@@ -1,14 +1,40 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
-import { InputCheckBoxComponent } from '@shared/components/inputs/input-check-box/input-check-box.component';
 import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
+import { DeliveryService } from '@shared/services/interaction/department.service';
+import { DepData } from '@interfaces/department';
 
 @Component({
   selector: 'app-courier',
   standalone: true,
-  imports: [CommonModule, InputCheckBoxComponent, TransformPricePipe],
+  imports: [CommonModule, FormsModule, TransformPricePipe],
   templateUrl: './courier.component.html',
   styleUrls: ['./courier.component.scss'],
 })
-export class CourierComponent {}
+export class CourierComponent {
+  public deliveryService = inject(DeliveryService);
+
+  courier: DepData = {
+    street: '',
+    house: '',
+    floor: '',
+    apartment: '',
+    time: '',
+    deliveryMethod: "Кур'єрська доставка",
+    isValid: false,
+  };
+
+  makeChanges() {
+    this.deliveryService.delivery(this.courier);
+    this.courier.isValid = this.validationChecker();
+  }
+
+  private validationChecker(): boolean {
+    if (this.courier?.apartment && this.courier?.house && this.courier?.street)
+      return true;
+
+    return false;
+  }
+}

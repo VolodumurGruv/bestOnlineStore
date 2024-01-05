@@ -12,4 +12,7 @@ import { InputSelectComponent } from '@shared/components/inputs/input-select/inp
 })
 export class UkrPoshtaComponent {
   @Input() items = [];
+  data = {
+    deliveryMethod: 'Укрпошта',
+  };
 }

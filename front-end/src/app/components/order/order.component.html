@@ -13,7 +13,7 @@
         <div class="order__user-info__data">{{ user.phone }}</div>
       </div>
     </div>
-    <div class="order__user-info__items">
+    <div class="order__user-info__items" *ngIf="!user.isAnonymous">
       <div class="order__user-info__name" *ngIf="user.lastName">
         <div class="order__user-info__item">Прізвище:</div>
         <div class="order__user-info__data">{{ user.lastName }}</div>

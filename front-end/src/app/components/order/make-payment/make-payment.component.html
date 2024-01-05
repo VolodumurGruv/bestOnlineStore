@@ -15,7 +15,9 @@
     </div>
   </div>
   <div class="action">
-    <button class="btn btn__login" (click)="makeOrder()">Замовити</button>
+    <button class="btn btn__login" (click)="makeOrder()" [disabled]="!disabled">
+      Замовити
+    </button>
     <div class="link" (click)="back()">Назад</div>
   </div>
 </section>

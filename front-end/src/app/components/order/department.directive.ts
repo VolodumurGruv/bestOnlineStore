@@ -10,6 +10,7 @@ import { NovaPoshtaComponent } from './nova-poshta/nova-poshta.component';
 import { UkrPoshtaComponent } from './ukr-poshta/ukr-poshta.component';
 import { CourierComponent } from './courier/courier.component';
 import { SelfPickupComponent } from './self-pickup/self-pickup.component';
+import { DeliveryService } from '@shared/services/interaction/department.service';
 
 @Directive({
   selector: '[appDepartment]',
@@ -28,6 +29,8 @@ export class DepartmentDirective {
     }
   }
 
+  private readonly deliveryService = inject(DeliveryService);
+
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly templateRef = inject(TemplateRef<any>);
 
@@ -35,11 +38,12 @@ export class DepartmentDirective {
     switch (department) {
       case 'NovaPoshta':
         return NovaPoshtaComponent;
-      case 'UkrPoshta':
-        return UkrPoshtaComponent;
+      // case 'UkrPoshta':
+      //   return UkrPoshtaComponent;
       case 'Courier':
         return CourierComponent;
       case 'SelfPickUp':
+        this.deliveryService.delivery({ deliveryMethod: 'Самовивіз' });
         return SelfPickupComponent;
       default:
         return '';

@@ -1,4 +1,83 @@
 <div class="courier">
-  <div></div>
-  <div class="courier__price"></div>
+  <div class="courier__input">
+    <input
+      [ngClass]="{
+        input__alert: street.invalid && (street.dirty || street.touched)
+      }"
+      name="street"
+      type="text"
+      placeholder="Вулиця"
+      [(ngModel)]="courier.street"
+      required
+      #street="ngModel"
+      (keyup)="makeChanges()"
+    />
+    <div
+      *ngIf="street.invalid && (street.dirty || street.touched)"
+      class="alert"
+    >
+      <div *ngIf="street.errors?.['required']">
+        Поле обов’язкове до заповнення
+      </div>
+    </div>
+  </div>
+
+  <div class="courier__input">
+    <input
+      [ngClass]="{
+        input__alert: house.invalid && (house.dirty || house.touched)
+      }"
+      type="text"
+      placeholder="Будинок"
+      name="house"
+      [(ngModel)]="courier.house"
+      required
+      #house="ngModel"
+      (keyup)="makeChanges()"
+    />
+    <div *ngIf="house.invalid && (house.dirty || house.touched)" class="alert">
+      <div *ngIf="house.errors?.['required']">
+        Поле обов’язкове до заповнення
+      </div>
+    </div>
+  </div>
+  <div class="courier__input">
+    <input
+      type="text"
+      placeholder="Поверх"
+      [(ngModel)]="courier.floor"
+      (keyup)="makeChanges()"
+    />
+  </div>
+  <div class="courier__input">
+    <input
+      type="text"
+      placeholder="Квартира"
+      [ngClass]="{
+        input__alert:
+          apartment.invalid && (apartment.dirty || apartment.touched)
+      }"
+      name="apartment"
+      [(ngModel)]="courier.apartment"
+      #apartment="ngModel"
+      required
+      (keyup)="makeChanges()"
+    />
+    <div
+      *ngIf="apartment.invalid && (apartment.dirty || apartment.touched)"
+      class="alert"
+    >
+      <div *ngIf="apartment.errors?.['required']">
+        Поле обов’язкове до заповнення
+      </div>
+    </div>
+  </div>
+  <div class="courier__input">
+    <input
+      type="text"
+      placeholder="Час доставки"
+      [(ngModel)]="courier.time"
+      (keyup)="makeChanges()"
+    />
+  </div>
 </div>

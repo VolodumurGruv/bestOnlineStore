@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { InputCheckBoxComponent } from '@shared/components/inputs/input-check-box/input-check-box.component';
 import { InputSelectComponent } from '@shared/components/inputs/input-select/input-select.component';
 import { getCities, getNovaPoshtaDepartment } from '@shared/utils/nova-poshta';
-import { DepartmentService } from '@shared/services/interaction/department.service';
+import { DeliveryService } from '@shared/services/interaction/department.service';
 
 @Component({
   selector: 'app-nova-poshta',
@@ -13,7 +13,7 @@ import { DepartmentService } from '@shared/services/interaction/department.servi
   styleUrls: ['./nova-poshta.component.scss'],
 })
 export class NovaPoshtaComponent {
-  private readonly departmentService = inject(DepartmentService);
+  private readonly deliveryService = inject(DeliveryService);
 
   public items: { cities: string[]; departments: string[] } = {
     cities: [],
@@ -63,6 +63,6 @@ export class NovaPoshtaComponent {
 
     this.data.city = this.city;
     this.data.novaPoshtaAddress = this.departmentName;
-    this.departmentService.cities(this.data);
+    this.deliveryService.delivery(this.data);
   }
 }

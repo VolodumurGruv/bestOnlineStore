@@ -3,15 +3,17 @@ import { DepData } from '@interfaces/department';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class DepartmentService {
-  private citiesData = new BehaviorSubject<DepData>({
-    city: '',
-    novaPoshtaAddress: '',
-    deliveryMethod: '',
-  });
-  public citiesDataResult$ = this.citiesData.asObservable();
+export class DeliveryService {
+  private deliveryData = new BehaviorSubject<DepData>({ isValid: false });
+  private valid = new BehaviorSubject<boolean>(false);
+  public deliveryDataResult$ = this.deliveryData.asObservable();
+  public valid$ = this.valid.asObservable();
 
-  cities(city: DepData) {
-    this.citiesData.next(city);
+  delivery(city: DepData) {
+    this.deliveryData.next(city);
+  }
+
+  isValid(state: boolean) {
+    this.valid.next(state);
   }
 }
