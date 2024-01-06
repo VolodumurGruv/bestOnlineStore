@@ -38,10 +38,12 @@ export class InputSelectComponent implements ControlValueAccessor {
     this.isList = true;
     this.value = value;
 
-    this.filteredItems = this.items.filter(
-      (item) =>
-        item.slice(0, value.length).toLowerCase() === value.toLowerCase()
-    );
+    if (this.items.length) {
+      this.filteredItems = this.items.filter(
+        (item) =>
+          item.slice(0, value.length).toLowerCase() === value.toLowerCase()
+      );
+    }
 
     if (this.value) {
       this.onChange(this.value);
@@ -73,8 +75,8 @@ export class InputSelectComponent implements ControlValueAccessor {
   }
 
   pickUp(item: string) {
-    this.inputValue.emit(item);
     this.writeValue(item);
+    this.inputValue.emit(item);
     this.isList = false;
   }
 }

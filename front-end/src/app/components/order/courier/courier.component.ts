@@ -31,10 +31,11 @@ export class CourierComponent {
     this.courier.isValid = this.validationChecker();
   }
 
-  private validationChecker(): boolean {
-    if (this.courier?.apartment && this.courier?.house && this.courier?.street)
-      return true;
-
-    return false;
-  }
+  private validationChecker = (): boolean => {
+    return this.courier?.apartment &&
+      this.courier?.house &&
+      this.courier?.street
+      ? true
+      : false;
+  };
 }

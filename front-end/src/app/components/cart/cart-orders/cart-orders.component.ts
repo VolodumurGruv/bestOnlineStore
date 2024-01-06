@@ -19,7 +19,6 @@ import { CartService } from '../services/cart.service';
 import { InfoComponent } from 'app/components/user/components/info/info.component';
 import { InfoFormComponent } from '@shared/components/info-form/info-form.component';
 import { Subscription, map, tap } from 'rxjs';
-import { OrderService } from '@shared/services/order.service';
 import { IconComponent } from '@shared/components/icon/icon.component';
 import { AuthService } from 'app/components/user/services/signin-flow/auth.service';
 
@@ -50,7 +49,6 @@ export class CartOrdersComponent
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly cartService = inject(CartService);
-  private readonly orderService = inject(OrderService);
   private readonly authService = inject(AuthService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private unSub = new Subscription();
@@ -77,6 +75,7 @@ export class CartOrdersComponent
         .getCart()
         .pipe(
           map((res: any) => {
+            console.log(res);
             this.total = res.payload.totalPrice;
             this.orders = res.payload.items.filter(
               (item: Orders) => item.quantity
@@ -157,7 +156,7 @@ export class CartOrdersComponent
       this.router.navigate(['/order']);
       this.timeoutID = setTimeout(() => {
         this.close();
-      }, 0);
+      }, 10);
     } else {
       this.isComplete = false;
       this.advertisement.emit(false);

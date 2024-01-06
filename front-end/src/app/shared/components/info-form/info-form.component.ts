@@ -21,7 +21,6 @@ import {
 import { setupInitialValue } from '@shared/utils/initial-from-local';
 
 import { ErrorValidationComponent } from '@shared/components/error-validation/error-validation.component';
-import { OrderService } from '@shared/services/order.service';
 import { UserInfo } from '@interfaces/user.interface';
 import { InfoFormItemComponent } from './info-form-item/info-form-item.component';
 import { DeliveryFormItemComponent } from './delivery-form-item/delivery-form-item.component';
@@ -45,7 +44,6 @@ export class InfoFormComponent implements OnInit, OnDestroy, AfterViewChecked {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly userService = inject(UserService);
-  private readonly orderService = inject(OrderService);
   private unSub = new Subscription();
 
   public path!: string;

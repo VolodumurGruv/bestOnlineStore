@@ -24,6 +24,7 @@ export class NovaPoshtaComponent {
     city: '',
     deliveryMethod: 'Нова пошта',
     novaPoshtaAddress: '',
+    isValid: false,
   };
 
   public placeholder = {
@@ -35,6 +36,7 @@ export class NovaPoshtaComponent {
   private departmentName = '';
 
   getCity(event: string) {
+    this.city = '';
     this.city = event;
     getCities(this.city)
       .then((d) => d.json())
@@ -45,9 +47,11 @@ export class NovaPoshtaComponent {
           this.getDepartments(this.city);
         }
       });
+    this.data.isValid = this.validationCheck(this.city, this.departmentName);
   }
 
   getDepartments(event: string) {
+    this.departmentName = '';
     this.departmentName = event;
 
     if (this.city) {
@@ -64,5 +68,14 @@ export class NovaPoshtaComponent {
     this.data.city = this.city;
     this.data.novaPoshtaAddress = this.departmentName;
     this.deliveryService.delivery(this.data);
+
+    this.data.isValid = this.validationCheck(this.city, this.departmentName);
   }
+
+  private validationCheck = (city: string, department: string): boolean => {
+    return this.items.cities.includes(city) &&
+      this.items.departments.includes(department)
+      ? true
+      : false;
+  };
 }

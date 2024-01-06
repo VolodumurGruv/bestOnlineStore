@@ -7,5 +7,5 @@ export type DepData = {
   floor?: string;
   apartment?: string;
   time?: string;
-  isValid?: boolean | undefined;
+  isValid: boolean;
 };

@@ -9,7 +9,7 @@
           {{ order.description }}
         </div>
         <div class="price">
-          <p>{{ order.itemsPrice | transformPrice }}</p>
+          <p>{{ order.totalPrice | transformPrice }}</p>
           <p class="discount">{{ order?.discount | transformPrice }}</p>
         </div>
       </div>

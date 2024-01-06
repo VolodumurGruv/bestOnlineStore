@@ -43,7 +43,10 @@ export class DepartmentDirective {
       case 'Courier':
         return CourierComponent;
       case 'SelfPickUp':
-        this.deliveryService.delivery({ deliveryMethod: 'Самовивіз' });
+        this.deliveryService.delivery({
+          deliveryMethod: 'Самовивіз',
+          isValid: true,
+        });
         return SelfPickupComponent;
       default:
         return '';

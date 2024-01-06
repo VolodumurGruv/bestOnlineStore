@@ -37,6 +37,7 @@ export interface Orders {
   product: string;
   isPaid: boolean;
   itemsPrice?: number;
+  totalPrice?: number;
 }
 
 export interface Review {

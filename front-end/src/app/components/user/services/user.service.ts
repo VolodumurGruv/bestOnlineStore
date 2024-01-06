@@ -4,7 +4,7 @@ import { configs } from '@configs/configs';
 import { PAYLOAD } from '@interfaces/request.interface';
 import { UserInfo } from '@interfaces/user.interface';
 import { HttpErrorHandlerService } from '@shared/services/http-error-handler.service';
-import { Observable, catchError, config, map, tap } from 'rxjs';
+import { Observable, catchError, config, map, retry, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -41,6 +41,7 @@ export class UserService {
     return this.http
       .put<PAYLOAD<UserInfo>>(`${configs.URL}/user/profile`, user)
       .pipe(
+        retry(3),
         tap((res: PAYLOAD<UserInfo>) => {
           const user = res.payload.user;
           user.token = JSON.parse(localStorage.getItem('user')!).token;

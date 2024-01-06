@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { deliveryData } from '@configs/delivery-data';
@@ -20,6 +20,8 @@ import { DeliveryService } from '@shared/services/interaction/department.service
   styleUrls: ['./department.component.scss'],
 })
 export class DepartmentComponent implements OnInit {
+  @Output() deliveryPrice = new EventEmitter<number>();
+
   private readonly deliveryService = inject(DeliveryService);
   public readonly deliveryData = deliveryData;
   public department: string = '';
@@ -36,6 +38,19 @@ export class DepartmentComponent implements OnInit {
         this.deliveryData[i].isChecked = event;
       }
     });
+
+    if (this.deliveryData[id].isClosed) {
+      this.deliveryService.delivery({ isValid: false });
+    }
+
+    if (
+      this.deliveryData[id].department === 'Courier' &&
+      !this.deliveryData[id].isClosed
+    ) {
+      this.deliveryPrice.emit(this.deliveryData[id].price);
+    } else {
+      this.deliveryPrice.emit(0);
+    }
 
     this.checkValidation();
   }

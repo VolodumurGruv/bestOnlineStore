@@ -30,12 +30,16 @@ export class MakePaymentComponent implements OnInit, OnDestroy {
   dataValid: boolean | undefined = false;
 
   ngOnInit(): void {
-    this.deliveryService.valid$.subscribe((b) => {
-      this.disabled = b;
-    });
-    this.deliveryService.deliveryDataResult$.subscribe((b) => {
-      this.dataValid = b.isValid;
-    });
+    this.unSub.add(
+      this.deliveryService.valid$.subscribe((b) => {
+        this.disabled = b;
+      })
+    );
+    this.unSub.add(
+      this.deliveryService.deliveryDataResult$.subscribe((b) => {
+        this.dataValid = b.isValid;
+      })
+    );
   }
 
   makeOrder() {
@@ -43,8 +47,9 @@ export class MakePaymentComponent implements OnInit, OnDestroy {
       .pipe(tap((b) => (this.data = b)))
       .subscribe();
 
-    // this.unSub.add(this.orderService.makeOrder(this.data).subscribe());
+    this.unSub.add(this.orderService.makeOrder(this.data).subscribe());
   }
+
   back() {
     this.router.navigate([{ outlets: { cart: ['cart'] } }]);
   }
