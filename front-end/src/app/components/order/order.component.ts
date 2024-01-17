@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription, map, tap } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 import { Orders, UserInfo } from '@interfaces/user.interface';
 import { UserService } from '../user/services/user.service';
@@ -23,6 +23,7 @@ import { deliveryData } from '@configs/delivery-data';
     MakePaymentComponent,
     DepartmentComponent,
     OrdersComponent,
+    RouterOutlet,
   ],
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],

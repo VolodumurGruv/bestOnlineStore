@@ -46,6 +46,13 @@ export const APP_ROUTING: Routes = [
           ),
       },
       {
+        path: 'order/completed',
+        loadComponent: () =>
+          import(
+            './components/order/completed-order/completed-order.component'
+          ).then((m) => m.CompletedOrderComponent),
+      },
+      {
         path: 'sales',
         loadComponent: () =>
           import('./components/sales/sales.component').then(

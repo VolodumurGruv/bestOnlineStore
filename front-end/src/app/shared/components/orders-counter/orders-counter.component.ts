@@ -85,7 +85,6 @@ export class OrdersCounterComponent implements OnInit, OnDestroy, DoCheck {
           }),
           map((res: any) => {
             res.payload.items.forEach((item: any) => {
-              console.log(this.order._id == item._id);
               if (item._id == this.order._id) {
                 this.order = item;
               }

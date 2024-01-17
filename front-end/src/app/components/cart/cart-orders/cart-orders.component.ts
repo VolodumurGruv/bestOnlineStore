@@ -22,6 +22,7 @@ import { AuthService } from 'app/components/user/services/signin-flow/auth.servi
 import { OrdersCounterComponent } from '@shared/components/orders-counter/orders-counter.component';
 import { DeliveryService } from '@shared/services/interaction/delivery.service';
 import { SpinnerService } from '@shared/services/interaction/spinner.service';
+import { InCartService } from '@shared/services/interaction/in-cart.service';
 
 @Component({
   selector: 'app-cart-orders',
@@ -51,6 +52,7 @@ export class CartOrdersComponent
   private readonly deliveryService = inject(DeliveryService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private readonly spinnerService = inject(SpinnerService);
+  private readonly inCartService = inject(InCartService);
   private unSub = new Subscription();
 
   private timeoutID!: any;
@@ -86,6 +88,7 @@ export class CartOrdersComponent
   }
 
   private getCartOrders() {
+    this.inCartService.productsInCart$.subscribe((res) => console.log(res));
     this.unSub.add(
       this.cartService
         .getCart()

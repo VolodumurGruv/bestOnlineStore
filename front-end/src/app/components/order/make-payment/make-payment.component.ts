@@ -56,6 +56,7 @@ export class MakePaymentComponent implements OnInit, OnDestroy {
     );
     deliveryData.forEach((item) => (item.isChecked = false));
     this.unSub.add(this.orderService.makeOrder(this.data).subscribe());
+    this.router.navigate(['/order/completed']);
   }
 
   back() {

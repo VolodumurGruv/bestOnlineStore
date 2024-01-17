@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { NgClass, NgFor, NgIf, NgOptimizedImage } from '@angular/common';
-import { Subscription, concatMap, tap } from 'rxjs';
+import { Subscription, concatMap, map, tap } from 'rxjs';
 
 import { Product } from '@interfaces/product.interfaces';
 import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
@@ -11,6 +11,7 @@ import { WishlistService } from '@shared/services/wishlist.service';
 import { IconComponent } from '@shared/components/icon/icon.component';
 import { ProductsService } from '@shared/services/products.service';
 import { User } from '@interfaces/user.interface';
+import { InCartService } from '@shared/services/interaction/in-cart.service';
 
 @Component({
   selector: 'app-about-product',
@@ -35,6 +36,7 @@ export class AboutProductComponent implements OnInit, OnDestroy {
   private readonly alertService = inject(AlertService);
   private readonly wishService = inject(WishlistService);
   private readonly productService = inject(ProductsService);
+  private readonly inCartService = inject(InCartService);
 
   private unSub = new Subscription();
 
@@ -42,7 +44,7 @@ export class AboutProductComponent implements OnInit, OnDestroy {
     this.unSub.add(
       this.productService
         .viewedProduct(this.product._id, { viewed: 1 })
-        .subscribe((res) => console.log(res))
+        .subscribe()
     );
   }
 
@@ -60,10 +62,16 @@ export class AboutProductComponent implements OnInit, OnDestroy {
         this.userService
           .userAnonymous()
           .pipe(concatMap(() => this.cartService.makeOrder(id, quantity)))
-          .subscribe()
+          .subscribe((res: any) => {
+            this.inCartService.orders(res.payload.items);
+          })
       );
     } else {
-      this.unSub.add(this.cartService.makeOrder(id, quantity).subscribe());
+      this.unSub.add(
+        this.cartService.makeOrder(id, quantity).subscribe((res: any) => {
+          this.inCartService.orders(res.payload.items);
+        })
+      );
     }
   }
 
