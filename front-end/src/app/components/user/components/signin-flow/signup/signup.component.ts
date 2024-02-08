@@ -43,7 +43,16 @@ export class SignupComponent implements OnDestroy {
   public readonly isValid = isValid;
 
   public signupForm: FormGroup = this.fb.group({
-    name: [
+    firstName: [
+      null,
+      [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30),
+        nameValidator(),
+      ],
+    ],
+    lastName: [
       null,
       [
         Validators.required,
@@ -76,18 +85,10 @@ export class SignupComponent implements OnDestroy {
   });
 
   registerUser() {
-    const { name, email, password } = this.signupForm.value;
-    const firstName = name.split(' ')[0];
-    let lastName = name.split(' ')[1];
-
-    if (!lastName) {
-      lastName = 'xxxxx';
-    }
-
-    if (firstName && email && password) {
+    if (this.signupForm.value) {
       this.unSub.add(
         this.authService
-          .signup({ firstName, lastName, password, email })
+          .signup(this.signupForm.value)
           .subscribe(() => this.router.navigate(['/user']))
       );
     }

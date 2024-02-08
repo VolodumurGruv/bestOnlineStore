@@ -31,6 +31,7 @@ export interface Product {
 export interface Review {
   _id: string;
   user: string;
+  userName?: string;
   product: string;
   rating: number;
   comment: string;
@@ -39,4 +40,5 @@ export interface Review {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  isComment?: boolean;
 }

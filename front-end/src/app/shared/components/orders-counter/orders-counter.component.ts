@@ -1,11 +1,4 @@
-import {
-  Component,
-  DoCheck,
-  Input,
-  OnDestroy,
-  OnInit,
-  inject,
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { CartService } from 'app/components/cart/services/cart.service';
@@ -23,7 +16,7 @@ import { TransformPricePipe } from '@shared/pipes/transform-price.pipe';
   templateUrl: './orders-counter.component.html',
   styleUrls: ['./orders-counter.component.scss'],
 })
-export class OrdersCounterComponent implements OnInit, OnDestroy, DoCheck {
+export class OrdersCounterComponent implements OnInit, OnDestroy {
   @Input() order!: Orders;
   private readonly cartService = inject(CartService);
   private readonly deliveryService = inject(DeliveryService);
@@ -34,8 +27,6 @@ export class OrdersCounterComponent implements OnInit, OnDestroy, DoCheck {
   ngOnInit(): void {
     this.getCartOrders();
   }
-
-  ngDoCheck(): void {}
 
   increase(id: string | undefined, quantity: number) {
     if (id && quantity) {

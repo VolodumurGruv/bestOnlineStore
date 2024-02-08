@@ -4,7 +4,7 @@
     <p class="feedbacks__rating">
       Рейтинг: 4.8 &#9734; &#9734; &#9734; &#9734; &#9734;
     </p>
-    <p class="feedbacks__num">Всі відгуки: 235</p>
+    <p class="feedbacks__num">Всі відгуки: {{ feedbackAmount }}</p>
     <div class="feedbacks__inputs">
       <input
         class="feedbacks__input-text"
@@ -12,7 +12,7 @@
         placeholder="Написати відгук"
         [(ngModel)]="feedback"
       />
-      <div class="feedbacks__input-file">
+      <!-- <div class="feedbacks__input-file">
         <input
           type="file"
           id="fileInput"
@@ -26,13 +26,16 @@
             [viewBox]="'0 0 29 27'"
           ></app-icon>
         </label>
-      </div>
+      </div> -->
       <button class="feedbacks__see-all" (click)="addReview()">
         надіслати
       </button>
     </div>
   </div>
-  <app-feedback-item [product]="product"></app-feedback-item>
+  <app-feedback-item
+    [product]="product"
+    (feedbackLength)="feedbackLength($event)"
+  ></app-feedback-item>
 
   <button class="feedbacks__see-all">всі відгуки</button>
 </section>

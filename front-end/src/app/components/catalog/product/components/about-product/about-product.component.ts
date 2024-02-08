@@ -44,7 +44,7 @@ export class AboutProductComponent implements OnInit, OnDestroy {
     this.unSub.add(
       this.productService
         .viewedProduct(this.product._id, { viewed: 1 })
-        .subscribe()
+        .subscribe((res) => console.log(res.payload.viewed))
     );
   }
 

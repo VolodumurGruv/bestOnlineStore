@@ -5,7 +5,6 @@ import { Subscription, map } from 'rxjs';
 
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
 import { FiltersComponent } from '../filters/filters.component';
-import { CardComponent } from 'app/components/home-page/components/card/card.component';
 import { Product } from '@interfaces/product.interfaces';
 import { ProductsService } from '@shared/services/products.service';
 import { PathStringService } from '@shared/services/interaction/path-string.service';
@@ -20,7 +19,6 @@ import { AlertService } from '@shared/services/interaction/alert.service';
   standalone: true,
   imports: [
     CommonModule,
-    CardComponent,
     ProductCardComponent,
     FiltersComponent,
     SortingComponent,

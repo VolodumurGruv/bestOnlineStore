@@ -2,7 +2,7 @@
   <div class="group__count">
     <p class="order__order__name">{{ order.name }}</p>
     <div class="order__order__count">
-      <span class="decrease" (click)="decrease(order.product, +quantity.value)">
+      <span class="decrease" (click)="decrease(order.product, order.quantity)">
         <app-icon
           [path]="'minus'"
           [size]="{ width: '26px', height: '27px' }"
@@ -19,7 +19,7 @@
         class="order__input"
         disabled
       />
-      <span class="increase" (click)="increase(order.product, +quantity.value)">
+      <span class="increase" (click)="increase(order.product, order.quantity)">
         <app-icon
           [path]="'increase'"
           [size]="{ width: '26px', height: '27px' }"

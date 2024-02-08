@@ -88,7 +88,6 @@ export class CartOrdersComponent
   }
 
   private getCartOrders() {
-    this.inCartService.productsInCart$.subscribe((res) => console.log(res));
     this.unSub.add(
       this.cartService
         .getCart()

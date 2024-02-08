@@ -7,7 +7,10 @@ export class DeliveryService {
   private deliveryData = new BehaviorSubject<DepData>({ isValid: false });
   private valid = new BehaviorSubject<boolean>(false);
   private orderCounter = new BehaviorSubject<number>(0);
-  private quantity = new BehaviorSubject<number>(0);
+  private quantity = new BehaviorSubject<{ id: string; quantity: number }>({
+    id: '',
+    quantity: 1,
+  });
   public deliveryDataResult$ = this.deliveryData.asObservable();
   public valid$ = this.valid.asObservable();
   public orderCounter$ = this.orderCounter.asObservable();
@@ -25,7 +28,7 @@ export class DeliveryService {
     this.orderCounter.next(value);
   }
 
-  quantityCounter(quantity: number) {
+  quantityCounter(quantity: { id: string; quantity: number }) {
     this.quantity.next(quantity);
   }
 }

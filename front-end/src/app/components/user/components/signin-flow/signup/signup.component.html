@@ -6,15 +6,32 @@
       (ngSubmit)="registerUser()"
       class="signup__form"
     >
-      <div class="signup__input-wrap" [ngClass]="isValid(signupForm, 'name')">
+      <div
+        class="signup__input-wrap"
+        [ngClass]="isValid(signupForm, 'firstName')"
+      >
         <input
           type="text"
           class="signup__input"
-          placeholder="І'мя Призвіще*"
-          formControlName="name"
+          placeholder="І'мя*"
+          formControlName="firstName"
         />
         <app-error-validation
-          [control]="signupForm.get('name')"
+          [control]="signupForm.get('firstName')"
+        ></app-error-validation>
+      </div>
+      <div
+        class="signup__input-wrap"
+        [ngClass]="isValid(signupForm, 'lastName')"
+      >
+        <input
+          type="text"
+          class="signup__input"
+          placeholder="Призвіще*"
+          formControlName="lastName"
+        />
+        <app-error-validation
+          [control]="signupForm.get('lastName')"
         ></app-error-validation>
       </div>
 

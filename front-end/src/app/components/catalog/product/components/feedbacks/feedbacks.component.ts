@@ -18,6 +18,7 @@ export class FeedbacksComponent {
   @Input() product!: Product;
   public feedback: string = '';
   public file!: string;
+  public feedbackAmount: number = 0;
 
   private readonly reviewService = inject(ReviewService);
 
@@ -32,5 +33,9 @@ export class FeedbacksComponent {
     if (userID) {
       this.reviewService.addReview(review).subscribe();
     }
+  }
+
+  feedbackLength(length: number): void {
+    this.feedbackAmount = length;
   }
 }

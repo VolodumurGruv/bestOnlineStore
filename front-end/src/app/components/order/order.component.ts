@@ -1,4 +1,12 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription, map, tap } from 'rxjs';
 import { Router, RouterOutlet } from '@angular/router';
@@ -28,7 +36,7 @@ import { deliveryData } from '@configs/delivery-data';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
 })
-export class OrderComponent implements OnInit, OnDestroy {
+export class OrderComponent implements OnInit, DoCheck, OnDestroy {
   private readonly userService = inject(UserService);
   private readonly cartService = inject(CartService);
   private readonly deliveryService = inject(DeliveryService);
@@ -66,6 +74,7 @@ export class OrderComponent implements OnInit, OnDestroy {
         .getCart()
         .pipe(
           map((res: any) => {
+            this.initialTotal = res.payload.totalPrice;
             this.total = res.payload.totalPrice;
             this.orders = res.payload.items.filter(
               (item: Orders) => item.quantity
@@ -74,6 +83,25 @@ export class OrderComponent implements OnInit, OnDestroy {
         )
         .subscribe()
     );
+  }
+
+  ngDoCheck(): void {
+    // if (this.initialTotal !== this.total) {
+    //   this.unSub.add(
+    //     this.cartService
+    //       .getCart()
+    //       .pipe(
+    //         map((res: any) => {
+    //           this.initialTotal = res.payload.totalPrice;
+    //           this.total = res.payload.totalPrice;
+    //           this.orders = res.payload.items.filter(
+    //             (item: Orders) => item.quantity
+    //           );
+    //         })
+    //       )
+    //       .subscribe()
+    //   );
+    // }
   }
 
   calkTotal(event: number) {

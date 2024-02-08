@@ -1,5 +1,8 @@
 .sales {
   display: flex;
-  justify-content: space-between;
-  padding: 80px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem;
+  gap: 7.5rem;
 }

@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Subscription, tap } from 'rxjs';
+
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { AdvicesComponent } from './components/advices/advices.component';
-import { CardComponent } from './components/card/card.component';
-
 import { ProductsService } from '@shared/services/products.service';
 import { Product } from '@interfaces/product.interfaces';
 import { ProductCardComponent } from '@shared/components/product-card/product-card.component';
-import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
@@ -17,7 +16,6 @@ import { Observable, Subscription } from 'rxjs';
     CommonModule,
     CarouselComponent,
     AdvicesComponent,
-    CardComponent,
     ProductCardComponent,
   ],
   templateUrl: './home-page.component.html',
@@ -31,13 +29,26 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   private unSub = new Subscription();
 
-  products!: Product[];
+  topProducts!: Product[];
+  discountProducts!: Product[];
+  newProducts!: Product[];
 
   ngOnInit(): void {
     this.unSub.add(
       this.productService
         .getAllProducts()
-        .subscribe((res) => (this.products = res))
+        .pipe(
+          tap((res) => {
+            this.topProducts = res
+              .sort((a, b) => b.viewed - a.viewed)
+              .slice(0, 3);
+            this.discountProducts = res
+              .filter((item) => item.discount > 0)
+              .slice(0, 3);
+            this.newProducts = res.filter((item) => item.new).slice(0, 3);
+          })
+        )
+        .subscribe()
     );
   }
 
