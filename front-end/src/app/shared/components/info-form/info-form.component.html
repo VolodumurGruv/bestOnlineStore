@@ -1,0 +1,16 @@
+<div class="user__info-title">Особиста інформація</div>
+<form
+  class="user__form"
+  [formGroup]="infoForm"
+  (ngSubmit)="makeOrder()"
+  autocomplete="on"
+>
+  <app-info-form-item
+    [infoForm]="infoForm"
+    [isCart]="isCart"
+  ></app-info-form-item>
+
+  <div class="delivery__actions">
+    <ng-content></ng-content>
+  </div>
+</form>

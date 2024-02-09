@@ -1,0 +1,68 @@
+@use "fonts";
+@use "colors";
+
+.payment {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 56px;
+
+  &__title {
+    @include fonts.montserrat(32px, 500, normal, normal);
+
+    color: colors.$black;
+  }
+
+  &__drop-down {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 1316px;
+    padding: 1.25rem 1rem;
+    border-radius: 8px;
+    border: 1px solid colors.$gray;
+    cursor: pointer;
+
+    &__item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      width: 100%;
+      gap: 20px;
+
+      p {
+        @include fonts.montserrat(28px, 500, normal, normal);
+
+        color: colors.$color-text;
+      }
+    }
+
+    &__chosen {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.2rem;
+    }
+  }
+}
+
+.checkboxes {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 1.6rem;
+
+  &__hidden {
+    display: none;
+  }
+
+  &__item {
+    display: flex;
+    width: 82.25rem;
+    padding: 1.25rem 0;
+    align-items: center;
+    gap: 50.75rem;
+    border-radius: 0.5rem;
+  }
+}

@@ -1,0 +1,39 @@
+@use "fonts";
+@use "colors";
+
+.courier {
+  display: flex;
+  width: 72rem;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 1.5rem 12rem;
+  flex-wrap: wrap;
+}
+
+input {
+  @include fonts.primary-roboto(1.5rem, 400, normal, 130%);
+
+  display: flex;
+  width: 30rem;
+  height: 4.5rem;
+  padding: 0.75rem 1rem;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
+  border: 1px solid colors.$gray;
+  background: colors.$white;
+  outline: none;
+
+  &::placeholder {
+    color: colors.$gray;
+  }
+}
+
+.input__alert {
+  border: 1px solid colors.$sale-color;
+}
+
+.alert {
+  @include fonts.inter(0.875rem, 400, normal, normal);
+  color: colors.$sale-color;
+}

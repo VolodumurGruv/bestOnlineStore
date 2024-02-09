@@ -1,0 +1,8 @@
+<ng-container *ngIf="text">
+  <div [ngClass]="alertClass">
+    <div class="alert__wrap">
+      <p class="alert__text">{{ text }}</p>
+      <p *ngIf="errorText">{{ errorText }}</p>
+    </div>
+  </div>
+</ng-container>

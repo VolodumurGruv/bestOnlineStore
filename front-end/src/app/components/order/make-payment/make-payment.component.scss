@@ -1,0 +1,67 @@
+@use "fonts";
+@use "colors";
+
+.make-payment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 1316px;
+  flex-shrink: 0;
+  gap: 80px;
+
+  &__card {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 56px;
+  }
+}
+
+.title {
+  @include fonts.montserrat(34px, 500, normal, normal);
+
+  color: colors.$black;
+}
+
+.card {
+  &__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 36px;
+  }
+}
+
+.items {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 550px;
+  width: 100%;
+}
+
+.item {
+  @include fonts.montserrat(28px, 500, normal, normal);
+
+  color: colors.$color-text;
+
+  &__text {
+    @include fonts.montserrat(24px, 400, normal, normal);
+
+    color: colors.$color-text;
+  }
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.link {
+  @extend .item__text;
+
+  text-decoration: underline;
+  cursor: pointer;
+}

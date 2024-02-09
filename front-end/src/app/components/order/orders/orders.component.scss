@@ -1,0 +1,45 @@
+@use "fonts";
+@use "colors";
+
+.container {
+  display: flex;
+  width: 1316px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 56px;
+  flex-shrink: 0;
+}
+
+.order {
+  &__subtitle {
+    @include fonts.montserrat(32px, 500, normal, normal);
+
+    margin-bottom: 56px;
+    color: colors.$color-text;
+  }
+
+  &__order {
+    &__items {
+      display: flex;
+      width: 1316px;
+      padding: 16px 20px;
+      align-items: center;
+      gap: 20px;
+      border-radius: 8px;
+      border: 1px solid colors.$gray;
+    }
+
+    &__image {
+      img {
+        width: 220px;
+        height: 200px;
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+.orders-counter {
+  width: 100%;
+}
