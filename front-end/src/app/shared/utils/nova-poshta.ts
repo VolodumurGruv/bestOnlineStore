@@ -1,4 +1,3 @@
-import { environment } from 'environments/environment.development';
 
 const URL = 'https://api.novaposhta.ua/v2.0/json/';
 interface NovaPoshtaReq {
@@ -10,7 +9,7 @@ interface NovaPoshtaReq {
 export const getAddresses = (city: string) => {
   console.log(city);
   const reqCityAddresses = {
-    apiKey: environment.novaPoshta,
+    apiKey: 'environment.novaPoshta',
     modelName: 'Address',
     calledMethod: 'getSettlements',
     methodProperties: {
@@ -23,7 +22,7 @@ export const getAddresses = (city: string) => {
 
 export const getNovaPoshtaDepartment = (cityName: string, ref: string) => {
   const reqDepartments = {
-    apiKey: environment.novaPoshta,
+    apiKey: 'environment.novaPoshta',
     modelName: 'Address',
     calledMethod: 'getWarehouses',
     methodProperties: {
@@ -39,7 +38,7 @@ export const getNovaPoshtaDepartment = (cityName: string, ref: string) => {
 
 export const getNovaPoshtaStreet = (city: string) => {
   const reqStreet = {
-    apiKey: environment.novaPoshta,
+    apiKey: 'environment.novaPoshta',
     modelName: 'Address',
     calledMethod: 'getStreet',
     methodProperties: {

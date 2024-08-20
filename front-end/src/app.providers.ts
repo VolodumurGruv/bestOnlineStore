@@ -24,10 +24,10 @@ export const mainProviders = {
       ],
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })
     ),
-    importProvidersFrom(
-      provideFirebaseApp(() => initializeApp(environment.firebase)),
-      provideAuth(() => getAuth())
-    ),
+    // importProvidersFrom(
+    //   provideFirebaseApp(() => initializeApp(environment.firebase)),
+    //   provideAuth(() => getAuth())
+    // ),
     provideHttpClient(withInterceptors([AuthInterceptor])),
     provideAnimations(),
   ],
