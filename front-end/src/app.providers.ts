@@ -14,15 +14,22 @@ if (environment.production) {
 
 export const mainProviders = {
   providers: [
-    provideRouter([
+    provideRouter(
+      [
         {
-            path: '',
-            loadChildren: () => import('./app/app.routing').then((m) => m.APP_ROUTING),
+          path: '',
+          loadChildren: () =>
+            import('./app/app.routing').then((m) => m.APP_ROUTING),
         },
-    ], withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })),
-    importProvidersFrom(provideFirebaseApp(() => initializeApp(environment.firebase)), provideAuth(() => getAuth())),
+      ],
+      withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })
+    ),
+    importProvidersFrom(
+      provideFirebaseApp(() => initializeApp(environment.firebase)),
+      provideAuth(() => getAuth())
+    ),
     provideHttpClient(withInterceptors([AuthInterceptor])),
     provideAnimations(),
-    provideAnimations()
-],
+    provideAnimations(),
+  ],
 };
