@@ -1,0 +1,42 @@
+<ng-container *ngIf="products?.length; else loading">
+  <section class="carousel wrapper">
+    <app-carousel></app-carousel>
+  </section>
+  <section class="top wrapper">
+    <div class="top__title">Популярне</div>
+    <app-card class="top__box" [product]="products"></app-card>
+    <div class="top__btn">
+      <button class="btn btn__add btn__card" (click)="redirect('/catalog')">
+        ПЕРЕЙТИ В КАТАЛОГ
+      </button>
+    </div>
+  </section>
+  <section class="new wrapper">
+    <div class="top__title">Новинки</div>
+    <app-card class="new__box" [product]="products"></app-card>
+    <div class="top__btn">
+      <button
+        class="btn btn__add btn__card"
+        (click)="redirect('/catalog/newest')"
+      >
+        переглянути всі
+      </button>
+    </div>
+  </section>
+  <section class="actions wrapper">
+    <div class="top__title">Акції</div>
+    <app-card class="actions__box" [product]="products"></app-card>
+    <div class="top__btn">
+      <button class="btn btn__add btn__card" (click)="redirect('/sales')">
+        переглянути всі
+      </button>
+    </div>
+  </section>
+  <section class="advices wrapper">
+    <app-advices class="advices__box"></app-advices>
+  </section>
+</ng-container>
+
+<ng-template #loading>
+  <div class="wrapper">Loading...</div>
+</ng-template>

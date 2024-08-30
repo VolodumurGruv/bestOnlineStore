@@ -1,0 +1,18 @@
+<div class="items">
+  <div class="item">
+    <p>Місто</p>
+    <app-input-select
+      [items]="items.cities"
+      [label]="placeholder.city"
+      (inputValue)="getCity($event)"
+    ></app-input-select>
+  </div>
+  <div class="item">
+    <p>Відділення</p>
+    <app-input-select
+      [items]="items.departments"
+      [label]="placeholder.department"
+      (inputValue)="getDepartments($event)"
+    ></app-input-select>
+  </div>
+</div>

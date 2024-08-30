@@ -1,0 +1,36 @@
+<section class="order">
+  <h1 class="order__title">Оформлення замовлення</h1>
+  <h2 class="order__subtitle">Особиста інформація</h2>
+  <div class="order__user-info">
+    <div class="order__user-info__items" *ngIf="user.firstName">
+      <div class="order__user-info__name">
+        <div class="order__user-info__item">Ім’я:</div>
+        <div class="order__user-info__data">{{ user.firstName }}</div>
+      </div>
+
+      <div class="order__user-info__name">
+        <div class="order__user-info__item">Телефон:</div>
+        <div class="order__user-info__data">{{ user.phone }}</div>
+      </div>
+    </div>
+    <div class="order__user-info__items" *ngIf="!user.isAnonymous">
+      <div class="order__user-info__name" *ngIf="user.lastName">
+        <div class="order__user-info__item">Прізвище:</div>
+        <div class="order__user-info__data">{{ user.lastName }}</div>
+      </div>
+      <div class="order__user-info__name" *ngIf="user.email">
+        <div class="order__user-info__item">E-mail:</div>
+        <div class="order__user-info__data">{{ user.email }}</div>
+      </div>
+    </div>
+  </div>
+
+  <app-orders [orders]="orders" (total)="calkTotal($event)"></app-orders>
+  <app-department (deliveryPrice)="deliveryPrice($event)"></app-department>
+  <div class="payment container">
+    <app-payment></app-payment>
+  </div>
+  <div class="make-payment container">
+    <app-make-payment [total]="total ? total : initialTotal"></app-make-payment>
+  </div>
+</section>

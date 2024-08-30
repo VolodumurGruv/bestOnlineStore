@@ -1,0 +1,50 @@
+@use "fonts";
+
+.name {
+  display: flex;
+  justify-content: center;
+  padding: 70px 0 32px;
+
+  &__shop {
+    @include fonts.satisfy;
+    margin: 0;
+    font-size: 52px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    color: #000;
+  }
+}
+
+.top__title {
+  @include fonts.montserrat(40px, 500, normal, 130%);
+
+  text-align: center;
+  color: #000;
+}
+
+.top,
+.new,
+.carousel,
+.actions,
+.advices {
+  padding: 80px 0;
+}
+.carousel {
+  padding-top: 0;
+}
+
+.top,
+.new,
+.actions,
+.advices,
+.top__btn {
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+}
+
+.btn__card {
+  margin: 0 auto;
+  width: 274px;
+}

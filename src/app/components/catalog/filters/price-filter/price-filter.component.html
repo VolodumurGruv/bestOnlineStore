@@ -1,0 +1,47 @@
+<section class="price_filter">
+  <div class="price_filter__title">Ціна</div>
+  <div class="price_filter__container">
+    <div class="price_filter__items">
+      <div class="price_filter__item">
+        <input
+          #minRange
+          class="price_filter__item-input"
+          [value]="fromRange"
+          type="number"
+          (change)="onChangeMin(minRange.value)"
+        />
+      </div>
+      <div class="price_filter__item">
+        <input
+          #maxRange
+          class="price_filter__item-input"
+          [value]="toRange"
+          type="number"
+          (change)="onChangeMax(maxRange.value)"
+        />
+      </div>
+    </div>
+    <div class="price_filter__range">
+      <input
+        #minInput
+        class="price_filter__range-input"
+        type="range"
+        [min]="min"
+        [max]="max"
+        [step]="step"
+        [(ngModel)]="fromRange"
+        (ngModelChange)="onChangeMin(fromRange)"
+      />
+      <input
+        #maxInput
+        class="price_filter__range-input"
+        type="range"
+        [min]="min"
+        [max]="max"
+        [step]="step"
+        [(ngModel)]="toRange"
+        (ngModelChange)="onChangeMax(toRange)"
+      />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+@use "fonts";
+@use "colors";
+
+.label {
+  @include fonts.montserrat(28px, 500, normal, normal);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  color: colors.$color-text;
+
+  &__disabled {
+    color: colors.$gray;
+  }
+}
+
+input[type="checkbox"] {
+  // remove default style
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: colors.$white;
+  margin: 0;
+  // custom style
+  font: inherit;
+  color: currentColor;
+  width: 1.3em;
+  height: 1.3em;
+  border: 0.04em solid currentColor;
+  border-radius: 0.07em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.86em;
+  height: 0.86em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em colors.$color-text;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+input[type="checkbox"]:disabled {
+  color: colors.$gray;
+}

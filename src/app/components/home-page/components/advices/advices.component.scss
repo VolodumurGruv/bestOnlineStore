@@ -1,0 +1,53 @@
+@import "colors";
+
+.advices {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__title {
+    margin-bottom: 100px;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%;
+    color: #000;
+  }
+
+  &__images {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 100px;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.temp__image {
+  width: 28%;
+  height: 471px;
+  background-color: $main-color;
+
+  &__wide {
+    width: 64%;
+    height: 471px;
+    background-color: $main-color;
+  }
+
+  &-one {
+    background-image: url("../../../../../assets/pics/png/advices/advice1.jpg");
+  }
+  &-two {
+    background-image: url("../../../../../assets/pics/png/advices/advice2.jpg");
+  }
+  &-three {
+    background-image: url("../../../../../assets/pics/png/advices/advice4.jpg");
+  }
+  &-four {
+    background-image: url("../../../../../assets/pics/png/advices/advice3.jpg");
+  }
+}

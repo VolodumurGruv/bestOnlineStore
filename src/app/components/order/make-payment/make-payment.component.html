@@ -1,0 +1,27 @@
+<section class="make-payment">
+  <div class="make-payment__card">
+    <div class="title">До сплати</div>
+    <div class="card__body">
+      <div class="items">
+        <div class="item">Доставка:</div>
+        <div class="item__text">
+          За тарифами перевізника. Оплата при отриманні
+        </div>
+      </div>
+      <div class="items">
+        <div class="item">До сплати:</div>
+        <div class="item">{{ (total ? total : 0) | transformPrice }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="action">
+    <button
+      class="btn btn__login"
+      (click)="makeOrder()"
+      [disabled]="!disabled || !dataValid"
+    >
+      Замовити
+    </button>
+    <div class="link" (click)="back()">Назад</div>
+  </div>
+</section>

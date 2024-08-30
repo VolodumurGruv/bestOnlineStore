@@ -1,0 +1,13 @@
+<div class="order__order container">
+  <h2 class="order__subtitle">Замовлення</h2>
+  <div class="order__order__items" *ngFor="let order of orders">
+    <div class="order__order__image">
+      <img [src]="order.image" [alt]="order.name" />
+    </div>
+
+    <app-orders-counter
+      class="orders-counter"
+      [order]="order"
+    ></app-orders-counter>
+  </div>
+</div>
